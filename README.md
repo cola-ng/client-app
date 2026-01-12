@@ -29,7 +29,7 @@ mofa-studio/
 ├── mofa-widgets/           # Shared reusable widgets
 └── apps/
     ├── mofa-fm/            # Voice chat interface
-    └── mofa-settings/      # Provider configuration
+    ├── settings/           # Provider configuration
 ```
 
 ### Key Design Principles
@@ -174,7 +174,7 @@ MoFA Studio is organized as a Cargo workspace with 5 crates:
 | `mofa-studio-shell` | Binary | Main application shell with window chrome and navigation |
 | `mofa-widgets` | Library | Shared UI components (theme, audio player, waveforms, etc.) |
 | `mofa-fm` | Library | Voice chat interface app |
-| `mofa-settings` | Library | Provider configuration app |
+| `settings` | Library | Provider configuration app |
 
 ### Key Files
 

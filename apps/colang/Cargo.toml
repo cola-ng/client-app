@@ -6,8 +6,8 @@ edition.workspace = true
 [dependencies]
 makepad-widgets.workspace = true
 mofa-widgets = { path = "../../mofa-widgets" }
-mofa-dora-bridge = { path = "../../mofa-dora-bridge" }
-mofa-settings = { path = "../mofa-settings" }
+dora-bridge = { path = "../../dora-bridge" }
+settings = { path = "../settings" }
 parking_lot.workspace = true
 log.workspace = true
 sysinfo.workspace = true

@@ -68,7 +68,7 @@ mofa-studio/
 ├── mofa-widgets/         # Shared UI components (library)
 └── apps/
     ├── mofa-fm/          # Voice chat app (library)
-    └── mofa-settings/    # Settings app (library)
+    ├── settings/         # Settings app (library)
 ```
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed architecture documentation.
@@ -78,7 +78,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed architecture documentation.
 MoFA Studio uses a plugin-based architecture. To create a new app:
 
 1. **Read the guide**: See [APP_DEVELOPMENT_GUIDE.md](APP_DEVELOPMENT_GUIDE.md)
-2. **Follow the pattern**: Look at `apps/mofa-fm` or `apps/mofa-settings` as examples
+2. **Follow the pattern**: Look at `apps/mofa-fm` or `apps/settings` as examples
 3. **Implement MofaApp trait**: Required for app registration
 4. **Use the theme system**: Import colors and fonts from `mofa-widgets::theme`
 5. **Support dark mode**: Use `instance dark_mode` pattern in shaders

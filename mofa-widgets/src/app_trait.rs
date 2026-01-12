@@ -17,7 +17,7 @@
 //! ```rust,ignore
 //! use mofa_widgets::{MofaApp, AppRegistry};
 //! use mofa_fm::MoFaFMApp;
-//! use mofa_settings::MoFaSettingsApp;
+//! use settings::MoFaSettingsApp;
 //!
 //! // In App struct
 //! #[rust]

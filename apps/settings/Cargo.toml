@@ -1,5 +1,5 @@
 [package]
-name = "mofa-settings"
+name = "settings"
 version.workspace = true
 edition.workspace = true
 

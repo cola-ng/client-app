@@ -13,9 +13,9 @@ use mofa_studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 // App plugin system imports
 use colang::{ColangApp, ColangScreenWidgetRefExt};
 use mofa_fm::{MoFaFMApp, MoFaFMScreenWidgetRefExt};
-use mofa_settings::data::Preferences;
-use mofa_settings::screen::SettingsScreenWidgetRefExt;
-use mofa_settings::MoFaSettingsApp;
+use settings::data::Preferences;
+use settings::screen::SettingsScreenWidgetRefExt;
+use settings::MoFaSettingsApp;
 use mofa_widgets::{AppRegistry, MofaApp, StateChangeListener};
 
 // ============================================================================
@@ -73,7 +73,7 @@ live_design! {
     use mofa_studio_shell::widgets::sidebar::Sidebar;
     use colang::screen::ColangScreen;
     use mofa_fm::screen::MoFaFMScreen;
-    use mofa_settings::screen::SettingsScreen;
+    use settings::screen::SettingsScreen;
 
     // Logo image
     MOFA_LOGO = dep("crate://self/resources/mofa-logo.png")

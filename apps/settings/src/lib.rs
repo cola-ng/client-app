@@ -18,7 +18,7 @@ impl MofaApp for MoFaSettingsApp {
     fn info() -> AppInfo {
         AppInfo {
             name: "Settings",
-            id: "mofa-settings",
+            id: "settings",
             description: "Provider configuration and preferences",
         }
     }

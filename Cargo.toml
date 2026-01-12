@@ -3,7 +3,7 @@ resolver = "2"
 members = [
     "mofa-studio-shell",
     "mofa-widgets",
-    "mofa-dora-bridge",
+    "dora-bridge",
     "apps/*",
     "rust-nodes/*",
 ]

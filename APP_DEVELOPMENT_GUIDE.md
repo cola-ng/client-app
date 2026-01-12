@@ -140,7 +140,7 @@ members = [
     "mofa-widgets",
     "mofa-studio-shell",
     "apps/mofa-fm",
-    "apps/mofa-settings",
+    "apps/settings",
     "apps/mofa-myapp",  # Add your app
 ]
 ```
@@ -474,7 +474,7 @@ Before submitting your app:
 | App | Description | Features |
 |-----|-------------|----------|
 | `mofa-fm` | Audio streaming | Timer management, shader animations |
-| `mofa-settings` | Provider config | Modal dialogs, form inputs, state management |
+| `settings` | Provider config | Modal dialogs, form inputs, state management |
 
 ---
 

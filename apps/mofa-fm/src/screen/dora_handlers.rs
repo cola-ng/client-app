@@ -8,7 +8,7 @@ use std::path::PathBuf;
 
 use crate::mofa_hero::{MofaHeroWidgetExt, ConnectionStatus};
 use crate::dora_integration::{DoraIntegration, DoraEvent};
-use mofa_settings::data::Preferences;
+use settings::data::Preferences;
 
 use super::{MoFaFMScreen, ChatMessageEntry};
 

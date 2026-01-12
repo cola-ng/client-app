@@ -4,7 +4,7 @@
 //! the dora dataflow and MoFA widgets.
 
 use crossbeam_channel::{Receiver, Sender, bounded};
-use mofa_dora_bridge::{
+use dora_bridge::{
     controller::DataflowController,
     data::{AudioData, ChatMessage, LogEntry},
     dispatcher::DynamicNodeDispatcher,
@@ -303,7 +303,7 @@ impl DoraIntegration {
                         if let Some(ref disp) = dispatcher {
                             if let Some(bridge) = disp.get_bridge("mofa-prompt-input") {
                                 log::info!("Sending prompt via bridge: {}", message);
-                                if let Err(e) = bridge.send("prompt", mofa_dora_bridge::DoraData::Text(message.clone())) {
+                                if let Err(e) = bridge.send("prompt", dora_bridge::DoraData::Text(message.clone())) {
                                     log::error!("Failed to send prompt: {}", e);
                                 }
                             } else {
@@ -316,8 +316,8 @@ impl DoraIntegration {
                         if let Some(ref disp) = dispatcher {
                             if let Some(bridge) = disp.get_bridge("mofa-prompt-input") {
                                 log::info!("Sending control command: {}", command);
-                                let ctrl = mofa_dora_bridge::ControlCommand::new(&command);
-                                if let Err(e) = bridge.send("control", mofa_dora_bridge::DoraData::Control(ctrl)) {
+                                let ctrl = dora_bridge::ControlCommand::new(&command);
+                                if let Err(e) = bridge.send("control", dora_bridge::DoraData::Control(ctrl)) {
                                     log::error!("Failed to send control: {}", e);
                                 }
                             } else {
@@ -333,7 +333,7 @@ impl DoraIntegration {
                             if let Some(bridge) = disp.get_bridge("mofa-audio-player") {
                                 if let Err(e) = bridge.send(
                                     "buffer_status",
-                                    mofa_dora_bridge::DoraData::Json(serde_json::json!(fill_percentage)),
+                                    dora_bridge::DoraData::Json(serde_json::json!(fill_percentage)),
                                 ) {
                                     log::debug!("Failed to send buffer status to bridge: {}", e);
                                 }
@@ -379,7 +379,7 @@ impl DoraIntegration {
             if let Some(ref disp) = dispatcher {
                 for (node_id, bridge_event) in disp.poll_events() {
                     match bridge_event {
-                        mofa_dora_bridge::BridgeEvent::Connected => {
+                        dora_bridge::BridgeEvent::Connected => {
                             log::info!("Bridge connected: {}", node_id);
                             let _ = event_tx.send(DoraEvent::BridgeConnected {
                                 bridge_name: node_id.clone(),
@@ -392,7 +392,7 @@ impl DoraIntegration {
                                 _ => {}
                             }
                         }
-                        mofa_dora_bridge::BridgeEvent::Disconnected => {
+                        dora_bridge::BridgeEvent::Disconnected => {
                             log::info!("Bridge disconnected: {}", node_id);
                             let _ = event_tx.send(DoraEvent::BridgeDisconnected {
                                 bridge_name: node_id.clone(),
@@ -404,28 +404,28 @@ impl DoraIntegration {
                                 _ => {}
                             }
                         }
-                        mofa_dora_bridge::BridgeEvent::DataReceived { input_id, data, .. } => {
+                        dora_bridge::BridgeEvent::DataReceived { input_id, data, .. } => {
                             log::info!("Bridge DataReceived: {}", node_id);
                             match data {
-                                mofa_dora_bridge::DoraData::Audio(audio) => {
+                                dora_bridge::DoraData::Audio(audio) => {
                                     let _ = event_tx.send(DoraEvent::AudioReceived { data: audio });
                                 }
-                                mofa_dora_bridge::DoraData::Chat(chat) => {
+                                dora_bridge::DoraData::Chat(chat) => {
                                     state.write().pending_chat_messages.push(chat.clone());
                                     let _ = event_tx.send(DoraEvent::ChatReceived { message: chat });
                                 }
-                                mofa_dora_bridge::DoraData::Log(entry) => {
+                                dora_bridge::DoraData::Log(entry) => {
                                     state.write().pending_log_entries.push(entry.clone());
                                     let _ = event_tx.send(DoraEvent::LogReceived { entry });
                                 }
-                                mofa_dora_bridge::DoraData::Json(json) => {
+                                dora_bridge::DoraData::Json(json) => {
                                     // JSON data from bridges (unused - LED visualization done in screen.rs)
                                     log::debug!("Received JSON from {}: input_id={}, data={:?}", node_id, input_id, json);
                                 }
                                 _ => {}
                             }
                         }
-                        mofa_dora_bridge::BridgeEvent::Error(msg) => {
+                        dora_bridge::BridgeEvent::Error(msg) => {
                             log::error!("Bridge error: {}", msg);
                             let _ = event_tx.send(DoraEvent::Error { message: msg });
                         }

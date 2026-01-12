@@ -4,17 +4,17 @@ version.workspace = true
 edition.workspace = true
 
 [features]
-default = ["mofa-fm", "colang", "mofa-settings"]
+default = ["mofa-fm", "colang", "settings"]
 mofa-fm = ["dep:mofa-fm"]
 colang = ["dep:colang"]
-mofa-settings = ["dep:mofa-settings"]
+settings = ["dep:settings"]
 
 [dependencies]
 makepad-widgets.workspace = true
 mofa-widgets = { path = "../mofa-widgets" }
 mofa-fm = { path = "../apps/mofa-fm", optional = true }
 colang = { path = "../apps/colang", optional = true }
-mofa-settings = { path = "../apps/mofa-settings", optional = true }
+settings = { path = "../apps/settings", optional = true }
 
 # Audio
 cpal.workspace = true

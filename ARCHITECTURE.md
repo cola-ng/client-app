@@ -53,7 +53,7 @@ studio/
     │   │   ├── mofa_hero.rs # Status bar (~660 lines)
     │   │   └── audio.rs    # Audio device management
     │   └── resources/
-    └── mofa-settings/      # Settings app (library)
+    └── settings/           # Settings app (library)
         ├── src/
         │   ├── lib.rs
         │   ├── screen.rs   # Settings screen (~415 lines)
@@ -75,7 +75,7 @@ mofa-studio-shell (binary)
 ├── makepad-widgets
 ├── mofa-widgets
 ├── mofa-fm (optional, default enabled)
-├── mofa-settings (optional, default enabled)
+├── settings (optional, default enabled)
 ├── cpal (audio)
 ├── tokio (async runtime)
 ├── parking_lot (synchronization)
@@ -90,9 +90,9 @@ mofa-fm (library)
 ├── cpal
 ├── parking_lot
 ├── sysinfo
-└── log
+    └── log
 
-mofa-settings (library)
+settings (library)
 ├── makepad-widgets
 ├── mofa-widgets
 ├── serde, serde_json
@@ -181,7 +181,7 @@ Apps are self-contained widgets. The shell knows nothing about their internal st
 ```rust
 // mofa-studio-shell/src/app.rs
 use mofa_fm::screen::MoFaFMScreen;
-use mofa_settings::screen::SettingsScreen;
+use settings::screen::SettingsScreen;
 ```
 
 #### 2. Widget Registration (Order Matters!)
@@ -194,7 +194,7 @@ impl LiveRegister for App {
         mofa_studio_shell::widgets::log_panel::live_design(cx);
         mofa_studio_shell::widgets::participant_panel::live_design(cx);
         mofa_fm::live_design(cx);                // Then apps
-        mofa_settings::live_design(cx);
+        settings::live_design(cx);
     }
 }
 ```
@@ -713,7 +713,7 @@ if self.view.view(ids!(my_view)).finger_up(actions).is_some() {
 
 - **Total Crates**: 5 (1 binary, 4 libraries)
 - **Total Lines**: ~6,500 lines of Rust
-- **Apps**: 2 (mofa-fm, mofa-settings)
+- **Apps**: 2 (mofa-fm, settings)
 - **Shared Widgets**: 7 reusable components (fully documented)
 - **Theme Colors**: 60+ (light/dark variants)
 - **Default Window**: 1400x900 pixels
