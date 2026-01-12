@@ -6,24 +6,24 @@ live_design! {
     use link::widgets::*;
 
     // Import fonts and colors from shared theme (single source of truth)
-    use mofa_widgets::theme::FONT_REGULAR;
-    use mofa_widgets::theme::FONT_BOLD;
-    use mofa_widgets::theme::SLATE_50;
-    use mofa_widgets::theme::SLATE_200;
-    use mofa_widgets::theme::SLATE_400;
-    use mofa_widgets::theme::SLATE_500;
-    use mofa_widgets::theme::SLATE_600;
-    use mofa_widgets::theme::SLATE_700;
-    use mofa_widgets::theme::SLATE_800;
-    use mofa_widgets::theme::SLATE_900;
-    use mofa_widgets::theme::BLUE_100;
-    use mofa_widgets::theme::BLUE_900;
-    use mofa_widgets::theme::DIVIDER;
-    use mofa_widgets::theme::DIVIDER_DARK;
-    use mofa_widgets::theme::AMBER_500;
-    use mofa_widgets::theme::INDIGO_500;
-    use mofa_widgets::theme::TEXT_PRIMARY_DARK;
-    use mofa_widgets::theme::TEXT_SECONDARY_DARK;
+    use widgets::theme::FONT_REGULAR;
+    use widgets::theme::FONT_BOLD;
+    use widgets::theme::SLATE_50;
+    use widgets::theme::SLATE_200;
+    use widgets::theme::SLATE_400;
+    use widgets::theme::SLATE_500;
+    use widgets::theme::SLATE_600;
+    use widgets::theme::SLATE_700;
+    use widgets::theme::SLATE_800;
+    use widgets::theme::SLATE_900;
+    use widgets::theme::BLUE_100;
+    use widgets::theme::BLUE_900;
+    use widgets::theme::DIVIDER;
+    use widgets::theme::DIVIDER_DARK;
+    use widgets::theme::AMBER_500;
+    use widgets::theme::INDIGO_500;
+    use widgets::theme::TEXT_PRIMARY_DARK;
+    use widgets::theme::TEXT_SECONDARY_DARK;
 
     // Chevron icon for expand/collapse
     ChevronRight = <Icon> {

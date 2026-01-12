@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use mofa_widgets::led_gauge::BufferGauge;
+//!     use widgets::led_gauge::BufferGauge;
 //!
 //!     MyScreen = <View> {
 //!         buffer_indicator = <BufferGauge> {

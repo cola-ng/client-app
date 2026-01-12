@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use mofa_widgets::participant_panel::ParticipantPanel;
+//!     use widgets::participant_panel::ParticipantPanel;
 //!
 //!     MyScreen = <View> {
 //!         participant = <ParticipantPanel> {

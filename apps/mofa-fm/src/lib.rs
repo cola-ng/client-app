@@ -14,7 +14,7 @@ pub use audio::AudioManager;
 pub use dora_integration::{DoraIntegration, DoraCommand, DoraEvent, DoraState};
 
 use makepad_widgets::Cx;
-use mofa_widgets::{MofaApp, AppInfo};
+use widgets::{MofaApp, AppInfo};
 
 /// MoFA FM app descriptor
 pub struct MoFaFMApp;

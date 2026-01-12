@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use mofa_widgets::log_panel::LogPanel;
+//!     use widgets::log_panel::LogPanel;
 //!
 //!     MyScreen = <View> {
 //!         log = <LogPanel> {

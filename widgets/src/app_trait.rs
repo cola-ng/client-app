@@ -15,7 +15,7 @@
 //! ## Usage in Shell
 //!
 //! ```rust,ignore
-//! use mofa_widgets::{MofaApp, AppRegistry};
+//! use widgets::{MofaApp, AppRegistry};
 //! use mofa_fm::MoFaFMApp;
 //! use settings::MoFaSettingsApp;
 //!
@@ -39,7 +39,7 @@
 //! ## Creating a New App
 //!
 //! ```rust,ignore
-//! use mofa_widgets::{MofaApp, AppInfo};
+//! use widgets::{MofaApp, AppInfo};
 //!
 //! pub struct MyApp;
 //!

@@ -8,7 +8,7 @@ live_design! {
     use link::shaders::*;
     use link::widgets::*;
 
-    use mofa_widgets::theme::*;
+    use widgets::theme::*;
 
     ICO_OPENAI = dep("crate://self/resources/icons/openai.svg")
     ICO_DEEPSEEK = dep("crate://self/resources/icons/deepseek.svg")

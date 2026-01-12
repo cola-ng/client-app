@@ -1,8 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
-    "mofa-studio-shell",
-    "mofa-widgets",
+    "studio-shell",
+    "widgets",
     "dora-bridge",
     "apps/*",
     "rust-nodes/*",

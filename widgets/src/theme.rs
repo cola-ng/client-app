@@ -8,7 +8,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use mofa_widgets::theme::*;
+//!     use widgets::theme::*;
 //!
 //!     MyWidget = <View> {
 //!         draw_bg: { color: (PANEL_BG) }

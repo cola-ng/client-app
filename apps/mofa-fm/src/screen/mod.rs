@@ -15,8 +15,8 @@ use makepad_widgets::*;
 use crate::mofa_hero::{MofaHeroWidgetExt, MofaHeroAction};
 use crate::log_bridge;
 use crate::dora_integration::{DoraIntegration, DoraCommand};
-use mofa_widgets::participant_panel::ParticipantPanelWidgetExt;
-use mofa_widgets::StateChangeListener;
+use widgets::participant_panel::ParticipantPanelWidgetExt;
+use widgets::StateChangeListener;
 use std::path::PathBuf;
 
 live_design! {
@@ -24,9 +24,9 @@ live_design! {
     use link::shaders::*;
     use link::widgets::*;
 
-    use mofa_widgets::theme::*;
-    use mofa_widgets::participant_panel::ParticipantPanel;
-    use mofa_widgets::log_panel::LogPanel;
+    use widgets::theme::*;
+    use widgets::participant_panel::ParticipantPanel;
+    use widgets::log_panel::LogPanel;
     use crate::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)

@@ -8,7 +8,7 @@
 //! - Helper Methods (organized by responsibility)
 
 use makepad_widgets::*;
-use mofa_studio_shell::widgets::sidebar::SidebarWidgetRefExt;
+use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 
 // App plugin system imports
 use colang::{ColangApp, ColangScreenWidgetRefExt};
@@ -16,7 +16,7 @@ use mofa_fm::{MoFaFMApp, MoFaFMScreenWidgetRefExt};
 use settings::data::Preferences;
 use settings::screen::SettingsScreenWidgetRefExt;
 use settings::MoFaSettingsApp;
-use mofa_widgets::{AppRegistry, MofaApp, StateChangeListener};
+use widgets::{AppRegistry, MofaApp, StateChangeListener};
 
 // ============================================================================
 // TAB IDENTIFIER
@@ -39,38 +39,38 @@ live_design! {
     use link::widgets::*;
 
     // Import fonts and colors from shared theme (single source of truth)
-    use mofa_widgets::theme::FONT_REGULAR;
-    use mofa_widgets::theme::FONT_MEDIUM;
-    use mofa_widgets::theme::FONT_SEMIBOLD;
-    use mofa_widgets::theme::FONT_BOLD;
+    use widgets::theme::FONT_REGULAR;
+    use widgets::theme::FONT_MEDIUM;
+    use widgets::theme::FONT_SEMIBOLD;
+    use widgets::theme::FONT_BOLD;
     // Semantic colors
-    use mofa_widgets::theme::DARK_BG;
-    use mofa_widgets::theme::PANEL_BG;
-    use mofa_widgets::theme::ACCENT_BLUE;
-    use mofa_widgets::theme::ACCENT_GREEN;
-    use mofa_widgets::theme::ACCENT_INDIGO;
-    use mofa_widgets::theme::TEXT_PRIMARY;
-    use mofa_widgets::theme::TEXT_SECONDARY;
-    use mofa_widgets::theme::TEXT_MUTED;
-    use mofa_widgets::theme::DIVIDER;
-    use mofa_widgets::theme::BORDER;
-    use mofa_widgets::theme::HOVER_BG;
-    use mofa_widgets::theme::WHITE;
-    use mofa_widgets::theme::TRANSPARENT;
+    use widgets::theme::DARK_BG;
+    use widgets::theme::PANEL_BG;
+    use widgets::theme::ACCENT_BLUE;
+    use widgets::theme::ACCENT_GREEN;
+    use widgets::theme::ACCENT_INDIGO;
+    use widgets::theme::TEXT_PRIMARY;
+    use widgets::theme::TEXT_SECONDARY;
+    use widgets::theme::TEXT_MUTED;
+    use widgets::theme::DIVIDER;
+    use widgets::theme::BORDER;
+    use widgets::theme::HOVER_BG;
+    use widgets::theme::WHITE;
+    use widgets::theme::TRANSPARENT;
     // Palette colors
-    use mofa_widgets::theme::SLATE_50;
-    use mofa_widgets::theme::SLATE_200;
-    use mofa_widgets::theme::SLATE_400;
-    use mofa_widgets::theme::SLATE_500;
-    use mofa_widgets::theme::SLATE_600;
-    use mofa_widgets::theme::SLATE_700;
-    use mofa_widgets::theme::SLATE_800;
-    use mofa_widgets::theme::GRAY_300;
-    use mofa_widgets::theme::GRAY_600;
-    use mofa_widgets::theme::GRAY_700;
-    use mofa_widgets::theme::INDIGO_100;
+    use widgets::theme::SLATE_50;
+    use widgets::theme::SLATE_200;
+    use widgets::theme::SLATE_400;
+    use widgets::theme::SLATE_500;
+    use widgets::theme::SLATE_600;
+    use widgets::theme::SLATE_700;
+    use widgets::theme::SLATE_800;
+    use widgets::theme::GRAY_300;
+    use widgets::theme::GRAY_600;
+    use widgets::theme::GRAY_700;
+    use widgets::theme::INDIGO_100;
 
-    use mofa_studio_shell::widgets::sidebar::Sidebar;
+    use studio_shell::widgets::sidebar::Sidebar;
     use colang::screen::ColangScreen;
     use mofa_fm::screen::MoFaFMScreen;
     use settings::screen::SettingsScreen;
@@ -227,13 +227,13 @@ live_design! {
     // ------------------------------------------------------------------------
 
     // Dark theme colors (imported for shader use)
-    use mofa_widgets::theme::DARK_BG_DARK;
-    use mofa_widgets::theme::PANEL_BG_DARK;
-    use mofa_widgets::theme::TEXT_PRIMARY_DARK;
-    use mofa_widgets::theme::TEXT_SECONDARY_DARK;
-    use mofa_widgets::theme::BORDER_DARK;
-    use mofa_widgets::theme::HOVER_BG_DARK;
-    use mofa_widgets::theme::DIVIDER_DARK;
+    use widgets::theme::DARK_BG_DARK;
+    use widgets::theme::PANEL_BG_DARK;
+    use widgets::theme::TEXT_PRIMARY_DARK;
+    use widgets::theme::TEXT_SECONDARY_DARK;
+    use widgets::theme::BORDER_DARK;
+    use widgets::theme::HOVER_BG_DARK;
+    use widgets::theme::DIVIDER_DARK;
 
     Dashboard = {{Dashboard}} <View> {
         width: Fill, height: Fill
@@ -881,13 +881,13 @@ impl App {
 
     /// Get app info by ID
     #[allow(dead_code)]
-    pub fn get_app_info(&self, id: &str) -> Option<&mofa_widgets::AppInfo> {
+    pub fn get_app_info(&self, id: &str) -> Option<&widgets::AppInfo> {
         self.app_registry.find_by_id(id)
     }
 
     /// Get all registered apps
     #[allow(dead_code)]
-    pub fn apps(&self) -> &[mofa_widgets::AppInfo] {
+    pub fn apps(&self) -> &[widgets::AppInfo] {
         self.app_registry.apps()
     }
 }
@@ -900,8 +900,8 @@ impl LiveRegister for App {
     fn live_register(cx: &mut Cx) {
         // Core widget libraries
         makepad_widgets::live_design(cx);
-        mofa_widgets::live_design(cx);
-        mofa_studio_shell::widgets::sidebar::live_design(cx);
+        widgets::live_design(cx);
+        studio_shell::widgets::sidebar::live_design(cx);
 
         // Register apps via MofaApp trait
         // Note: Widget types in live_design! macro still require compile-time imports

@@ -8,7 +8,7 @@ live_design! {
     use link::shaders::*;
     use link::widgets::*;
 
-    use mofa_widgets::theme::*;
+    use widgets::theme::*;
 
     // Custom text input style
     SettingsTextInput = <TextInput> {

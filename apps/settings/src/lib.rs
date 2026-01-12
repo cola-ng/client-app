@@ -9,7 +9,7 @@ pub mod add_provider_modal;
 pub use screen::SettingsScreenRef;
 
 use makepad_widgets::Cx;
-use mofa_widgets::{MofaApp, AppInfo};
+use widgets::{MofaApp, AppInfo};
 
 /// MoFA Settings app descriptor
 pub struct MoFaSettingsApp;

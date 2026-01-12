@@ -6,7 +6,7 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use mofa_widgets::theme::*;
+    use widgets::theme::*;
 
     // Local layout constants (colors imported from theme)
     HERO_RADIUS = 4.0

@@ -35,11 +35,11 @@
 //! The theme module provides a centralized color system with dark mode support:
 //!
 //! ```rust,ignore
-//! use mofa_widgets::theme::*;
+//! use widgets::theme::*;
 //!
 //! // In live_design! macro - use theme constants
 //! live_design! {
-//!     use mofa_widgets::theme::*;
+//!     use widgets::theme::*;
 //!
 //!     MyWidget = <View> {
 //!         draw_bg: { color: (PANEL_BG) }
@@ -55,7 +55,7 @@
 //! Apps implement the [`MofaApp`] trait for standardized registration:
 //!
 //! ```rust,ignore
-//! use mofa_widgets::{MofaApp, AppInfo};
+//! use widgets::{MofaApp, AppInfo};
 //!
 //! pub struct MyApp;
 //!
@@ -98,7 +98,7 @@ use makepad_widgets::Cx;
 /// ```rust,ignore
 /// impl LiveRegister for App {
 ///     fn live_register(cx: &mut Cx) {
-///         mofa_widgets::live_design(cx);  // Register shared widgets first
+///         widgets::live_design(cx);  // Register shared widgets first
 ///         my_app::live_design(cx);        // Then app-specific widgets
 ///     }
 /// }

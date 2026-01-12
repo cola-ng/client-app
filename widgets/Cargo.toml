@@ -1,5 +1,5 @@
 [package]
-name = "mofa-widgets"
+name = "widgets"
 version.workspace = true
 edition.workspace = true
 

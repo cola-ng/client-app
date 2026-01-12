@@ -18,7 +18,7 @@ pub use database::Database;
 pub use doubao_api::DoubaoClient;
 
 use makepad_widgets::Cx;
-use mofa_widgets::{MofaApp, AppInfo};
+use widgets::{MofaApp, AppInfo};
 
 /// MoFA FM app descriptor
 pub struct ColangApp;

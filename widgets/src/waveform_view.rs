@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use mofa_widgets::waveform_view::WaveformView;
+//!     use widgets::waveform_view::WaveformView;
 //!
 //!     MyScreen = <View> {
 //!         waveform = <WaveformView> {

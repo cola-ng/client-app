@@ -1,5 +1,5 @@
 [package]
-name = "mofa-studio-shell"
+name = "studio-shell"
 version.workspace = true
 edition.workspace = true
 
@@ -11,7 +11,7 @@ settings = ["dep:settings"]
 
 [dependencies]
 makepad-widgets.workspace = true
-mofa-widgets = { path = "../mofa-widgets" }
+widgets = { path = "../widgets" }
 mofa-fm = { path = "../apps/mofa-fm", optional = true }
 colang = { path = "../apps/colang", optional = true }
 settings = { path = "../apps/settings", optional = true }
