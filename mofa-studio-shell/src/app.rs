@@ -421,6 +421,46 @@ live_design! {
                         }
                     }
                 }
+
+                // Close App Button
+                close_app_btn = <View> {
+                    width: 36, height: 36
+                    align: {x: 0.5, y: 0.5}
+                    margin: {left: 8}
+                    cursor: Hand
+                    show_bg: true
+                    draw_bg: {
+                        instance hover: 0.0
+                        instance dark_mode: 0.0
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            let cx = self.rect_size.x * 0.5;
+                            let cy = self.rect_size.y * 0.5;
+                            
+                            // Background circle on hover - red
+                            sdf.circle(cx, cy, 16.0);
+                            let hover_color = vec4(0.9, 0.2, 0.2, 0.8);
+                            sdf.fill(mix((TRANSPARENT), hover_color, self.hover));
+                            
+                            // X icon
+                            let sz = 4.5;
+                            sdf.move_to(cx - sz, cy - sz);
+                            sdf.line_to(cx + sz, cy + sz);
+                            sdf.move_to(cx + sz, cy - sz);
+                            sdf.line_to(cx - sz, cy + sz);
+                            
+                            // Icon color: default gray, white on hover
+                            let icon_color_light = (SLATE_500);
+                            let icon_color_dark = (SLATE_400);
+                            let normal_color = mix(icon_color_light, icon_color_dark, self.dark_mode);
+                            let stroke_color = mix(normal_color, (WHITE), self.hover);
+                            
+                            sdf.stroke(stroke_color, 1.5);
+                            
+                            return sdf.result;
+                        }
+                    }
+                }
             }
 
             // Content area
@@ -1647,6 +1687,14 @@ impl App {
                 },
             );
         self.ui.view(ids!(user_menu.menu_divider)).apply_over(
+            cx,
+            live! {
+                draw_bg: { dark_mode: (dm) }
+            },
+        );
+
+        // Apply to close app button
+        self.ui.view(ids!(body.dashboard_base.header.close_app_btn)).apply_over(
             cx,
             live! {
                 draw_bg: { dark_mode: (dm) }
