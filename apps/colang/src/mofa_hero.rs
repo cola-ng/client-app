@@ -1,7 +1,6 @@
-//! MofaHero Widget - System status bar with Dataflow, Audio Buffer, CPU, and Memory panels
+//! MofaHero Widget - System status bar with Dataflow and Audio Buffer panels
 
 use makepad_widgets::*;
-use sysinfo::System;
 
 live_design! {
     use link::theme::*;
@@ -349,48 +348,6 @@ live_design! {
                 text: "0%"
             }
         }
-
-        // CPU section
-        cpu_section = <StatusSection> {
-            <View> {
-                width: Fill, height: Fit
-                flow: Right
-                spacing: 6
-                align: {x: 0.0, y: 0.5}
-
-                cpu_dot = <StatusDot> {}
-                cpu_label = <StatusLabel> {
-                    text: "CPU"
-                }
-            }
-
-            cpu_gauge = <LedGauge> {}
-
-            cpu_pct = <PctLabel> {
-                text: "0%"
-            }
-        }
-
-        // Memory section
-        memory_section = <StatusSection> {
-            <View> {
-                width: Fill, height: Fit
-                flow: Right
-                spacing: 6
-                align: {x: 0.0, y: 0.5}
-
-                memory_dot = <StatusDot> {}
-                memory_label = <StatusLabel> {
-                    text: "Memory"
-                }
-            }
-
-            memory_gauge = <LedGauge> {}
-
-            memory_pct = <PctLabel> {
-                text: "0%"
-            }
-        }
     }
 }
 
@@ -414,19 +371,7 @@ pub struct MofaHero {
     buffer_level: f64,
 
     #[rust]
-    cpu_usage: f64,
-
-    #[rust]
-    memory_usage: f64,
-
-    #[rust]
     connection_status: ConnectionStatus,
-
-    #[rust]
-    sys: Option<System>,
-
-    #[rust]
-    timer: Timer,
 
     #[rust]
     blink_phase: f64,  // For blinking animation
@@ -446,18 +391,6 @@ pub enum ConnectionStatus {
 impl Widget for MofaHero {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
-
-        // Initialize system info on first event
-        if self.sys.is_none() {
-            self.sys = Some(System::new_all());
-            // Start timer for periodic updates (every 1 second)
-            self.timer = cx.start_interval(1.0);
-        }
-
-        // Handle timer for system stats updates
-        if self.timer.is_event(event).is_some() {
-            self.update_system_stats(cx);
-        }
 
         // Handle start/stop button clicks (using view containers to match conference-dashboard)
         let start_view = self.view.view(ids!(action_section.start_view));
@@ -497,33 +430,6 @@ impl Widget for MofaHero {
 }
 
 impl MofaHero {
-    /// Update system stats from sysinfo
-    fn update_system_stats(&mut self, cx: &mut Cx) {
-        // Get values from sys first to avoid borrow issues
-        let (cpu_usage, memory_usage) = if let Some(ref mut sys) = self.sys {
-            sys.refresh_cpu_usage();
-            sys.refresh_memory();
-
-            let cpu = sys.global_cpu_usage() as f64 / 100.0;
-
-            let total_memory = sys.total_memory() as f64;
-            let used_memory = sys.used_memory() as f64;
-            let memory = if total_memory > 0.0 {
-                used_memory / total_memory
-            } else {
-                0.0
-            };
-
-            (cpu, memory)
-        } else {
-            return;
-        };
-
-        // Now update UI with the values
-        self.set_cpu_usage_internal(cx, cpu_usage);
-        self.set_memory_usage_internal(cx, memory_usage);
-    }
-
     /// Set the running state (shows start or stop view - matches conference-dashboard)
     pub fn set_running(&mut self, cx: &mut Cx, running: bool) {
         self.is_running = running;
@@ -549,54 +455,6 @@ impl MofaHero {
         });
 
         self.view.redraw(cx);
-    }
-
-    /// Internal CPU update (doesn't trigger external notification)
-    fn set_cpu_usage_internal(&mut self, cx: &mut Cx, usage: f64) {
-        self.cpu_usage = usage.clamp(0.0, 1.0);
-
-        self.view.view(ids!(cpu_section.cpu_gauge)).apply_over(cx, live! {
-            draw_bg: { fill_pct: (self.cpu_usage) }
-        });
-
-        let pct_text = format!("{}%", (self.cpu_usage * 100.0) as u32);
-        self.view.label(ids!(cpu_section.cpu_pct)).set_text(cx, &pct_text);
-
-        let status = if self.cpu_usage < 0.7 { 1.0 } else if self.cpu_usage < 0.9 { 2.0 } else { 3.0 };
-        self.view.view(ids!(cpu_section.cpu_dot)).apply_over(cx, live! {
-            draw_bg: { status: (status) }
-        });
-
-        self.view.redraw(cx);
-    }
-
-    /// Set CPU usage (0.0 - 1.0)
-    pub fn set_cpu_usage(&mut self, cx: &mut Cx, usage: f64) {
-        self.set_cpu_usage_internal(cx, usage);
-    }
-
-    /// Internal memory update
-    fn set_memory_usage_internal(&mut self, cx: &mut Cx, usage: f64) {
-        self.memory_usage = usage.clamp(0.0, 1.0);
-
-        self.view.view(ids!(memory_section.memory_gauge)).apply_over(cx, live! {
-            draw_bg: { fill_pct: (self.memory_usage) }
-        });
-
-        let pct_text = format!("{}%", (self.memory_usage * 100.0) as u32);
-        self.view.label(ids!(memory_section.memory_pct)).set_text(cx, &pct_text);
-
-        let status = if self.memory_usage < 0.7 { 1.0 } else if self.memory_usage < 0.9 { 2.0 } else { 3.0 };
-        self.view.view(ids!(memory_section.memory_dot)).apply_over(cx, live! {
-            draw_bg: { status: (status) }
-        });
-
-        self.view.redraw(cx);
-    }
-
-    /// Set memory usage (0.0 - 1.0)
-    pub fn set_memory_usage(&mut self, cx: &mut Cx, usage: f64) {
-        self.set_memory_usage_internal(cx, usage);
     }
 
     /// Set connection status
@@ -642,18 +500,6 @@ impl MofaHeroRef {
         }
     }
 
-    pub fn set_cpu_usage(&self, cx: &mut Cx, usage: f64) {
-        if let Some(mut inner) = self.borrow_mut() {
-            inner.set_cpu_usage(cx, usage);
-        }
-    }
-
-    pub fn set_memory_usage(&self, cx: &mut Cx, usage: f64) {
-        if let Some(mut inner) = self.borrow_mut() {
-            inner.set_memory_usage(cx, usage);
-        }
-    }
-
     pub fn set_connection_status(&self, cx: &mut Cx, status: ConnectionStatus) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.set_connection_status(cx, status);
@@ -690,28 +536,6 @@ impl MofaHeroRef {
                 draw_text: { dark_mode: (dark_mode) }
             });
             inner.view.label(ids!(buffer_section.buffer_pct)).apply_over(cx, live!{
-                draw_text: { dark_mode: (dark_mode) }
-            });
-
-            // CPU section
-            inner.view.view(ids!(cpu_section)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-            });
-            inner.view.label(ids!(cpu_section.cpu_label)).apply_over(cx, live!{
-                draw_text: { dark_mode: (dark_mode) }
-            });
-            inner.view.label(ids!(cpu_section.cpu_pct)).apply_over(cx, live!{
-                draw_text: { dark_mode: (dark_mode) }
-            });
-
-            // Memory section
-            inner.view.view(ids!(memory_section)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-            });
-            inner.view.label(ids!(memory_section.memory_label)).apply_over(cx, live!{
-                draw_text: { dark_mode: (dark_mode) }
-            });
-            inner.view.label(ids!(memory_section.memory_pct)).apply_over(cx, live!{
                 draw_text: { dark_mode: (dark_mode) }
             });
 

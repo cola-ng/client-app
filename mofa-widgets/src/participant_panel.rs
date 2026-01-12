@@ -322,8 +322,8 @@ live_design! {
                 width: Fit, height: Fit
                 text: "中文"
                 padding: { top: 2, bottom: 2, left: 2, right: 2 }
-                label_walk: { 
-                    margin: { left: 6 }
+                label_walk: {
+                    margin: { left: 15 }
                     width: Fit
                     height: Fit
                 }
@@ -331,7 +331,7 @@ live_design! {
                     size: 12.0
                 }
                 draw_text: {
-                    text_style: { font_size: 10.0 }
+                    text_style: { font_size: 12.0 }
                 }
             }
 
@@ -340,8 +340,8 @@ live_design! {
                 width: Fit, height: Fit
                 text: "EN"
                 padding: { top: 2, bottom: 2, left: 2, right: 2 }
-                label_walk: { 
-                    margin: { left: 6 }
+                label_walk: {
+                    margin: { left: 15 }
                     width: Fit
                     height: Fit
                 }
@@ -349,7 +349,7 @@ live_design! {
                     size: 12.0
                 }
                 draw_text: {
-                    text_style: { font_size: 10.0 }
+                    text_style: { font_size: 12.0 }
                 }
             }
 
