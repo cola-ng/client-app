@@ -487,30 +487,6 @@ live_design! {
                             visible: false
                         }
 
-                        app_page = <View> {
-                            width: Fill, height: Fill
-                            flow: Down
-                            spacing: 12
-                            visible: false
-                            align: {x: 0.5, y: 0.5}
-                            show_bg: true
-                            draw_bg: { color: (DARK_BG) }
-
-                            <Label> {
-                                text: "Demo App"
-                                draw_text: {
-                                    color: (TEXT_MUTED)
-                                    text_style: <FONT_SEMIBOLD>{ font_size: 18.0 }
-                                }
-                            }
-                            <Label> {
-                                text: "Select an app from the sidebar"
-                                draw_text: {
-                                    color: (GRAY_300)
-                                    text_style: <FONT_REGULAR>{ font_size: 13.0 }
-                                }
-                            }
-                        }
 
                         settings_page = <SettingsScreen> {
                             width: Fill, height: Fill
@@ -708,11 +684,6 @@ live_design! {
                 sidebar_content = <Sidebar> {}
             }
 
-            user_btn_overlay = <View> {
-                width: 60, height: 44
-                abs_pos: vec2(1320.0, 10.0)
-                cursor: Hand
-            }
 
             user_menu = <View> {
                 width: 140, height: Fit
@@ -1027,18 +998,11 @@ impl App {
             return;
         }
 
-        let user_btn_x = window_width - 80.0;
-        self.ui.view(ids!(user_btn_overlay)).apply_over(cx, live!{
-            abs_pos: (dvec2(user_btn_x, 10.0))
-        });
 
         let user_menu_x = window_width - 150.0;
         self.ui.view(ids!(user_menu)).apply_over(cx, live!{
             abs_pos: (dvec2(user_menu_x, 55.0))
         });
-
-        let max_scroll_height = (window_height - 230.0).max(200.0);
-        self.ui.sidebar(ids!(sidebar_menu_overlay.sidebar_content)).set_max_scroll_height(max_scroll_height);
 
         self.ui.redraw(cx);
     }
@@ -1051,7 +1015,7 @@ impl App {
 impl App {
     /// Handle user menu hover
     fn handle_user_menu_hover(&mut self, cx: &mut Cx, event: &Event) {
-        let user_btn = self.ui.view(ids!(user_btn_overlay));
+        let user_btn = self.ui.view(ids!(body.dashboard_base.header.user_profile_container));
         let user_menu = self.ui.view(ids!(user_menu));
 
         match event.hits(cx, user_btn.area()) {
@@ -1225,15 +1189,6 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .app_page
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
                         .settings_page
                 ))
                 .apply_over(cx, live! { visible: false });
@@ -1275,15 +1230,6 @@ impl App {
                         .main_content
                         .content
                         .colang_page
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .app_page
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1342,185 +1288,9 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .app_page
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
                         .settings_page
                 ))
                 .apply_over(cx, live! { visible: true });
-            self.ui.redraw(cx);
-        }
-
-        // App buttons (1-20) - check if any was clicked
-        let app_clicked = self
-            .ui
-            .button(ids!(
-                sidebar_menu_overlay.sidebar_content.apps_scroll.app1_btn
-            ))
-            .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app2_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app3_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app4_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app5_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app6_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app7_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app8_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app9_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app10_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app11_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app12_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app13_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app14_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app15_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app16_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app17_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app18_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app19_btn
-                ))
-                .clicked(actions)
-            || self
-                .ui
-                .button(ids!(
-                    sidebar_menu_overlay.sidebar_content.apps_scroll.app20_btn
-                ))
-                .clicked(actions);
-
-        if app_clicked {
-            self.sidebar_menu_open = false;
-            self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .stop_timers(cx);
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .app_page
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.ui
-                .view(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .settings_page
-                ))
-                .apply_over(cx, live! { visible: false });
             self.ui.redraw(cx);
         }
     }
@@ -1556,9 +1326,6 @@ impl App {
                 self.ui
                     .view(ids!(sidebar_menu_overlay))
                     .set_visible(cx, false);
-                self.ui
-                    .sidebar(ids!(sidebar_menu_overlay.sidebar_content))
-                    .collapse_show_more(cx);
             }
         }
 
