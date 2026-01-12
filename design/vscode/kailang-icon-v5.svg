@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bubbleGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="bubbleDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#334155;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Large speech bubble (back) - rounded rectangle shape -->
+  <g id="bubble-back">
+    <rect x="200" y="180" width="260" height="200" rx="100" fill="url(#bubbleGreen)"/>
+    <!-- Tail pointing down-right -->
+    <path d="M 380 340 L 420 400 L 360 360 Z" fill="url(#bubbleGreen)"/>
+    
+    <!-- Three dots inside -->
+    <circle cx="270" cy="280" r="16" fill="white" opacity="0.95"/>
+    <circle cx="330" cy="280" r="16" fill="white" opacity="0.95"/>
+    <circle cx="390" cy="280" r="16" fill="white" opacity="0.95"/>
+  </g>
+  
+  <!-- Small speech bubble (front) - circle shape -->
+  <g id="bubble-front">
+    <circle cx="140" cy="240" r="100" fill="url(#bubbleDark)"/>
+    <!-- Tail pointing down-left -->
+    <path d="M 100 310 L 60 370 L 120 330 Z" fill="url(#bubbleDark)"/>
+    
+    <!-- Three dots inside -->
+    <circle cx="110" cy="235" r="12" fill="white" opacity="0.95"/>
+    <circle cx="140" cy="235" r="12" fill="white" opacity="0.95"/>
+    <circle cx="170" cy="235" r="12" fill="white" opacity="0.95"/>
+  </g>
+  
+  <!-- Connection element (small bridge between bubbles) -->
+  <ellipse cx="205" cy="260" rx="15" ry="25" fill="url(#bubbleGreen)" opacity="0.7"/>
+</svg>

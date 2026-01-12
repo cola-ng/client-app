@@ -76,7 +76,7 @@ live_design! {
     use settings::screen::SettingsScreen;
 
     // Logo image
-    MOFA_LOGO = dep("crate://self/resources/mofa-logo.png")
+    MOFA_LOGO = dep("crate://self/resources/clang-logo.png")
 
     // ------------------------------------------------------------------------
     // Tab Widgets

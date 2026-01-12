@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bubble1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0891b2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0e7490;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="bubble2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Large speech bubble (back) -->
+  <g id="bubble-back">
+    <circle cx="310" cy="280" r="120" fill="url(#bubble1)"/>
+    <!-- Tail -->
+    <path d="M 250 360 L 220 420 L 280 380 Z" fill="url(#bubble1)"/>
+    
+    <!-- Three dots inside -->
+    <circle cx="280" cy="270" r="14" fill="white" opacity="0.9"/>
+    <circle cx="320" cy="270" r="14" fill="white" opacity="0.9"/>
+    <circle cx="360" cy="270" r="14" fill="white" opacity="0.9"/>
+  </g>
+  
+  <!-- Small speech bubble (front) -->
+  <g id="bubble-front">
+    <circle cx="200" cy="200" r="90" fill="url(#bubble2)"/>
+    <!-- Tail -->
+    <path d="M 150 260 L 100 310 L 170 280 Z" fill="url(#bubble2)"/>
+    
+    <!-- Three dots inside -->
+    <circle cx="180" cy="195" r="11" fill="white" opacity="0.95"/>
+    <circle cx="210" cy="195" r="11" fill="white" opacity="0.95"/>
+    <circle cx="240" cy="195" r="11" fill="white" opacity="0.95"/>
+  </g>
+</svg>
