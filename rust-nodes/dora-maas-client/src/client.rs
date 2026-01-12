@@ -1,13 +1,13 @@
-use eyre::{Result, eyre};
+use eyre::{eyre, Result};
 use outfox_openai::spec::{
     ChatCompletionMessageToolCall, CreateChatCompletionRequest, CreateChatCompletionResponse,
 };
 use reqwest::Client as HttpClient;
+use std::time::Duration;
 use tokio::sync::mpsc;
 use tokio_util::sync::CancellationToken;
-use std::time::Duration;
 
-use crate::config::{GeminiConfig, OpenaiConfig, get_env_or_value};
+use crate::config::{get_env_or_value, GeminiConfig, OpenaiConfig};
 
 /// Trait for chat completion clients supporting multiple providers.
 ///
@@ -264,7 +264,6 @@ impl ChatClient for OpenaiClient {
         mut request: CreateChatCompletionRequest,
         chunk_sender: mpsc::UnboundedSender<String>,
     ) -> Result<(String, Option<Vec<ChatCompletionMessageToolCall>>)> {
-
         // Force streaming mode
         request.stream = Some(true);
 
@@ -300,7 +299,6 @@ impl ChatClient for OpenaiClient {
         cancellation_token: CancellationToken,
         timeout_duration: Duration,
     ) -> Result<(String, Option<Vec<ChatCompletionMessageToolCall>>)> {
-
         // Force streaming mode
         request.stream = Some(true);
 

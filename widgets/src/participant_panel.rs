@@ -401,25 +401,37 @@ impl ParticipantPanelRef {
     pub fn update_dark_mode(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Panel background
-            inner.view.apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-            });
+            inner.view.apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                },
+            );
 
             // Name label
-            inner.view.label(ids!(header.name_label)).apply_over(cx, live!{
-                draw_text: { dark_mode: (dark_mode) }
-            });
+            inner.view.label(ids!(header.name_label)).apply_over(
+                cx,
+                live! {
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
 
             // Replay button
-            inner.view.button(ids!(header.replay_btn)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-                draw_text: { dark_mode: (dark_mode) }
-            });
+            inner.view.button(ids!(header.replay_btn)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
 
             // Waveform background
-            inner.view.view(ids!(waveform)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-            });
+            inner.view.view(ids!(waveform)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                },
+            );
 
             inner.view.redraw(cx);
         }

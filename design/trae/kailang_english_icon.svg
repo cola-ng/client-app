@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="120" x2="884" y2="904" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B1022"/>
+      <stop offset="0.55" stop-color="#0A132A"/>
+      <stop offset="1" stop-color="#071018"/>
+    </linearGradient>
+    <radialGradient id="aurora" cx="0.32" cy="0.25" r="0.9">
+      <stop offset="0" stop-color="#8B5CF6" stop-opacity="0.55"/>
+      <stop offset="0.45" stop-color="#6366F1" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0.12"/>
+    </radialGradient>
+    <linearGradient id="mark" x1="304" y1="260" x2="740" y2="768" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A5B4FC"/>
+      <stop offset="0.5" stop-color="#C4B5FD"/>
+      <stop offset="1" stop-color="#34D399"/>
+    </linearGradient>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="72" y="72" width="880" height="880" rx="210" fill="url(#bg)"/>
+  <rect x="72" y="72" width="880" height="880" rx="210" fill="url(#aurora)" opacity="0.9"/>
+  <rect x="88" y="88" width="848" height="848" rx="196" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="2"/>
+
+  <g filter="url(#softGlow)">
+    <path
+      fill="url(#mark)"
+      fill-rule="evenodd"
+      d="
+        M512 230
+        C610 230 686 280 726 360
+        C768 444 758 548 700 626
+        C640 706 546 748 446 734
+        C344 720 268 652 246 560
+        C223 466 256 368 332 306
+        C382 266 444 230 512 230
+        Z
+
+        M512 312
+        C454 312 404 338 372 378
+        C326 436 316 516 348 574
+        C381 634 449 674 520 668
+        C592 662 654 611 674 542
+        C694 474 670 398 616 354
+        C586 330 550 312 512 312
+        Z
+
+        M512 470
+        C558 470 596 494 596 532
+        C596 573 556 604 512 604
+        C468 604 428 573 428 532
+        C428 494 466 470 512 470
+        Z
+
+        M512 512
+        C496 512 482 520 482 534
+        C482 549 497 562 512 562
+        C527 562 542 549 542 534
+        C542 520 528 512 512 512
+        Z
+
+        M674 404
+        C734 446 760 512 740 578
+        C735 595 716 604 699 599
+        C682 594 673 576 678 559
+        C693 508 673 461 633 431
+        C619 420 616 401 627 387
+        C638 373 660 370 674 381
+        Z
+
+        M742 344
+        C834 424 872 540 838 654
+        C833 671 815 681 798 676
+        C781 671 772 652 777 635
+        C804 544 774 454 702 392
+        C688 380 686 360 698 346
+        C710 332 728 332 742 344
+        Z
+      "/>
+
+    <path
+      d="M396 650 C440 702 586 702 628 650"
+      fill="none"
+      stroke="rgba(255,255,255,0.35)"
+      stroke-width="14"
+      stroke-linecap="round"/>
+  </g>
+
+  <g opacity="0.45">
+    <circle cx="238" cy="286" r="10" fill="#A78BFA"/>
+    <circle cx="804" cy="332" r="8" fill="#60A5FA"/>
+    <circle cx="786" cy="764" r="10" fill="#34D399"/>
+    <circle cx="252" cy="776" r="7" fill="#93C5FD"/>
+  </g>
+</svg>
+

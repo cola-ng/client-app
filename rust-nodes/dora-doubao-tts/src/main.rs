@@ -9,8 +9,8 @@ use dora_node_api::{
     ArrowData, DoraNode, Event,
 };
 use eyre::{Context, Result};
-use minimp3::{Decoder, Frame};
 use futures_util::{SinkExt, StreamExt};
+use minimp3::{Decoder, Frame};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
@@ -44,7 +44,6 @@ struct TextIssue {
     #[serde(default)]
     end_position: Option<i32>,
 }
-
 
 /// 简单文本输入格式
 #[derive(Debug, Serialize, Deserialize)]
@@ -162,21 +161,30 @@ async fn main() -> Result<()> {
                                 // Convert MP3 bytes to Float32 mono samples for audio player
                                 // Decode MP3 to PCM samples using minimp3
                                 // minimp3 Frame.data contains interleaved i16 samples: [L, R, L, R, ...] for stereo
-                                
+
                                 let mut decoder = Decoder::new(&audio_bytes[..]);
                                 let mut audio_samples: Vec<f32> = Vec::new();
                                 let mut actual_sample_rate = 24000; // Default from API config
                                 let mut total_channels = 1;
-                                
+
                                 loop {
                                     match decoder.next_frame() {
-                                        Ok(Frame { data, sample_rate, channels, .. }) => {
+                                        Ok(Frame {
+                                            data,
+                                            sample_rate,
+                                            channels,
+                                            ..
+                                        }) => {
                                             actual_sample_rate = sample_rate as u32;
                                             total_channels = channels;
-                                            
-                                            log::debug!("Frame: {} samples, {} channels, {} Hz", 
-                                                data.len(), channels, sample_rate);
-                                            
+
+                                            log::debug!(
+                                                "Frame: {} samples, {} channels, {} Hz",
+                                                data.len(),
+                                                channels,
+                                                sample_rate
+                                            );
+
                                             // Convert i16 PCM to f32 normalized samples
                                             // data is Vec<i16> with interleaved channels: [L,R,L,R,...] for stereo
                                             if channels == 2 {
@@ -208,7 +216,7 @@ async fn main() -> Result<()> {
                                         }
                                     }
                                 }
-                                
+
                                 log::info!("Decoded {} MP3 bytes to {} mono samples at {}Hz (source: {} channels)", 
                                     audio_bytes.len(), audio_samples.len(), actual_sample_rate, total_channels);
 

@@ -294,7 +294,7 @@ live_design! {
                 }
 
                 title = <Label> {
-                    text: "MoFA Studio"
+                    text: "开朗英语"
                     draw_text: {
                         color: (TEXT_PRIMARY)
                         text_style: <FONT_BOLD>{ font_size: 24.0 }
@@ -436,27 +436,27 @@ live_design! {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             let cx = self.rect_size.x * 0.5;
                             let cy = self.rect_size.y * 0.5;
-                            
+
                             // Background circle on hover - red
                             sdf.circle(cx, cy, 16.0);
                             let hover_color = vec4(0.9, 0.2, 0.2, 0.8);
                             sdf.fill(mix((TRANSPARENT), hover_color, self.hover));
-                            
+
                             // X icon
                             let sz = 4.5;
                             sdf.move_to(cx - sz, cy - sz);
                             sdf.line_to(cx + sz, cy + sz);
                             sdf.move_to(cx + sz, cy - sz);
                             sdf.line_to(cx - sz, cy + sz);
-                            
+
                             // Icon color: default gray, white on hover
                             let icon_color_light = (SLATE_500);
                             let icon_color_dark = (SLATE_400);
                             let normal_color = mix(icon_color_light, icon_color_dark, self.dark_mode);
                             let stroke_color = mix(normal_color, (WHITE), self.hover);
-                            
+
                             sdf.stroke(stroke_color, 1.5);
-                            
+
                             return sdf.result;
                         }
                     }
@@ -650,7 +650,7 @@ live_design! {
 
     App = {{App}} {
         ui: <Window> {
-            window: { title: "MoFA Studio", inner_size: vec2(1400, 900) }
+            window: { title: "开朗英语", inner_size: vec2(1400, 900) }
             pass: { clear_color: (DARK_BG) }
             flow: Overlay
 
@@ -992,17 +992,18 @@ impl App {
     /// Update overlay positions based on window size
     fn update_overlay_positions(&mut self, cx: &mut Cx) {
         let window_width = self.last_window_size.x;
-        let window_height = self.last_window_size.y;
 
         if window_width <= 0.0 {
             return;
         }
 
-
         let user_menu_x = window_width - 150.0;
-        self.ui.view(ids!(user_menu)).apply_over(cx, live!{
-            abs_pos: (dvec2(user_menu_x, 55.0))
-        });
+        self.ui.view(ids!(user_menu)).apply_over(
+            cx,
+            live! {
+                abs_pos: (dvec2(user_menu_x, 55.0))
+            },
+        );
 
         self.ui.redraw(cx);
     }
@@ -1015,7 +1016,9 @@ impl App {
 impl App {
     /// Handle user menu hover
     fn handle_user_menu_hover(&mut self, cx: &mut Cx, event: &Event) {
-        let user_btn = self.ui.view(ids!(body.dashboard_base.header.user_profile_container));
+        let user_btn = self
+            .ui
+            .view(ids!(body.dashboard_base.header.user_profile_container));
         let user_menu = self.ui.view(ids!(user_menu));
 
         match event.hits(cx, user_btn.area()) {
@@ -1055,13 +1058,21 @@ impl App {
 
     /// Handle user menu button clicks
     fn handle_user_menu_clicks(&mut self, cx: &mut Cx, actions: &[Action]) {
-        if self.ui.button(ids!(user_menu.menu_profile_btn)).clicked(actions) {
+        if self
+            .ui
+            .button(ids!(user_menu.menu_profile_btn))
+            .clicked(actions)
+        {
             self.user_menu_open = false;
             self.ui.view(ids!(user_menu)).set_visible(cx, false);
             self.open_or_switch_tab(cx, TabId::Profile);
         }
 
-        if self.ui.button(ids!(user_menu.menu_settings_btn)).clicked(actions) {
+        if self
+            .ui
+            .button(ids!(user_menu.menu_settings_btn))
+            .clicked(actions)
+        {
             self.user_menu_open = false;
             self.ui.view(ids!(user_menu)).set_visible(cx, false);
             self.open_or_switch_tab(cx, TabId::Settings);
@@ -1074,15 +1085,25 @@ impl App {
 
         match event.hits(cx, theme_btn.area()) {
             Hit::FingerHoverIn(_) => {
-                self.ui.view(ids!(body.dashboard_base.header.theme_toggle)).apply_over(cx, live!{
-                    draw_bg: { hover: 1.0 }
-                });
+                self.ui
+                    .view(ids!(body.dashboard_base.header.theme_toggle))
+                    .apply_over(
+                        cx,
+                        live! {
+                            draw_bg: { hover: 1.0 }
+                        },
+                    );
                 self.ui.redraw(cx);
             }
             Hit::FingerHoverOut(_) => {
-                self.ui.view(ids!(body.dashboard_base.header.theme_toggle)).apply_over(cx, live!{
-                    draw_bg: { hover: 0.0 }
-                });
+                self.ui
+                    .view(ids!(body.dashboard_base.header.theme_toggle))
+                    .apply_over(
+                        cx,
+                        live! {
+                            draw_bg: { hover: 0.0 }
+                        },
+                    );
                 self.ui.redraw(cx);
             }
             Hit::FingerUp(_) => {
@@ -1103,8 +1124,12 @@ impl App {
     /// Update the theme toggle icon based on current mode
     fn update_theme_toggle_icon(&mut self, cx: &mut Cx) {
         let is_dark = self.dark_mode;
-        self.ui.view(ids!(body.dashboard_base.header.theme_toggle.sun_icon)).set_visible(cx, !is_dark);
-        self.ui.view(ids!(body.dashboard_base.header.theme_toggle.moon_icon)).set_visible(cx, is_dark);
+        self.ui
+            .view(ids!(body.dashboard_base.header.theme_toggle.sun_icon))
+            .set_visible(cx, !is_dark);
+        self.ui
+            .view(ids!(body.dashboard_base.header.theme_toggle.moon_icon))
+            .set_visible(cx, is_dark);
         self.ui.redraw(cx);
     }
 }
@@ -1316,9 +1341,12 @@ impl App {
             -SIDEBAR_WIDTH * eased
         };
 
-        self.ui.view(ids!(sidebar_menu_overlay)).apply_over(cx, live!{
-            abs_pos: (dvec2(x, 52.0))
-        });
+        self.ui.view(ids!(sidebar_menu_overlay)).apply_over(
+            cx,
+            live! {
+                abs_pos: (dvec2(x, 52.0))
+            },
+        );
 
         if progress >= 1.0 {
             self.sidebar_animating = false;
@@ -1337,11 +1365,18 @@ impl App {
         self.sidebar_animating = true;
         self.sidebar_animation_start = Cx::time_now();
         self.sidebar_slide_in = true;
-        self.ui.view(ids!(sidebar_menu_overlay)).apply_over(cx, live!{
-            abs_pos: (dvec2(-250.0, 52.0))
-        });
-        self.ui.view(ids!(sidebar_menu_overlay)).set_visible(cx, true);
-        self.ui.sidebar(ids!(sidebar_menu_overlay.sidebar_content)).restore_selection_state(cx);
+        self.ui.view(ids!(sidebar_menu_overlay)).apply_over(
+            cx,
+            live! {
+                abs_pos: (dvec2(-250.0, 52.0))
+            },
+        );
+        self.ui
+            .view(ids!(sidebar_menu_overlay))
+            .set_visible(cx, true);
+        self.ui
+            .sidebar(ids!(sidebar_menu_overlay.sidebar_content))
+            .restore_selection_state(cx);
         self.ui.redraw(cx);
     }
 
@@ -1461,12 +1496,14 @@ impl App {
         );
 
         // Apply to close app button
-        self.ui.view(ids!(body.dashboard_base.header.close_app_btn)).apply_over(
-            cx,
-            live! {
-                draw_bg: { dark_mode: (dm) }
-            },
-        );
+        self.ui
+            .view(ids!(body.dashboard_base.header.close_app_btn))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dm) }
+                },
+            );
 
         // Apply to tab overlay - only when tabs are open
         if !self.open_tabs.is_empty() {
@@ -1641,15 +1678,36 @@ impl App {
     /// Apply dark mode to screens with a specific value
     fn apply_dark_mode_screens_with_value(&mut self, cx: &mut Cx, dm: f64) {
         // Apply to MoFA FM screen (main content)
-        self.ui.mo_fa_fmscreen(ids!(body.dashboard_base.content_area.main_content.content.fm_page))
+        self.ui
+            .mo_fa_fmscreen(ids!(
+                body.dashboard_base
+                    .content_area
+                    .main_content
+                    .content
+                    .fm_page
+            ))
             .on_dark_mode_change(cx, dm);
 
         // Apply to Colang screen (main content)
-        self.ui.colang_screen(ids!(body.dashboard_base.content_area.main_content.content.colang_page))
+        self.ui
+            .colang_screen(ids!(
+                body.dashboard_base
+                    .content_area
+                    .main_content
+                    .content
+                    .colang_page
+            ))
             .on_dark_mode_change(cx, dm);
 
         // Apply to Settings screen in main content
-        self.ui.settings_screen(ids!(body.dashboard_base.content_area.main_content.content.settings_page))
+        self.ui
+            .settings_screen(ids!(
+                body.dashboard_base
+                    .content_area
+                    .main_content
+                    .content
+                    .settings_page
+            ))
             .update_dark_mode(cx, dm);
 
         // Apply to tab overlay content - only when tabs are open

@@ -589,13 +589,17 @@ impl DoraBridge for AudioPlayerBridge {
                     if let Ok(BridgeEvent::Error(msg)) = self.event_receiver.try_recv() {
                         return Err(BridgeError::ConnectionFailed(msg));
                     }
-                    return Err(BridgeError::ConnectionFailed("Connection failed".to_string()));
+                    return Err(BridgeError::ConnectionFailed(
+                        "Connection failed".to_string(),
+                    ));
                 }
                 _ => {}
             }
 
             if start.elapsed() >= timeout {
-                return Err(BridgeError::ConnectionFailed("Connection timeout".to_string()));
+                return Err(BridgeError::ConnectionFailed(
+                    "Connection timeout".to_string(),
+                ));
             }
 
             std::thread::sleep(std::time::Duration::from_millis(50));

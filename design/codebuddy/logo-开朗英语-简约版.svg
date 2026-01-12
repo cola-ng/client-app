@@ -1,0 +1,71 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background - Vibrant Orange -->
+  <defs>
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB74D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF9800;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main Circle -->
+  <circle cx="256" cy="256" r="230" fill="url(#mainGrad)"/>
+  
+  <!-- Large Open Mouth - "开" (opening/speaking) -->
+  <!-- Main curve - warm and welcoming -->
+  <path d="M 120 280 Q 256 400 392 280" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="60" 
+        stroke-linecap="round"/>
+  
+  <!-- Inner highlight for depth -->
+  <path d="M 140 295 Q 256 380 372 295" 
+        fill="none" 
+        stroke="#FFE0B2" 
+        stroke-width="12" 
+        stroke-linecap="round"
+        opacity="0.7"/>
+  
+  <!-- Sound Waves - "朗" (reciting/speaking loudly) -->
+  <!-- 4 expanding waves on the right -->
+  <path d="M 420 200 Q 460 256 420 312" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="20" 
+        stroke-linecap="round"
+        opacity="1.0"/>
+  
+  <path d="M 435 175 Q 480 256 435 337" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="14" 
+        stroke-linecap="round"
+        opacity="0.8"/>
+  
+  <path d="M 450 150 Q 500 256 450 362" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="10" 
+        stroke-linecap="round"
+        opacity="0.6"/>
+  
+  <path d="M 465 125 Q 520 256 465 387" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="6" 
+        stroke-linecap="round"
+        opacity="0.4"/>
+  
+  <!-- Upward Smile Arc - "开朗" (cheerful) -->
+  <path d="M 150 160 Q 256 80 362 160" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="24" 
+        stroke-linecap="round"
+        opacity="0.5"/>
+  
+  <!-- Small sparkle elements for energy -->
+  <circle cx="100" cy="120" r="12" fill="#ffffff" opacity="0.4"/>
+  <circle cx="150" cy="90" r="8" fill="#ffffff" opacity="0.3"/>
+  <circle cx="380" cy="100" r="10" fill="#ffffff" opacity="0.35"/>
+</svg>

@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+  <defs>
+    <linearGradient id="bgr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070A12"/>
+      <stop offset="1" stop-color="#0B1022"/>
+    </linearGradient>
+    <filter id="shadowr" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <style>
+      .t { font-family: Segoe UI, Arial, sans-serif; fill: #E5E7EB; }
+      .muted { fill: #94A3B8; }
+      .muted2 { fill: #64748B; }
+      .h1 { font-size: 18px; font-weight: 700; }
+      .h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+      .p { font-size: 12px; }
+      .p2 { font-size: 11px; }
+      .panel { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .panel2 { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .chip { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.14); stroke-width: 1; }
+      .btn2 { fill: rgba(99,102,241,0.22); stroke: rgba(99,102,241,0.45); stroke-width: 1; }
+      .good { fill: #34D399; }
+      .warn { fill: #FBBF24; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="820" fill="url(#bgr)"/>
+  <text x="48" y="56" class="t h1">FluentFlow — Review (SRS 极简：到期优先 + AI 解释 + 1题针对练)</text>
+  <text x="48" y="80" class="t p muted">复习只做最关键的选择：开始到期复习；其余交给 AI 计划与引导</text>
+
+  <g filter="url(#shadowr)">
+    <rect x="40" y="110" width="1320" height="670" rx="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)"/>
+  </g>
+  <rect x="40" y="110" width="1320" height="72" rx="18" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+  <text x="72" y="152" class="t h1">Review</text>
+  <rect x="200" y="130" width="360" height="36" rx="12" class="panel"/>
+  <text x="218" y="152" class="t p muted2">Search cards / tags / errors…</text>
+  <rect x="1044" y="130" width="140" height="36" rx="12" class="btn2"/>
+  <text x="1082" y="152" class="t p">Start Due</text>
+  <rect x="1192" y="130" width="148" height="36" rx="12" class="panel"/>
+  <text x="1230" y="152" class="t p muted">Daily Cap</text>
+
+  <g>
+    <rect x="58" y="200" width="430" height="560" rx="16" class="panel"/>
+    <text x="80" y="230" class="t h2 muted">Today</text>
+    <rect x="78" y="250" width="390" height="120" rx="16" class="panel2"/>
+    <text x="98" y="280" class="t p">Due: <tspan fill="#A5B4FC" font-weight="700">38</tspan> • New: <tspan fill="#94A3B8" font-weight="700">8</tspan></text>
+    <text x="98" y="306" class="t p2 muted">Default: do due first. New cards auto-limited.</text>
+    <rect x="98" y="326" width="130" height="30" rx="15" class="btn2"/>
+    <text x="126" y="346" class="t p2">Start</text>
+    <rect x="240" y="326" width="110" height="30" rx="15" class="chip"/>
+    <text x="268" y="346" class="t p2">Settings</text>
+
+    <rect x="78" y="388" width="390" height="170" rx="16" class="panel2"/>
+    <text x="98" y="416" class="t p">Weak spots (auto)</text>
+    <rect x="98" y="436" width="350" height="30" rx="12" class="chip"/>
+    <circle cx="110" cy="451" r="4" class="warn"/>
+    <text x="122" y="455" class="t p2">Articles: a/the • 12 due</text>
+    <rect x="98" y="472" width="350" height="30" rx="12" class="chip"/>
+    <circle cx="110" cy="487" r="4" class="warn"/>
+    <text x="122" y="491" class="t p2">Prepositions • 9 due</text>
+    <rect x="98" y="508" width="350" height="30" rx="12" class="chip"/>
+    <circle cx="110" cy="523" r="4" class="warn"/>
+    <text x="122" y="527" class="t p2">Pronunciation: reservation • 3 drills</text>
+
+    <rect x="78" y="574" width="390" height="166" rx="16" class="panel2"/>
+    <text x="98" y="602" class="t p">Heatmap</text>
+    <g opacity="0.9">
+      <rect x="98" y="618" width="16" height="16" rx="4" fill="rgba(255,255,255,0.06)"/>
+      <rect x="118" y="618" width="16" height="16" rx="4" fill="rgba(52,211,153,0.25)"/>
+      <rect x="138" y="618" width="16" height="16" rx="4" fill="rgba(52,211,153,0.40)"/>
+      <rect x="158" y="618" width="16" height="16" rx="4" fill="rgba(52,211,153,0.12)"/>
+      <rect x="178" y="618" width="16" height="16" rx="4" fill="rgba(255,255,255,0.06)"/>
+      <rect x="98" y="638" width="16" height="16" rx="4" fill="rgba(52,211,153,0.30)"/>
+      <rect x="118" y="638" width="16" height="16" rx="4" fill="rgba(52,211,153,0.18)"/>
+      <rect x="138" y="638" width="16" height="16" rx="4" fill="rgba(255,255,255,0.06)"/>
+      <rect x="158" y="638" width="16" height="16" rx="4" fill="rgba(52,211,153,0.22)"/>
+      <rect x="178" y="638" width="16" height="16" rx="4" fill="rgba(52,211,153,0.44)"/>
+    </g>
+    <text x="98" y="714" class="t p2 muted">Minimal data: streak + today done + top weak spots</text>
+  </g>
+
+  <g>
+    <rect x="508" y="200" width="520" height="560" rx="16" class="panel"/>
+    <text x="530" y="230" class="t h2 muted">Review Flow</text>
+
+    <rect x="530" y="250" width="476" height="84" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="550" y="280" class="t p">Card 12 / 38 • Mode: Dictation</text>
+    <text x="550" y="306" class="t p2 muted">/ˌrez.əˈveɪ.ʃən/ 🔊</text>
+
+    <rect x="530" y="350" width="476" height="140" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="550" y="382" class="t p2 muted">Type what you hear</text>
+    <rect x="550" y="396" width="380" height="44" rx="14" class="chip"/>
+    <text x="566" y="423" class="t p2 muted2">r e s _ _ v a t i o n</text>
+    <rect x="938" y="396" width="68" height="44" rx="14" class="btn2"/>
+    <text x="956" y="423" class="t p2">Check</text>
+
+    <rect x="530" y="506" width="476" height="96" rx="16" fill="rgba(99,102,241,0.10)" stroke="rgba(99,102,241,0.28)"/>
+    <text x="550" y="536" class="t p2">AI explains in one breath:</text>
+    <text x="550" y="558" class="t p2 muted">re-ser-va-tion • stress on “-va-” • try 1 sentence now</text>
+    <rect x="878" y="536" width="108" height="34" rx="17" class="chip"/>
+    <text x="900" y="558" class="t p2">1 drill</text>
+
+    <rect x="530" y="618" width="156" height="44" rx="16" class="panel"/>
+    <text x="576" y="646" class="t p2 muted">Again</text>
+    <rect x="694" y="618" width="156" height="44" rx="16" class="panel"/>
+    <text x="732" y="646" class="t p2 muted">Skip</text>
+    <rect x="850" y="618" width="156" height="44" rx="16" class="btn2"/>
+    <text x="898" y="646" class="t p2">Good</text>
+
+    <text x="530" y="704" class="t p2 muted2">No branching; keep momentum. AI handles difficulty and scheduling.</text>
+  </g>
+
+  <g>
+    <rect x="1048" y="200" width="294" height="560" rx="16" class="panel"/>
+    <text x="1070" y="230" class="t h2 muted">Planner</text>
+
+    <rect x="1070" y="250" width="250" height="180" rx="16" class="panel2"/>
+    <text x="1090" y="278" class="t p">Auto Plan</text>
+    <rect x="1090" y="296" width="210" height="30" rx="12" class="chip"/>
+    <circle cx="1102" cy="311" r="4" class="good"/>
+    <text x="1114" y="315" class="t p2">3 min talk warm-up</text>
+    <rect x="1090" y="332" width="210" height="30" rx="12" class="chip"/>
+    <circle cx="1102" cy="347" r="4" class="warn"/>
+    <text x="1114" y="351" class="t p2">Focus: articles (a/the)</text>
+    <rect x="1090" y="368" width="210" height="30" rx="12" class="chip"/>
+    <circle cx="1102" cy="383" r="4" class="warn"/>
+    <text x="1114" y="387" class="t p2">Shadowing: check-in clip</text>
+
+    <rect x="1070" y="444" width="250" height="140" rx="16" class="panel2"/>
+    <text x="1090" y="472" class="t p">From Talk</text>
+    <text x="1090" y="498" class="t p2 muted2">Mistakes captured without shame:</text>
+    <text x="1090" y="522" class="t p2 muted">• want to + verb</text>
+    <text x="1090" y="544" class="t p2 muted">• reservation stress</text>
+
+    <rect x="1070" y="600" width="250" height="140" rx="16" class="panel2"/>
+    <text x="1090" y="628" class="t p">Confidence</text>
+    <rect x="1090" y="646" width="210" height="10" rx="5" fill="rgba(255,255,255,0.10)"/>
+    <rect x="1090" y="646" width="150" height="10" rx="5" fill="rgba(99,102,241,0.55)"/>
+    <text x="1090" y="676" class="t p2 muted">You spoke 7 times • Brave attempts 3</text>
+  </g>
+</svg>
+

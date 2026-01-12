@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#f8fafc"/>
+  
+  <!-- Left Sidebar (simplified) -->
+  <rect x="0" y="0" width="240" height="900" fill="#1e293b"/>
+  <circle cx="120" cy="40" r="20" fill="#3b82f6"/>
+  <text x="120" y="80" font-size="14" fill="#cbd5e1" text-anchor="middle" font-weight="600">FLUENT AI</text>
+  
+  <!-- Nav items (Progress active) -->
+  <text x="60" y="147" font-size="15" fill="#94a3b8" font-weight="400">🏠 Dashboard</text>
+  <text x="60" y="191" font-size="15" fill="#94a3b8" font-weight="400">💬 AI Tutor</text>
+  <rect x="16" y="334" width="208" height="44" rx="8" fill="#3b82f6"/>
+  <text x="60" y="361" font-size="15" fill="#ffffff" font-weight="500">📈 Progress</text>
+  
+  <!-- Main Content -->
+  <rect x="240" y="0" width="1160" height="900" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <text x="280" y="45" font-size="24" fill="#1e293b" font-weight="700">Learning Progress</text>
+  <text x="280" y="70" font-size="14" fill="#64748b">Track your improvement across all skills</text>
+  
+  <!-- Time range selector -->
+  <g id="timeSelector">
+    <rect x="1090" y="30" width="70" height="32" rx="16" fill="#f1f5f9"/>
+    <text x="1125" y="51" font-size="12" fill="#64748b" text-anchor="middle">Week</text>
+    
+    <rect x="1170" y="30" width="70" height="32" rx="16" fill="#3b82f6"/>
+    <text x="1205" y="51" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="600">Month</text>
+    
+    <rect x="1250" y="30" width="70" height="32" rx="16" fill="#f1f5f9"/>
+    <text x="1285" y="51" font-size="12" fill="#64748b" text-anchor="middle">Year</text>
+  </g>
+  
+  <!-- Overview Stats -->
+  <g id="overview">
+    <rect x="280" y="100" width="240" height="120" rx="12" fill="#dbeafe"/>
+    <text x="310" y="135" font-size="14" fill="#1e40af" font-weight="600">Total Study Time</text>
+    <text x="310" y="170" font-size="40" fill="#2563eb" font-weight="700">42.5</text>
+    <text x="400" y="175" font-size="16" fill="#3b82f6" font-weight="500">hours</text>
+    <text x="310" y="200" font-size="12" fill="#1e40af">↑ 15% from last month</text>
+    
+    <rect x="540" y="100" width="240" height="120" rx="12" fill="#dcfce7"/>
+    <text x="570" y="135" font-size="14" fill="#15803d" font-weight="600">Words Learned</text>
+    <text x="570" y="170" font-size="40" fill="#16a34a" font-weight="700">1,247</text>
+    <text x="690" y="175" font-size="16" fill="#22c55e" font-weight="500">words</text>
+    <text x="570" y="200" font-size="12" fill="#15803d">+32 this month</text>
+    
+    <rect x="800" y="100" width="240" height="120" rx="12" fill="#fef3c7"/>
+    <text x="830" y="135" font-size="14" fill="#a16207" font-weight="600">Current Streak</text>
+    <text x="830" y="170" font-size="40" fill="#ca8a04" font-weight="700">18</text>
+    <text x="905" y="175" font-size="16" fill="#eab308" font-weight="500">days</text>
+    <text x="830" y="200" font-size="12" fill="#a16207">🔥 Keep it up!</text>
+    
+    <rect x="1060" y="100" width="240" height="120" rx="12" fill="#e0e7ff"/>
+    <text x="1090" y="135" font-size="14" fill="#3730a3" font-weight="600">Practice Sessions</text>
+    <text x="1090" y="170" font-size="40" fill="#4f46e5" font-weight="700">124</text>
+    <text x="1175" y="175" font-size="16" fill="#6366f1" font-weight="500">sessions</text>
+    <text x="1090" y="200" font-size="12" fill="#3730a3">Avg 34 min/session</text>
+  </g>
+  
+  <!-- Learning Curve Chart -->
+  <text x="280" y="265" font-size="18" fill="#1e293b" font-weight="600">Learning Curve (Last 30 Days)</text>
+  
+  <rect x="280" y="280" width="1030" height="240" rx="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  
+  <!-- Y-axis labels -->
+  <text x="300" y="310" font-size="11" fill="#94a3b8" text-anchor="end">100</text>
+  <text x="300" y="370" font-size="11" fill="#94a3b8" text-anchor="end">75</text>
+  <text x="300" y="430" font-size="11" fill="#94a3b8" text-anchor="end">50</text>
+  <text x="300" y="490" font-size="11" fill="#94a3b8" text-anchor="end">25</text>
+  <text x="300" y="510" font-size="11" fill="#94a3b8" text-anchor="end">0</text>
+  
+  <!-- Grid lines -->
+  <line x1="320" y1="305" x2="1290" y2="305" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="320" y1="365" x2="1290" y2="365" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="320" y1="425" x2="1290" y2="425" stroke="#f1f5f9" stroke-width="1"/>
+  <line x1="320" y1="485" x2="1290" y2="485" stroke="#f1f5f9" stroke-width="1"/>
+  
+  <!-- Learning curve (vocabulary) -->
+  <polyline points="320,485 420,445 520,425 620,395 720,375 820,355 920,345 1020,325 1120,315 1220,305" 
+            fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Pronunciation curve -->
+  <polyline points="320,505 420,485 520,475 620,455 720,445 820,425 920,415 1020,395 1120,385 1220,365" 
+            fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5"/>
+  
+  <!-- Listening curve -->
+  <polyline points="320,495 420,475 520,465 620,445 720,435 820,415 920,405 1020,385 1120,375 1220,355" 
+            fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5"/>
+  
+  <!-- Data points -->
+  <circle cx="1220" cy="305" r="5" fill="#3b82f6"/>
+  <circle cx="1220" cy="365" r="5" fill="#22c55e"/>
+  <circle cx="1220" cy="355" r="5" fill="#f59e0b"/>
+  
+  <!-- X-axis labels -->
+  <text x="370" y="530" font-size="11" fill="#94a3b8">Jan 1</text>
+  <text x="570" y="530" font-size="11" fill="#94a3b8">Jan 10</text>
+  <text x="770" y="530" font-size="11" fill="#94a3b8">Jan 20</text>
+  <text x="970" y="530" font-size="11" fill="#94a3b8">Jan 30</text>
+  <text x="1170" y="530" font-size="11" fill="#94a3b8">Today</text>
+  
+  <!-- Legend -->
+  <rect x="320" y="540" width="12" height="3" fill="#3b82f6"/>
+  <text x="340" y="545" font-size="12" fill="#64748b">Vocabulary Score</text>
+  
+  <rect x="470" y="540" width="12" height="3" fill="#22c55e"/>
+  <text x="490" y="545" font-size="12" fill="#64748b">Pronunciation Score</text>
+  
+  <rect x="650" y="540" width="12" height="3" fill="#f59e0b"/>
+  <text x="670" y="545" font-size="12" fill="#64748b">Listening Score</text>
+  
+  <!-- Skill Radar Chart -->
+  <text x="280" y="595" font-size="18" fill="#1e293b" font-weight="600">Skill Breakdown</text>
+  
+  <rect x="280" y="610" width="500" height="280" rx="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  
+  <!-- Radar chart (hexagon) -->
+  <g transform="translate(530, 750)">
+    <!-- Grid (background hexagons) -->
+    <polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
+             fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    <polygon points="0,-75 65,-37.5 65,37.5 0,75 -65,37.5 -65,-37.5" 
+             fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    <polygon points="0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25" 
+             fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    <polygon points="0,-25 21.65,-12.5 21.65,12.5 0,25 -21.65,12.5 -21.65,-12.5" 
+             fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    
+    <!-- Data polygon -->
+    <polygon points="0,-85 73.5,-45 60,55 0,80 -60,40 -73.5,-45" 
+             fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="2"/>
+    
+    <!-- Labels -->
+    <text x="0" y="-115" font-size="12" fill="#1e293b" text-anchor="middle" font-weight="600">Vocabulary</text>
+    <text x="95" y="-45" font-size="12" fill="#1e293b" text-anchor="start" font-weight="600">Grammar</text>
+    <text x="95" y="60" font-size="12" fill="#1e293b" text-anchor="start" font-weight="600">Speaking</text>
+    <text x="0" y="115" font-size="12" fill="#1e293b" text-anchor="middle" font-weight="600">Listening</text>
+    <text x="-95" y="55" font-size="12" fill="#1e293b" text-anchor="end" font-weight="600">Reading</text>
+    <text x="-95" y="-40" font-size="12" fill="#1e293b" text-anchor="end" font-weight="600">Writing</text>
+    
+    <!-- Scores -->
+    <text x="0" y="-75" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">85</text>
+    <text x="64" y="-35" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">78</text>
+    <text x="52" y="50" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">72</text>
+    <text x="0" y="70" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">80</text>
+    <text x="-52" y="35" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">68</text>
+    <text x="-64" y="-35" font-size="11" fill="#3b82f6" text-anchor="middle" font-weight="700">75</text>
+  </g>
+  
+  <!-- Achievement Gallery -->
+  <text x="800" y="595" font-size="18" fill="#1e293b" font-weight="600">Recent Achievements</text>
+  
+  <rect x="800" y="610" width="500" height="280" rx="12" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  
+  <!-- Achievement 1 -->
+  <g id="achievement1">
+    <circle cx="850" cy="660" r="30" fill="#fef3c7"/>
+    <text x="850" y="672" font-size="28" text-anchor="middle">🏆</text>
+    <text x="900" y="660" font-size="14" fill="#1e293b" font-weight="600">18 Day Streak</text>
+    <text x="900" y="677" font-size="11" fill="#64748b">Unlocked 2 days ago</text>
+  </g>
+  
+  <!-- Achievement 2 -->
+  <g id="achievement2">
+    <circle cx="850" cy="730" r="30" fill="#dcfce7"/>
+    <text x="850" y="742" font-size="28" text-anchor="middle">📚</text>
+    <text x="900" y="730" font-size="14" fill="#1e293b" font-weight="600">1000 Words Master</text>
+    <text x="900" y="747" font-size="11" fill="#64748b">Unlocked 5 days ago</text>
+  </g>
+  
+  <!-- Achievement 3 -->
+  <g id="achievement3">
+    <circle cx="850" cy="800" r="30" fill="#dbeafe"/>
+    <text x="850" y="812" font-size="28" text-anchor="middle">⭐</text>
+    <text x="900" y="800" font-size="14" fill="#1e293b" font-weight="600">Perfect Pronunciation</text>
+    <text x="900" y="817" font-size="11" fill="#64748b">Unlocked 1 week ago</text>
+  </g>
+  
+  <!-- Achievement 4 (locked) -->
+  <g id="achievement4" opacity="0.5">
+    <circle cx="850" cy="860" r="30" fill="#f1f5f9" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="3,3"/>
+    <text x="850" y="872" font-size="28" text-anchor="middle">🔒</text>
+    <text x="900" y="860" font-size="14" fill="#94a3b8" font-weight="600">30 Day Warrior</text>
+    <text x="900" y="877" font-size="11" fill="#cbd5e1">12 more days to unlock</text>
+  </g>
+  
+  <!-- View All button -->
+  <rect x="1170" y="850" width="110" height="32" rx="16" fill="#f1f5f9"/>
+  <text x="1225" y="871" font-size="12" fill="#64748b" text-anchor="middle" font-weight="600">View All →</text>
+</svg>

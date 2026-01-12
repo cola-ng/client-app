@@ -52,7 +52,12 @@ impl CircularAudioBuffer {
         }
     }
 
-    fn write_with_participant(&mut self, samples: &[f32], participant_id: Option<String>, question_id: Option<String>) -> usize {
+    fn write_with_participant(
+        &mut self,
+        samples: &[f32],
+        participant_id: Option<String>,
+        question_id: Option<String>,
+    ) -> usize {
         let mut written = 0;
         for &sample in samples {
             if self.available_samples < self.buffer_size {
@@ -180,8 +185,8 @@ impl CircularAudioBuffer {
             self.segments = new_segments;
 
             // Update current participant from remaining segments
-            self.current_playing_participant = self.segments.front()
-                .and_then(|s| s.participant_id.clone());
+            self.current_playing_participant =
+                self.segments.front().and_then(|s| s.participant_id.clone());
         }
     }
 
@@ -196,7 +201,7 @@ struct SharedAudioState {
     buffer_seconds: f64,
     is_playing: bool,
     current_participant: Option<String>,
-    output_waveform: Vec<f32>,  // Samples currently being played (for visualization)
+    output_waveform: Vec<f32>, // Samples currently being played (for visualization)
 }
 
 /// Audio player handle
@@ -243,10 +248,17 @@ impl AudioPlayer {
     }
 
     /// Add audio samples to the buffer with question_id for smart reset support
-    pub fn write_audio_with_question(&self, samples: &[f32], participant_id: Option<String>, question_id: Option<String>) {
-        let _ = self
-            .command_tx
-            .send(AudioCommand::Write(samples.to_vec(), participant_id, question_id));
+    pub fn write_audio_with_question(
+        &self,
+        samples: &[f32],
+        participant_id: Option<String>,
+        question_id: Option<String>,
+    ) {
+        let _ = self.command_tx.send(AudioCommand::Write(
+            samples.to_vec(),
+            participant_id,
+            question_id,
+        ));
     }
 
     /// Get buffer fill percentage
@@ -287,7 +299,9 @@ impl AudioPlayer {
     /// Smart reset - keep only audio for the specified question_id
     /// Use this after receiving a new question to discard stale audio
     pub fn smart_reset(&self, question_id: &str) {
-        let _ = self.command_tx.send(AudioCommand::SmartReset(question_id.to_string()));
+        let _ = self
+            .command_tx
+            .send(AudioCommand::SmartReset(question_id.to_string()));
     }
 
     /// Get sample rate
@@ -304,13 +318,15 @@ impl AudioPlayer {
     /// Get current participant index (0=myself, 1=teacher)
     /// Matches conference-dashboard's interface for consistent behavior
     pub fn current_participant_idx(&self) -> Option<usize> {
-        self.state.lock().current_participant.as_ref().and_then(|p| {
-            match p.as_str() {
+        self.state
+            .lock()
+            .current_participant
+            .as_ref()
+            .and_then(|p| match p.as_str() {
                 "myself" => Some(0),
                 "teacher" => Some(1),
                 _ => None,
-            }
-        })
+            })
     }
 }
 
@@ -326,7 +342,7 @@ fn run_audio_thread(
     command_rx: Receiver<AudioCommand>,
     state: Arc<Mutex<SharedAudioState>>,
 ) -> Result<(), String> {
-    let buffer_seconds = 30.0;  // 30 second audio buffer
+    let buffer_seconds = 30.0; // 30 second audio buffer
     let buffer = Arc::new(Mutex::new(CircularAudioBuffer::new(
         buffer_seconds,
         sample_rate,
@@ -347,7 +363,7 @@ fn run_audio_thread(
     let supported_config = device
         .default_output_config()
         .map_err(|e| format!("Failed to get default config: {}", e))?;
-    
+
     // Try to use our preferred sample rate if supported, otherwise use device's default
     let actual_sample_rate = if supported_config.sample_rate().0 != sample_rate {
         log::warn!(
@@ -365,7 +381,7 @@ fn run_audio_thread(
         sample_rate: cpal::SampleRate(actual_sample_rate),
         buffer_size: cpal::BufferSize::Default,
     };
-    
+
     log::info!(
         "Using audio config: {} channels, {} Hz",
         config.channels,
@@ -383,7 +399,7 @@ fn run_audio_thread(
             move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
                 if is_playing_clone.load(Ordering::Relaxed) {
                     let mut buf = buffer_clone.lock();
-                    
+
                     // Read mono data and duplicate to all channels if needed
                     if channels == 1 {
                         buf.read(data);
@@ -392,14 +408,14 @@ fn run_audio_thread(
                         let frame_count = data.len() / channels;
                         let mut mono_data = vec![0.0f32; frame_count];
                         buf.read(&mut mono_data);
-                        
+
                         for (i, &sample) in mono_data.iter().enumerate() {
                             for ch in 0..channels {
                                 data[i * channels + ch] = sample;
                             }
                         }
                     }
-                    
+
                     let current_participant = buf.current_participant();
                     drop(buf);
 

@@ -22,7 +22,10 @@ async fn main() -> Result<()> {
         "stream": true
     });
 
-    eprintln!("Request body: {}", serde_json::to_string_pretty(&request_body)?);
+    eprintln!(
+        "Request body: {}",
+        serde_json::to_string_pretty(&request_body)?
+    );
 
     // Create HTTP client
     eprintln!("Creating HTTP client...");

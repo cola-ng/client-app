@@ -1,5 +1,5 @@
 use bytes::Bytes;
-use eyre::{Result, eyre};
+use eyre::{eyre, Result};
 use futures::StreamExt;
 use reqwest_eventsource::{Event, EventSource};
 use serde::Deserialize;
@@ -165,7 +165,8 @@ where
     let mut tool_accumulator = ToolCallAccumulator::default();
 
     // Track last few raw SSE events for debugging
-    let mut last_raw_events: std::collections::VecDeque<String> = std::collections::VecDeque::with_capacity(5);
+    let mut last_raw_events: std::collections::VecDeque<String> =
+        std::collections::VecDeque::with_capacity(5);
     let mut chunk_count: usize = 0;
 
     while let Some(event) = event_source.next().await {
@@ -255,7 +256,8 @@ where
     let mut tool_accumulator = ToolCallAccumulator::default();
 
     // Track last few raw SSE events for debugging
-    let mut last_raw_events: std::collections::VecDeque<String> = std::collections::VecDeque::with_capacity(5);
+    let mut last_raw_events: std::collections::VecDeque<String> =
+        std::collections::VecDeque::with_capacity(5);
     let mut chunk_count: usize = 0;
 
     loop {

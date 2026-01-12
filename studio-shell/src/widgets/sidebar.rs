@@ -183,7 +183,7 @@ pub struct Sidebar {
     view: View,
 
     #[rust]
-    selection: Option<SidebarSelection>,  // Track current selection
+    selection: Option<SidebarSelection>, // Track current selection
 }
 
 impl Widget for Sidebar {
@@ -229,14 +229,20 @@ impl Sidebar {
         match &selection {
             SidebarSelection::Colang => {
                 println!("Colang selected");
-                self.view.button(ids!(colang_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                self.view
+                    .button(ids!(colang_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
             SidebarSelection::MofaFM => {
                 println!("MofaFM selected");
-                self.view.button(ids!(mofa_fm_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                self.view
+                    .button(ids!(mofa_fm_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
             SidebarSelection::Settings => {
-                self.view.button(ids!(settings_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                self.view
+                    .button(ids!(settings_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
         }
 
@@ -252,7 +258,9 @@ impl Sidebar {
         }
 
         // Clear MoFA FM and Settings
-        clear_selection!(self, cx,
+        clear_selection!(
+            self,
+            cx,
             ids!(colang_tab),
             ids!(mofa_fm_tab),
             ids!(settings_tab)
@@ -271,13 +279,22 @@ impl SidebarRef {
             if let Some(selection) = inner.selection.clone() {
                 match selection {
                     SidebarSelection::Colang => {
-                        inner.view.button(ids!(colang_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                        inner
+                            .view
+                            .button(ids!(colang_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                     SidebarSelection::MofaFM => {
-                        inner.view.button(ids!(mofa_fm_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                        inner
+                            .view
+                            .button(ids!(mofa_fm_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                     SidebarSelection::Settings => {
-                        inner.view.button(ids!(settings_tab)).apply_over(cx, live!{ draw_bg: { selected: 1.0 } });
+                        inner
+                            .view
+                            .button(ids!(settings_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                 }
             }
@@ -289,27 +306,39 @@ impl SidebarRef {
     pub fn update_dark_mode(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Sidebar background
-            inner.view.apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-            });
+            inner.view.apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                },
+            );
 
             // Colang
-            inner.view.button(ids!(colang_tab)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-                draw_text: { dark_mode: (dark_mode) }
-            });
+            inner.view.button(ids!(colang_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
 
             // MoFA FM tab
-            inner.view.button(ids!(mofa_fm_tab)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-                draw_text: { dark_mode: (dark_mode) }
-            });
+            inner.view.button(ids!(mofa_fm_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
 
             // Settings tab
-            inner.view.button(ids!(settings_tab)).apply_over(cx, live!{
-                draw_bg: { dark_mode: (dark_mode) }
-                draw_text: { dark_mode: (dark_mode) }
-            });
+            inner.view.button(ids!(settings_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
 
             inner.view.redraw(cx);
         }

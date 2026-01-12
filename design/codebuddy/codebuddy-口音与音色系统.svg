@@ -1,0 +1,145 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#FFB74D"/>
+  <text x="600" y="50" font-family="Arial" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">CodeBuddy 口音与音色系统</text>
+  
+  <!-- Left Section - Accent Selection -->
+  <rect x="50" y="120" width="500" height="320" rx="12" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <text x="300" y="155" font-family="Arial" font-size="20" font-weight="bold" fill="#1976D2" text-anchor="middle">🌍 口音选择</text>
+  
+  <!-- American Accent -->
+  <rect x="80" y="180" width="200" height="110" rx="8" fill="#ffffff" stroke="#2196F3" stroke-width="3"/>
+  <circle cx="130" cy="215" r="25" fill="#2196F3"/>
+  <text x="130" y="222" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">🇺🇸</text>
+  <text x="170" y="210" font-family="Arial" font-size="14" font-weight="bold" fill="#333">美式口音</text>
+  <text x="170" y="235" font-family="Arial" font-size="11" fill="#666">American Accent</text>
+  <text x="170" y="255" font-family="Arial" font-size="10" fill="#2196F3">• 卷舌音明显</text>
+  <text x="170" y="270" font-family="Arial" font-size="10" fill="#2196F3">• 元音较扁平</text>
+  <rect x="90" y="275" width="60" height="10" rx="5" fill="#4CAF50"/>
+  <text x="120" y="283" font-family="Arial" font-size="7" fill="#fff" text-anchor="middle">常用</text>
+  
+  <!-- British Accent -->
+  <rect x="320" y="180" width="200" height="110" rx="8" fill="#ffffff" stroke="#2196F3"/>
+  <circle cx="370" cy="215" r="25" fill="#2196F3"/>
+  <text x="370" y="222" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">🇬🇧</text>
+  <text x="410" y="210" font-family="Arial" font-size="14" font-weight="bold" fill="#333">英式口音</text>
+  <text x="410" y="235" font-family="Arial" font-size="11" fill="#666">British Accent</text>
+  <text x="410" y="255" font-family="Arial" font-size="10" fill="#2196F3">• 清晰规范</text>
+  <text x="410" y="270" font-family="Arial" font-size="10" fill="#2196F3">• 元音饱满</text>
+  <rect x="330" y="275" width="60" height="10" rx="5" fill="#81C784"/>
+  <text x="360" y="283" font-family="Arial" font-size="7" fill="#fff" text-anchor="middle">流行</text>
+  
+  <!-- Australian Accent -->
+  <rect x="80" y="310" width="200" height="110" rx="8" fill="#ffffff" stroke="#2196F3"/>
+  <circle cx="130" cy="345" r="25" fill="#2196F3"/>
+  <text x="130" y="352" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">🇦🇺</text>
+  <text x="170" y="340" font-family="Arial" font-size="14" font-weight="bold" fill="#333">澳式口音</text>
+  <text x="170" y="365" font-family="Arial" font-size="11" fill="#666">Australian Accent</text>
+  <text x="170" y="385" font-family="Arial" font-size="10" fill="#2196F3">• 元音有特色</text>
+  <text x="170" y="400" font-family="Arial" font-size="10" fill="#2196F3">• 语调上扬</text>
+  <rect x="90" y="405" width="60" height="10" rx="5" fill="#FFE0B2"/>
+  <text x="120" y="413" font-family="Arial" font-size="7" fill="#333" text-anchor="middle">中等</text>
+  
+  <!-- Indian Accent -->
+  <rect x="320" y="310" width="200" height="110" rx="8" fill="#ffffff" stroke="#2196F3"/>
+  <circle cx="370" cy="345" r="25" fill="#2196F3"/>
+  <text x="370" y="352" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">🇮🇳</text>
+  <text x="410" y="340" font-family="Arial" font-size="14" font-weight="bold" fill="#333">印式口音</text>
+  <text x="410" y="365" font-family="Arial" font-size="11" fill="#666">Indian Accent</text>
+  <text x="410" y="385" font-family="Arial" font-size="10" fill="#2196F3">• 重音靠前</text>
+  <text x="410" y="400" font-family="Arial" font-size="10" fill="#2196F3">• 特定音调</text>
+  <rect x="330" y="405" width="60" height="10" rx="5" fill="#FFE0B2"/>
+  <text x="360" y="413" font-family="Arial" font-size="7" fill="#333" text-anchor="middle">中等</text>
+  
+  <!-- Right Section - Voice Selection -->
+  <rect x="600" y="120" width="550" height="320" rx="12" fill="#F3E5F5" stroke="#BA68C8" stroke-width="2"/>
+  <text x="875" y="155" font-family="Arial" font-size="20" font-weight="bold" fill="#7B1FA2" text-anchor="middle">🎤 音色选择</text>
+  
+  <!-- Voice Options -->
+  <rect x="630" y="180" width="220" height="80" rx="8" fill="#ffffff" stroke="#BA68C8" stroke-width="3"/>
+  <circle cx="680" cy="210" r="20" fill="#BA68C8"/>
+  <text x="680" y="216" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">👨</text>
+  <text x="715" y="205" font-family="Arial" font-size="13" font-weight="bold" fill="#333">男声</text>
+  <text x="715" y="225" font-family="Arial" font-size="10" fill="#666">沉稳温暖</text>
+  <text x="715" y="245" font-family="Arial" font-size="9" fill="#BA68C8">适合学习环境</text>
+  
+  <rect x="870" y="180" width="220" height="80" rx="8" fill="#ffffff" stroke="#BA68C8" stroke-width="3"/>
+  <circle cx="920" cy="210" r="20" fill="#BA68C8"/>
+  <text x="920" y="216" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">👩</text>
+  <text x="955" y="205" font-family="Arial" font-size="13" font-weight="bold" fill="#333">女声</text>
+  <text x="955" y="225" font-family="Arial" font-size="10" fill="#666">温柔亲切</text>
+  <text x="955" y="245" font-family="Arial" font-size="9" fill="#BA68C8">适合情感交流</text>
+  
+  <rect x="630" y="280" width="220" height="80" rx="8" fill="#ffffff" stroke="#BA68C8"/>
+  <circle cx="680" cy="310" r="20" fill="#E1BEE7"/>
+  <text x="680" y="316" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">👴</text>
+  <text x="715" y="305" font-family="Arial" font-size="13" font-weight="bold" fill="#666">长辈声</text>
+  <text x="715" y="325" font-family="Arial" font-size="10" fill="#999">经验丰富</text>
+  <text x="715" y="345" font-family="Arial" font-size="9" fill="#999">适合商务场景</text>
+  
+  <rect x="870" y="280" width="220" height="80" rx="8" fill="#ffffff" stroke="#BA68C8"/>
+  <circle cx="920" cy="310" r="20" fill="#E1BEE7"/>
+  <text x="920" y="316" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">👦</text>
+  <text x="955" y="305" font-family="Arial" font-size="13" font-weight="bold" fill="#666">青年声</text>
+  <text x="955" y="325" font-family="Arial" font-size="10" fill="#999">活力四射</text>
+  <text x="955" y="345" font-family="Arial" font-size="9" fill="#999">适合日常交流</text>
+  
+  <rect x="630" y="380" width="220" height="40" rx="8" fill="#9C27B0"/>
+  <text x="740" y="405" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🔊 试听当前配置</text>
+  
+  <rect x="870" y="380" width="220" height="40" rx="8" fill="#ffffff" stroke="#9C27B0"/>
+  <text x="980" y="405" font-family="Arial" font-size="12" fill="#7B1FA2" text-anchor="middle">🎚️ 调整语速/音调</text>
+  
+  <!-- Bottom Section - Benefits -->
+  <text x="600" y="480" font-family="Arial" font-size="20" font-weight="bold" fill="#333" text-anchor="middle">🎯 核心优势</text>
+  
+  <rect x="50" y="500" width="350" height="140" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+  <text x="225" y="535" font-family="Arial" font-size="16" font-weight="bold" fill="#388E3C" text-anchor="middle">🎧 听力训练</text>
+  <text x="70" y="565" font-family="Arial" font-size="12" fill="#666">• 暴露于不同口音环境</text>
+  <text x="70" y="585" font-family="Arial" font-size="12" fill="#666">• 提高语音识别能力</text>
+  <text x="70" y="605" font-family="Arial" font-size="12" fill="#666">• 适应国际交流场景</text>
+  <text x="70" y="625" font-family="Arial" font-size="12" fill="#666">• 增强跨文化理解</text>
+  
+  <rect x="425" y="500" width="350" height="140" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+  <text x="600" y="535" font-family="Arial" font-size="16" font-weight="bold" fill="#F57C00" text-anchor="middle">🗣️ 发音模仿</text>
+  <text x="445" y="565" font-family="Arial" font-size="12" fill="#666">• 跟读练习多种口音</text>
+  <text x="445" y="585" font-family="Arial" font-size="12" fill="#666">• 对比分析发音差异</text>
+  <text x="445" y="605" font-family="Arial" font-size="12" fill="#666">• 掌握不同发音技巧</text>
+  <text x="445" y="625" font-family="Arial" font-size="12" fill="#666">• 提升发音多样性</text>
+  
+  <rect x="800" y="500" width="350" height="140" rx="12" fill="#F3E5F5" stroke="#BA68C8" stroke-width="2"/>
+  <text x="975" y="535" font-family="Arial" font-size="16" font-weight="bold" fill="#7B1FA2" text-anchor="middle">🌟 个性化定制</text>
+  <text x="820" y="565" font-family="Arial" font-size="12" fill="#666">• 根据偏好自动推荐</text>
+  <text x="820" y="585" font-family="Arial" font-size="12" fill="#666">• AI 记忆用户选择</text>
+  <text x="820" y="605" font-family="Arial" font-size="12" fill="#666">• 支持随时切换</text>
+  <text x="820" y="625" font-family="Arial" font-size="12" fill="#666">• 场景化音色适配</text>
+  
+  <!-- Scenario Based Recommendation -->
+  <rect x="50" y="660" width="1100" height="100" rx="12" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/>
+  <text x="600" y="690" font-family="Arial" font-size="16" font-weight="bold" fill="#F57F17" text-anchor="middle">💡 智能场景推荐</text>
+  
+  <rect x="80" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="155" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">商务会议 → 英式男声</text>
+  
+  <rect x="250" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="325" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">日常聊天 → 美式女声</text>
+  
+  <rect x="420" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="495" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">留学申请 → 英式长辈</text>
+  
+  <rect x="590" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="665" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">旅游问路 → 美式青年</text>
+  
+  <rect x="760" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="835" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">跨国交流 → 多种口音</text>
+  
+  <rect x="930" y="710" width="150" height="40" rx="6" fill="#ffffff" stroke="#FBC02D"/>
+  <text x="1005" y="735" font-family="Arial" font-size="11" fill="#333" text-anchor="middle">电影学习 → 角色适配</text>
+  
+  <!-- Footer -->
+  <rect x="0" y="780" width="1200" height="20" fill="#BA68C8"/>
+  <text x="600" y="795" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">口音与音色系统 - 多样化选择，个性化体验，全面提升听说能力</text>
+</svg>

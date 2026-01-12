@@ -1,0 +1,197 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#FFB74D"/>
+  <text x="600" y="50" font-family="Arial" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">CodeBuddy 设计系统概览</text>
+  
+  <!-- Color Palette Section -->
+  <text x="80" y="130" font-family="Arial" font-size="22" font-weight="bold" fill="#333">🎨 色彩系统</text>
+  <rect x="80" y="150" width="340" height="180" rx="12" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <!-- Primary Colors -->
+  <text x="100" y="180" font-family="Arial" font-size="14" font-weight="bold" fill="#333">主色调</text>
+  <rect x="100" y="190" width="100" height="40" rx="6" fill="#FFB74D"/>
+  <text x="150" y="215" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">Primary</text>
+  <text x="210" y="205" font-family="Arial" font-size="9" fill="#666">#FFB74D</text>
+  <text x="210" y="220" font-family="Arial" font-size="9" fill="#999">温暖橙黄</text>
+  
+  <rect x="100" y="240" width="100" height="40" rx="6" fill="#FF9800"/>
+  <text x="150" y="265" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">Primary Dark</text>
+  <text x="210" y="255" font-family="Arial" font-size="9" fill="#666">#FF9800</text>
+  <text x="210" y="270" font-family="Arial" font-size="9" fill="#999">强调色</text>
+  
+  <rect x="100" y="290" width="100" height="40" rx="6" fill="#FFE0B2"/>
+  <text x="150" y="315" font-family="Arial" font-size="10" fill="#333" text-anchor="middle">Primary Light</text>
+  <text x="210" y="305" font-family="Arial" font-size="9" fill="#666">#FFE0B2</text>
+  <text x="210" y="320" font-family="Arial" font-size="9" fill="#999">背景色</text>
+  
+  <!-- Secondary Colors -->
+  <text x="250" y="180" font-family="Arial" font-size="14" font-weight="bold" fill="#333">功能色</text>
+  <rect x="250" y="190" width="60" height="30" rx="4" fill="#4CAF50"/>
+  <text x="280" y="208" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">成功</text>
+  
+  <rect x="320" y="190" width="60" height="30" rx="4" fill="#2196F3"/>
+  <text x="350" y="208" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">信息</text>
+  
+  <rect x="250" y="230" width="60" height="30" rx="4" fill="#FF5252"/>
+  <text x="280" y="248" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">错误</text>
+  
+  <rect x="320" y="230" width="60" height="30" rx="4" fill="#FF9800"/>
+  <text x="350" y="248" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">警告</text>
+  
+  <rect x="250" y="270" width="60" height="30" rx="4" fill="#BA68C8"/>
+  <text x="280" y="288" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">AI</text>
+  
+  <rect x="320" y="270" width="60" height="30" rx="4" fill="#81C784"/>
+  <text x="350" y="288" font-family="Arial" font-size="8" fill="#fff" text-anchor="middle">学习</text>
+  
+  <!-- Typography Section -->
+  <text x="450" y="130" font-family="Arial" font-size="22" font-weight="bold" fill="#333">📝 字体系统</text>
+  <rect x="450" y="150" width="340" height="180" rx="12" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <text x="470" y="180" font-family="Arial" font-size="24" font-weight="bold" fill="#333">标题 H1 - 24px Bold</text>
+  <text x="470" y="205" font-family="Arial" font-size="20" font-weight="bold" fill="#333">标题 H2 - 20px Bold</text>
+  <text x="470" y="230" font-family="Arial" font-size="16" font-weight="bold" fill="#333">标题 H3 - 16px Bold</text>
+  <text x="470" y="255" font-family="Arial" font-size="14" font-weight="normal" fill="#333">正文 Regular - 14px</text>
+  <text x="470" y="280" font-family="Arial" font-size="12" font-weight="normal" fill="#666">辅助文本 - 12px</text>
+  <text x="470" y="305" font-family="Arial" font-size="10" font-weight="normal" fill="#999">标签文本 - 10px</text>
+  
+  <!-- Spacing Section -->
+  <text x="820" y="130" font-family="Arial" font-size="22" font-weight="bold" fill="#333">📏 间距系统</text>
+  <rect x="820" y="150" width="300" height="180" rx="12" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <rect x="840" y="170" width="20" height="20" rx="2" fill="#FFB74D"/>
+  <text x="870" y="185" font-family="Arial" font-size="12" fill="#333">4px - XS</text>
+  
+  <rect x="840" y="200" width="30" height="20" rx="2" fill="#FFB74D"/>
+  <text x="880" y="215" font-family="Arial" font-size="12" fill="#333">8px - S</text>
+  
+  <rect x="840" y="230" width="40" height="20" rx="2" fill="#FFB74D"/>
+  <text x="890" y="245" font-family="Arial" font-size="12" fill="#333">12px - M</text>
+  
+  <rect x="840" y="260" width="60" height="20" rx="2" fill="#FFB74D"/>
+  <text x="910" y="275" font-family="Arial" font-size="12" fill="#333">16px - L</text>
+  
+  <rect x="840" y="290" width="80" height="20" rx="2" fill="#FFB74D"/>
+  <text x="930" y="305" font-family="Arial" font-size="12" fill="#333">24px - XL</text>
+  
+  <!-- Component Library Section -->
+  <text x="80" y="370" font-family="Arial" font-size="22" font-weight="bold" fill="#333">🧩 核心组件</text>
+  
+  <!-- Buttons -->
+  <text x="80" y="400" font-family="Arial" font-size="16" font-weight="bold" fill="#333">按钮</text>
+  <rect x="80" y="420" width="120" height="40" rx="20" fill="#4CAF50"/>
+  <text x="140" y="445" font-family="Arial" font-size="13" fill="#fff" text-anchor="middle">主要按钮</text>
+  
+  <rect x="210" y="420" width="120" height="40" rx="20" fill="#2196F3"/>
+  <text x="270" y="445" font-family="Arial" font-size="13" fill="#fff" text-anchor="middle">次要按钮</text>
+  
+  <rect x="340" y="420" width="120" height="40" rx="20" fill="#fff" stroke="#e0e0e0"/>
+  <text x="400" y="445" font-family="Arial" font-size="13" fill="#666" text-anchor="middle">取消</text>
+  
+  <!-- Cards -->
+  <text x="80" y="490" font-family="Arial" font-size="16" font-weight="bold" fill="#333">卡片</text>
+  <rect x="80" y="510" width="250" height="100" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="1"/>
+  <rect x="80" y="510" width="6" height="100" rx="3" fill="#2196F3"/>
+  <text x="100" y="540" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2">信息卡片</text>
+  <text x="100" y="565" font-family="Arial" font-size="11" fill="#666">用于展示提示、警告、</text>
+  <text x="100" y="585" font-family="Arial" font-size="11" fill="#666">学习点等信息</text>
+  
+  <rect x="340" y="510" width="250" height="100" rx="8" fill="#FFF3E0" stroke="#FFB74D" stroke-width="1"/>
+  <rect x="340" y="510" width="6" height="100" rx="3" fill="#FF9800"/>
+  <text x="360" y="540" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00">学习点卡片</text>
+  <text x="360" y="565" font-family="Arial" font-size="11" fill="#666">用于展示错误纠正、</text>
+  <text x="360" y="585" font-family="Arial" font-size="11" fill="#666">发音建议等学习内容</text>
+  
+  <!-- Input Fields -->
+  <text x="80" y="640" font-family="Arial" font-size="16" font-weight="bold" fill="#333">输入框</text>
+  <rect x="80" y="660" width="300" height="45" rx="22" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <text x="100" y="688" font-family="Arial" font-size="13" fill="#999">输入消息...</text>
+  
+  <rect x="390" y="660" width="300" height="45" rx="22" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <text x="410" y="688" font-family="Arial" font-size="13" fill="#333">Hello, how are you?</text>
+  
+  <!-- Progress Bars -->
+  <text x="80" y="730" font-family="Arial" font-size="16" font-weight="bold" fill="#333">进度条</text>
+  <rect x="80" y="750" width="300" height="12" rx="6" fill="#e0e0e0"/>
+  <rect x="80" y="750" width="180" height="12" rx="6" fill="#4CAF50"/>
+  <text x="390" y="760" font-family="Arial" font-size="11" fill="#666">60% - 学习进度</text>
+  
+  <!-- Additional Components Section -->
+  <text x="450" y="370" font-family="Arial" font-size="22" font-weight="bold" fill="#333">🎯 更多组件</text>
+  
+  <!-- Toggles -->
+  <text x="450" y="400" font-family="Arial" font-size="16" font-weight="bold" fill="#333">开关</text>
+  <rect x="450" y="420" width="50" height="30" rx="15" fill="#9C27B0"/>
+  <circle cx="480" cy="435" r="12" fill="#fff"/>
+  <text x="510" y="440" font-family="Arial" font-size="12" fill="#333">已开启</text>
+  
+  <rect x="570" y="420" width="50" height="30" rx="15" fill="#e0e0e0"/>
+  <circle cx="595" cy="435" r="12" fill="#fff"/>
+  <text x="630" y="440" font-family="Arial" font-size="12" fill="#666">已关闭</text>
+  
+  <!-- Badges -->
+  <text x="450" y="490" font-family="Arial" font-size="16" font-weight="bold" fill="#333">标签</text>
+  <rect x="450" y="510" width="70" height="25" rx="4" fill="#4CAF50"/>
+  <text x="485" y="527" font-family="Arial" font-size="11" fill="#fff" text-anchor="middle">初级</text>
+  
+  <rect x="530" y="510" width="70" height="25" rx="4" fill="#FF9800"/>
+  <text x="565" y="527" font-family="Arial" font-size="11" fill="#fff" text-anchor="middle">中级</text>
+  
+  <rect x="610" y="510" width="70" height="25" rx="4" fill="#F44336"/>
+  <text x="645" y="527" font-family="Arial" font-size="11" fill="#fff" text-anchor="middle">高级</text>
+  
+  <!-- Avatars -->
+  <text x="450" y="570" font-family="Arial" font-size="16" font-weight="bold" fill="#333">头像</text>
+  <circle cx="485" cy="605" r="20" fill="#64B5F6"/>
+  <text x="485" y="610" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">J</text>
+  
+  <circle cx="535" cy="605" r="20" fill="#BA68C8"/>
+  <text x="535" y="610" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">A</text>
+  
+  <circle cx="585" cy="605" r="20" fill="#81C784"/>
+  <text x="585" y="610" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">M</text>
+  
+  <!-- Icons -->
+  <text x="450" y="650" font-family="Arial" font-size="16" font-weight="bold" fill="#333">图标</text>
+  <circle cx="485" cy="685" r="18" fill="#FFB74D"/>
+  <text x="485" y="690" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🎙️</text>
+  
+  <circle cx="535" cy="685" r="18" fill="#64B5F6"/>
+  <text x="535" y="690" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">📝</text>
+  
+  <circle cx="585" cy="685" r="18" fill="#BA68C8"/>
+  <text x="585" y="690" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🎭</text>
+  
+  <circle cx="635" cy="685" r="18" fill="#81C784"/>
+  <text x="635" y="690" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">📊</text>
+  
+  <!-- Design Principles -->
+  <text x="820" y="370" font-family="Arial" font-size="22" font-weight="bold" fill="#333">✨ 设计原则</text>
+  <rect x="820" y="390" width="300" height="370" rx="12" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <text x="840" y="420" font-family="Arial" font-size="14" font-weight="bold" fill="#4CAF50">1. 人性化</text>
+  <text x="840" y="445" font-family="Arial" font-size="11" fill="#666">• 温和支持，零羞耻感</text>
+  <text x="840" y="465" font-family="Arial" font-size="11" fill="#666">• 错误是"学习点"而非"错误"</text>
+  <text x="840" y="485" font-family="Arial" font-size="11" fill="#666">• 紧张时减压，鼓励时挑战</text>
+  
+  <text x="840" y="520" font-family="Arial" font-size="14" font-weight="bold" fill="#2196F3">2. 美观性</text>
+  <text x="840" y="545" font-family="Arial" font-size="11" fill="#666">• 温暖橙黄主色，友好舒适</text>
+  <text x="840" y="565" font-family="Arial" font-size="11" fill="#666">• 清晰的信息层次</text>
+  <text x="840" y="585" font-family="Arial" font-size="11" fill="#666">• 流畅的动画效果</text>
+  
+  <text x="840" y="620" font-family="Arial" font-size="14" font-weight="bold" fill="#FF9800">3. 简洁性</text>
+  <text x="840" y="645" font-family="Arial" font-size="11" fill="#666">• 主要功能≤5个模块</text>
+  <text x="840" y="665" font-family="Arial" font-size="11" fill="#666">• 学习流程≤3步</text>
+  <text x="840" y="685" font-family="Arial" font-size="11" fill="#666">• 深度功能折叠在"更多"</text>
+  
+  <text x="840" y="720" font-family="Arial" font-size="14" font-weight="bold" fill="#BA68C8">4. 创新性</text>
+  <text x="840" y="745" font-family="Arial" font-size="11" fill="#666">• 场景化沉浸学习</text>
+  <text x="840" y="765" font-family="Arial" font-size="11" fill="#666">• AI主动教练+情绪感知</text>
+  
+  <!-- Footer -->
+  <rect x="0" y="780" width="1200" height="20" fill="#FFB74D"/>
+  <text x="600" y="795" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">CodeBuddy Design System v1.0 - 2026</text>
+</svg>

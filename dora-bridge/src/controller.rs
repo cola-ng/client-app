@@ -169,7 +169,10 @@ impl DataflowController {
                         }
                     }
 
-                    debug!("Waiting for dora daemon (attempt {}/{})", attempt, MAX_ATTEMPTS);
+                    debug!(
+                        "Waiting for dora daemon (attempt {}/{})",
+                        attempt, MAX_ATTEMPTS
+                    );
                 }
 
                 Err(BridgeError::StartFailed(

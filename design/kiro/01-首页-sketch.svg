@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .card-hover { fill: #fafafa; stroke: #6366f1; stroke-width: 2; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .sidebar { fill: #fafbfc; stroke: #f1f5f9; stroke-width: 1; }
+      .avatar { fill: #ddd6fe; stroke: #a5b4fc; stroke-width: 2; }
+      .progress-bg { fill: #e5e7eb; rx: 4; }
+      .progress-fill { fill: #6366f1; rx: 4; }
+      .icon-circle { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; }
+    </style>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.05" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.05" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="900" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - 首页设计草图</text>
+  <text x="40" y="65" class="t p muted">桌面端 · 温暖友好的学习仪表盘 · AI 主动引导开口</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="780" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="64" class="header" fill="url(#headerGrad)"/>
+  <circle cx="82" cy="122" r="18" fill="#6366f1"/>
+  <text x="82" y="127" class="t small" fill="#fff" text-anchor="middle">SF</text>
+  <text x="112" y="127" class="t h3 accent">SpeakFlow</text>
+  
+  <!-- Search Bar -->
+  <rect x="240" y="106" width="300" height="36" class="panel"/>
+  <text x="260" y="129" class="t p muted">🔍 搜索场景、词汇...</text>
+  
+  <!-- Header Right -->
+  <circle cx="1220" cy="122" r="16" class="icon-circle"/>
+  <text x="1220" y="127" class="t small" text-anchor="middle">🔔</text>
+  <circle cx="1270" cy="122" r="16" class="icon-circle"/>
+  <text x="1270" y="127" class="t small" text-anchor="middle">⚙️</text>
+  <circle cx="1320" cy="122" r="18" class="avatar"/>
+  <text x="1320" y="127" class="t small" text-anchor="middle">👤</text>
+
+  <!-- Sidebar -->
+  <rect x="40" y="154" width="200" height="716" class="sidebar"/>
+  
+  <!-- Nav Items -->
+  <rect x="52" y="170" width="176" height="44" class="chip-active"/>
+  <text x="80" y="197" class="t p" fill="#fff">🏠 首页</text>
+  
+  <rect x="52" y="224" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
+  <text x="80" y="251" class="t p muted">💬 AI 对话</text>
+  
+  <rect x="52" y="278" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
+  <text x="80" y="305" class="t p muted">🎭 场景中心</text>
+  
+  <rect x="52" y="332" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
+  <text x="80" y="359" class="t p muted">📚 复习中心</text>
+  
+  <rect x="52" y="386" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
+  <text x="80" y="413" class="t p muted">🤝 实时助手</text>
+  
+  <rect x="52" y="440" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
+  <text x="80" y="467" class="t p muted">👤 个人中心</text>
+
+  <!-- Streak Card in Sidebar -->
+  <rect x="52" y="720" width="176" height="100" class="panel"/>
+  <text x="72" y="748" class="t h3">🔥 连续学习</text>
+  <text x="72" y="775" class="t h1 accent">12 天</text>
+  <text x="72" y="800" class="t small muted">继续保持！</text>
+
+  <!-- Main Content Area -->
+  <!-- Welcome Section -->
+  <rect x="260" y="170" width="540" height="120" class="card" fill="url(#cardGrad)"/>
+  <text x="290" y="205" class="t h2">👋 早上好，Chris！</text>
+  <text x="290" y="235" class="t p muted">今天想聊点什么？AI 已经准备好陪你练习了</text>
+  <rect x="290" y="255" width="140" height="36" class="btn-primary"/>
+  <text x="360" y="278" class="t p" fill="#fff" text-anchor="middle">开始对话 →</text>
+  
+  <!-- AI Suggestion Bubble -->
+  <rect x="500" y="185" width="280" height="80" class="panel" rx="16"/>
+  <text x="520" y="210" class="t small accent">💡 AI 建议</text>
+  <text x="520" y="232" class="t p">"昨天我们聊了旅行，今天</text>
+  <text x="520" y="250" class="t p">继续练习酒店预订怎么样？"</text>
+
+  <!-- Today's Tasks -->
+  <rect x="260" y="310" width="540" height="200" class="card"/>
+  <text x="290" y="345" class="t h2">📋 今日任务</text>
+  <text x="730" y="345" class="t small muted">3/5 已完成</text>
+  
+  <!-- Task Progress Bar -->
+  <rect x="290" y="360" width="480" height="6" class="progress-bg"/>
+  <rect x="290" y="360" width="288" height="6" class="progress-fill"/>
+  
+  <!-- Task Items -->
+  <rect x="290" y="380" width="230" height="60" class="panel"/>
+  <text x="310" y="405" class="t p">✅ 3分钟自由对话</text>
+  <text x="310" y="425" class="t small muted">已完成</text>
+  
+  <rect x="540" y="380" width="230" height="60" class="panel"/>
+  <text x="560" y="405" class="t p">⏳ 场景练习：点餐</text>
+  <text x="560" y="425" class="t small muted">进行中...</text>
+  
+  <rect x="290" y="450" width="230" height="60" class="panel"/>
+  <text x="310" y="475" class="t p">⭕ 复习 8 个易错点</text>
+  <text x="310" y="495" class="t small muted">待完成</text>
+  
+  <rect x="540" y="450" width="230" height="60" class="panel"/>
+  <text x="560" y="475" class="t p">⭕ 跟读训练 5 句</text>
+  <text x="560" y="495" class="t small muted">待完成</text>
+
+  <!-- Quick Actions -->
+  <rect x="260" y="530" width="540" height="140" class="card"/>
+  <text x="290" y="565" class="t h2">⚡ 快捷入口</text>
+  
+  <rect x="290" y="585" width="120" height="70" class="panel"/>
+  <text x="350" y="615" class="t p" text-anchor="middle">🎭</text>
+  <text x="350" y="640" class="t small" text-anchor="middle">场景模拟</text>
+  
+  <rect x="425" y="585" width="120" height="70" class="panel"/>
+  <text x="485" y="615" class="t p" text-anchor="middle">🎬</text>
+  <text x="485" y="640" class="t small" text-anchor="middle">经典对白</text>
+  
+  <rect x="560" y="585" width="120" height="70" class="panel"/>
+  <text x="620" y="615" class="t p" text-anchor="middle">🎤</text>
+  <text x="620" y="640" class="t small" text-anchor="middle">跟读练习</text>
+  
+  <rect x="695" y="585" width="120" height="70" class="panel"/>
+  <text x="755" y="615" class="t p" text-anchor="middle">🤝</text>
+  <text x="755" y="640" class="t small" text-anchor="middle">实时助手</text>
+
+  <!-- Right Panel - Stats & Insights -->
+  <rect x="820" y="170" width="520" height="200" class="card"/>
+  <text x="850" y="205" class="t h2">📊 学习数据</text>
+  
+  <!-- Stats Grid -->
+  <rect x="850" y="225" width="110" height="70" class="panel"/>
+  <text x="905" y="255" class="t h2 accent" text-anchor="middle">47</text>
+  <text x="905" y="280" class="t small muted" text-anchor="middle">本周对话(分钟)</text>
+  
+  <rect x="975" y="225" width="110" height="70" class="panel"/>
+  <text x="1030" y="255" class="t h2 success" text-anchor="middle">156</text>
+  <text x="1030" y="280" class="t small muted" text-anchor="middle">已掌握词汇</text>
+  
+  <rect x="1100" y="225" width="110" height="70" class="panel"/>
+  <text x="1155" y="255" class="t h2 warning" text-anchor="middle">23</text>
+  <text x="1155" y="280" class="t small muted" text-anchor="middle">待复习</text>
+  
+  <rect x="1225" y="225" width="95" height="70" class="panel"/>
+  <text x="1272" y="255" class="t h2" text-anchor="middle">B1</text>
+  <text x="1272" y="280" class="t small muted" text-anchor="middle">当前水平</text>
+
+  <!-- Weekly Chart Placeholder -->
+  <rect x="850" y="310" width="470" height="45" class="panel"/>
+  <text x="870" y="338" class="t small muted">本周学习时长分布 ▓▓▓░▓▓▓</text>
+
+  <!-- AI Insights -->
+  <rect x="820" y="390" width="520" height="180" class="card"/>
+  <text x="850" y="425" class="t h2">🧠 AI 洞察</text>
+  
+  <rect x="850" y="445" width="470" height="50" class="panel"/>
+  <text x="870" y="468" class="t p">💡 你的冠词使用进步明显！a/an 错误率下降 40%</text>
+  <text x="870" y="488" class="t small success">持续保持</text>
+  
+  <rect x="850" y="505" width="470" height="50" class="panel"/>
+  <text x="870" y="528" class="t p">⚠️ 建议多练习过去时态，这是你目前的薄弱点</text>
+  <text x="870" y="548" class="t small warning">点击开始专项练习 →</text>
+
+  <!-- Recommended Scenarios -->
+  <rect x="820" y="590" width="520" height="180" class="card"/>
+  <text x="850" y="625" class="t h2">🎯 推荐场景</text>
+  
+  <rect x="850" y="645" width="150" height="100" class="panel"/>
+  <text x="925" y="680" class="t p" text-anchor="middle">🏨</text>
+  <text x="925" y="705" class="t small" text-anchor="middle">酒店入住</text>
+  <text x="925" y="725" class="t small muted" text-anchor="middle">继续上次</text>
+  
+  <rect x="1015" y="645" width="150" height="100" class="panel"/>
+  <text x="1090" y="680" class="t p" text-anchor="middle">🍽️</text>
+  <text x="1090" y="705" class="t small" text-anchor="middle">餐厅点餐</text>
+  <text x="1090" y="725" class="t small muted" text-anchor="middle">新场景</text>
+  
+  <rect x="1180" y="645" width="150" height="100" class="panel"/>
+  <text x="1255" y="680" class="t p" text-anchor="middle">💼</text>
+  <text x="1255" y="705" class="t small" text-anchor="middle">工作面试</text>
+  <text x="1255" y="725" class="t small muted" text-anchor="middle">挑战</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="890" class="t small muted">设计要点：温暖渐变色调 · AI 主动建议气泡 · 任务进度可视化 · 数据驱动的个性化推荐</text>
+</svg>

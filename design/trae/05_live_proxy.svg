@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+  <defs>
+    <linearGradient id="bgl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070A12"/>
+      <stop offset="1" stop-color="#0B1022"/>
+    </linearGradient>
+    <filter id="shadowl" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <style>
+      .t { font-family: Segoe UI, Arial, sans-serif; fill: #E5E7EB; }
+      .muted { fill: #94A3B8; }
+      .muted2 { fill: #64748B; }
+      .h1 { font-size: 18px; font-weight: 700; }
+      .h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+      .p { font-size: 12px; }
+      .p2 { font-size: 11px; }
+      .panel { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .panel2 { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .chip { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.14); stroke-width: 1; }
+      .btn2 { fill: rgba(168,85,247,0.20); stroke: rgba(168,85,247,0.45); stroke-width: 1; }
+      .good { fill: #34D399; }
+      .warn { fill: #FBBF24; }
+      .bad { fill: #FB7185; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="820" fill="url(#bgl)"/>
+  <text x="48" y="56" class="t h1">FluentFlow — Live Proxy (真人聊天代理：原话 → AI 润色 → 对外发送)</text>
+  <text x="48" y="80" class="t p muted">降低社交压力：对方只看到“润色后表达”；你看到实时纠错与备选回复；可配置代聊强度</text>
+
+  <g filter="url(#shadowl)">
+    <rect x="40" y="110" width="1320" height="670" rx="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)"/>
+  </g>
+  <rect x="40" y="110" width="1320" height="72" rx="18" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+  <text x="72" y="152" class="t h1">Live Proxy</text>
+  <rect x="240" y="130" width="320" height="36" rx="12" class="panel"/>
+  <text x="258" y="152" class="t p muted2">Connected: Sarah (London) • Voice: warm</text>
+  <rect x="1060" y="132" width="160" height="32" rx="16" fill="rgba(52,211,153,0.12)" stroke="rgba(52,211,153,0.35)"/>
+  <circle cx="1076" cy="148" r="4" class="good"/>
+  <text x="1088" y="152" class="t p2">Auto-correct ON</text>
+  <rect x="1230" y="130" width="110" height="36" rx="12" fill="rgba(251,113,133,0.12)" stroke="rgba(251,113,133,0.35)"/>
+  <text x="1262" y="152" class="t p">End</text>
+
+  <g>
+    <rect x="58" y="200" width="390" height="560" rx="16" class="panel"/>
+    <text x="80" y="230" class="t h2 muted">Your Raw Voice</text>
+
+    <rect x="78" y="250" width="350" height="200" rx="16" class="panel2"/>
+    <text x="98" y="280" class="t p2 muted">Live transcription (private)</text>
+    <text x="98" y="314" class="t p">“Uh… I think… maybe we go to…</text>
+    <text x="98" y="338" class="t p">eat dinner?”</text>
+    <circle cx="102" cy="368" r="5" class="bad"/>
+    <text x="116" y="372" class="t p2 muted">Hesitation detected</text>
+    <rect x="98" y="390" width="140" height="32" rx="16" class="chip"/>
+    <text x="116" y="412" class="t p2">Proxy can step in</text>
+
+    <rect x="78" y="466" width="350" height="120" rx="16" class="panel2"/>
+    <text x="98" y="494" class="t p">Corrections (private)</text>
+    <circle cx="102" cy="522" r="5" class="warn"/>
+    <text x="116" y="526" class="t p2 muted">Grammar: “Maybe we <tspan fill="#A5B4FC">could</tspan>…”</text>
+    <circle cx="102" cy="548" r="5" class="warn"/>
+    <text x="116" y="552" class="t p2 muted">Pronunciation: “dinner” (soft n)</text>
+
+    <rect x="78" y="602" width="350" height="138" rx="16" class="panel2"/>
+    <text x="98" y="630" class="t p">Assistance Level</text>
+    <rect x="98" y="646" width="310" height="10" rx="5" fill="rgba(255,255,255,0.10)"/>
+    <rect x="98" y="646" width="238" height="10" rx="5" fill="rgba(168,85,247,0.55)"/>
+    <text x="98" y="676" class="t p2 muted">Correct → Enhance → Auto-reply</text>
+    <rect x="98" y="694" width="150" height="34" rx="17" class="btn2"/>
+    <text x="138" y="716" class="t p2">Allow 1-line takeover</text>
+  </g>
+
+  <g>
+    <rect x="468" y="200" width="874" height="560" rx="16" class="panel"/>
+    <text x="490" y="230" class="t h2 muted">What Partner Sees</text>
+
+    <rect x="490" y="250" width="834" height="360" rx="16" class="panel2"/>
+    <text x="510" y="284" class="t p2 muted">Sarah</text>
+    <rect x="510" y="296" width="520" height="54" rx="18" class="chip"/>
+    <text x="530" y="329" class="t p2">Hey! I’m hungry. Any plans tonight?</text>
+
+    <text x="510" y="382" class="t p2 muted">You (AI polished)</text>
+    <rect x="510" y="394" width="620" height="70" rx="18" fill="rgba(168,85,247,0.16)" stroke="rgba(168,85,247,0.38)"/>
+    <text x="530" y="424" class="t p2">I was thinking… would you like to grab dinner together?</text>
+    <rect x="1046" y="404" width="64" height="24" rx="12" fill="rgba(168,85,247,0.35)"/>
+    <text x="1058" y="421" class="t p2">AI</text>
+
+    <text x="510" y="502" class="t p2 muted">Safety</text>
+    <rect x="510" y="514" width="834" height="70" rx="18" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.22)"/>
+    <text x="530" y="544" class="t p2 muted">Partner never sees your mistakes; you learn privately.</text>
+
+    <rect x="490" y="626" width="834" height="114" rx="18" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+    <rect x="510" y="650" width="560" height="44" rx="18" class="chip"/>
+    <text x="530" y="677" class="t p2 muted2">Type or speak…</text>
+    <rect x="1080" y="650" width="120" height="44" rx="18" class="btn2"/>
+    <text x="1116" y="677" class="t p2">Send</text>
+    <rect x="1210" y="650" width="114" height="44" rx="18" class="panel"/>
+    <text x="1240" y="677" class="t p2 muted">Suggest</text>
+
+    <rect x="1140" y="268" width="184" height="120" rx="16" fill="rgba(0,0,0,0.20)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="1160" y="296" class="t p2 muted">One-click replies</text>
+    <rect x="1160" y="314" width="144" height="28" rx="14" class="chip"/>
+    <text x="1172" y="333" class="t p2">What time works?</text>
+    <rect x="1160" y="348" width="144" height="28" rx="14" class="chip"/>
+    <text x="1172" y="367" class="t p2">Italian sounds great</text>
+  </g>
+</svg>
+

@@ -3,16 +3,16 @@
 //! Manages the lifecycle of dora bridges and routes data between
 //! the dora dataflow and MoFA widgets.
 
-use crossbeam_channel::{Receiver, Sender, bounded};
+use crossbeam_channel::{bounded, Receiver, Sender};
 use dora_bridge::{
     controller::DataflowController,
     data::{AudioData, ChatMessage, LogEntry},
     dispatcher::DynamicNodeDispatcher,
 };
+use parking_lot::RwLock;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::thread;
-use parking_lot::RwLock;
 
 // NOTE: ParticipantAudioData removed - LED visualization is calculated in screen.rs
 // from output waveform (more accurate since it reflects what's actually being played)
@@ -217,7 +217,10 @@ impl DoraIntegration {
             // Process commands
             while let Ok(cmd) = command_rx.try_recv() {
                 match cmd {
-                    DoraCommand::StartDataflow { dataflow_path, env_vars } => {
+                    DoraCommand::StartDataflow {
+                        dataflow_path,
+                        env_vars,
+                    } => {
                         log::info!("Starting dataflow: {:?}", dataflow_path);
 
                         // Set environment variables in both process env and controller
@@ -239,7 +242,8 @@ impl DoraIntegration {
                                         state.write().dataflow_running = true;
                                         state.write().dataflow_id = Some(dataflow_id.clone());
                                         dataflow_start_time = Some(std::time::Instant::now());
-                                        let _ = event_tx.send(DoraEvent::DataflowStarted { dataflow_id });
+                                        let _ = event_tx
+                                            .send(DoraEvent::DataflowStarted { dataflow_id });
                                         dispatcher = Some(disp);
                                     }
                                     Err(e) => {
@@ -303,7 +307,9 @@ impl DoraIntegration {
                         if let Some(ref disp) = dispatcher {
                             if let Some(bridge) = disp.get_bridge("mofa-prompt-input") {
                                 log::info!("Sending prompt via bridge: {}", message);
-                                if let Err(e) = bridge.send("prompt", dora_bridge::DoraData::Text(message.clone())) {
+                                if let Err(e) = bridge
+                                    .send("prompt", dora_bridge::DoraData::Text(message.clone()))
+                                {
                                     log::error!("Failed to send prompt: {}", e);
                                 }
                             } else {
@@ -317,7 +323,9 @@ impl DoraIntegration {
                             if let Some(bridge) = disp.get_bridge("mofa-prompt-input") {
                                 log::info!("Sending control command: {}", command);
                                 let ctrl = dora_bridge::ControlCommand::new(&command);
-                                if let Err(e) = bridge.send("control", dora_bridge::DoraData::Control(ctrl)) {
+                                if let Err(e) =
+                                    bridge.send("control", dora_bridge::DoraData::Control(ctrl))
+                                {
                                     log::error!("Failed to send control: {}", e);
                                 }
                             } else {
@@ -412,7 +420,8 @@ impl DoraIntegration {
                                 }
                                 dora_bridge::DoraData::Chat(chat) => {
                                     state.write().pending_chat_messages.push(chat.clone());
-                                    let _ = event_tx.send(DoraEvent::ChatReceived { message: chat });
+                                    let _ =
+                                        event_tx.send(DoraEvent::ChatReceived { message: chat });
                                 }
                                 dora_bridge::DoraData::Log(entry) => {
                                     state.write().pending_log_entries.push(entry.clone());
@@ -420,7 +429,12 @@ impl DoraIntegration {
                                 }
                                 dora_bridge::DoraData::Json(json) => {
                                     // JSON data from bridges (unused - LED visualization done in screen.rs)
-                                    log::debug!("Received JSON from {}: input_id={}, data={:?}", node_id, input_id, json);
+                                    log::debug!(
+                                        "Received JSON from {}: input_id={}, data={:?}",
+                                        node_id,
+                                        input_id,
+                                        json
+                                    );
                                 }
                                 _ => {}
                             }

@@ -4,14 +4,14 @@ use std::process::Stdio;
 use std::sync::Arc;
 
 use figment::{
-    Figment,
     providers::{Env, Format, Json, Toml, Yaml},
+    Figment,
 };
-use rmcp::{RoleClient, ServiceExt, service::RunningService, transport::ConfigureCommandExt};
+use rmcp::{service::RunningService, transport::ConfigureCommandExt, RoleClient, ServiceExt};
 use serde::Deserialize;
 
 use crate::client::{ChatClient, GeminiClient, OpenaiClient};
-use crate::tool::{Tool, ToolSet, get_mcp_tools};
+use crate::tool::{get_mcp_tools, Tool, ToolSet};
 
 /// Main configuration structure for the MaaS client.
 ///
@@ -47,11 +47,17 @@ fn default_log_level() -> String {
     "INFO".to_string()
 }
 
-fn default_request_timeout() -> u64 { 30 }
+fn default_request_timeout() -> u64 {
+    30
+}
 
-fn default_stream_timeout() -> u64 { 120 }
+fn default_stream_timeout() -> u64 {
+    120
+}
 
-fn default_enable_cancellation() -> bool { true }
+fn default_enable_cancellation() -> bool {
+    true
+}
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
@@ -381,16 +387,32 @@ pub fn get_env_or_value(value: &str) -> String {
         if result.is_empty() {
             eprintln!("⚠️  {} resolved to EMPTY string", env_var);
         } else if result.len() > 8 {
-            eprintln!("✓ {} = {}...{} (len={})", env_var, &result[..4], &result[result.len()-4..], result.len());
+            eprintln!(
+                "✓ {} = {}...{} (len={})",
+                env_var,
+                &result[..4],
+                &result[result.len() - 4..],
+                result.len()
+            );
         } else {
-            eprintln!("⚠️  {} = {} (too short, len={})", env_var, result, result.len());
+            eprintln!(
+                "⚠️  {} = {} (too short, len={})",
+                env_var,
+                result,
+                result.len()
+            );
         }
         result
     } else {
         // Literal value - also log masked
         let result = value.trim().to_string();
         if result.len() > 8 {
-            eprintln!("✓ Literal API key: {}...{} (len={})", &result[..4], &result[result.len()-4..], result.len());
+            eprintln!(
+                "✓ Literal API key: {}...{} (len={})",
+                &result[..4],
+                &result[result.len() - 4..],
+                result.len()
+            );
         }
         result
     }
@@ -422,7 +444,10 @@ pub fn load_anchor_context(file_path: &str) -> eyre::Result<String> {
 
     // Validate that content contains anchor points
     if !content.contains("[A0") {
-        return Err(eyre::eyre!("Invalid anchor context file: missing anchor points [A0]-[A11] in {}", file_path));
+        return Err(eyre::eyre!(
+            "Invalid anchor context file: missing anchor points [A0]-[A11] in {}",
+            file_path
+        ));
     }
 
     // Trim whitespace and return

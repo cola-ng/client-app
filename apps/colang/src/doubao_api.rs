@@ -1,11 +1,11 @@
 // Doubao (豆包) Volcanic Engine API Integration
 // Provides ASR (Speech Recognition), TTS (Text-to-Speech), and Chat capabilities
 
-use reqwest::{Client, header};
+use futures::stream::StreamExt;
+use reqwest::{header, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::error::Error;
-use futures::stream::StreamExt;
 
 const DOUBAO_API_BASE: &str = "https://openspeech.bytedance.com/api/v1";
 const DOUBAO_CHAT_API_BASE: &str = "https://ark.cn-beijing.volces.com/api/v3";
@@ -22,7 +22,7 @@ pub struct DoubaoClient {
 pub struct AsrRequest {
     pub audio_format: String, // "wav", "mp3", "pcm"
     pub sample_rate: u32,
-    pub language: String, // "en", "zh", "auto"
+    pub language: String,    // "en", "zh", "auto"
     pub audio_data: Vec<u8>, // Base64 encoded audio
 }
 
@@ -44,10 +44,10 @@ pub struct WordTiming {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TtsRequest {
     pub text: String,
-    pub voice_type: String, // Voice ID from Doubao
-    pub speed_ratio: f32,   // 0.5 - 2.0
-    pub volume_ratio: f32,  // 0.0 - 3.0
-    pub pitch_ratio: f32,   // 0.5 - 2.0
+    pub voice_type: String,   // Voice ID from Doubao
+    pub speed_ratio: f32,     // 0.5 - 2.0
+    pub volume_ratio: f32,    // 0.0 - 3.0
+    pub pitch_ratio: f32,     // 0.5 - 2.0
     pub audio_format: String, // "wav", "mp3", "pcm"
     pub sample_rate: u32,
 }
@@ -115,9 +115,9 @@ impl DoubaoClient {
     /// Perform speech recognition (ASR)
     pub async fn speech_to_text(&self, request: AsrRequest) -> Result<AsrResponse, Box<dyn Error>> {
         let url = format!("{}/asr", DOUBAO_API_BASE);
-        
+
         let audio_base64 = base64::encode(&request.audio_data);
-        
+
         let payload = json!({
             "app": {
                 "appid": self.app_id,
@@ -134,7 +134,8 @@ impl DoubaoClient {
             }
         });
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header(header::CONTENT_TYPE, "application/json")
             .json(&payload)
@@ -147,16 +148,11 @@ impl DoubaoClient {
         }
 
         let result: serde_json::Value = response.json().await?;
-        
+
         // Parse Doubao response format
-        let text = result["result"]["text"]
-            .as_str()
-            .unwrap_or("")
-            .to_string();
-        
-        let confidence = result["result"]["confidence"]
-            .as_f64()
-            .unwrap_or(0.0) as f32;
+        let text = result["result"]["text"].as_str().unwrap_or("").to_string();
+
+        let confidence = result["result"]["confidence"].as_f64().unwrap_or(0.0) as f32;
 
         let words = result["result"]["words"]
             .as_array()
@@ -184,7 +180,7 @@ impl DoubaoClient {
     /// Perform text-to-speech (TTS)
     pub async fn text_to_speech(&self, request: TtsRequest) -> Result<TtsResponse, Box<dyn Error>> {
         let url = format!("{}/tts", DOUBAO_API_BASE);
-        
+
         let payload = json!({
             "app": {
                 "appid": self.app_id,
@@ -207,7 +203,8 @@ impl DoubaoClient {
             }
         });
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header(header::CONTENT_TYPE, "application/json")
             .json(&payload)
@@ -220,16 +217,12 @@ impl DoubaoClient {
         }
 
         let result: serde_json::Value = response.json().await?;
-        
-        let audio_base64 = result["data"]
-            .as_str()
-            .ok_or("Missing audio data")?;
-        
+
+        let audio_base64 = result["data"].as_str().ok_or("Missing audio data")?;
+
         let audio_data = base64::decode(audio_base64)?;
-        
-        let duration_ms = result["duration"]
-            .as_u64()
-            .unwrap_or(0);
+
+        let duration_ms = result["duration"].as_u64().unwrap_or(0);
 
         Ok(TtsResponse {
             audio_data,
@@ -238,9 +231,12 @@ impl DoubaoClient {
     }
 
     /// Perform chat completion
-    pub async fn chat_completion(&self, request: ChatRequest) -> Result<ChatResponse, Box<dyn Error>> {
+    pub async fn chat_completion(
+        &self,
+        request: ChatRequest,
+    ) -> Result<ChatResponse, Box<dyn Error>> {
         let url = format!("{}/chat/completions", DOUBAO_CHAT_API_BASE);
-        
+
         let payload = json!({
             "model": request.model,
             "messages": request.messages,
@@ -249,9 +245,13 @@ impl DoubaoClient {
             "stream": request.stream
         });
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
-            .header(header::AUTHORIZATION, format!("Bearer {}", self.chat_api_key))
+            .header(
+                header::AUTHORIZATION,
+                format!("Bearer {}", self.chat_api_key),
+            )
             .header(header::CONTENT_TYPE, "application/json")
             .json(&payload)
             .send()
@@ -263,12 +263,12 @@ impl DoubaoClient {
         }
 
         let result: serde_json::Value = response.json().await?;
-        
+
         let content = result["choices"][0]["message"]["content"]
             .as_str()
             .unwrap_or("")
             .to_string();
-        
+
         let finish_reason = result["choices"][0]["finish_reason"]
             .as_str()
             .unwrap_or("stop")
@@ -286,10 +286,10 @@ impl DoubaoClient {
         request: ChatRequest,
     ) -> Result<impl StreamExt<Item = Result<String, Box<dyn Error>>>, Box<dyn Error>> {
         let url = format!("{}/chat/completions", DOUBAO_CHAT_API_BASE);
-        
+
         let mut req = request;
         req.stream = true;
-        
+
         let payload = json!({
             "model": req.model,
             "messages": req.messages,
@@ -298,9 +298,13 @@ impl DoubaoClient {
             "stream": true
         });
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
-            .header(header::AUTHORIZATION, format!("Bearer {}", self.chat_api_key))
+            .header(
+                header::AUTHORIZATION,
+                format!("Bearer {}", self.chat_api_key),
+            )
             .header(header::CONTENT_TYPE, "application/json")
             .json(&payload)
             .send()
@@ -317,14 +321,14 @@ impl DoubaoClient {
                 .and_then(|bytes| {
                     let text = String::from_utf8(bytes.to_vec())
                         .map_err(|e| Box::new(e) as Box<dyn Error>)?;
-                    
+
                     // Parse SSE format
                     if text.starts_with("data: ") {
                         let json_str = text.trim_start_matches("data: ");
                         if json_str == "[DONE]" {
                             return Ok(String::new());
                         }
-                        
+
                         let value: serde_json::Value = serde_json::from_str(json_str)?;
                         let content = value["choices"][0]["delta"]["content"]
                             .as_str()
@@ -348,9 +352,9 @@ impl DoubaoClient {
         language: &str,
     ) -> Result<PronunciationAnalysis, Box<dyn Error>> {
         let url = format!("{}/pronunciation_assessment", DOUBAO_API_BASE);
-        
+
         let audio_base64 = base64::encode(&audio_data);
-        
+
         let payload = json!({
             "app": {
                 "appid": self.app_id,
@@ -374,7 +378,8 @@ impl DoubaoClient {
             }
         });
 
-        let response = self.client
+        let response = self
+            .client
             .post(&url)
             .header(header::CONTENT_TYPE, "application/json")
             .json(&payload)
@@ -387,19 +392,15 @@ impl DoubaoClient {
         }
 
         let result: serde_json::Value = response.json().await?;
-        
-        let overall_score = result["result"]["overall_score"]
-            .as_f64()
-            .unwrap_or(0.0) as f32;
-        
-        let fluency_score = result["result"]["fluency_score"]
-            .as_f64()
-            .unwrap_or(0.0) as f32;
-        
+
+        let overall_score = result["result"]["overall_score"].as_f64().unwrap_or(0.0) as f32;
+
+        let fluency_score = result["result"]["fluency_score"].as_f64().unwrap_or(0.0) as f32;
+
         let pronunciation_score = result["result"]["pronunciation_score"]
             .as_f64()
             .unwrap_or(0.0) as f32;
-        
+
         let completeness_score = result["result"]["completeness_score"]
             .as_f64()
             .unwrap_or(0.0) as f32;
@@ -446,7 +447,9 @@ impl DoubaoClient {
         messages.extend_from_slice(&chat_history[chat_history.len().saturating_sub(5)..]);
 
         let words_str = if target_words.is_empty() {
-            String::from("Generate a natural conversation topic without specific word requirements.")
+            String::from(
+                "Generate a natural conversation topic without specific word requirements.",
+            )
         } else {
             format!(
                 "Generate a conversation topic that naturally uses these words: {}. Make it engaging and relevant to real-life situations.",
@@ -496,21 +499,21 @@ impl DoubaoClient {
         };
 
         let response = self.chat_completion(request).await?;
-        
+
         // Try to parse JSON response
         match serde_json::from_str::<Vec<TextIssue>>(&response.content) {
             Ok(issues) => Ok(issues),
             Err(_) => {
                 // If not valid JSON, try to extract from markdown code blocks
-                let content = response.content
+                let content = response
+                    .content
                     .trim_start_matches("```json")
                     .trim_start_matches("```")
                     .trim_end_matches("```")
                     .trim();
-                
-                serde_json::from_str(content).map_err(|e| {
-                    format!("Failed to parse AI response: {}", e).into()
-                })
+
+                serde_json::from_str(content)
+                    .map_err(|e| format!("Failed to parse AI response: {}", e).into())
             }
         }
     }
@@ -532,22 +535,18 @@ mod base64 {
 
     pub fn encode(data: &[u8]) -> String {
         data.iter()
-            .flat_map(|&b| {
-                vec![
-                    b >> 2,
-                    ((b & 0x03) << 4),
-                ]
-            })
+            .flat_map(|&b| vec![b >> 2, ((b & 0x03) << 4)])
             .collect::<Vec<u8>>()
             .chunks(3)
             .map(|chunk| {
                 let mut result = [b'='; 4];
                 result[0] = ENCODE_TABLE[(chunk[0] >> 2) as usize];
-                result[1] = ENCODE_TABLE[((chunk.get(0).unwrap_or(&0) & 0x03) << 4 | 
-                                         chunk.get(1).unwrap_or(&0) >> 4) as usize];
+                result[1] = ENCODE_TABLE[((chunk.get(0).unwrap_or(&0) & 0x03) << 4
+                    | chunk.get(1).unwrap_or(&0) >> 4)
+                    as usize];
                 if chunk.len() > 1 {
-                    result[2] = ENCODE_TABLE[((chunk[1] & 0x0f) << 2 | 
-                                             chunk.get(2).unwrap_or(&0) >> 6) as usize];
+                    result[2] = ENCODE_TABLE
+                        [((chunk[1] & 0x0f) << 2 | chunk.get(2).unwrap_or(&0) >> 6) as usize];
                 }
                 if chunk.len() > 2 {
                     result[3] = ENCODE_TABLE[(chunk[2] & 0x3f) as usize];
@@ -559,8 +558,12 @@ mod base64 {
 
     pub fn decode(_s: &str) -> Result<Vec<u8>, Error> {
         // Simplified base64 decode - in production use base64 crate
-        Err(Error::new(ErrorKind::Other, "Use base64 crate for production"))
+        Err(Error::new(
+            ErrorKind::Other,
+            "Use base64 crate for production",
+        ))
     }
 
-    const ENCODE_TABLE: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    const ENCODE_TABLE: &[u8; 64] =
+        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 }

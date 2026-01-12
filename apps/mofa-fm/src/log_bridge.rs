@@ -3,7 +3,7 @@
 //! This module sets up a custom logger that captures all log messages
 //! and makes them available to the UI via a channel.
 
-use crossbeam_channel::{Receiver, Sender, bounded};
+use crossbeam_channel::{bounded, Receiver, Sender};
 use log::{Level, LevelFilter, Log, Metadata, Record};
 use once_cell::sync::OnceCell;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -37,10 +37,7 @@ impl LogMessage {
         };
 
         // Extract a short module name from target
-        let module = self.target
-            .split("::")
-            .last()
-            .unwrap_or(&self.target);
+        let module = self.target.split("::").last().unwrap_or(&self.target);
 
         format!("[{}] [{}] {}", level_str, module, self.message)
     }
@@ -53,10 +50,11 @@ impl Log for BridgeLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
         // Filter out noisy modules
         let target = metadata.target();
-        if target.starts_with("wgpu") ||
-           target.starts_with("naga") ||
-           target.starts_with("winit") ||
-           target.starts_with("makepad_platform") {
+        if target.starts_with("wgpu")
+            || target.starts_with("naga")
+            || target.starts_with("winit")
+            || target.starts_with("makepad_platform")
+        {
             return metadata.level() <= Level::Warn;
         }
         metadata.level() <= Level::Debug

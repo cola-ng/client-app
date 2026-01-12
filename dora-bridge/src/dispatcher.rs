@@ -8,7 +8,9 @@ use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
 use crate::controller::DataflowController;
 use crate::error::{BridgeError, BridgeResult};
 use crate::parser::MofaNodeSpec;
-use crate::widgets::{AudioPlayerBridge, MicInputBridge, TextInputBridge, PromptInputBridge, SystemLogBridge};
+use crate::widgets::{
+    AudioPlayerBridge, MicInputBridge, PromptInputBridge, SystemLogBridge, TextInputBridge,
+};
 use crate::MofaNodeType;
 use crossbeam_channel::Receiver;
 use parking_lot::RwLock;

@@ -2,7 +2,10 @@
 // 专门负责从数据库随机读取问题词汇
 // 基于间隔重复算法选择需要复习的词汇
 
-use dora_node_api::{DoraNode, Event, arrow::array::{Array, StringArray, UInt8Array}};
+use dora_node_api::{
+    arrow::array::{Array, StringArray, UInt8Array},
+    DoraNode, Event,
+};
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
 use sqlx::sqlite::SqlitePool;
@@ -38,10 +41,10 @@ struct TriggerCommand {
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
-    
+
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "sqlite://learning_companion.db".to_string());
-    
+
     log::info!("DB Reader connecting to database: {}", database_url);
     let pool = SqlitePool::connect(&database_url)
         .await
@@ -54,12 +57,12 @@ async fn main() -> Result<()> {
     //     .wrap_err("Failed to run migrations")?;
 
     let (mut node, mut events) = DoraNode::init_from_env()?;
-    
+
     let default_min_words = std::env::var("MIN_WORDS")
         .ok()
         .and_then(|s| s.parse().ok())
         .unwrap_or(20);
-    
+
     let default_max_words = std::env::var("MAX_WORDS")
         .ok()
         .and_then(|s| s.parse().ok())
@@ -77,7 +80,7 @@ async fn main() -> Result<()> {
                 match id.as_str() {
                     "trigger" => {
                         log::info!("Received trigger to select words");
-                        
+
                         let raw_data = extract_bytes(&data);
                         let (min_words, max_words) = if !raw_data.is_empty() {
                             // Try to parse trigger command
@@ -91,30 +94,33 @@ async fn main() -> Result<()> {
                         } else {
                             (default_min_words, default_max_words)
                         };
-                        
+
                         log::info!("Selecting words (min: {}, max: {})", min_words, max_words);
-                        
+
                         // Select words from database
                         match select_words(&pool, max_words).await {
                             Ok(words) => {
                                 // Generate new session ID
                                 let session_id = uuid::Uuid::new_v4().to_string();
-                                
-                                let word_strings: Vec<String> = words.iter()
-                                    .map(|w| w.word.clone())
-                                    .collect();
-                                
+
+                                let word_strings: Vec<String> =
+                                    words.iter().map(|w| w.word.clone()).collect();
+
                                 let output = WordSelectionOutput {
                                     words: word_strings.clone(),
                                     word_details: words.clone(),
                                     session_id: session_id.clone(),
                                     total_selected: words.len(),
                                 };
-                                
+
                                 let output_json = serde_json::to_string(&output)?;
                                 let output_array = StringArray::from(vec![output_json.as_str()]);
-                                node.send_output("selected_words".to_string().into(), metadata.parameters.clone(), output_array)?;
-                                
+                                node.send_output(
+                                    "selected_words".to_string().into(),
+                                    metadata.parameters.clone(),
+                                    output_array,
+                                )?;
+
                                 log::info!(
                                     "Selected {} words for session {}: {:?}",
                                     words.len(),
@@ -123,13 +129,15 @@ async fn main() -> Result<()> {
                                 );
 
                                 // Create learning session in database
-                                if let Err(e) = create_learning_session(&pool, &session_id, &words).await {
+                                if let Err(e) =
+                                    create_learning_session(&pool, &session_id, &words).await
+                                {
                                     log::error!("Failed to create learning session: {}", e);
                                 }
                             }
                             Err(e) => {
                                 log::error!("Failed to select words: {}", e);
-                                
+
                                 // Send empty result
                                 let output = WordSelectionOutput {
                                     words: vec![],
@@ -139,7 +147,11 @@ async fn main() -> Result<()> {
                                 };
                                 let output_json = serde_json::to_string(&output)?;
                                 let output_array = StringArray::from(vec![output_json.as_str()]);
-                                node.send_output("selected_words".to_string().into(), metadata.parameters.clone(), output_array)?;
+                                node.send_output(
+                                    "selected_words".to_string().into(),
+                                    metadata.parameters.clone(),
+                                    output_array,
+                                )?;
                             }
                         }
                     }
@@ -175,10 +187,8 @@ fn extract_bytes(data: &dora_node_api::ArrowData) -> Vec<u8> {
 }
 
 async fn select_words(pool: &SqlitePool, limit: usize) -> Result<Vec<IssueWord>> {
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)?
-        .as_secs() as i64;
-    
+    let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() as i64;
+
     let one_day_ago = now - 86400; // 24 hours in seconds
 
     // Select words based on spaced repetition:
@@ -206,7 +216,7 @@ async fn select_words(pool: &SqlitePool, limit: usize) -> Result<Vec<IssueWord>>
             w.difficulty_level DESC,
             w.created_at ASC
         LIMIT ?
-        "#
+        "#,
     )
     .bind(one_day_ago)
     .bind(now)
@@ -236,20 +246,17 @@ async fn create_learning_session(
     session_id: &str,
     words: &[IssueWord],
 ) -> Result<()> {
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)?
-        .as_secs() as i64;
-    
-    let target_words_json = serde_json::to_string(
-        &words.iter().map(|w| &w.word).collect::<Vec<_>>()
-    )?;
+    let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() as i64;
+
+    let target_words_json =
+        serde_json::to_string(&words.iter().map(|w| &w.word).collect::<Vec<_>>())?;
 
     sqlx::query(
         r#"
         INSERT INTO learning_sessions (
             session_id, topic, target_words, started_at, total_exchanges
         ) VALUES (?, ?, ?, ?, ?)
-        "#
+        "#,
     )
     .bind(session_id)
     .bind("English Learning Session")

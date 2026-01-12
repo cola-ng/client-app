@@ -2,9 +2,9 @@ use std::collections::{BTreeMap, HashMap, HashSet, VecDeque};
 use std::env;
 
 use dora_node_api::{
-    DoraNode, Event, Parameter,
     arrow::array::{Array, AsArray, StringArray},
     dora_core::config::DataId,
+    DoraNode, Event, Parameter,
 };
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
@@ -40,7 +40,8 @@ fn get_friendly_node_name(node_id: &str) -> String {
     // Check if we're in study mode by looking for environment variable
     let study_mode = std::env::var("DORA_STUDY_MODE")
         .unwrap_or_default()
-        .to_ascii_lowercase() == "true";
+        .to_ascii_lowercase()
+        == "true";
 
     // Convert technical node IDs to user-friendly names
     if study_mode {
@@ -50,7 +51,8 @@ fn get_friendly_node_name(node_id: &str) -> String {
             "bridge-to-student2" => "Bridge to Student2".to_string(),
             _ => {
                 // Fallback: make technical ID more readable
-                node_id.replace("-", " ")
+                node_id
+                    .replace("-", " ")
                     .replace("bridge", "Bridge")
                     .replace("student", "Student")
                     .replace("tutor", "Tutor")
@@ -63,7 +65,8 @@ fn get_friendly_node_name(node_id: &str) -> String {
             "bridge-to-llm2" => "Bridge to LLM2".to_string(),
             _ => {
                 // Fallback: make technical ID more readable
-                node_id.replace("-", " ")
+                node_id
+                    .replace("-", " ")
                     .replace("bridge", "Bridge")
                     .replace("llm", "LLM")
                     .replace("judge", "Judge")
@@ -105,14 +108,13 @@ fn send_log(node: &mut DoraNode, level: LogLevel, config_level: LogLevel, messag
     }
 }
 
-
 #[derive(Debug, Clone, PartialEq)]
 enum SignalType {
-    ResetSignal,      // session_status: "reset" - control signal, drop silently
-    CancelledSignal,  // session_status: "cancelled" - control signal, drop silently
-    TechnicalError,   // session_status: "error" - actual error, may need notification
-    ContentError,     // Text-based errors like "Error:" - forward template if configured
-    NormalContent,    // Regular content - forward as-is
+    ResetSignal,     // session_status: "reset" - control signal, drop silently
+    CancelledSignal, // session_status: "cancelled" - control signal, drop silently
+    TechnicalError,  // session_status: "error" - actual error, may need notification
+    ContentError,    // Text-based errors like "Error:" - forward template if configured
+    NormalContent,   // Regular content - forward as-is
 }
 
 /// Classify the type of signal from metadata and text content
@@ -164,7 +166,10 @@ impl MessageState {
 
     fn add_chunk(&mut self, chunk: String, metadata: BTreeMap<String, Parameter>) {
         match self {
-            MessageState::Streaming { chunks, metadata: meta } => {
+            MessageState::Streaming {
+                chunks,
+                metadata: meta,
+            } => {
                 chunks.push(chunk);
                 meta.extend(metadata);
             }
@@ -195,19 +200,18 @@ impl MessageState {
     fn is_complete(&self) -> bool {
         matches!(self, MessageState::Complete { .. })
     }
-
 }
 
 #[derive(Debug)]
 struct InputPort {
     port_name: String,
-    is_streaming: bool,  // Explicitly configured
+    is_streaming: bool, // Explicitly configured
     message_state: Option<MessageState>,
     ready: bool,
     draining: bool,
     was_already_ready: bool, // Track if we already logged this as ready
-    signal_type: Option<SignalType>,  // Type of signal detected, if any
-    should_forward: bool,  // Whether this input should be forwarded (false for control signals)
+    signal_type: Option<SignalType>, // Type of signal detected, if any
+    should_forward: bool,    // Whether this input should be forwarded (false for control signals)
 }
 
 impl InputPort {
@@ -220,7 +224,7 @@ impl InputPort {
             draining: false,
             was_already_ready: false,
             signal_type: None,
-            should_forward: true,  // Default to forwarding
+            should_forward: true, // Default to forwarding
         }
     }
 
@@ -231,7 +235,8 @@ impl InputPort {
             // error = error occurred
             // cancelled = user cancelled streaming (history preserved in LLM)
             // reset = user reset (streaming cancelled + history cleared)
-            if status == "ended" || status == "error" || status == "cancelled" || status == "reset" {
+            if status == "ended" || status == "error" || status == "cancelled" || status == "reset"
+            {
                 return true;
             }
         }
@@ -266,12 +271,15 @@ impl InputPort {
 
         // For control signals (reset/cancelled), discard completely - don't accumulate or mark ready
         // These are notifications, not content to be forwarded
-        if matches!(signal_type, SignalType::ResetSignal | SignalType::CancelledSignal) {
+        if matches!(
+            signal_type,
+            SignalType::ResetSignal | SignalType::CancelledSignal
+        ) {
             // Clear any accumulated state - this input port is now empty
             self.message_state = None;
             self.ready = false;
             self.should_forward = false;
-            return false;  // Not ready, nothing accumulated
+            return false; // Not ready, nothing accumulated
         }
 
         // Determine if this should be forwarded based on signal type
@@ -281,15 +289,16 @@ impl InputPort {
                 false
             }
             SignalType::TechnicalError | SignalType::ContentError => {
-                true   // Forward template message for errors
+                true // Forward template message for errors
             }
             SignalType::NormalContent => {
-                true   // Forward normal content as-is
+                true // Forward normal content as-is
             }
         };
 
         // Check if this is the start of a new message (session_status: "started")
-        let is_new_start = metadata.get("session_status")
+        let is_new_start = metadata
+            .get("session_status")
             .and_then(|p| match p {
                 Parameter::String(s) => Some(s.as_str()),
                 _ => None,
@@ -311,13 +320,19 @@ impl InputPort {
 
             // Only add chunk if it's not an empty ending signal
             if let Some(state) = &mut self.message_state {
-                let is_ending_signal = text.trim().is_empty() &&
-                    metadata.get("session_status")
+                let is_ending_signal = text.trim().is_empty()
+                    && metadata
+                        .get("session_status")
                         .and_then(|p| match p {
                             Parameter::String(s) => Some(s.as_str()),
                             _ => None,
                         })
-                        .map_or(false, |status| status == "ended" || status == "error" || status == "cancelled" || status == "reset");
+                        .map_or(false, |status| {
+                            status == "ended"
+                                || status == "error"
+                                || status == "cancelled"
+                                || status == "reset"
+                        });
 
                 if !is_ending_signal {
                     state.add_chunk(text, metadata.clone());
@@ -330,18 +345,16 @@ impl InputPort {
                     state.complete();
                 }
                 self.ready = true;
-                return true;  // Ready to forward (will be filtered in forward_bundle)
+                return true; // Ready to forward (will be filtered in forward_bundle)
             }
         } else {
             // Non-streaming input - complete immediately
-            self.message_state = Some(MessageState::Complete {
-                content: text,
-            });
+            self.message_state = Some(MessageState::Complete { content: text });
             self.ready = true;
-            return true;  // Ready to forward (will be filtered in forward_bundle)
+            return true; // Ready to forward (will be filtered in forward_bundle)
         }
 
-        false  // Not ready yet
+        false // Not ready yet
     }
 
     fn get_bundled_message(&self) -> Option<BundledMessage> {
@@ -373,12 +386,18 @@ impl InputPort {
     fn is_streaming_active(&self) -> bool {
         matches!(self.message_state, Some(MessageState::Streaming { .. }))
     }
-
 }
 
 fn metadata_indicates_completion(metadata: &BTreeMap<String, Parameter>) -> bool {
     match metadata.get("session_status") {
-        Some(Parameter::String(status)) if status == "ended" || status == "error" || status == "cancelled" || status == "reset" => return true,
+        Some(Parameter::String(status))
+            if status == "ended"
+                || status == "error"
+                || status == "cancelled"
+                || status == "reset" =>
+        {
+            return true
+        }
         _ => {}
     }
 
@@ -392,19 +411,19 @@ struct ConferenceBridge {
     log_level: LogLevel,
     arrival_queue: VecDeque<String>,
     current_question_id: u32,
-    controller_question_id: Option<u32>,  // Track controller's question_id
-    has_controller_input: bool,           // Flag if controller provided question_id
-    last_status: String,  // Track last status to avoid duplicate logs
-    resume_mode: bool,     // Track if bridge is in resume mode
-    error_message_template: Option<String>,  // Template for error messages, {participant} will be replaced
-  }
+    controller_question_id: Option<u32>, // Track controller's question_id
+    has_controller_input: bool,          // Flag if controller provided question_id
+    last_status: String,                 // Track last status to avoid duplicate logs
+    resume_mode: bool,                   // Track if bridge is in resume mode
+    error_message_template: Option<String>, // Template for error messages, {participant} will be replaced
+}
 
 impl ConferenceBridge {
     fn new(
         streaming_ports: HashSet<String>,
         expected_ports: HashSet<String>,
         log_level: LogLevel,
-        _increment_question_id: bool,  // Parameter kept for compatibility but ignored
+        _increment_question_id: bool, // Parameter kept for compatibility but ignored
         error_message_template: Option<String>,
     ) -> Self {
         let mut bridge = Self {
@@ -417,7 +436,7 @@ impl ConferenceBridge {
             controller_question_id: None,
             has_controller_input: false,
             last_status: String::new(),
-            resume_mode: false,  // Start in paused mode
+            resume_mode: false, // Start in paused mode
             error_message_template,
         };
 
@@ -437,31 +456,49 @@ impl ConferenceBridge {
     fn register_input(&mut self, port_name: String) {
         if !self.inputs.contains_key(&port_name) {
             let is_streaming = self.streaming_ports.contains(&port_name);
-            self.inputs.insert(port_name.clone(), InputPort::new(port_name, is_streaming));
+            self.inputs
+                .insert(port_name.clone(), InputPort::new(port_name, is_streaming));
         }
     }
 
     /// Handle control input from conference controller
-    fn handle_control_input(&mut self, node: &mut DoraNode,
-                           control_text: &str, metadata: &dora_node_api::Metadata) -> Result<()> {
-
+    fn handle_control_input(
+        &mut self,
+        node: &mut DoraNode,
+        control_text: &str,
+        metadata: &dora_node_api::Metadata,
+    ) -> Result<()> {
         if control_text == "resume" {
             // Extract question_id from controller's resume command
-            if let Some(dora_node_api::Parameter::String(qid_str)) = metadata.parameters.get("question_id") {
+            if let Some(dora_node_api::Parameter::String(qid_str)) =
+                metadata.parameters.get("question_id")
+            {
                 if let Ok(qid) = qid_str.parse::<u32>() {
                     self.controller_question_id = Some(qid);
                     self.has_controller_input = true;
                     self.resume_mode = true;
 
-                    send_log(node, LogLevel::Info, self.log_level,
-                        &format!("▶️ Bridge using controller question_id: {}", qid));
+                    send_log(
+                        node,
+                        LogLevel::Info,
+                        self.log_level,
+                        &format!("▶️ Bridge using controller question_id: {}", qid),
+                    );
                 } else {
-                    send_log(node, LogLevel::Warn, self.log_level,
-                        &format!("⚠️ Invalid question_id format: {}", qid_str));
+                    send_log(
+                        node,
+                        LogLevel::Warn,
+                        self.log_level,
+                        &format!("⚠️ Invalid question_id format: {}", qid_str),
+                    );
                 }
             } else {
-                send_log(node, LogLevel::Warn, self.log_level,
-                    "⚠️ Resume command without question_id - using default behavior");
+                send_log(
+                    node,
+                    LogLevel::Warn,
+                    self.log_level,
+                    "⚠️ Resume command without question_id - using default behavior",
+                );
                 self.has_controller_input = false;
             }
         } else if control_text == "reset" {
@@ -489,7 +526,12 @@ impl ConferenceBridge {
         Ok(())
     }
 
-    fn handle_input(&mut self, port_name: &str, text: String, metadata: BTreeMap<String, Parameter>) -> bool {
+    fn handle_input(
+        &mut self,
+        port_name: &str,
+        text: String,
+        metadata: BTreeMap<String, Parameter>,
+    ) -> bool {
         // Register input if not known
         self.register_input(port_name.to_string());
 
@@ -515,9 +557,9 @@ impl ConferenceBridge {
         }
     }
 
-
     fn get_ready_inputs(&self) -> HashSet<String> {
-        self.inputs.iter()
+        self.inputs
+            .iter()
             .filter(|(_, input)| input.ready)
             .map(|(name, _)| name.clone())
             .collect()
@@ -550,7 +592,6 @@ impl ConferenceBridge {
     }
 
     fn finalize_cycle(&mut self, node: &mut DoraNode, status: &str) -> Result<()> {
-
         for (_, input) in self.inputs.iter_mut() {
             input.reset();
         }
@@ -590,14 +631,15 @@ impl ConferenceBridge {
                     &format!("🔄 Force clearing active streaming input: {}", port_name),
                 );
             }
-            input.reset();  // Force clear, don't drain
+            input.reset(); // Force clear, don't drain
         }
 
         // Don't clear arrival_queue completely - remove non-human entries but keep human
-        self.arrival_queue.retain(|port_name| port_name.to_lowercase().contains("human"));
+        self.arrival_queue
+            .retain(|port_name| port_name.to_lowercase().contains("human"));
 
         self.current_question_id = 0;
-        self.resume_mode = false;  // Reset to pause mode
+        self.resume_mode = false; // Reset to pause mode
 
         send_log(
             node,
@@ -614,7 +656,11 @@ impl ConferenceBridge {
             node,
             LogLevel::Debug,
             self.log_level,
-            &format!("🚀 FORWARDING BUNDLE - queue: {:?}, {} ready inputs", self.arrival_queue, self.get_ready_inputs().len()),
+            &format!(
+                "🚀 FORWARDING BUNDLE - queue: {:?}, {} ready inputs",
+                self.arrival_queue,
+                self.get_ready_inputs().len()
+            ),
         );
 
         // Step 1: Collect messages in FIFO order and concatenate
@@ -634,20 +680,27 @@ impl ConferenceBridge {
                         node,
                         LogLevel::Debug,
                         self.log_level,
-                        &format!("🚫 Dropping {:?} signal from {}", input.signal_type, port_name),
+                        &format!(
+                            "🚫 Dropping {:?} signal from {}",
+                            input.signal_type, port_name
+                        ),
                     );
-                    continue;  // Skip control signals (reset, cancelled)
+                    continue; // Skip control signals (reset, cancelled)
                 }
 
                 // Handle error signals that should be forwarded with template message
                 if let Some(signal_type) = &input.signal_type {
-                    if matches!(signal_type, SignalType::TechnicalError | SignalType::ContentError) {
+                    if matches!(
+                        signal_type,
+                        SignalType::TechnicalError | SignalType::ContentError
+                    ) {
                         // If we have an error message template, create and forward the error message
                         if let Some(template) = &self.error_message_template {
                             // Convert port_name to friendly participant name using study mode detection
                             let study_mode = std::env::var("DORA_STUDY_MODE")
                                 .unwrap_or_default()
-                                .to_ascii_lowercase() == "true";
+                                .to_ascii_lowercase()
+                                == "true";
 
                             let participant_name = if study_mode {
                                 port_name
@@ -661,12 +714,16 @@ impl ConferenceBridge {
                                     .replace("judge", "Judge")
                             };
 
-                            let error_message = template.replace("{participant}", &participant_name);
+                            let error_message =
+                                template.replace("{participant}", &participant_name);
                             send_log(
                                 node,
                                 LogLevel::Warn,
                                 self.log_level,
-                                &format!("📢 {} had an error - sending notification: {}", port_name, error_message),
+                                &format!(
+                                    "📢 {} had an error - sending notification: {}",
+                                    port_name, error_message
+                                ),
                             );
 
                             // Add error message to concatenated content
@@ -681,7 +738,10 @@ impl ConferenceBridge {
                                 node,
                                 LogLevel::Warn,
                                 self.log_level,
-                                &format!("❌ Dropping error input from {} - no error message template", port_name),
+                                &format!(
+                                    "❌ Dropping error input from {} - no error message template",
+                                    port_name
+                                ),
                             );
                         }
                         continue;
@@ -710,14 +770,23 @@ impl ConferenceBridge {
                         node,
                         LogLevel::Debug,
                         self.log_level,
-                        &format!("📦 Adding {} to bundle: {} chars", message.participant, message.content.len()),
+                        &format!(
+                            "📦 Adding {} to bundle: {} chars",
+                            message.participant,
+                            message.content.len()
+                        ),
                     );
                 }
             }
         }
 
         if forwarded_count == 0 {
-            send_log(node, LogLevel::Debug, self.log_level, "No messages ready to forward");
+            send_log(
+                node,
+                LogLevel::Debug,
+                self.log_level,
+                "No messages ready to forward",
+            );
             return Ok(());
         }
 
@@ -729,9 +798,9 @@ impl ConferenceBridge {
 
         // Use controller's question_id if provided, otherwise generate default
         let output_question_id = if let Some(controller_qid) = self.controller_question_id {
-            controller_qid  // Use controller's question_id
+            controller_qid // Use controller's question_id
         } else {
-            1  // Simple fallback for standalone usage
+            1 // Simple fallback for standalone usage
         };
 
         let mut output_metadata = BTreeMap::new();
@@ -740,13 +809,31 @@ impl ConferenceBridge {
             Parameter::String(output_question_id.to_string()),
         );
 
-        send_log(node, LogLevel::Debug, self.log_level,
-            &format!("📤 Forwarding with question_id: {} ({})",
+        send_log(
+            node,
+            LogLevel::Debug,
+            self.log_level,
+            &format!(
+                "📤 Forwarding with question_id: {} ({})",
                 output_question_id,
-                if self.has_controller_input { "controller" } else { "fallback" }));
+                if self.has_controller_input {
+                    "controller"
+                } else {
+                    "fallback"
+                }
+            ),
+        );
 
-        send_log(node, LogLevel::Debug, self.log_level,
-            &format!("📤 Sending {} chars from {} inputs", concatenated_content.len(), forwarded_count));
+        send_log(
+            node,
+            LogLevel::Debug,
+            self.log_level,
+            &format!(
+                "📤 Sending {} chars from {} inputs",
+                concatenated_content.len(),
+                forwarded_count
+            ),
+        );
 
         // Step 3: Send concatenated output with metadata
         node.send_output(
@@ -760,7 +847,10 @@ impl ConferenceBridge {
             node,
             LogLevel::Debug,
             self.log_level,
-            &format!("✅ SENT: Successfully sent {} chars to text output", concatenated_content.len()),
+            &format!(
+                "✅ SENT: Successfully sent {} chars to text output",
+                concatenated_content.len()
+            ),
         );
 
         // Step 4: Update state
@@ -778,19 +868,22 @@ impl ConferenceBridge {
 
 fn main() -> Result<()> {
     // Load configuration from environment
-    let streaming_ports = env::var("STREAMING_PORTS").ok()
+    let streaming_ports = env::var("STREAMING_PORTS")
+        .ok()
         .unwrap_or_default()
         .split(',')
         .filter(|s| !s.trim().is_empty())
         .map(|s| s.trim().to_string())
         .collect::<HashSet<String>>();
 
-    let log_level = env::var("LOG_LEVEL").ok()
+    let log_level = env::var("LOG_LEVEL")
+        .ok()
         .and_then(|s| LogLevel::parse(&s))
         .unwrap_or(LogLevel::Info);
 
     // INC_QUESTION_ID is no longer used - controller manages question_id
-    let increment_question_id = env::var("INC_QUESTION_ID").ok()
+    let increment_question_id = env::var("INC_QUESTION_ID")
+        .ok()
         .and_then(|s| s.parse::<bool>().ok())
         .unwrap_or(false); // Kept for compatibility but ignored
     let (mut node, mut events) =
@@ -868,7 +961,12 @@ fn main() -> Result<()> {
                     let mut command: Option<String> = None;
 
                     if trimmed.is_empty() {
-                        send_log(&mut node, LogLevel::Warn, log_level, "Empty control message");
+                        send_log(
+                            &mut node,
+                            LogLevel::Warn,
+                            log_level,
+                            "Empty control message",
+                        );
                     } else if let Ok(value) = serde_json::from_str::<Value>(trimmed) {
                         if let Some(cmd) = value.get("command").and_then(|v| v.as_str()) {
                             command = Some(cmd.to_ascii_lowercase());
@@ -880,44 +978,90 @@ fn main() -> Result<()> {
                     match command.as_deref() {
                         Some("reset") => {
                             // Handle controller's reset command
-                            if let Err(e) = bridge.handle_control_input(&mut node, "reset", &metadata) {
-                                send_log(&mut node, LogLevel::Error, log_level,
-                                    &format!("❌ Error handling control input: {}", e));
+                            if let Err(e) =
+                                bridge.handle_control_input(&mut node, "reset", &metadata)
+                            {
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Error,
+                                    log_level,
+                                    &format!("❌ Error handling control input: {}", e),
+                                );
                             }
                             bridge.reset_state(&mut node)?;
-                            send_log(&mut node, LogLevel::Info, log_level, "🔄 Reset command received");
+                            send_log(
+                                &mut node,
+                                LogLevel::Info,
+                                log_level,
+                                "🔄 Reset command received",
+                            );
                         }
                         Some("resume") => {
                             // Handle controller's resume command with question_id
-                            if let Err(e) = bridge.handle_control_input(&mut node, "resume", &metadata) {
-                                send_log(&mut node, LogLevel::Error, log_level,
-                                    &format!("❌ Error handling control input: {}", e));
+                            if let Err(e) =
+                                bridge.handle_control_input(&mut node, "resume", &metadata)
+                            {
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Error,
+                                    log_level,
+                                    &format!("❌ Error handling control input: {}", e),
+                                );
                             }
 
-                            let any_streaming = bridge.inputs.values().any(|input| input.is_streaming_active());
+                            let any_streaming = bridge
+                                .inputs
+                                .values()
+                                .any(|input| input.is_streaming_active());
                             let ready_inputs = bridge.get_ready_inputs();
 
                             // Forward if there are ready inputs AND no ongoing streaming
                             if !ready_inputs.is_empty() && !any_streaming {
-                                send_log(&mut node, LogLevel::Info, log_level,
-                                    &format!("🚀 Forwarding {} ready inputs", ready_inputs.len()));
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Info,
+                                    log_level,
+                                    &format!("🚀 Forwarding {} ready inputs", ready_inputs.len()),
+                                );
                                 match bridge.forward_bundle(&mut node) {
                                     Ok(_) => {
                                         bridge.resume_mode = false;
-                                        send_log(&mut node, LogLevel::Debug, log_level, "✅ Forward complete");
+                                        send_log(
+                                            &mut node,
+                                            LogLevel::Debug,
+                                            log_level,
+                                            "✅ Forward complete",
+                                        );
                                     }
                                     Err(e) => {
-                                        send_log(&mut node, LogLevel::Error, log_level,
-                                            &format!("❌ Forward failed: {}", e));
+                                        send_log(
+                                            &mut node,
+                                            LogLevel::Error,
+                                            log_level,
+                                            &format!("❌ Forward failed: {}", e),
+                                        );
                                     }
                                 }
                             } else {
-                                send_log(&mut node, LogLevel::Debug, log_level,
-                                    &format!("⏳ Waiting for inputs (ready={}, streaming={})", ready_inputs.len(), any_streaming));
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Debug,
+                                    log_level,
+                                    &format!(
+                                        "⏳ Waiting for inputs (ready={}, streaming={})",
+                                        ready_inputs.len(),
+                                        any_streaming
+                                    ),
+                                );
                             }
                         }
                         Some(other) => {
-                            send_log(&mut node, LogLevel::Warn, log_level, &format!("Unknown command: {}", other));
+                            send_log(
+                                &mut node,
+                                LogLevel::Warn,
+                                log_level,
+                                &format!("Unknown command: {}", other),
+                            );
                         }
                         None => {}
                     }
@@ -936,18 +1080,24 @@ fn main() -> Result<()> {
                 bridge.register_input(port_name.clone());
                 let completion_signal = metadata_indicates_completion(&parameters);
 
-                let session_status_value = parameters
-                    .get("session_status")
-                    .and_then(|param| match param {
-                        Parameter::String(status) => Some(status.as_str()),
-                        _ => None,
-                    });
+                let session_status_value =
+                    parameters
+                        .get("session_status")
+                        .and_then(|param| match param {
+                            Parameter::String(status) => Some(status.as_str()),
+                            _ => None,
+                        });
                 let is_starting = session_status_value
                     .map(|status| status.eq_ignore_ascii_case("started"))
                     .unwrap_or(false);
                 let has_session_status = session_status_value.is_some();
 
-                if bridge.handle_drain(&port_name, is_starting, completion_signal, has_session_status) {
+                if bridge.handle_drain(
+                    &port_name,
+                    is_starting,
+                    completion_signal,
+                    has_session_status,
+                ) {
                     continue;
                 }
 
@@ -961,10 +1111,17 @@ fn main() -> Result<()> {
                 let is_reset_signal = session_status_value == Some("reset");
 
                 if is_reset_signal {
-                    send_log(&mut node, LogLevel::Info, log_level,
-                        &format!("🔄 RESET SIGNAL from {} - discarding ALL queued inputs", port_name));
+                    send_log(
+                        &mut node,
+                        LogLevel::Info,
+                        log_level,
+                        &format!(
+                            "🔄 RESET SIGNAL from {} - discarding ALL queued inputs",
+                            port_name
+                        ),
+                    );
                     bridge.reset_state(&mut node)?;
-                    continue;  // Skip further processing, wait for new debate
+                    continue; // Skip further processing, wait for new debate
                 }
 
                 let input_ready = bridge.handle_input(&port_name, text, parameters);
@@ -975,9 +1132,16 @@ fn main() -> Result<()> {
                         if !input.was_already_ready {
                             input.was_already_ready = true;
                             // Log state changes only for errors
-                            if matches!(input.signal_type, Some(SignalType::TechnicalError) | Some(SignalType::ContentError)) {
-                                send_log(&mut node, LogLevel::Warn, log_level,
-                                    &format!("❌ Input {} completed with ERROR", port_name));
+                            if matches!(
+                                input.signal_type,
+                                Some(SignalType::TechnicalError) | Some(SignalType::ContentError)
+                            ) {
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Warn,
+                                    log_level,
+                                    &format!("❌ Input {} completed with ERROR", port_name),
+                                );
                             }
                         }
                     }
@@ -985,22 +1149,38 @@ fn main() -> Result<()> {
 
                 // If input completed and bridge is in resume mode, check if we can forward
                 if bridge.resume_mode && input_ready {
-                    let any_streaming = bridge.inputs.values().any(|input| input.is_streaming_active());
+                    let any_streaming = bridge
+                        .inputs
+                        .values()
+                        .any(|input| input.is_streaming_active());
                     let ready_inputs = bridge.get_ready_inputs();
 
                     // Only forward if no other inputs are still streaming
                     if !any_streaming && !ready_inputs.is_empty() {
-                        send_log(&mut node, LogLevel::Info, log_level,
-                            &format!("🚀 Forwarding {} ready inputs", ready_inputs.len()));
+                        send_log(
+                            &mut node,
+                            LogLevel::Info,
+                            log_level,
+                            &format!("🚀 Forwarding {} ready inputs", ready_inputs.len()),
+                        );
 
                         match bridge.forward_bundle(&mut node) {
                             Ok(_) => {
                                 bridge.resume_mode = false;
-                                send_log(&mut node, LogLevel::Debug, log_level, "✅ Forward complete");
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Debug,
+                                    log_level,
+                                    "✅ Forward complete",
+                                );
                             }
                             Err(e) => {
-                                send_log(&mut node, LogLevel::Error, log_level,
-                                    &format!("❌ Forward failed: {}", e));
+                                send_log(
+                                    &mut node,
+                                    LogLevel::Error,
+                                    log_level,
+                                    &format!("❌ Forward failed: {}", e),
+                                );
                             }
                         }
                     }
@@ -1014,7 +1194,12 @@ fn main() -> Result<()> {
                 }
             }
             Event::Stop(_) => {
-                send_log(&mut node, LogLevel::Info, log_level, "Received stop event, shutting down");
+                send_log(
+                    &mut node,
+                    LogLevel::Info,
+                    log_level,
+                    "Received stop event, shutting down",
+                );
                 break;
             }
             _ => {}

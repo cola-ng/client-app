@@ -13,36 +13,54 @@ impl MoFaFMScreen {
 
         // Get input devices
         let input_devices = audio_manager.get_input_devices();
-        let input_labels: Vec<String> = input_devices.iter().map(|d| {
-            if d.is_default {
-                format!("{} (Default)", d.name)
-            } else {
-                d.name.clone()
-            }
-        }).collect();
+        let input_labels: Vec<String> = input_devices
+            .iter()
+            .map(|d| {
+                if d.is_default {
+                    format!("{} (Default)", d.name)
+                } else {
+                    d.name.clone()
+                }
+            })
+            .collect();
         self.input_devices = input_devices.iter().map(|d| d.name.clone()).collect();
 
         // Get output devices
         let output_devices = audio_manager.get_output_devices();
-        let output_labels: Vec<String> = output_devices.iter().map(|d| {
-            if d.is_default {
-                format!("{} (Default)", d.name)
-            } else {
-                d.name.clone()
-            }
-        }).collect();
+        let output_labels: Vec<String> = output_devices
+            .iter()
+            .map(|d| {
+                if d.is_default {
+                    format!("{} (Default)", d.name)
+                } else {
+                    d.name.clone()
+                }
+            })
+            .collect();
         self.output_devices = output_devices.iter().map(|d| d.name.clone()).collect();
 
         // Populate input dropdown
         if !input_labels.is_empty() {
-            let dropdown = self.view.drop_down(ids!(audio_container.device_container.device_selectors.input_device_group.input_device_dropdown));
+            let dropdown = self.view.drop_down(ids!(
+                audio_container
+                    .device_container
+                    .device_selectors
+                    .input_device_group
+                    .input_device_dropdown
+            ));
             dropdown.set_labels(cx, input_labels);
             dropdown.set_selected_item(cx, 0);
         }
 
         // Populate output dropdown
         if !output_labels.is_empty() {
-            let dropdown = self.view.drop_down(ids!(audio_container.device_container.device_selectors.output_device_group.output_device_dropdown));
+            let dropdown = self.view.drop_down(ids!(
+                audio_container
+                    .device_container
+                    .device_selectors
+                    .output_device_group
+                    .output_device_dropdown
+            ));
             dropdown.set_labels(cx, output_labels);
             dropdown.set_selected_item(cx, 0);
         }
@@ -115,19 +133,52 @@ impl MoFaFMScreen {
         // LED colors by index: 0,1=green, 2=yellow, 3=orange, 4=red
         let led_colors = [green, green, yellow, orange, red];
         let led_ids = [
-            ids!(audio_container.mic_container.mic_group.mic_level_meter.mic_led_1),
-            ids!(audio_container.mic_container.mic_group.mic_level_meter.mic_led_2),
-            ids!(audio_container.mic_container.mic_group.mic_level_meter.mic_led_3),
-            ids!(audio_container.mic_container.mic_group.mic_level_meter.mic_led_4),
-            ids!(audio_container.mic_container.mic_group.mic_level_meter.mic_led_5),
+            ids!(
+                audio_container
+                    .mic_container
+                    .mic_group
+                    .mic_level_meter
+                    .mic_led_1
+            ),
+            ids!(
+                audio_container
+                    .mic_container
+                    .mic_group
+                    .mic_level_meter
+                    .mic_led_2
+            ),
+            ids!(
+                audio_container
+                    .mic_container
+                    .mic_group
+                    .mic_level_meter
+                    .mic_led_3
+            ),
+            ids!(
+                audio_container
+                    .mic_container
+                    .mic_group
+                    .mic_level_meter
+                    .mic_led_4
+            ),
+            ids!(
+                audio_container
+                    .mic_container
+                    .mic_group
+                    .mic_level_meter
+                    .mic_led_5
+            ),
         ];
 
         for (i, led_id) in led_ids.iter().enumerate() {
             let is_active = (i + 1) as u32 <= active_leds;
             let color = if is_active { led_colors[i] } else { off };
-            self.view.view(*led_id).apply_over(cx, live! {
-                draw_bg: { color: (color) }
-            });
+            self.view.view(*led_id).apply_over(
+                cx,
+                live! {
+                    draw_bg: { color: (color) }
+                },
+            );
         }
 
         self.view.redraw(cx);

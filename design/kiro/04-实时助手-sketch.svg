@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .error { fill: #ef4444; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-success { fill: #10b981; stroke: none; rx: 12; }
+      .btn-warning { fill: #f59e0b; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .msg-partner { fill: #f1f5f9; stroke: none; rx: 16; }
+      .msg-user { fill: #6366f1; stroke: none; rx: 16; }
+      .msg-ai-assist { fill: #dcfce7; stroke: #86efac; stroke-width: 1; rx: 16; }
+      .msg-correction { fill: #fef3c7; stroke: #fcd34d; stroke-width: 1; rx: 12; }
+      .avatar-partner { fill: #fecaca; stroke: #f87171; stroke-width: 2; }
+      .avatar-user { fill: #bfdbfe; stroke: #93c5fd; stroke-width: 2; }
+      .avatar-ai { fill: #ddd6fe; stroke: #a5b4fc; stroke-width: 2; }
+      .live-indicator { fill: #10b981; }
+      .input-area { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 24; }
+      .float-panel { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 16; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15)); }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - 实时助手草图</text>
+  <text x="40" y="65" class="t p muted">与真人聊天时的 AI 实时辅助 · 发音纠正 · 翻译代发 · 卡壳救援</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="830" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="64" class="header"/>
+  <text x="70" y="130" class="t h2">🤝 实时助手</text>
+  
+  <!-- Live Status -->
+  <circle cx="200" cy="122" r="6" class="live-indicator"/>
+  <text x="215" y="127" class="t small success">正在通话中</text>
+  
+  <!-- Partner Info -->
+  <circle cx="700" cy="122" r="20" class="avatar-partner"/>
+  <text x="700" y="127" class="t small" text-anchor="middle">👩</text>
+  <text x="740" y="118" class="t h3">Sarah (美国)</text>
+  <text x="740" y="135" class="t small muted">语言交换伙伴 · 在线</text>
+  
+  <!-- Call Controls -->
+  <rect x="1100" y="106" width="36" height="36" class="chip"/>
+  <text x="1118" y="130" class="t p" text-anchor="middle">🔊</text>
+  <rect x="1145" y="106" width="36" height="36" class="chip"/>
+  <text x="1163" y="130" class="t p" text-anchor="middle">🎥</text>
+  <rect x="1190" y="106" width="100" height="36" fill="#ef4444" rx="18"/>
+  <text x="1240" y="130" class="t small white" text-anchor="middle">结束通话</text>
+
+  <!-- Main Chat Area -->
+  <rect x="60" y="170" width="850" height="580" fill="#fafbfc" rx="12"/>
+  
+  <!-- Partner Message 1 -->
+  <circle cx="90" cy="210" r="16" class="avatar-partner"/>
+  <text x="90" y="215" class="t small" text-anchor="middle">👩</text>
+  <rect x="115" y="190" width="350" height="50" class="msg-partner"/>
+  <text x="135" y="215" class="t p">Hi! How are you doing today?</text>
+  <text x="135" y="235" class="t small muted">🔊 播放原声</text>
+
+  <!-- AI Translation for User -->
+  <rect x="115" y="250" width="200" height="30" class="msg-ai-assist"/>
+  <text x="135" y="270" class="t small success">🤖 翻译：你好！你今天怎么样？</text>
+
+  <!-- User Response (with AI assist) -->
+  <rect x="500" y="300" width="380" height="70" class="msg-user"/>
+  <text x="520" y="325" class="t p white">I'm doing great, thanks for asking!</text>
+  <text x="520" y="345" class="t p white">How about you?</text>
+  <text x="520" y="365" class="t small" fill="#c7d2fe">🤖 AI 帮你优化后发送</text>
+  <circle cx="870" cy="335" r="16" class="avatar-user"/>
+  <text x="870" y="340" class="t small" text-anchor="middle">👤</text>
+
+  <!-- Partner Message 2 -->
+  <circle cx="90" cy="420" r="16" class="avatar-partner"/>
+  <rect x="115" y="400" width="400" height="50" class="msg-partner"/>
+  <text x="135" y="425" class="t p">I'm good! I just got back from a trip to Japan.</text>
+  <text x="135" y="445" class="t small muted">🔊 播放原声</text>
+  
+  <rect x="115" y="460" width="280" height="30" class="msg-ai-assist"/>
+  <text x="135" y="480" class="t small success">🤖 翻译：我很好！我刚从日本旅行回来。</text>
+
+  <!-- User trying to respond (with correction) -->
+  <rect x="450" y="510" width="430" height="90" class="msg-user"/>
+  <text x="470" y="535" class="t p white">Oh wow! I always want to go Japan.</text>
+  <rect x="470" y="545" width="390" height="45" class="msg-correction"/>
+  <text x="490" y="565" class="t small warning">💡 AI 建议修正：</text>
+  <text x="490" y="585" class="t small">"I've always wanted to go to Japan"</text>
+  <circle cx="870" cy="555" r="16" class="avatar-user"/>
+
+  <!-- AI Suggestion Panel -->
+  <rect x="115" y="620" width="500" height="80" class="float-panel"/>
+  <text x="135" y="645" class="t h3 accent">🤖 AI 建议回复</text>
+  <text x="135" y="670" class="t p">"That sounds amazing! What was your favorite part?"</text>
+  <rect x="135" y="680" width="80" height="24" class="chip"/>
+  <text x="175" y="696" class="t small" text-anchor="middle">使用</text>
+  <rect x="225" y="680" width="80" height="24" class="chip"/>
+  <text x="265" y="696" class="t small" text-anchor="middle">修改</text>
+
+  <!-- Input Area -->
+  <rect x="60" y="765" width="850" height="70" class="input-area"/>
+  <text x="90" y="805" class="t p muted">说中文，AI 帮你翻译发送...</text>
+  
+  <!-- Input Actions -->
+  <rect x="700" y="780" width="90" height="40" class="btn-warning"/>
+  <text x="745" y="805" class="t small white" text-anchor="middle">🤖 帮我说</text>
+  <rect x="800" y="780" width="90" height="40" class="btn-success"/>
+  <text x="845" y="805" class="t small white" text-anchor="middle">🎤 发送</text>
+
+  <!-- Right Panel: AI Assistant Controls -->
+  <rect x="930" y="170" width="410" height="580" class="card"/>
+  
+  <!-- AI Mode Toggle -->
+  <text x="950" y="200" class="t h3">🎛️ AI 助手模式</text>
+  
+  <rect x="950" y="220" width="370" height="80" class="panel"/>
+  <rect x="970" y="240" width="160" height="40" class="chip-active"/>
+  <text x="1050" y="265" class="t small white" text-anchor="middle">🛡️ 实时纠错</text>
+  <rect x="1140" y="240" width="160" height="40" class="chip"/>
+  <text x="1220" y="265" class="t small" text-anchor="middle">🔇 静默模式</text>
+  <text x="970" y="290" class="t small muted">发送前自动检查并建议修正</text>
+
+  <!-- Translation Settings -->
+  <text x="950" y="330" class="t h3">🌐 翻译设置</text>
+  <rect x="950" y="350" width="370" height="60" class="panel"/>
+  <text x="970" y="375" class="t small">对方说的话：</text>
+  <rect x="1100" y="358" width="100" height="28" class="chip-active"/>
+  <text x="1150" y="377" class="t small white" text-anchor="middle">自动翻译</text>
+  <rect x="1210" y="358" width="80" height="28" class="chip"/>
+  <text x="1250" y="377" class="t small" text-anchor="middle">关闭</text>
+
+  <!-- Pronunciation Check -->
+  <text x="950" y="440" class="t h3">🎤 发音检查</text>
+  <rect x="950" y="460" width="370" height="100" class="panel"/>
+  <text x="970" y="485" class="t small">你刚才说的：</text>
+  <text x="970" y="510" class="t p">"I always want to go Japan"</text>
+  <rect x="970" y="525" width="330" height="25" fill="#fef3c7" rx="6"/>
+  <text x="990" y="543" class="t small warning">发音评分：78/100 · "want" 的 /wɒnt/ 需注意</text>
+
+  <!-- Quick Phrases -->
+  <text x="950" y="590" class="t h3">⚡ 快捷短语</text>
+  <rect x="950" y="610" width="370" height="120" class="panel"/>
+  <rect x="970" y="630" width="160" height="30" class="chip"/>
+  <text x="1050" y="650" class="t small" text-anchor="middle">That's interesting!</text>
+  <rect x="1140" y="630" width="160" height="30" class="chip"/>
+  <text x="1220" y="650" class="t small" text-anchor="middle">Could you repeat?</text>
+  <rect x="970" y="670" width="160" height="30" class="chip"/>
+  <text x="1050" y="690" class="t small" text-anchor="middle">I didn't catch that</text>
+  <rect x="1140" y="670" width="160" height="30" class="chip"/>
+  <text x="1220" y="690" class="t small" text-anchor="middle">Let me think...</text>
+
+  <!-- Emergency AI Takeover -->
+  <rect x="950" y="750" width="370" height="60" class="btn-primary"/>
+  <text x="1135" y="775" class="t p white" text-anchor="middle">🆘 卡壳了？让 AI 帮你接话</text>
+  <text x="1135" y="795" class="t small" fill="#c7d2fe" text-anchor="middle">AI 会根据上下文生成合适的回复</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="940" class="t small muted">设计要点：实时翻译辅助 · 发送前纠错 · 发音评分 · 快捷短语 · 一键 AI 接管 · 不打断对话流</text>
+</svg>

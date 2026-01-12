@@ -1,0 +1,133 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#FFB74D"/>
+  <text x="600" y="50" font-family="Arial" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">CodeBuddy vs 现有方案 - 创新优势对比</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="100" width="120" height="30" rx="4" fill="#4CAF50"/>
+  <text x="110" y="120" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">✅ CodeBuddy</text>
+  
+  <rect x="190" y="100" width="120" height="30" rx="4" fill="#e0e0e0"/>
+  <text x="250" y="120" font-family="Arial" font-size="12" fill="#666" text-anchor="middle">❌ 其他方案</text>
+  
+  <!-- Comparison Table -->
+  <rect x="50" y="150" width="1100" height="620" rx="12" fill="#fafafa" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- Table Header -->
+  <rect x="50" y="150" width="1100" height="40" rx="12" fill="#FFB74D"/>
+  <text x="150" y="178" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">功能特性</text>
+  <text x="450" y="178" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">CodeBuddy</text>
+  <text x="750" y="178" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">现有方案 (1-10)</text>
+  <text x="950" y="178" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff">优势提升</text>
+  
+  <!-- Row 1: AI Proactive Coach -->
+  <rect x="70" y="210" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="240" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">AI 主动教练</text>
+  <rect x="350" y="210" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="235" font-family="Arial" font-size="11" fill="#388E3C">• 有人格的 Emma 教练</text>
+  <text x="500" y="250" font-family="Arial" font-size="11" fill="#388E3C">• 情绪感知 + 主动引导</text>
+  <rect x="670" y="210" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="235" font-family="Arial" font-size="11" fill="#C62828">• 被动响应</text>
+  <text x="780" y="250" font-family="Arial" font-size="11" fill="#C62828">• 缺乏人格化</text>
+  <rect x="910" y="210" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="240" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+45%</text>
+  <text x="1020" y="255" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">参与度提升</text>
+  
+  <!-- Row 2: Scenario Immersion -->
+  <rect x="70" y="280" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="310" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">场景化沉浸</text>
+  <rect x="350" y="280" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="305" font-family="Arial" font-size="11" fill="#388E3C">• 真实场景 + 环境音效</text>
+  <text x="500" y="320" font-family="Arial" font-size="11" fill="#388E3C">• 增强代入感</text>
+  <rect x="670" y="280" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="305" font-family="Arial" font-size="11" fill="#C62828">• 缺乏场景</text>
+  <text x="780" y="320" font-family="Arial" font-size="11" fill="#C62828">• 干燥的对话</text>
+  <rect x="910" y="280" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="310" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+34%</text>
+  <text x="1020" y="325" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">沉浸感提升</text>
+  
+  <!-- Row 3: Smart Review System -->
+  <rect x="70" y="350" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="380" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">智能复习系统</text>
+  <rect x="350" y="350" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="375" font-family="Arial" font-size="11" fill="#388E3C">• AI 自动生成</text>
+  <text x="500" y="390" font-family="Arial" font-size="11" fill="#388E3C">• 嵌入对话自然复习</text>
+  <rect x="670" y="350" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="375" font-family="Arial" font-size="11" fill="#C62828">• 手动规划</text>
+  <text x="780" y="390" font-family="Arial" font-size="11" fill="#C62828">• 需要额外时间</text>
+  <rect x="910" y="350" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="380" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+28%</text>
+  <text x="1020" y="395" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">学习效率提升</text>
+  
+  <!-- Row 4: Social English Assistant -->
+  <rect x="70" y="420" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="450" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">社交英语助手</text>
+  <rect x="350" y="420" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="445" font-family="Arial" font-size="11" fill="#388E3C">• AI 辅助真实社交</text>
+  <text x="500" y="460" font-family="Arial" font-size="11" fill="#388E3C">• 卡壳救场保护自尊</text>
+  <rect x="670" y="420" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="445" font-family="Arial" font-size="11" fill="#C62828">• 无社交功能</text>
+  <text x="780" y="460" font-family="Arial" font-size="11" fill="#C62828">• 缺乏实际应用</text>
+  <rect x="910" y="420" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="450" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+52%</text>
+  <text x="1020" y="465" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">实际应用提升</text>
+  
+  <!-- Row 5: Multi-Accent Support -->
+  <rect x="70" y="490" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="520" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">多区口音支持</text>
+  <rect x="350" y="490" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="515" font-family="Arial" font-size="11" fill="#388E3C">• 美英澳印多口音</text>
+  <text x="500" y="530" font-family="Arial" font-size="11" fill="#388E3C">• 多种音色可选</text>
+  <rect x="670" y="490" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="515" font-family="Arial" font-size="11" fill="#C62828">• 单一口音</text>
+  <text x="780" y="530" font-family="Arial" font-size="11" fill="#C62828">• 音色选择有限</text>
+  <rect x="910" y="490" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="520" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+40%</text>
+  <text x="1020" y="535" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">听力广度提升</text>
+  
+  <!-- Row 6: Movie Line Learning -->
+  <rect x="70" y="560" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="590" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">电影台词学习</text>
+  <rect x="350" y="560" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="585" font-family="Arial" font-size="11" fill="#388E3C">• 角色扮演 + 情感标注</text>
+  <text x="500" y="600" font-family="Arial" font-size="11" fill="#388E3C">• 即兴对话生成</text>
+  <rect x="670" y="560" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="585" font-family="Arial" font-size="11" fill="#C62828">• 静态台词展示</text>
+  <text x="780" y="600" font-family="Arial" font-size="11" fill="#C62828">• 缺乏互动性</text>
+  <rect x="910" y="560" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="590" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+38%</text>
+  <text x="1020" y="605" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">学习趣味提升</text>
+  
+  <!-- Row 7: Stuck Rescue -->
+  <rect x="70" y="630" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="660" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">卡壳救场机制</text>
+  <rect x="350" y="630" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="655" font-family="Arial" font-size="11" fill="#388E3C">• AI 自动救场</text>
+  <text x="500" y="670" font-family="Arial" font-size="11" fill="#388E3C">• 保护用户自尊</text>
+  <rect x="670" y="630" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="655" font-family="Arial" font-size="11" fill="#C62828">• 无此功能</text>
+  <text x="780" y="670" font-family="Arial" font-size="11" fill="#C62828">• 紧张时无人帮助</text>
+  <rect x="910" y="630" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="660" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+45%</text>
+  <text x="1020" y="675" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">开口勇气提升</text>
+  
+  <!-- Row 8: Emotional AI -->
+  <rect x="70" y="700" width="260" height="50" rx="4" fill="#E3F2FD"/>
+  <text x="200" y="730" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">情绪感知 AI</text>
+  <rect x="350" y="700" width="300" height="50" rx="4" fill="#E8F5E9"/>
+  <text x="500" y="725" font-family="Arial" font-size="11" fill="#388E3C">• 根据状态调整策略</text>
+  <text x="500" y="740" font-family="Arial" font-size="11" fill="#388E3C">• 紧张减压 + 鼓励挑战</text>
+  <rect x="670" y="700" width="220" height="50" rx="4" fill="#FFEBEE"/>
+  <text x="780" y="725" font-family="Arial" font-size="11" fill="#C62828">• 静态难度</text>
+  <text x="780" y="740" font-family="Arial" font-size="11" fill="#C62828">• 不感知用户情绪</text>
+  <rect x="910" y="700" width="220" height="50" rx="4" fill="#FFF3E0"/>
+  <text x="1020" y="730" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+30%</text>
+  <text x="1020" y="745" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">学习体验提升</text>
+  
+  <!-- Summary Box -->
+  <rect x="50" y="770" width="1100" height="30" rx="12" fill="#4CAF50"/>
+  <text x="600" y="790" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">🏆 CodeBuddy 整体提升 40% 以上，8大核心创新全面超越现有方案</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Gradient for vibrant look -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle (optional, for rounded square look) -->
+  <rect width="512" height="512" rx="80" fill="url(#mainGradient)"/>
+  
+  <!-- Main symbol: Open mouth/speech shape with sound waves -->
+  
+  <!-- Central open circle (representing open mouth) -->
+  <circle cx="256" cy="256" r="80" fill="white" opacity="0.95"/>
+  
+  <!-- Inner accent (tongue/vocal element) -->
+  <ellipse cx="256" cy="270" rx="45" ry="30" fill="url(#accentGradient)"/>
+  
+  <!-- Sound waves radiating outward (3 arcs on each side) -->
+  <!-- Right side waves -->
+  <path d="M 340 200 Q 380 230 380 256 Q 380 282 340 312" 
+        fill="none" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+  <path d="M 370 170 Q 420 210 420 256 Q 420 302 370 342" 
+        fill="none" stroke="white" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 400 140 Q 460 190 460 256 Q 460 322 400 372" 
+        fill="none" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Left side waves (mirrored) -->
+  <path d="M 172 200 Q 132 230 132 256 Q 132 282 172 312" 
+        fill="none" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
+  <path d="M 142 170 Q 92 210 92 256 Q 92 302 142 342" 
+        fill="none" stroke="white" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 112 140 Q 52 190 52 256 Q 52 322 112 372" 
+        fill="none" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+  
+  <!-- Upper accent arcs (cheerful smile shape) -->
+  <path d="M 200 220 Q 256 200 312 220" 
+        fill="none" stroke="white" stroke-width="16" stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Small sparkle elements (representing brightness/cheerfulness) -->
+  <circle cx="380" cy="130" r="8" fill="#fbbf24" opacity="0.9"/>
+  <circle cx="420" cy="100" r="6" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="132" cy="130" r="8" fill="#fbbf24" opacity="0.9"/>
+  <circle cx="92" cy="100" r="6" fill="#fbbf24" opacity="0.7"/>
+</svg>

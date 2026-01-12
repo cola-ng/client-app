@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .error { fill: #ef4444; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .msg-ai { fill: #f1f5f9; stroke: none; rx: 16; }
+      .msg-user { fill: #6366f1; stroke: none; rx: 16; }
+      .msg-correction { fill: #fef3c7; stroke: #fcd34d; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .btn-voice { fill: #10b981; stroke: none; rx: 50; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .sidebar { fill: #fafbfc; stroke: #f1f5f9; stroke-width: 1; }
+      .float-card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 12; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+      .avatar-ai { fill: #ddd6fe; stroke: #a5b4fc; stroke-width: 2; }
+      .avatar-user { fill: #bfdbfe; stroke: #93c5fd; stroke-width: 2; }
+      .input-area { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 24; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - AI 对话界面草图</text>
+  <text x="40" y="65" class="t p muted">核心功能 · AI 主动引导 · 无压力纠错 · 即时词卡 · 沉浸式对话</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="830" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h3">← 返回</text>
+  
+  <!-- Chat Header Info -->
+  <circle cx="700" cy="118" r="20" class="avatar-ai"/>
+  <text x="700" y="123" class="t small" text-anchor="middle">🤖</text>
+  <text x="740" y="115" class="t h3">AI 教练 · Luna</text>
+  <text x="740" y="132" class="t small muted">场景：酒店入住 · 美式口音 · 正常语速</text>
+  
+  <!-- Settings Icons -->
+  <rect x="1180" y="102" width="32" height="32" class="chip"/>
+  <text x="1196" y="123" class="t small" text-anchor="middle">🔊</text>
+  <rect x="1220" y="102" width="32" height="32" class="chip"/>
+  <text x="1236" y="123" class="t small" text-anchor="middle">⚙️</text>
+  <rect x="1260" y="102" width="80" height="32" class="btn-secondary"/>
+  <text x="1300" y="123" class="t small" text-anchor="middle">结束对话</text>
+
+  <!-- Main Chat Area -->
+  <rect x="60" y="160" width="900" height="620" fill="#fafbfc" rx="12"/>
+  
+  <!-- AI Message 1 -->
+  <circle cx="90" cy="200" r="16" class="avatar-ai"/>
+  <text x="90" y="205" class="t small" text-anchor="middle">🤖</text>
+  <rect x="115" y="180" width="400" height="70" class="msg-ai"/>
+  <text x="135" y="205" class="t p">Hi! Welcome to the Grand Hotel. 🏨</text>
+  <text x="135" y="225" class="t p">How can I help you today?</text>
+  <text x="135" y="245" class="t small muted">点击播放 🔊 · 0.8x 1x 1.2x</text>
+
+  <!-- User Message 1 -->
+  <rect x="520" y="270" width="320" height="50" class="msg-user"/>
+  <text x="540" y="300" class="t p white">I want book a room for tonight.</text>
+  <circle cx="870" cy="295" r="16" class="avatar-user"/>
+  <text x="870" y="300" class="t small" text-anchor="middle">👤</text>
+
+  <!-- AI Correction (Gentle) -->
+  <circle cx="90" cy="365" r="16" class="avatar-ai"/>
+  <rect x="115" y="340" width="450" height="100" class="msg-ai"/>
+  <text x="135" y="365" class="t p">Sure! I'd be happy to help. 😊</text>
+  
+  <!-- Inline Correction -->
+  <rect x="135" y="380" width="410" height="50" class="msg-correction"/>
+  <text x="155" y="400" class="t small warning">💡 小提示：</text>
+  <text x="155" y="420" class="t p">"I want to book" 更自然哦 (want to + 动词)</text>
+
+  <!-- User Message 2 -->
+  <rect x="450" y="460" width="390" height="50" class="msg-user"/>
+  <text x="470" y="490" class="t p white">Oh right! I want to book a room, please.</text>
+  <circle cx="870" cy="485" r="16" class="avatar-user"/>
+
+  <!-- AI Encouragement -->
+  <circle cx="90" cy="555" r="16" class="avatar-ai"/>
+  <rect x="115" y="530" width="380" height="80" class="msg-ai"/>
+  <text x="135" y="555" class="t p">Perfect! ✨ That sounds great!</text>
+  <text x="135" y="580" class="t p">How many nights would you like to stay?</text>
+  <text x="135" y="600" class="t small accent">🎯 AI 正在引导你继续对话...</text>
+
+  <!-- Typing Indicator -->
+  <rect x="115" y="630" width="120" height="35" class="msg-ai"/>
+  <text x="135" y="653" class="t p muted">正在输入...</text>
+
+  <!-- Input Area -->
+  <rect x="60" y="795" width="900" height="70" class="input-area"/>
+  <text x="90" y="835" class="t p muted">说点什么... (按住空格键语音输入)</text>
+  
+  <!-- Input Actions -->
+  <circle cx="820" cy="830" r="22" class="btn-voice"/>
+  <text x="820" y="836" class="t p white" text-anchor="middle">🎤</text>
+  <rect x="860" y="810" width="80" height="40" class="btn-primary"/>
+  <text x="900" y="835" class="t p white" text-anchor="middle">发送</text>
+
+  <!-- Quick Replies -->
+  <rect x="90" y="750" width="100" height="30" class="chip"/>
+  <text x="140" y="770" class="t small" text-anchor="middle">Two nights</text>
+  <rect x="200" y="750" width="120" height="30" class="chip"/>
+  <text x="260" y="770" class="t small" text-anchor="middle">Just one night</text>
+  <rect x="330" y="750" width="100" height="30" class="chip"/>
+  <text x="380" y="770" class="t small" text-anchor="middle">帮我说 🤖</text>
+
+  <!-- Right Panel - Context & Tools -->
+  <rect x="980" y="160" width="360" height="620" class="card"/>
+  
+  <!-- Scene Context -->
+  <rect x="1000" y="180" width="320" height="100" class="panel"/>
+  <text x="1020" y="205" class="t h3">🎭 当前场景</text>
+  <text x="1020" y="230" class="t p">酒店前台 · 入住登记</text>
+  <text x="1020" y="255" class="t small muted">目标：完成预订并询问房间设施</text>
+  <rect x="1020" y="265" width="280" height="6" fill="#e5e7eb" rx="3"/>
+  <rect x="1020" y="265" width="112" height="6" fill="#6366f1" rx="3"/>
+
+  <!-- Floating Word Card -->
+  <rect x="1000" y="300" width="320" height="140" class="float-card"/>
+  <text x="1020" y="325" class="t h3 accent">📝 即时词卡</text>
+  <text x="1020" y="355" class="t h2">book (v.)</text>
+  <text x="1020" y="380" class="t p muted">/bʊk/ · 预订、预约</text>
+  <text x="1020" y="405" class="t small">例句: I'd like to book a table for two.</text>
+  <rect x="1020" y="415" width="80" height="28" class="chip"/>
+  <text x="1060" y="434" class="t small" text-anchor="middle">+ 收藏</text>
+  <rect x="1110" y="415" width="80" height="28" class="chip"/>
+  <text x="1150" y="434" class="t small" text-anchor="middle">跟读</text>
+  <rect x="1200" y="415" width="100" height="28" class="chip"/>
+  <text x="1250" y="434" class="t small" text-anchor="middle">更多例句</text>
+
+  <!-- Error Log -->
+  <rect x="1000" y="460" width="320" height="120" class="panel"/>
+  <text x="1020" y="485" class="t h3">⚠️ 本次易错点</text>
+  <rect x="1020" y="500" width="280" height="30" fill="#fef3c7" rx="6"/>
+  <text x="1040" y="520" class="t small">want to + 动词原形</text>
+  <text x="1260" y="520" class="t small muted">已纠正 ✓</text>
+  <rect x="1020" y="540" width="280" height="30" fill="#f1f5f9" rx="6"/>
+  <text x="1040" y="560" class="t small muted">暂无更多错误，继续加油！</text>
+
+  <!-- Voice Settings -->
+  <rect x="1000" y="600" width="320" height="100" class="panel"/>
+  <text x="1020" y="625" class="t h3">🔊 语音设置</text>
+  <text x="1020" y="655" class="t small">口音：</text>
+  <rect x="1070" y="640" width="50" height="24" class="chip-active" fill="#6366f1"/>
+  <text x="1095" y="657" class="t small white" text-anchor="middle">美式</text>
+  <rect x="1130" y="640" width="50" height="24" class="chip"/>
+  <text x="1155" y="657" class="t small" text-anchor="middle">英式</text>
+  <rect x="1190" y="640" width="50" height="24" class="chip"/>
+  <text x="1215" y="657" class="t small" text-anchor="middle">澳式</text>
+  <text x="1020" y="685" class="t small">语速：0.8x ━━━●━━━ 1.5x</text>
+
+  <!-- AI Takeover Button -->
+  <rect x="1000" y="720" width="320" height="50" class="btn-secondary"/>
+  <text x="1160" y="750" class="t p accent" text-anchor="middle">🤖 让 AI 帮我说这句</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="940" class="t small muted">设计要点：对话气泡区分 · 温和纠错不打断 · 即时词卡浮层 · AI 主动引导提示 · 一键让 AI 接管</text>
+</svg>

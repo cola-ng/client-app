@@ -1,0 +1,125 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1200" height="80" fill="#FFB74D"/>
+  <text x="600" y="50" font-family="Arial" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">CodeBuddy 用户学习流程</text>
+  
+  <!-- Step 1: Onboarding -->
+  <rect x="50" y="120" width="340" height="300" rx="12" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <circle cx="220" cy="160" r="30" fill="#2196F3"/>
+  <text x="220" y="168" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">1</text>
+  <text x="220" y="210" font-family="Arial" font-size="20" font-weight="bold" fill="#1976D2" text-anchor="middle">新手引导</text>
+  
+  <text x="80" y="250" font-family="Arial" font-size="13" fill="#333">• 评估英语水平</text>
+  <text x="80" y="275" font-family="Arial" font-size="13" fill="#333">• 设置学习目标</text>
+  <text x="80" y="300" font-family="Arial" font-size="13" fill="#333">• 选择口音偏好</text>
+  <text x="80" y="325" font-family="Arial" font-size="13" fill="#333">• AI 教练 Emma 介绍</text>
+  <text x="80" y="350" font-family="Arial" font-size="13" fill="#333">• 创建学习档案</text>
+  
+  <rect x="80" y="370" width="280" height="30" rx="6" fill="#2196F3"/>
+  <text x="220" y="390" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">开始学习之旅</text>
+  
+  <!-- Arrow 1-2 -->
+  <polygon points="400,270 430,270 420,260 430,270 420,280" fill="#FFB74D"/>
+  <line x1="390" y1="270" x2="430" y2="270" stroke="#FFB74D" stroke-width="3"/>
+  
+  <!-- Step 2: Scenario Learning -->
+  <rect x="440" y="120" width="340" height="300" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+  <circle cx="610" cy="160" r="30" fill="#4CAF50"/>
+  <text x="610" y="168" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">2</text>
+  <text x="610" y="210" font-family="Arial" font-size="20" font-weight="bold" fill="#388E3C" text-anchor="middle">场景学习</text>
+  
+  <text x="470" y="250" font-family="Arial" font-size="13" fill="#333">• AI 主动引导对话</text>
+  <text x="470" y="275" font-family="Arial" font-size="13" fill="#333">• 场景沉浸体验</text>
+  <text x="470" y="300" font-family="Arial" font-size="13" fill="#333">• 大胆犯错，零羞耻</text>
+  <text x="470" y="325" font-family="Arial" font-size="13" fill="#333">• 实时纠错建议</text>
+  <text x="470" y="350" font-family="Arial" font-size="13" fill="#333">• 学习点自动记录</text>
+  
+  <rect x="470" y="370" width="280" height="30" rx="6" fill="#4CAF50"/>
+  <text x="610" y="390" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">进入场景</text>
+  
+  <!-- Arrow 2-3 -->
+  <polygon points="790,270 820,270 810,260 820,270 810,280" fill="#FFB74D"/>
+  <line x1="780" y1="270" x2="820" y2="270" stroke="#FFB74D" stroke-width="3"/>
+  
+  <!-- Step 3: Social Practice -->
+  <rect x="830" y="120" width="340" height="300" rx="12" fill="#FFF3E0" stroke="#FF9800" stroke-width="2"/>
+  <circle cx="1000" cy="160" r="30" fill="#FF9800"/>
+  <text x="1000" y="168" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">3</text>
+  <text x="1000" y="210" font-family="Arial" font-size="20" font-weight="bold" fill="#F57C00" text-anchor="middle">社交练习</text>
+  
+  <text x="860" y="250" font-family="Arial" font-size="13" fill="#333">• 在线匹配学习伙伴</text>
+  <text x="860" y="275" font-family="Arial" font-size="13" fill="#333">• AI 助手实时辅助</text>
+  <text x="860" y="300" font-family="Arial" font-size="13" fill="#333">• 卡壳自动救场</text>
+  <text x="860" y="325" font-family="Arial" font-size="13" fill="#333">• 发音纠正提醒</text>
+  <text x="860" y="350" font-family="Arial" font-size="13" fill="#333">• 紧张时减压支持</text>
+  
+  <rect x="860" y="370" width="280" height="30" rx="6" fill="#FF9800"/>
+  <text x="1000" y="390" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">开始社交</text>
+  
+  <!-- Arrow 2-4 (down) -->
+  <polygon points="610,420 610,450 600,440 610,450 620,440" fill="#FFB74D"/>
+  <line x1="610" y1="420" x2="610" y2="450" stroke="#FFB74D" stroke-width="3"/>
+  
+  <!-- Step 4: Movie Learning -->
+  <rect x="440" y="460" width="340" height="300" rx="12" fill="#F3E5F5" stroke="#BA68C8" stroke-width="2"/>
+  <circle cx="610" cy="500" r="30" fill="#BA68C8"/>
+  <text x="610" y="508" font-family="Arial" font-size="24" fill="#fff" text-anchor="middle">4</text>
+  <text x="610" y="550" font-family="Arial" font-size="20" font-weight="bold" fill="#7B1FA2" text-anchor="middle">电影台词学习</text>
+  
+  <text x="470" y="590" font-family="Arial" font-size="13" fill="#333">• 选择喜欢的电影</text>
+  <text x="470" y="615" font-family="Arial" font-size="13" fill="#333">• 跟读经典台词</text>
+  <text x="470" y="640" font-family="Arial" font-size="13" fill="#333">• 情感标注分析</text>
+  <text x="470" y="665" font-family="Arial" font-size="13" fill="#333">• 角色扮演练习</text>
+  <text x="470" y="690" font-family="Arial" font-size="13" fill="#333">• 即兴对话生成</text>
+  
+  <rect x="470" y="710" width="280" height="30" rx="6" fill="#BA68C8"/>
+  <text x="610" y="730" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">选择电影</text>
+  
+  <!-- Review Loop -->
+  <path d="M 830 610 Q 1000 550 1000 420" fill="none" stroke="#FFB74D" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="970" y="480" font-family="Arial" font-size="11" fill="#666">智能复习系统</text>
+  <text x="970" y="495" font-family="Arial" font-size="11" fill="#666">自动生成复习计划</text>
+  
+  <!-- Side Panel - Daily Routine -->
+  <rect x="50" y="460" width="340" height="300" rx="12" fill="#FAFAFA" stroke="#e0e0e0" stroke-width="2"/>
+  <text x="220" y="500" font-family="Arial" font-size="18" font-weight="bold" fill="#333" text-anchor="middle">📅 每日学习建议</text>
+  
+  <rect x="70" y="520" width="300" height="45" rx="6" fill="#E3F2FD"/>
+  <text x="85" y="540" font-family="Arial" font-size="12" font-weight="bold" fill="#1976D2">上午</text>
+  <text x="85" y="558" font-family="Arial" font-size="11" fill="#333">场景学习 20分钟</text>
+  
+  <rect x="70" y="575" width="300" height="45" rx="6" fill="#E8F5E9"/>
+  <text x="85" y="595" font-family="Arial" font-size="12" font-weight="bold" fill="#388E3C">下午</text>
+  <text x="85" y="613" font-family="Arial" font-size="11" fill="#333">电影台词 15分钟</text>
+  
+  <rect x="70" y="630" width="300" height="45" rx="6" fill="#FFF3E0"/>
+  <text x="85" y="650" font-family="Arial" font-size="12" font-weight="bold" fill="#F57C00">晚上</text>
+  <text x="85" y="668" font-family="Arial" font-size="11" fill="#333">社交练习 25分钟</text>
+  
+  <rect x="70" y="685" width="300" height="45" rx="6" fill="#F3E5F5"/>
+  <text x="85" y="705" font-family="Arial" font-size="12" font-weight="bold" fill="#7B1FA2">全天</text>
+  <text x="85" y="723" font-family="Arial" font-size="11" fill="#333">复习 + 跟读 15分钟</text>
+  
+  <!-- AI Coach Tip -->
+  <rect x="830" y="460" width="340" height="100" rx="12" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/>
+  <text x="850" y="490" font-family="Arial" font-size="14" font-weight="bold" fill="#F57F17">💡 AI 教练 Emma 建议</text>
+  <text x="850" y="515" font-family="Arial" font-size="12" fill="#333">根据你的学习进度和表现，</text>
+  <text x="850" y="535" font-family="Arial" font-size="12" fill="#333">我为你定制了个性化的学习路径！</text>
+  <text x="850" y="555" font-family="Arial" font-size="12" fill="#666">继续保持，你做得很好！</text>
+  
+  <!-- Progress Overview -->
+  <rect x="830" y="580" width="340" height="180" rx="12" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+  <text x="850" y="610" font-family="Arial" font-size="16" font-weight="bold" fill="#333">本周学习统计</text>
+  
+  <text x="850" y="645" font-family="Arial" font-size="13" fill="#333">学习时长: <tspan fill="#4CAF50" font-weight="bold">5.2 小时</tspan></text>
+  <text x="850" y="675" font-family="Arial" font-size="13" fill="#333">学习点: <tspan fill="#2196F3" font-weight="bold">24 个</tspan></text>
+  <text x="850" y="705" font-family="Arial" font-size="13" fill="#333">对话轮数: <tspan fill="#FF9800" font-weight="bold">86 次</tspan></text>
+  <text x="850" y="735" font-family="Arial" font-size="13" fill="#333">电影台词: <tspan fill="#BA68C8" font-weight="bold">15 句</tspan></text>
+  
+  <!-- Legend -->
+  <rect x="0" y="780" width="1200" height="20" fill="#FFB74D"/>
+  <text x="600" y="795" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">CodeBuddy 用户学习流程 - 循环渐进式学习体验</text>
+</svg>

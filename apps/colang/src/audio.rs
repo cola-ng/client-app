@@ -2,7 +2,7 @@
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{Device, Host, Stream, StreamConfig};
-use crossbeam_channel::{Sender, Receiver, unbounded};
+use crossbeam_channel::{unbounded, Receiver, Sender};
 use parking_lot::Mutex;
 use std::sync::Arc;
 
@@ -15,13 +15,16 @@ pub struct AudioDeviceInfo {
 
 /// Shared state for mic level
 pub struct MicLevelState {
-    pub level: f32,  // 0.0 - 1.0
+    pub level: f32, // 0.0 - 1.0
     pub peak: f32,
 }
 
 impl Default for MicLevelState {
     fn default() -> Self {
-        Self { level: 0.0, peak: 0.0 }
+        Self {
+            level: 0.0,
+            peak: 0.0,
+        }
     }
 }
 
@@ -61,9 +64,7 @@ impl AudioManager {
 
     /// Get list of input devices
     pub fn get_input_devices(&self) -> Vec<AudioDeviceInfo> {
-        let default_name = self.host
-            .default_input_device()
-            .and_then(|d| d.name().ok());
+        let default_name = self.host.default_input_device().and_then(|d| d.name().ok());
 
         let mut devices = Vec::new();
 
@@ -83,7 +84,8 @@ impl AudioManager {
 
     /// Get list of output devices
     pub fn get_output_devices(&self) -> Vec<AudioDeviceInfo> {
-        let default_name = self.host
+        let default_name = self
+            .host
             .default_output_device()
             .and_then(|d| d.name().ok());
 
@@ -126,7 +128,8 @@ impl AudioManager {
             self.find_input_device(name)
                 .ok_or_else(|| format!("Device not found: {}", name))?
         } else {
-            self.host.default_input_device()
+            self.host
+                .default_input_device()
                 .ok_or_else(|| "No default input device".to_string())?
         };
 
@@ -134,7 +137,8 @@ impl AudioManager {
         self.current_input_device = Some(device_name);
 
         // Get config
-        let config = device.default_input_config()
+        let config = device
+            .default_input_config()
             .map_err(|e| format!("Failed to get config: {}", e))?;
 
         let sample_format = config.sample_format();
@@ -152,7 +156,7 @@ impl AudioManager {
             cpal::SampleFormat::F32 => {
                 let buffer = Arc::new(Mutex::new(Vec::with_capacity(chunk_size)));
                 let buffer_clone = buffer.clone();
-                
+
                 device.build_input_stream(
                     &stream_config,
                     move |data: &[f32], _: &cpal::InputCallbackInfo| {
@@ -177,7 +181,7 @@ impl AudioManager {
                         if let Some(ref tx) = audio_tx {
                             let mut buf = buffer_clone.lock();
                             buf.extend_from_slice(data);
-                            
+
                             // Send chunk when buffer is full
                             if buf.len() >= chunk_size {
                                 let chunk = AudioChunk {
@@ -196,7 +200,7 @@ impl AudioManager {
             cpal::SampleFormat::I16 => {
                 let buffer = Arc::new(Mutex::new(Vec::with_capacity(chunk_size)));
                 let buffer_clone = buffer.clone();
-                
+
                 device.build_input_stream(
                     &stream_config,
                     move |data: &[i16], _: &cpal::InputCallbackInfo| {
@@ -223,7 +227,7 @@ impl AudioManager {
                             for &sample in data {
                                 buf.push(sample as f32 / 32768.0);
                             }
-                            
+
                             // Send chunk when buffer is full
                             if buf.len() >= chunk_size {
                                 let chunk = AudioChunk {
@@ -240,9 +244,12 @@ impl AudioManager {
                 )
             }
             _ => return Err("Unsupported sample format".to_string()),
-        }.map_err(|e| format!("Failed to build stream: {}", e))?;
+        }
+        .map_err(|e| format!("Failed to build stream: {}", e))?;
 
-        stream.play().map_err(|e| format!("Failed to play stream: {}", e))?;
+        stream
+            .play()
+            .map_err(|e| format!("Failed to play stream: {}", e))?;
         self.input_stream = Some(stream);
 
         Ok(())

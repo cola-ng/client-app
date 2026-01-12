@@ -1,0 +1,84 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Modern Gradient Background -->
+  <defs>
+    <linearGradient id="modernGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB74D;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F57C00;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main circle with gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#modernGrad)" filter="url(#glow)"/>
+  
+  <!-- Central Mouth - Bold and Dynamic -->
+  <!-- Main speaking mouth shape -->
+  <path d="M 100 290 Q 256 430 412 290" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="70" 
+        stroke-linecap="round"
+        filter="url(#glow)"/>
+  
+  <!-- Inner glow for depth -->
+  <path d="M 130 310 Q 256 400 382 310" 
+        fill="none" 
+        stroke="#FFE0B2" 
+        stroke-width="20" 
+        stroke-linecap="round"
+        opacity="0.6"/>
+  
+  <!-- Dynamic Sound Waves - Radiating outward -->
+  <!-- Wave 1 (brightest) -->
+  <path d="M 440 190 Q 490 256 440 322" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="24" 
+        stroke-linecap="round"
+        opacity="1.0"/>
+  
+  <!-- Wave 2 -->
+  <path d="M 455 160 Q 510 256 455 352" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="16" 
+        stroke-linecap="round"
+        opacity="0.8"/>
+  
+  <!-- Wave 3 -->
+  <path d="M 470 130 Q 530 256 470 382" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="12" 
+        stroke-linecap="round"
+        opacity="0.6"/>
+  
+  <!-- Wave 4 (subtle) -->
+  <path d="M 485 100 Q 550 256 485 412" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="6" 
+        stroke-linecap="round"
+        opacity="0.4"/>
+  
+  <!-- Cheerful Arc - "开朗" (upward, positive) -->
+  <path d="M 130 140 Q 256 50 382 140" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="28" 
+        stroke-linecap="round"
+        opacity="0.5"/>
+  
+  <!-- Accent dots for vibrancy -->
+  <circle cx="90" cy="100" r="15" fill="#ffffff" opacity="0.5"/>
+  <circle cx="140" cy="70" r="10" fill="#ffffff" opacity="0.4"/>
+  <circle cx="390" cy="80" r="12" fill="#ffffff" opacity="0.45"/>
+  <circle cx="450" cy="140" r="8" fill="#ffffff" opacity="0.3"/>
+</svg>

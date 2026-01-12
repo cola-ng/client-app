@@ -1,0 +1,82 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f5f5f5"/>
+  
+  <!-- App Window -->
+  <rect x="50" y="50" width="1100" height="700" rx="12" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="50" y="50" width="1100" height="60" rx="12" fill="#FFB74D"/>
+  <rect x="50" y="90" width="1100" height="20" fill="#FFB74D"/>
+  <text x="80" y="90" font-family="Arial" font-size="20" font-weight="bold" fill="#ffffff">CodeBuddy - 场景沉浸学习</text>
+  
+  <!-- Window Controls -->
+  <circle cx="1130" cy="80" r="8" fill="#FF5252"/>
+  <circle cx="1105" cy="80" r="8" fill="#FFB74D"/>
+  <circle cx="1080" cy="80" r="8" fill="#4CAF50"/>
+  
+  <!-- Left Panel - Scene Preview -->
+  <rect x="70" y="130" width="350" height="600" rx="8" fill="#fff3e0" stroke="#FFB74D" stroke-width="2"/>
+  <text x="90" y="160" font-family="Arial" font-size="18" font-weight="bold" fill="#333">场景: 咖啡馆</text>
+  
+  <!-- Scene Image Placeholder -->
+  <rect x="90" y="180" width="310" height="200" rx="6" fill="#FFE0B2" stroke="#FFB74D" stroke-dasharray="5,5"/>
+  <text x="245" y="285" font-family="Arial" font-size="14" fill="#666">场景预览图</text>
+  
+  <!-- Scene Info -->
+  <text x="90" y="410" font-family="Arial" font-size="14" fill="#666">当前目标: 点餐练习</text>
+  <text x="90" y="435" font-family="Arial" font-size="12" fill="#999">AI 教练: Emma (美式口音)</text>
+  
+  <!-- Progress Bar -->
+  <rect x="90" y="460" width="310" height="8" rx="4" fill="#e0e0e0"/>
+  <rect x="90" y="460" width="186" height="8" rx="4" fill="#4CAF50"/>
+  <text x="90" y="485" font-family="Arial" font-size="12" fill="#666">学习进度: 60%</text>
+  
+  <!-- Quick Actions -->
+  <text x="90" y="520" font-family="Arial" font-size="14" font-weight="bold" fill="#333">快速工具</text>
+  <rect x="90" y="540" width="145" height="40" rx="6" fill="#FFB74D"/>
+  <text x="162.5" y="565" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">📝 复习计划</text>
+  <rect x="255" y="540" width="145" height="40" rx="6" fill="#81C784"/>
+  <text x="327.5" y="565" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🎤 跟读练习</text>
+  <rect x="90" y="595" width="145" height="40" rx="6" fill="#64B5F6"/>
+  <text x="162.5" y="620" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🎭 角色扮演</text>
+  <rect x="255" y="595" width="145" height="40" rx="6" fill="#BA68C8"/>
+  <text x="327.5" y="620" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">📊 学习统计</text>
+  
+  <!-- Main Chat Area -->
+  <rect x="440" y="130" width="680" height="480" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="460" y="160" font-family="Arial" font-size="16" font-weight="bold" fill="#333">对话区</text>
+  
+  <!-- AI Message -->
+  <rect x="460" y="180" width="380" height="80" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="1"/>
+  <text x="475" y="205" font-family="Arial" font-size="12" font-weight="bold" fill="#1976D2">Emma (AI)</text>
+  <text x="475" y="225" font-family="Arial" font-size="12" fill="#333">"Hi! Welcome to the coffee shop.</text>
+  <text x="475" y="245" font-family="Arial" font-size="12" fill="#333">What would you like to order today?"</text>
+  
+  <!-- User Message -->
+  <rect x="700" y="275" width="380" height="80" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+  <text x="715" y="300" font-family="Arial" font-size="12" font-weight="bold" fill="#388E3C">你</text>
+  <text x="715" y="320" font-family="Arial" font-size="12" fill="#333">"I want a coffee and...</text>
+  <text x="715" y="340" font-family="Arial" font-size="12" fill="#333" text-decoration="line-through">and some sandwish"</text>
+  <text x="715" y="360" font-family="Arial" font-size="12" fill="#E53935">sandwich</text>
+  
+  <!-- Error Card -->
+  <rect x="460" y="370" width="640" height="90" rx="8" fill="#FFF3E0" stroke="#FFB74D" stroke-width="2"/>
+  <rect x="460" y="370" width="8" height="90" rx="4" fill="#FF9800"/>
+  <text x="480" y="395" font-family="Arial" font-size="14" font-weight="bold" fill="#F57C00">💡 学习点</text>
+  <text x="480" y="420" font-family="Arial" font-size="12" fill="#666">发音: sandwish → sandwich (注意 wi 的发音)</text>
+  <text x="480" y="445" font-family="Arial" font-size="12" fill="#666">练习: "sand-wich" 重音在第二个音节</text>
+  
+  <!-- Bottom Input Area -->
+  <rect x="440" y="620" width="680" height="110" rx="8" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  <rect x="460" y="640" width="540" height="40" rx="20" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <text x="480" y="665" font-family="Arial" font-size="12" fill="#999">输入你的回复...</text>
+  <rect x="1010" y="640" width="100" height="40" rx="20" fill="#4CAF50"/>
+  <text x="1060" y="665" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">发送</text>
+  <circle cx="485" cy="700" r="15" fill="#FFB74D"/>
+  <text x="485" y="705" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">🎙️</text>
+  <text x="510" y="705" font-family="Arial" font-size="12" fill="#666">按住说话</text>
+  
+  <!-- Legend -->
+  <text x="600" y="800" font-family="Arial" font-size="12" fill="#999">CodeBuddy 设计方案1 - 场景沉浸主界面</text>
+</svg>

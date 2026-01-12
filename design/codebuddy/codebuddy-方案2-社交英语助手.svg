@@ -1,0 +1,132 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f5f5f5"/>
+  
+  <!-- App Window -->
+  <rect x="50" y="50" width="1100" height="700" rx="12" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- Header -->
+  <rect x="50" y="50" width="1100" height="60" rx="12" fill="#FFB74D"/>
+  <rect x="50" y="90" width="1100" height="20" fill="#FFB74D"/>
+  <text x="80" y="90" font-family="Arial" font-size="20" font-weight="bold" fill="#ffffff">CodeBuddy - 社交英语助手</text>
+  
+  <!-- Window Controls -->
+  <circle cx="1130" cy="80" r="8" fill="#FF5252"/>
+  <circle cx="1105" cy="80" r="8" fill="#FFB74D"/>
+  <circle cx="1080" cy="80" r="8" fill="#4CAF50"/>
+  
+  <!-- Left Panel - Online Users -->
+  <rect x="70" y="130" width="280" height="600" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="2"/>
+  <text x="90" y="160" font-family="Arial" font-size="18" font-weight="bold" fill="#333">在线用户</text>
+  <rect x="90" y="180" width="240" height="40" rx="6" fill="#ffffff" stroke="#2196F3"/>
+  <text x="105" y="205" font-family="Arial" font-size="11" fill="#999">搜索用户...</text>
+  
+  <!-- User List -->
+  <rect x="90" y="240" width="240" height="60" rx="6" fill="#BBDEFB"/>
+  <circle cx="115" cy="270" r="18" fill="#64B5F6"/>
+  <text x="115" y="275" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">J</text>
+  <text x="145" y="265" font-family="Arial" font-size="13" font-weight="bold" fill="#333">John Smith</text>
+  <text x="145" y="285" font-family="Arial" font-size="11" fill="#666">美式口音 · 初级</text>
+  <rect x="290" y="255" width="30" height="20" rx="4" fill="#4CAF50"/>
+  <text x="305" y="269" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">聊</text>
+  
+  <rect x="90" y="315" width="240" height="60" rx="6" fill="#ffffff" stroke="#BBDEFB"/>
+  <circle cx="115" cy="345" r="18" fill="#BA68C8"/>
+  <text x="115" y="350" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">A</text>
+  <text x="145" y="340" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Alice Chen</text>
+  <text x="145" y="360" font-family="Arial" font-size="11" fill="#666">英式口音 · 中级</text>
+  <rect x="290" y="330" width="30" height="20" rx="4" fill="#4CAF50"/>
+  <text x="305" y="344" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">聊</text>
+  
+  <rect x="90" y="390" width="240" height="60" rx="6" fill="#ffffff" stroke="#BBDEFB"/>
+  <circle cx="115" cy="420" r="18" fill="#81C784"/>
+  <text x="115" y="425" font-family="Arial" font-size="12" fill="#fff" text-anchor="middle">M</text>
+  <text x="145" y="415" font-family="Arial" font-size="13" font-weight="bold" fill="#333">Mike Johnson</text>
+  <text x="145" y="435" font-family="Arial" font-size="11" fill="#666">澳式口音 · 高级</text>
+  <rect x="290" y="405" width="30" height="20" rx="4" fill="#4CAF50"/>
+  <text x="305" y="419" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">聊</text>
+  
+  <!-- Match Button -->
+  <rect x="90" y="500" width="240" height="50" rx="8" fill="#FF9800"/>
+  <text x="210" y="532" font-family="Arial" font-size="16" fill="#fff" text-anchor="middle">🎯 智能匹配</text>
+  <text x="90" y="570" font-family="Arial" font-size="11" fill="#666">AI 会根据你的水平和偏好推荐</text>
+  
+  <!-- Current Chat Area -->
+  <rect x="370" y="130" width="500" height="400" rx="8" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="390" y="160" font-family="Arial" font-size="16" font-weight="bold" fill="#333">当前对话</text>
+  
+  <!-- Partner Info -->
+  <rect x="390" y="180" width="140" height="35" rx="6" fill="#E3F2FD"/>
+  <circle cx="410" cy="197" r="12" fill="#64B5F6"/>
+  <text x="410" y="201" font-family="Arial" font-size="9" fill="#fff" text-anchor="middle">J</text>
+  <text x="430" y="193" font-family="Arial" font-size="11" font-weight="bold" fill="#333">John</text>
+  <text x="430" y="208" font-family="Arial" font-size="9" fill="#666">在线 23分钟</text>
+  
+  <!-- Messages -->
+  <rect x="390" y="230" width="280" height="60" rx="8" fill="#E3F2FD" stroke="#2196F3" stroke-width="1"/>
+  <text x="405" y="255" font-family="Arial" font-size="11" font-weight="bold" fill="#1976D2">John</text>
+  <text x="405" y="275" font-family="Arial" font-size="11" fill="#333">"Hey! What's your hobby?"</text>
+  
+  <rect x="520" y="305" width="280" height="60" rx="8" fill="#E8F5E9" stroke="#4CAF50" stroke-width="1"/>
+  <text x="535" y="330" font-family="Arial" font-size="11" font-weight="bold" fill="#388E3C">你</text>
+  <text x="535" y="350" font-family="Arial" font-size="11" fill="#333">"I like... (AI 辅助中)"</text>
+  
+  <!-- AI Assistant Notification -->
+  <rect x="390" y="380" width="460" height="70" rx="8" fill="#FFF3E0" stroke="#FFB74D" stroke-width="2"/>
+  <rect x="390" y="380" width="6" height="70" rx="3" fill="#FF9800"/>
+  <text x="405" y="405" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00">🤖 AI 助手检测到</text>
+  <text x="405" y="425" font-family="Arial" font-size="11" fill="#666">检测到犹豫，正在生成建议回复...</text>
+  <text x="405" y="440" font-family="Arial" font-size="11" fill="#666">"I like reading books and watching movies"</text>
+  
+  <!-- Chat Input -->
+  <rect x="370" y="540" width="500" height="80" rx="8" fill="#ffffff" stroke="#e0e0e0" stroke-width="1"/>
+  <rect x="390" y="555" width="380" height="35" rx="17" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <text x="405" y="578" font-family="Arial" font-size="11" fill="#999">输入消息...</text>
+  <circle cx="420" cy="605" r="12" fill="#FFB74D"/>
+  <text x="420" y="609" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">🎙️</text>
+  
+  <!-- Right Panel - AI Assistant Controls -->
+  <rect x="890" y="130" width="250" height="600" rx="8" fill="#F3E5F5" stroke="#BA68C8" stroke-width="2"/>
+  <text x="910" y="160" font-family="Arial" font-size="18" font-weight="bold" fill="#333">AI 助手控制</text>
+  
+  <!-- Toggle Switches -->
+  <rect x="910" y="190" width="220" height="50" rx="6" fill="#ffffff" stroke="#E1BEE7"/>
+  <rect x="910" y="190" width="40" height="50" rx="6" fill="#9C27B0"/>
+  <text x="965" y="205" font-family="Arial" font-size="12" font-weight="bold" fill="#333">🔊 发音纠正</text>
+  <text x="965" y="225" font-family="Arial" font-size="10" fill="#666">实时纠正发音错误</text>
+  
+  <rect x="910" y="255" width="220" height="50" rx="6" fill="#ffffff" stroke="#E1BEE7"/>
+  <rect x="910" y="255" width="40" height="50" rx="6" fill="#9C27B0"/>
+  <text x="965" y="270" font-family="Arial" font-size="12" font-weight="bold" fill="#333">💬 实时翻译</text>
+  <text x="965" y="290" font-family="Arial" font-size="10" fill="#666">显示中文翻译提示</text>
+  
+  <rect x="910" y="320" width="220" height="50" rx="6" fill="#ffffff" stroke="#E1BEE7"/>
+  <rect x="910" y="320" width="40" height="50" rx="6" fill="#e0e0e0"/>
+  <text x="965" y="335" font-family="Arial" font-size="12" font-weight="bold" fill="#666">🎭 角色扮演</text>
+  <text x="965" y="355" font-family="Arial" font-size="10" fill="#999">模拟不同场景对话</text>
+  
+  <!-- Stuck Rescue -->
+  <text x="910" y="400" font-family="Arial" font-size="14" font-weight="bold" fill="#333">卡壳救场</text>
+  <rect x="910" y="420" width="220" height="60" rx="8" fill="#FF9800"/>
+  <text x="1020" y="445" font-family="Arial" font-size="12" font-weight="bold" fill="#fff" text-anchor="middle">🆘 紧急救援</text>
+  <text x="1020" y="465" font-family="Arial" font-size="10" fill="#fff" text-anchor="middle">AI 代为回复</text>
+  <text x="910" y="500" font-family="Arial" font-size="10" fill="#666">当紧张或卡住时，AI 会</text>
+  <text x="910" y="515" font-family="Arial" font-size="10" fill="#666">自动接替对话，保护自尊</text>
+  
+  <!-- Session Stats -->
+  <text x="910" y="550" font-family="Arial" font-size="14" font-weight="bold" fill="#333">本次会话统计</text>
+  <rect x="910" y="565" width="100" height="50" rx="6" fill="#E3F2FD"/>
+  <text x="960" y="585" font-family="Arial" font-size="10" fill="#666">学习点</text>
+  <text x="960" y="605" font-family="Arial" font-size="16" font-weight="bold" fill="#2196F3" text-anchor="middle">3</text>
+  
+  <rect x="1020" y="565" width="100" height="50" rx="6" fill="#E8F5E9"/>
+  <text x="1070" y="585" font-family="Arial" font-size="10" fill="#666">对话轮数</text>
+  <text x="1070" y="605" font-family="Arial" font-size="16" font-weight="bold" fill="#4CAF50" text-anchor="middle">12</text>
+  
+  <rect x="910" y="625" width="210" height="50" rx="6" fill="#FFF3E0"/>
+  <text x="965" y="645" font-family="Arial" font-size="10" fill="#666">AI 辅助次数</text>
+  <text x="965" y="665" font-family="Arial" font-size="16" font-weight="bold" fill="#FF9800">2</text>
+  
+  <!-- Legend -->
+  <text x="600" y="800" font-family="Arial" font-size="12" fill="#999">CodeBuddy 设计方案2 - 社交英语助手</text>
+</svg>

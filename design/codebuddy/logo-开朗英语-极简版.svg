@@ -1,0 +1,27 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Minimalist Design -->
+  
+  <!-- Solid Orange Circle -->
+  <circle cx="256" cy="256" r="240" fill="#FFB74D"/>
+  
+  <!-- Clean Mouth - Simple and Bold -->
+  <path d="M 130 285 Q 256 395 382 285" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="55" 
+        stroke-linecap="round"/>
+  
+  <!-- Single Sound Wave -->
+  <path d="M 420 200 Q 470 256 420 312" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="22" 
+        stroke-linecap="round"/>
+  
+  <!-- Cheerful Upward Curve -->
+  <path d="M 160 150 Q 256 90 352 150" 
+        fill="none" 
+        stroke="#ffffff" 
+        stroke-width="20" 
+        stroke-linecap="round"/>
+</svg>

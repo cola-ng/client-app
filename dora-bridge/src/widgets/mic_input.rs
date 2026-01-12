@@ -110,20 +110,17 @@ impl MicInputBridge {
                 params.insert("channels".to_string(), Parameter::Integer(1));
 
                 // Convert f32 samples to Arrow ListArray
-                let audio_array =
-                    dora_node_api::arrow::array::ListArray::from_iter_primitive::<
-                        dora_node_api::arrow::datatypes::Float32Type,
-                        _,
-                        _,
-                    >(std::iter::once(Some(
-                        audio_data.samples.iter().map(|&s| Some(s)),
-                    )));
+                let audio_array = dora_node_api::arrow::array::ListArray::from_iter_primitive::<
+                    dora_node_api::arrow::datatypes::Float32Type,
+                    _,
+                    _,
+                >(std::iter::once(Some(
+                    audio_data.samples.iter().map(|&s| Some(s)),
+                )));
 
-                if let Err(e) = node.send_output(
-                    DataId::from("audio".to_string()),
-                    params,
-                    audio_array,
-                ) {
+                if let Err(e) =
+                    node.send_output(DataId::from("audio".to_string()), params, audio_array)
+                {
                     error!("Failed to send audio: {}", e);
                 }
             }
@@ -145,11 +142,7 @@ impl MicInputBridge {
     }
 
     /// Handle a dora event
-    fn handle_dora_event(
-        event: Event,
-        _node: &mut DoraNode,
-        event_sender: &Sender<BridgeEvent>,
-    ) {
+    fn handle_dora_event(event: Event, _node: &mut DoraNode, event_sender: &Sender<BridgeEvent>) {
         match event {
             Event::Input { id, data, metadata } => {
                 // Mic input typically doesn't receive inputs, but handle if needed
@@ -225,13 +218,17 @@ impl DoraBridge for MicInputBridge {
                     if let Ok(BridgeEvent::Error(msg)) = self.event_receiver.try_recv() {
                         return Err(BridgeError::ConnectionFailed(msg));
                     }
-                    return Err(BridgeError::ConnectionFailed("Connection failed".to_string()));
+                    return Err(BridgeError::ConnectionFailed(
+                        "Connection failed".to_string(),
+                    ));
                 }
                 _ => {}
             }
 
             if start.elapsed() >= timeout {
-                return Err(BridgeError::ConnectionFailed("Connection timeout".to_string()));
+                return Err(BridgeError::ConnectionFailed(
+                    "Connection timeout".to_string(),
+                ));
             }
 
             std::thread::sleep(std::time::Duration::from_millis(50));

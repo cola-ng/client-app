@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .card-scene { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 20; }
+      .card-hover { fill: #fafafa; stroke: #6366f1; stroke-width: 2; rx: 20; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .sidebar { fill: #fafbfc; stroke: #f1f5f9; stroke-width: 1; }
+      .scene-img { fill: #e0e7ff; rx: 12; }
+      .badge { fill: #10b981; rx: 10; }
+      .badge-new { fill: #f59e0b; rx: 10; }
+      .badge-challenge { fill: #ef4444; rx: 10; }
+    </style>
+    <linearGradient id="sceneGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="sceneGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#34d399;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="sceneGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - 场景中心草图</text>
+  <text x="40" y="65" class="t p muted">沉浸式场景模拟 · 经典对白学习 · 多口音体验</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="830" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h2">🎭 场景中心</text>
+  
+  <!-- Search -->
+  <rect x="400" y="102" width="300" height="36" class="panel"/>
+  <text x="420" y="125" class="t p muted">🔍 搜索场景...</text>
+  
+  <!-- Filter Chips -->
+  <rect x="720" y="102" width="60" height="32" class="chip-active"/>
+  <text x="750" y="123" class="t small white" text-anchor="middle">全部</text>
+  <rect x="790" y="102" width="60" height="32" class="chip"/>
+  <text x="820" y="123" class="t small" text-anchor="middle">旅行</text>
+  <rect x="860" y="102" width="60" height="32" class="chip"/>
+  <text x="890" y="123" class="t small" text-anchor="middle">工作</text>
+  <rect x="930" y="102" width="60" height="32" class="chip"/>
+  <text x="960" y="123" class="t small" text-anchor="middle">生活</text>
+  <rect x="1000" y="102" width="80" height="32" class="chip"/>
+  <text x="1040" y="123" class="t small" text-anchor="middle">经典对白</text>
+
+  <!-- Main Content -->
+  <!-- Section: Continue Learning -->
+  <text x="70" y="180" class="t h2">📚 继续学习</text>
+  
+  <rect x="70" y="200" width="380" height="160" class="card-hover"/>
+  <rect x="90" y="220" width="340" height="80" fill="url(#sceneGrad1)" rx="12"/>
+  <text x="260" y="265" class="t h1 white" text-anchor="middle">🏨</text>
+  <text x="90" y="325" class="t h3">酒店入住</text>
+  <text x="90" y="345" class="t small muted">进度 60% · 还剩 3 个对话</text>
+  <rect x="330" y="315" width="80" height="30" class="btn-primary"/>
+  <text x="370" y="335" class="t small white" text-anchor="middle">继续 →</text>
+
+  <!-- Section: Daily Scenarios -->
+  <text x="70" y="400" class="t h2">🌟 今日推荐场景</text>
+  
+  <!-- Scene Card 1 -->
+  <rect x="70" y="420" width="240" height="200" class="card-scene"/>
+  <rect x="90" y="440" width="200" height="100" fill="url(#sceneGrad2)" rx="12"/>
+  <text x="190" y="500" class="t h1" text-anchor="middle">🍽️</text>
+  <rect x="90" y="445" width="50" height="20" class="badge-new"/>
+  <text x="115" y="459" class="t small white" text-anchor="middle">新</text>
+  <text x="90" y="565" class="t h3">餐厅点餐</text>
+  <text x="90" y="585" class="t small muted">⭐⭐ 初级 · 5分钟</text>
+  <text x="90" y="605" class="t small accent">学习：点餐、询问推荐</text>
+
+  <!-- Scene Card 2 -->
+  <rect x="330" y="420" width="240" height="200" class="card-scene"/>
+  <rect x="350" y="440" width="200" height="100" fill="url(#sceneGrad3)" rx="12"/>
+  <text x="450" y="500" class="t h1" text-anchor="middle">✈️</text>
+  <text x="350" y="565" class="t h3">机场登机</text>
+  <text x="350" y="585" class="t small muted">⭐⭐ 初级 · 6分钟</text>
+  <text x="350" y="605" class="t small accent">学习：值机、安检对话</text>
+
+  <!-- Scene Card 3 -->
+  <rect x="590" y="420" width="240" height="200" class="card-scene"/>
+  <rect x="610" y="440" width="200" height="100" fill="url(#sceneGrad1)" rx="12"/>
+  <text x="710" y="500" class="t h1" text-anchor="middle">💼</text>
+  <rect x="610" y="445" width="60" height="20" class="badge-challenge"/>
+  <text x="640" y="459" class="t small white" text-anchor="middle">挑战</text>
+  <text x="610" y="565" class="t h3">工作面试</text>
+  <text x="610" y="585" class="t small muted">⭐⭐⭐ 中级 · 10分钟</text>
+  <text x="610" y="605" class="t small accent">学习：自我介绍、回答问题</text>
+
+  <!-- Scene Card 4 -->
+  <rect x="850" y="420" width="240" height="200" class="card-scene"/>
+  <rect x="870" y="440" width="200" height="100" fill="url(#sceneGrad2)" rx="12"/>
+  <text x="970" y="500" class="t h1" text-anchor="middle">🛒</text>
+  <text x="870" y="565" class="t h3">超市购物</text>
+  <text x="870" y="585" class="t small muted">⭐ 入门 · 4分钟</text>
+  <text x="870" y="605" class="t small accent">学习：询价、结账</text>
+
+  <!-- Section: Classic Dialogues -->
+  <text x="70" y="660" class="t h2">🎬 经典对白</text>
+  <text x="250" y="660" class="t small muted">从电影/美剧中学习地道表达</text>
+
+  <!-- Classic Card 1 -->
+  <rect x="70" y="680" width="300" height="120" class="card-scene"/>
+  <rect x="90" y="700" width="80" height="80" fill="#1a1a2e" rx="8"/>
+  <text x="130" y="745" class="t h2 white" text-anchor="middle">🎥</text>
+  <text x="190" y="725" class="t h3">《当幸福来敲门》</text>
+  <text x="190" y="745" class="t small muted">The Pursuit of Happyness</text>
+  <text x="190" y="770" class="t small accent">经典面试场景 · 励志表达</text>
+
+  <!-- Classic Card 2 -->
+  <rect x="390" y="680" width="300" height="120" class="card-scene"/>
+  <rect x="410" y="700" width="80" height="80" fill="#1a1a2e" rx="8"/>
+  <text x="450" y="745" class="t h2 white" text-anchor="middle">📺</text>
+  <text x="510" y="725" class="t h3">《老友记》</text>
+  <text x="510" y="745" class="t small muted">Friends</text>
+  <text x="510" y="770" class="t small accent">日常对话 · 幽默表达</text>
+
+  <!-- Classic Card 3 -->
+  <rect x="710" y="680" width="300" height="120" class="card-scene"/>
+  <rect x="730" y="700" width="80" height="80" fill="#1a1a2e" rx="8"/>
+  <text x="770" y="745" class="t h2 white" text-anchor="middle">🎤</text>
+  <text x="830" y="725" class="t h3">TED 演讲精选</text>
+  <text x="830" y="745" class="t small muted">TED Talks</text>
+  <text x="830" y="770" class="t small accent">演讲技巧 · 高级表达</text>
+
+  <!-- Right Panel: Scene Preview -->
+  <rect x="1110" y="160" width="230" height="650" class="panel"/>
+  <text x="1130" y="190" class="t h3">👀 场景预览</text>
+  
+  <!-- Preview Content -->
+  <rect x="1130" y="210" width="190" height="120" fill="url(#sceneGrad2)" rx="12"/>
+  <text x="1225" y="280" class="t h1" text-anchor="middle">🍽️</text>
+  
+  <text x="1130" y="355" class="t h3">餐厅点餐</text>
+  <text x="1130" y="380" class="t small muted">难度：⭐⭐ 初级</text>
+  <text x="1130" y="400" class="t small muted">时长：约 5 分钟</text>
+  
+  <text x="1130" y="435" class="t h3">你将学会：</text>
+  <text x="1130" y="460" class="t small">• 如何点餐和询问推荐</text>
+  <text x="1130" y="480" class="t small">• 表达饮食偏好</text>
+  <text x="1130" y="500" class="t small">• 请求账单和付款</text>
+  
+  <text x="1130" y="540" class="t h3">核心句型：</text>
+  <rect x="1130" y="555" width="190" height="50" fill="#f1f5f9" rx="8"/>
+  <text x="1145" y="575" class="t small">"I'd like to order..."</text>
+  <text x="1145" y="595" class="t small">"Could you recommend..."</text>
+  
+  <text x="1130" y="630" class="t h3">口音选择：</text>
+  <rect x="1130" y="645" width="55" height="26" class="chip-active"/>
+  <text x="1157" y="663" class="t small white" text-anchor="middle">美式</text>
+  <rect x="1195" y="645" width="55" height="26" class="chip"/>
+  <text x="1222" y="663" class="t small" text-anchor="middle">英式</text>
+  <rect x="1260" y="645" width="55" height="26" class="chip"/>
+  <text x="1287" y="663" class="t small" text-anchor="middle">澳式</text>
+  
+  <rect x="1130" y="700" width="190" height="45" class="btn-primary"/>
+  <text x="1225" y="728" class="t p white" text-anchor="middle">开始场景 →</text>
+  
+  <rect x="1130" y="755" width="190" height="35" class="btn-secondary"/>
+  <text x="1225" y="778" class="t small" text-anchor="middle">先看看对话脚本</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="940" class="t small muted">设计要点：场景卡片化展示 · 难度标签清晰 · 经典对白独立分区 · 预览面板快速了解 · 口音可选</text>
+</svg>

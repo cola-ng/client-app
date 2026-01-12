@@ -1,4 +1,4 @@
-use crate::policies::{PatternParser, PolicyPattern, UnifiedRatioPolicy, Weight, Policy};
+use crate::policies::{PatternParser, Policy, PolicyPattern, UnifiedRatioPolicy, Weight};
 
 #[test]
 fn test_parse_sequential_pattern() {
@@ -184,7 +184,10 @@ fn test_policy_ratio_priority_ratio_based() {
     if let Some(counts) = stats.get("word_counts").and_then(|v| v.as_object()) {
         let judge_count = counts.get("judge").and_then(|v| v.as_u64()).unwrap_or(0);
         let defense_count = counts.get("defense").and_then(|v| v.as_u64()).unwrap_or(0);
-        let prosecution_count = counts.get("prosecution").and_then(|v| v.as_u64()).unwrap_or(0);
+        let prosecution_count = counts
+            .get("prosecution")
+            .and_then(|v| v.as_u64())
+            .unwrap_or(0);
 
         assert!(judge_count > defense_count);
         assert!(judge_count > prosecution_count);
@@ -207,7 +210,10 @@ fn test_policy_simple_ratio_equal_weights() {
     if let Some(counts) = stats.get("word_counts").and_then(|v| v.as_object()) {
         let judge_count = counts.get("judge").and_then(|v| v.as_u64()).unwrap_or(0);
         let defense_count = counts.get("defense").and_then(|v| v.as_u64()).unwrap_or(0);
-        let prosecution_count = counts.get("prosecution").and_then(|v| v.as_u64()).unwrap_or(0);
+        let prosecution_count = counts
+            .get("prosecution")
+            .and_then(|v| v.as_u64())
+            .unwrap_or(0);
 
         // All should have spoken equal amount (within reason)
         assert_eq!(judge_count, 300);

@@ -43,7 +43,7 @@ impl ToString for IssueType {
 
 impl std::str::FromStr for IssueType {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "pronunciation" => Ok(IssueType::Pronunciation),
@@ -89,7 +89,7 @@ impl ToString for Speaker {
 
 impl std::str::FromStr for Speaker {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "user" => Ok(Speaker::User),
@@ -119,7 +119,7 @@ impl ToString for UseLang {
 
 impl std::str::FromStr for UseLang {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "en" => Ok(UseLang::En),
@@ -171,7 +171,7 @@ impl ToString for AnnotationType {
 
 impl std::str::FromStr for AnnotationType {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "pronunciation_error" => Ok(AnnotationType::PronunciationError),
@@ -205,7 +205,7 @@ impl ToString for Severity {
 
 impl std::str::FromStr for Severity {
     type Err = String;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "low" => Ok(Severity::Low),
@@ -280,7 +280,7 @@ impl Database {
                 description_zh = excluded.description_zh,
                 context = excluded.context,
                 audio_timestamp = excluded.audio_timestamp
-            "#
+            "#,
         )
         .bind(&word.word)
         .bind(word.issue_type.to_string())
@@ -322,7 +322,7 @@ impl Database {
                 w.difficulty_level DESC,
                 w.created_at ASC
             LIMIT ?
-            "#
+            "#,
         )
         .bind(Self::now() - 86400) // 24 hours ago
         .bind(Self::now())
@@ -361,15 +361,15 @@ impl Database {
         let (new_interval, new_difficulty) = if success {
             // Increase interval on success (1 -> 2 -> 4 -> 7 -> 14 -> 30 days)
             let row = sqlx::query(
-                "SELECT review_interval_days, difficulty_level FROM issue_words WHERE id = ?"
+                "SELECT review_interval_days, difficulty_level FROM issue_words WHERE id = ?",
             )
             .bind(word_id)
             .fetch_one(&self.pool)
             .await?;
-            
+
             let interval: i64 = row.get("review_interval_days");
             let diff: i64 = row.get("difficulty_level");
-            
+
             let new_interval = match interval {
                 1 => 2,
                 2 => 4,
@@ -383,12 +383,12 @@ impl Database {
         } else {
             // Reset interval on failure, increase difficulty
             let diff = sqlx::query_scalar::<_, i64>(
-                "SELECT difficulty_level FROM issue_words WHERE id = ?"
+                "SELECT difficulty_level FROM issue_words WHERE id = ?",
             )
             .bind(word_id)
             .fetch_one(&self.pool)
             .await?;
-            
+
             (1, (diff + 1).min(5))
         };
 
@@ -403,7 +403,7 @@ impl Database {
                 review_interval_days = ?,
                 difficulty_level = ?
             WHERE id = ?
-            "#
+            "#,
         )
         .bind(Self::now())
         .bind(next_review)
@@ -426,7 +426,7 @@ impl Database {
                 session_id, speaker, use_lang, content_en, content_zh, audio_path, created_at,
                 duration_ms, words_per_minute, pause_count, hesitation_count
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            "#
+            "#,
         )
         .bind(&conv.session_id)
         .bind(conv.speaker.to_string())
@@ -457,7 +457,7 @@ impl Database {
             WHERE session_id = ?
             ORDER BY created_at DESC
             LIMIT ?
-            "#
+            "#,
         )
         .bind(session_id)
         .bind(limit)
@@ -498,7 +498,7 @@ impl Database {
                 conversation_id, annotation_type, start_position, end_position,
                 original_text, suggested_text, description_en, description_zh, severity, created_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            "#
+            "#,
         )
         .bind(annotation.conversation_id)
         .bind(annotation.annotation_type.to_string())
@@ -521,12 +521,10 @@ impl Database {
         &self,
         conversation_id: i64,
     ) -> Result<Vec<ConversationAnnotation>, sqlx::Error> {
-        let rows = sqlx::query(
-            "SELECT * FROM conversation_annotations WHERE conversation_id = ?"
-        )
-        .bind(conversation_id)
-        .fetch_all(&self.pool)
-        .await?;
+        let rows = sqlx::query("SELECT * FROM conversation_annotations WHERE conversation_id = ?")
+            .bind(conversation_id)
+            .fetch_all(&self.pool)
+            .await?;
 
         let mut annotations = Vec::new();
         for row in rows {
@@ -557,7 +555,7 @@ impl Database {
             INSERT INTO learning_sessions (
                 session_id, topic, target_words, started_at, total_exchanges
             ) VALUES (?, ?, ?, ?, ?)
-            "#
+            "#,
         )
         .bind(&session.session_id)
         .bind(&session.topic)
@@ -582,7 +580,7 @@ impl Database {
             UPDATE learning_sessions 
             SET ended_at = ?, user_satisfaction = ?, notes = ?
             WHERE session_id = ?
-            "#
+            "#,
         )
         .bind(Self::now())
         .bind(satisfaction)
@@ -597,16 +595,13 @@ impl Database {
     // ============ Word Practice Log Operations ============
 
     /// Log a word practice
-    pub async fn log_word_practice(
-        &self,
-        log: &WordPracticeLog,
-    ) -> Result<i64, sqlx::Error> {
+    pub async fn log_word_practice(&self, log: &WordPracticeLog) -> Result<i64, sqlx::Error> {
         let result = sqlx::query(
             r#"
             INSERT INTO word_practice_log (
                 word_id, session_id, practiced_at, success_level, notes
             ) VALUES (?, ?, ?, ?, ?)
-            "#
+            "#,
         )
         .bind(log.word_id)
         .bind(&log.session_id)

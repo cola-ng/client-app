@@ -22,9 +22,9 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use dora_node_api::{
-    DoraNode, Event, Parameter,
-    arrow::array::{AsArray, StringArray, Array},
+    arrow::array::{Array, AsArray, StringArray},
     dora_core::config::DataId,
+    DoraNode, Event, Parameter,
 };
 use eyre::{Context, Result};
 use outfox_openai::spec::{
@@ -44,7 +44,7 @@ mod segmenter;
 mod streaming;
 mod tool;
 
-use config::{Config, load_anchor_context, format_anchor_context};
+use config::{format_anchor_context, load_anchor_context, Config};
 use segmenter::StreamSegmenter;
 use tool::ToolSet;
 
@@ -85,11 +85,7 @@ impl RequestCancellationManager {
     }
 
     /// Create a new cancellation token for a request
-    async fn create_token(
-        &self,
-        request_id: String,
-        session_id: String,
-    ) -> CancellationToken {
+    async fn create_token(&self, request_id: String, session_id: String) -> CancellationToken {
         let token = CancellationToken::new();
 
         // Store token
@@ -135,7 +131,10 @@ impl RequestCancellationManager {
 
         // Only show cancellation message if there were actual requests to cancel
         if cancelled_count > 0 {
-            eprintln!("[CANCELLATION] Cancelled {} requests for session: {}", cancelled_count, session_id);
+            eprintln!(
+                "[CANCELLATION] Cancelled {} requests for session: {}",
+                cancelled_count, session_id
+            );
         } else {
             // During startup, show a more informative message
             if session_id == "default" {
@@ -298,7 +297,10 @@ fn load_anchor_context_for_session(config: &Config) -> Option<String> {
                 Some(formatted)
             }
             Err(e) => {
-                eprintln!("⚠️ Warning: Failed to load anchor context from '{}': {}", context_path, e);
+                eprintln!(
+                    "⚠️ Warning: Failed to load anchor context from '{}': {}",
+                    context_path, e
+                );
                 eprintln!("⚠️ Proceeding without anchor context");
                 None
             }
@@ -415,7 +417,11 @@ async fn main() -> Result<()> {
                             .collect::<Vec<_>>()
                             .join(" ");
 
-                        send_log(&mut node, "INFO", &format!("Received input: \"{}\"", user_text))?;
+                        send_log(
+                            &mut node,
+                            "INFO",
+                            &format!("Received input: \"{}\"", user_text),
+                        )?;
 
                         if user_text.is_empty() {
                             send_log(&mut node, "WARNING", "Received empty text input")?;
@@ -424,20 +430,20 @@ async fn main() -> Result<()> {
 
                         // Get or create session
                         let session = sessions.entry(session_id.clone()).or_insert_with(|| {
-                            let mut session = ChatSession::new(config.system_prompt.clone(), anchor_context.clone());
+                            let mut session = ChatSession::new(
+                                config.system_prompt.clone(),
+                                anchor_context.clone(),
+                            );
                             if let Some(ref ts) = tool_set {
                                 session.set_tool_set(ts.clone());
                             }
                             session
                         });
 
-                        let role = metadata
-                            .parameters
-                            .get("role")
-                            .and_then(|p| match p {
-                                Parameter::String(s) => Some(s.as_str()),
-                                _ => None,
-                            });
+                        let role = metadata.parameters.get("role").and_then(|p| match p {
+                            Parameter::String(s) => Some(s.as_str()),
+                            _ => None,
+                        });
 
                         if matches!(role, Some("assistant")) {
                             send_log(
@@ -561,10 +567,11 @@ async fn main() -> Result<()> {
 
                                 // Create cancellation token if enabled
                                 let cancellation_token = if config.enable_cancellation {
-                                    Some(cancellation_manager.create_token(
-                                        request_id.clone(),
-                                        session_id.clone(),
-                                    ).await)
+                                    Some(
+                                        cancellation_manager
+                                            .create_token(request_id.clone(), session_id.clone())
+                                            .await,
+                                    )
                                 } else {
                                     None
                                 };
@@ -572,12 +579,14 @@ async fn main() -> Result<()> {
                                 let stream_handle = tokio::spawn(async move {
                                     let result = if let Some(token) = cancellation_token {
                                         // Use cancellation-aware streaming
-                                        client_clone.complete_streaming_with_cancellation(
-                                            request_clone,
-                                            tx,
-                                            token,
-                                            Duration::from_secs(config.stream_timeout_secs),
-                                        ).await
+                                        client_clone
+                                            .complete_streaming_with_cancellation(
+                                                request_clone,
+                                                tx,
+                                                token,
+                                                Duration::from_secs(config.stream_timeout_secs),
+                                            )
+                                            .await
                                     } else {
                                         // Use regular streaming
                                         client_clone.complete_streaming(request_clone, tx).await
@@ -611,13 +620,11 @@ async fn main() -> Result<()> {
                                         let mut segment_metadata = metadata.parameters.clone();
                                         segment_metadata.insert(
                                             "session_status".to_string(),
-                                            Parameter::String(
-                                                if !has_sent_segment {
-                                                    "started".to_string()
-                                                } else {
-                                                    "ongoing".to_string()
-                                                },
-                                            ),
+                                            Parameter::String(if !has_sent_segment {
+                                                "started".to_string()
+                                            } else {
+                                                "ongoing".to_string()
+                                            }),
                                         );
                                         segment_metadata.insert(
                                             "segment_index".to_string(),
@@ -643,13 +650,11 @@ async fn main() -> Result<()> {
                                     let mut segment_metadata = metadata.parameters.clone();
                                     segment_metadata.insert(
                                         "session_status".to_string(),
-                                        Parameter::String(
-                                            if !has_sent_segment {
-                                                "started".to_string()
-                                            } else {
-                                                "ongoing".to_string()
-                                            },
-                                        ),
+                                        Parameter::String(if !has_sent_segment {
+                                            "started".to_string()
+                                        } else {
+                                            "ongoing".to_string()
+                                        }),
                                     );
                                     segment_metadata.insert(
                                         "segment_index".to_string(),
@@ -695,13 +700,13 @@ async fn main() -> Result<()> {
                                             DataId::from("status".to_string()),
                                             Default::default(),
                                             StringArray::from(vec!["complete"]),
-                                    )
-                                    .context("Failed to send status output")?;
+                                        )
+                                        .context("Failed to send status output")?;
 
-                                    // FIX: Handle tool calls from streaming response
-                                    // When the LLM returns tool calls, we either execute them locally (enable_local_mcp=true)
-                                    // or pass them back to the client (enable_local_mcp=false)
-                                    if let Some(tool_calls) = tool_calls {
+                                        // FIX: Handle tool calls from streaming response
+                                        // When the LLM returns tool calls, we either execute them locally (enable_local_mcp=true)
+                                        // or pass them back to the client (enable_local_mcp=false)
+                                        if let Some(tool_calls) = tool_calls {
                                             send_log(
                                                 &mut node,
                                                 "INFO",
@@ -842,7 +847,7 @@ async fn main() -> Result<()> {
                                                     DataId::from("tool_calls".to_string()),
                                                     Default::default(),
                                                     StringArray::from(vec![
-                                                        tool_calls_json.as_str(),
+                                                        tool_calls_json.as_str()
                                                     ]),
                                                 )
                                                 .context("Failed to send tool calls")?;
@@ -864,7 +869,9 @@ async fn main() -> Result<()> {
                                         )?;
 
                                         // Classify error type and set appropriate session_status
-                                        let status = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let status = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -873,7 +880,9 @@ async fn main() -> Result<()> {
                                         };
 
                                         // Use same classification for session_status
-                                        let session_status = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let session_status = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -907,7 +916,7 @@ async fn main() -> Result<()> {
                                             DataId::from("text".to_string()),
                                             error_metadata,
                                             StringArray::from(vec![
-                                                format!("Error: {}", e).as_str(),
+                                                format!("Error: {}", e).as_str()
                                             ]),
                                         )
                                         .context("Failed to send error")?;
@@ -921,7 +930,9 @@ async fn main() -> Result<()> {
                                         )?;
 
                                         // Classify error type for task errors
-                                        let error_type = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let error_type = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -933,7 +944,10 @@ async fn main() -> Result<()> {
                                         node.send_output(
                                             DataId::from("status".to_string()),
                                             Default::default(),
-                                            StringArray::from(vec![format!("{}: {}", error_type, e)]),
+                                            StringArray::from(vec![format!(
+                                                "{}: {}",
+                                                error_type, e
+                                            )]),
                                         )
                                         .context("Failed to send status output")?;
 
@@ -954,7 +968,9 @@ async fn main() -> Result<()> {
                                         node.send_output(
                                             DataId::from("text".to_string()),
                                             error_metadata,
-                                            StringArray::from(vec![format!("Error: {}", e).as_str()]),
+                                            StringArray::from(vec![
+                                                format!("Error: {}", e).as_str()
+                                            ]),
                                         )
                                         .context("Failed to send error output")?;
                                     }
@@ -1036,10 +1052,12 @@ async fn main() -> Result<()> {
                                     }
                                     Err(e) => {
                                         let error_msg = format!("{}", e);
-                                                                send_log(&mut node, "ERROR", &error_msg)?;
+                                        send_log(&mut node, "ERROR", &error_msg)?;
 
                                         // Classify error type for API call errors
-                                        let error_type = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let error_type = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -1051,7 +1069,10 @@ async fn main() -> Result<()> {
                                         node.send_output(
                                             DataId::from("status".to_string()),
                                             Default::default(),
-                                            StringArray::from(vec![format!("{}: {}", error_type, e)]),
+                                            StringArray::from(vec![format!(
+                                                "{}: {}",
+                                                error_type, e
+                                            )]),
                                         )
                                         .context("Failed to send status output")?;
 
@@ -1219,25 +1240,42 @@ async fn main() -> Result<()> {
                             .join(" ");
 
                         // ENHANCED LOGGING: Log ALL control inputs for debugging
-                        send_log(&mut node, "INFO", &format!("🔍 CONTROL INPUT RECEIVED: '{}'", control_text))?;
+                        send_log(
+                            &mut node,
+                            "INFO",
+                            &format!("🔍 CONTROL INPUT RECEIVED: '{}'", control_text),
+                        )?;
                         send_log(&mut node, "INFO", &format!("  Session ID: {}", session_id))?;
-                        send_log(&mut node, "INFO", &format!("  Metadata: {:?}", metadata.parameters))?;
+                        send_log(
+                            &mut node,
+                            "INFO",
+                            &format!("  Metadata: {:?}", metadata.parameters),
+                        )?;
 
                         // Only proceed with detailed logging if this is an unexpected command
                         // Check if it's a known command or valid JSON with prompt
-                        let is_known_command = control_text.eq_ignore_ascii_case("reset") ||
-                                               control_text.eq_ignore_ascii_case("cancel") ||
-                                               control_text.eq_ignore_ascii_case("ready") ||
-                                               control_text.eq_ignore_ascii_case("exit");
+                        let is_known_command = control_text.eq_ignore_ascii_case("reset")
+                            || control_text.eq_ignore_ascii_case("cancel")
+                            || control_text.eq_ignore_ascii_case("ready")
+                            || control_text.eq_ignore_ascii_case("exit");
 
-                        let is_valid_json_prompt = serde_json::from_str::<serde_json::Value>(&control_text)
-                            .ok()
-                            .and_then(|v| v.get("prompt").map(|_| true))
-                            .unwrap_or(false);
+                        let is_valid_json_prompt =
+                            serde_json::from_str::<serde_json::Value>(&control_text)
+                                .ok()
+                                .and_then(|v| v.get("prompt").map(|_| true))
+                                .unwrap_or(false);
 
                         if !is_known_command && !is_valid_json_prompt {
-                            send_log(&mut node, "WARNING", &format!("🚨 UNEXPECTED CONTROL COMMAND!"))?;
-                            send_log(&mut node, "WARNING", &format!("  This should help trace where 'resume' is coming from!"))?;
+                            send_log(
+                                &mut node,
+                                "WARNING",
+                                &format!("🚨 UNEXPECTED CONTROL COMMAND!"),
+                            )?;
+                            send_log(
+                                &mut node,
+                                "WARNING",
+                                &format!("  This should help trace where 'resume' is coming from!"),
+                            )?;
                         }
 
                         // Try to parse as JSON first, fall back to plain text
@@ -1251,10 +1289,18 @@ async fn main() -> Result<()> {
 
                         if let Some(json) = parsed {
                             // Handle JSON control input
-                            send_log(&mut node, "DEBUG", &format!("Parsed JSON control: {:?}", json))?;
+                            send_log(
+                                &mut node,
+                                "DEBUG",
+                                &format!("Parsed JSON control: {:?}", json),
+                            )?;
 
                             if let Some(command) = json.get("command").and_then(|v| v.as_str()) {
-                                send_log(&mut node, "DEBUG", &format!("Found command: {}", command))?;
+                                send_log(
+                                    &mut node,
+                                    "DEBUG",
+                                    &format!("Found command: {}", command),
+                                )?;
                                 if command.eq_ignore_ascii_case("reset") {
                                     should_reset = true;
                                 } else if command.eq_ignore_ascii_case("cancel") {
@@ -1269,14 +1315,26 @@ async fn main() -> Result<()> {
                                     .context("Failed to send status output")?;
                                 } else if command.eq_ignore_ascii_case("exit") {
                                     sessions.remove(&session_id);
-                                    send_log(&mut node, "INFO", &format!("Removed session: {}", session_id))?;
+                                    send_log(
+                                        &mut node,
+                                        "INFO",
+                                        &format!("Removed session: {}", session_id),
+                                    )?;
                                 }
                             }
                             if let Some(prompt) = json.get("prompt").and_then(|v| v.as_str()) {
-                                send_log(&mut node, "DEBUG", &format!("Found prompt field: {}", prompt))?;
+                                send_log(
+                                    &mut node,
+                                    "DEBUG",
+                                    &format!("Found prompt field: {}", prompt),
+                                )?;
                                 if !prompt.trim().is_empty() {
                                     prompt_text = Some(prompt.to_string());
-                                    send_log(&mut node, "INFO", &format!("Extracted prompt from control: {}", prompt))?;
+                                    send_log(
+                                        &mut node,
+                                        "INFO",
+                                        &format!("Extracted prompt from control: {}", prompt),
+                                    )?;
                                 }
                             }
                         } else {
@@ -1294,32 +1352,64 @@ async fn main() -> Result<()> {
                                 .context("Failed to send status output")?;
                             } else if control_text.eq_ignore_ascii_case("exit") {
                                 sessions.remove(&session_id);
-                                send_log(&mut node, "INFO", &format!("Removed session: {}", session_id))?;
+                                send_log(
+                                    &mut node,
+                                    "INFO",
+                                    &format!("Removed session: {}", session_id),
+                                )?;
                             } else {
                                 // ENHANCED LOGGING: Unknown control command - show complete context
-                                send_log(&mut node, "WARNING", &format!("🚨 UNKNOWN CONTROL COMMAND DETECTED!"))?;
-                                send_log(&mut node, "WARNING", &format!("Unknown control command: {}", control_text))?;
+                                send_log(
+                                    &mut node,
+                                    "WARNING",
+                                    &format!("🚨 UNKNOWN CONTROL COMMAND DETECTED!"),
+                                )?;
+                                send_log(
+                                    &mut node,
+                                    "WARNING",
+                                    &format!("Unknown control command: {}", control_text),
+                                )?;
 
                                 // Debug context information
                                 let node_id = node.id();
                                 let context_msg = format!("🔍 DEBUG CONTEXT:\n  Node ID: {:?}\n  Session ID: {}\n  Input Port: control\n  Raw Control Text: '{}'\n  Control Text Length: {}\n  Metadata Parameters: {:?}",
                                     node_id, session_id, control_text, control_text.len(), metadata.parameters);
                                 send_log(&mut node, "WARNING", &context_msg)?;
-                                send_log(&mut node, "WARNING", &format!("  Expected Commands: reset, cancel, ready, exit"))?;
+                                send_log(
+                                    &mut node,
+                                    "WARNING",
+                                    &format!("  Expected Commands: reset, cancel, ready, exit"),
+                                )?;
 
                                 // Log environment info for debugging
                                 if let Ok(node_name) = std::env::var("DORA_NODE_NAME") {
-                                    send_log(&mut node, "WARNING", &format!("  Environment DORA_NODE_NAME: {}", node_name))?;
+                                    send_log(
+                                        &mut node,
+                                        "WARNING",
+                                        &format!("  Environment DORA_NODE_NAME: {}", node_name),
+                                    )?;
                                 }
                                 if let Ok(maas_config) = std::env::var("MAAS_CONFIG_PATH") {
-                                    send_log(&mut node, "WARNING", &format!("  Environment MAAS_CONFIG_PATH: {}", maas_config))?;
+                                    send_log(
+                                        &mut node,
+                                        "WARNING",
+                                        &format!("  Environment MAAS_CONFIG_PATH: {}", maas_config),
+                                    )?;
                                 }
 
                                 // Log data details
                                 let data_array = data.as_string::<i32>();
-                                send_log(&mut node, "WARNING", &format!("  Data Array Length: {}", data_array.len()))?;
+                                send_log(
+                                    &mut node,
+                                    "WARNING",
+                                    &format!("  Data Array Length: {}", data_array.len()),
+                                )?;
                                 if let Some(first_item) = data_array.iter().next().flatten() {
-                                    send_log(&mut node, "WARNING", &format!("  First Data Item: '{}'", first_item))?;
+                                    send_log(
+                                        &mut node,
+                                        "WARNING",
+                                        &format!("  First Data Item: '{}'", first_item),
+                                    )?;
                                 }
 
                                 send_log(&mut node, "WARNING", &format!("  This suggests LLM1 is incorrectly receiving control commands!"))?;
@@ -1332,7 +1422,8 @@ async fn main() -> Result<()> {
                             let session_id_for_cancel = session_id.clone();
                             let cancelled_count = {
                                 futures::executor::block_on(
-                                    cancellation_manager_for_cancel.cancel_session(&session_id_for_cancel)
+                                    cancellation_manager_for_cancel
+                                        .cancel_session(&session_id_for_cancel),
                                 )
                             };
                             if cancelled_count > 0 {
@@ -1344,15 +1435,14 @@ async fn main() -> Result<()> {
                                     "session_status".to_string(),
                                     Parameter::String("cancelled".to_string()),
                                 );
-                                end_metadata.insert(
-                                    "is_complete".to_string(),
-                                    Parameter::Bool(true),
-                                );
+                                end_metadata
+                                    .insert("is_complete".to_string(), Parameter::Bool(true));
                                 node.send_output(
                                     DataId::from("text".to_string()),
                                     end_metadata,
                                     StringArray::from(vec![""]),
-                                ).context("Failed to send end signal on cancel")?;
+                                )
+                                .context("Failed to send end signal on cancel")?;
                             } else {
                                 send_log(&mut node, "INFO", &format!("🛑 Cancel requested but no active streaming for session: {}", session_id))?;
                             }
@@ -1372,7 +1462,8 @@ async fn main() -> Result<()> {
                             let cancelled_count = {
                                 // Use futures::executor for synchronous block
                                 futures::executor::block_on(
-                                    cancellation_manager_for_reset.cancel_session(&session_id_for_reset)
+                                    cancellation_manager_for_reset
+                                        .cancel_session(&session_id_for_reset),
                                 )
                             };
                             if cancelled_count > 0 {
@@ -1385,20 +1476,22 @@ async fn main() -> Result<()> {
                                 "session_status".to_string(),
                                 Parameter::String("reset".to_string()),
                             );
-                            end_metadata.insert(
-                                "is_complete".to_string(),
-                                Parameter::Bool(true),
-                            );
+                            end_metadata.insert("is_complete".to_string(), Parameter::Bool(true));
                             node.send_output(
                                 DataId::from("text".to_string()),
                                 end_metadata,
                                 StringArray::from(vec![""]),
-                            ).context("Failed to send end signal on reset")?;
+                            )
+                            .context("Failed to send end signal on reset")?;
 
                             // Clear conversation history
                             if let Some(session) = sessions.get_mut(&session_id) {
                                 session.reset();
-                                send_log(&mut node, "INFO", &format!("🔄 Reset session history: {}", session_id))?;
+                                send_log(
+                                    &mut node,
+                                    "INFO",
+                                    &format!("🔄 Reset session history: {}", session_id),
+                                )?;
                             }
                             node.send_output(
                                 DataId::from("status".to_string()),
@@ -1410,11 +1503,18 @@ async fn main() -> Result<()> {
 
                         // Handle prompt field - process through LLM like text input
                         if let Some(user_text) = prompt_text {
-                            send_log(&mut node, "INFO", &format!("Sending prompt from control to API: {}", user_text))?;
+                            send_log(
+                                &mut node,
+                                "INFO",
+                                &format!("Sending prompt from control to API: {}", user_text),
+                            )?;
 
                             // Get or create session
                             let session = sessions.entry(session_id.clone()).or_insert_with(|| {
-                                let mut session = ChatSession::new(config.system_prompt.clone(), anchor_context.clone());
+                                let mut session = ChatSession::new(
+                                    config.system_prompt.clone(),
+                                    anchor_context.clone(),
+                                );
                                 if let Some(ref ts) = tool_set {
                                     session.set_tool_set(ts.clone());
                                 }
@@ -1460,7 +1560,11 @@ async fn main() -> Result<()> {
                             // Make API call - use streaming if enabled
                             if config.enable_streaming.unwrap_or(false) {
                                 // Streaming mode
-                                send_log(&mut node, "DEBUG", "Using streaming mode for control prompt")?;
+                                send_log(
+                                    &mut node,
+                                    "DEBUG",
+                                    "Using streaming mode for control prompt",
+                                )?;
 
                                 let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<String>();
                                 let mut has_sent_segment = false;
@@ -1476,10 +1580,11 @@ async fn main() -> Result<()> {
 
                                 // Create cancellation token if enabled
                                 let cancellation_token = if config.enable_cancellation {
-                                    Some(cancellation_manager.create_token(
-                                        request_id.clone(),
-                                        session_id.clone(),
-                                    ).await)
+                                    Some(
+                                        cancellation_manager
+                                            .create_token(request_id.clone(), session_id.clone())
+                                            .await,
+                                    )
                                 } else {
                                     None
                                 };
@@ -1487,12 +1592,14 @@ async fn main() -> Result<()> {
                                 let stream_handle = tokio::spawn(async move {
                                     let result = if let Some(token) = cancellation_token {
                                         // Use cancellation-aware streaming
-                                        client_clone.complete_streaming_with_cancellation(
-                                            request_clone,
-                                            tx,
-                                            token,
-                                            Duration::from_secs(config.stream_timeout_secs),
-                                        ).await
+                                        client_clone
+                                            .complete_streaming_with_cancellation(
+                                                request_clone,
+                                                tx,
+                                                token,
+                                                Duration::from_secs(config.stream_timeout_secs),
+                                            )
+                                            .await
                                     } else {
                                         // Use regular streaming
                                         client_clone.complete_streaming(request_clone, tx).await
@@ -1508,7 +1615,11 @@ async fn main() -> Result<()> {
                                     result
                                 });
 
-                                send_log(&mut node, "DEBUG", "Stream created successfully, starting event loop")?;
+                                send_log(
+                                    &mut node,
+                                    "DEBUG",
+                                    "Stream created successfully, starting event loop",
+                                )?;
 
                                 // Use segmenter to buffer chunks
                                 let mut segmenter = StreamSegmenter::new(10);
@@ -1527,13 +1638,11 @@ async fn main() -> Result<()> {
                                         let mut segment_metadata = metadata.parameters.clone();
                                         segment_metadata.insert(
                                             "session_status".to_string(),
-                                            Parameter::String(
-                                                if !has_sent_segment {
-                                                    "started".to_string()
-                                                } else {
-                                                    "ongoing".to_string()
-                                                },
-                                            ),
+                                            Parameter::String(if !has_sent_segment {
+                                                "started".to_string()
+                                            } else {
+                                                "ongoing".to_string()
+                                            }),
                                         );
                                         segment_metadata.insert(
                                             "segment_index".to_string(),
@@ -1559,13 +1668,11 @@ async fn main() -> Result<()> {
                                     let mut segment_metadata = metadata.parameters.clone();
                                     segment_metadata.insert(
                                         "session_status".to_string(),
-                                        Parameter::String(
-                                            if !has_sent_segment {
-                                                "started".to_string()
-                                            } else {
-                                                "ongoing".to_string()
-                                            },
-                                        ),
+                                        Parameter::String(if !has_sent_segment {
+                                            "started".to_string()
+                                        } else {
+                                            "ongoing".to_string()
+                                        }),
                                     );
                                     segment_metadata.insert(
                                         "segment_index".to_string(),
@@ -1597,10 +1704,16 @@ async fn main() -> Result<()> {
                                     }
                                     Ok(Err(e)) => {
                                         let error_msg = format!("{}", e);
-                                        send_log(&mut node, "ERROR", &format!("Streaming error: {}", error_msg))?;
+                                        send_log(
+                                            &mut node,
+                                            "ERROR",
+                                            &format!("Streaming error: {}", error_msg),
+                                        )?;
 
                                         // Classify error type
-                                        let error_type = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let error_type = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -1634,7 +1747,7 @@ async fn main() -> Result<()> {
                                         // For cancellation errors, send empty text (just metadata signal)
                                         // For other errors, send the error message text
                                         let text_content = if error_type == "cancelled" {
-                                            ""  // Empty - don't contaminate downstream with error text
+                                            "" // Empty - don't contaminate downstream with error text
                                         } else {
                                             &format!("Error: {}", error_msg)
                                         };
@@ -1649,10 +1762,16 @@ async fn main() -> Result<()> {
                                     }
                                     Err(e) => {
                                         let error_msg = format!("{}", e);
-                                        send_log(&mut node, "ERROR", &format!("Stream task failed: {}", error_msg))?;
+                                        send_log(
+                                            &mut node,
+                                            "ERROR",
+                                            &format!("Stream task failed: {}", error_msg),
+                                        )?;
 
                                         // Classify error type for stream task failures
-                                        let error_type = if error_msg.contains("cancelled") || error_msg.contains("cancelled by user") {
+                                        let error_type = if error_msg.contains("cancelled")
+                                            || error_msg.contains("cancelled by user")
+                                        {
                                             "cancelled"
                                         } else if error_msg.contains("timed out") {
                                             "timeout"
@@ -1686,7 +1805,7 @@ async fn main() -> Result<()> {
                                         // For cancellation errors, send empty text (just metadata signal)
                                         // For other errors, send the error message text
                                         let text_content = if error_type == "cancelled" {
-                                            ""  // Empty - don't contaminate downstream with error text
+                                            "" // Empty - don't contaminate downstream with error text
                                         } else {
                                             &format!("Error: {}", error_msg)
                                         };
@@ -1727,14 +1846,19 @@ async fn main() -> Result<()> {
                                     StringArray::from(vec!["complete"]),
                                 )
                                 .context("Failed to send complete status")?;
-
                             } else {
                                 // Non-streaming mode
-                                send_log(&mut node, "DEBUG", "Using non-streaming mode for control prompt")?;
+                                send_log(
+                                    &mut node,
+                                    "DEBUG",
+                                    "Using non-streaming mode for control prompt",
+                                )?;
 
                                 match client.complete(request.clone()).await {
                                     Ok(response) => {
-                                        let assistant_message = response.choices.first()
+                                        let assistant_message = response
+                                            .choices
+                                            .first()
                                             .and_then(|choice| choice.message.content.clone())
                                             .unwrap_or_default();
 

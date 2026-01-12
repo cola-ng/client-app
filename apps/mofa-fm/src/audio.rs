@@ -14,13 +14,16 @@ pub struct AudioDeviceInfo {
 
 /// Shared state for mic level
 pub struct MicLevelState {
-    pub level: f32,  // 0.0 - 1.0
+    pub level: f32, // 0.0 - 1.0
     pub peak: f32,
 }
 
 impl Default for MicLevelState {
     fn default() -> Self {
-        Self { level: 0.0, peak: 0.0 }
+        Self {
+            level: 0.0,
+            peak: 0.0,
+        }
     }
 }
 
@@ -47,9 +50,7 @@ impl AudioManager {
 
     /// Get list of input devices
     pub fn get_input_devices(&self) -> Vec<AudioDeviceInfo> {
-        let default_name = self.host
-            .default_input_device()
-            .and_then(|d| d.name().ok());
+        let default_name = self.host.default_input_device().and_then(|d| d.name().ok());
 
         let mut devices = Vec::new();
 
@@ -69,7 +70,8 @@ impl AudioManager {
 
     /// Get list of output devices
     pub fn get_output_devices(&self) -> Vec<AudioDeviceInfo> {
-        let default_name = self.host
+        let default_name = self
+            .host
             .default_output_device()
             .and_then(|d| d.name().ok());
 
@@ -112,7 +114,8 @@ impl AudioManager {
             self.find_input_device(name)
                 .ok_or_else(|| format!("Device not found: {}", name))?
         } else {
-            self.host.default_input_device()
+            self.host
+                .default_input_device()
                 .ok_or_else(|| "No default input device".to_string())?
         };
 
@@ -120,7 +123,8 @@ impl AudioManager {
         self.current_input_device = Some(device_name);
 
         // Get config
-        let config = device.default_input_config()
+        let config = device
+            .default_input_config()
             .map_err(|e| format!("Failed to get config: {}", e))?;
 
         let sample_format = config.sample_format();
@@ -154,33 +158,34 @@ impl AudioManager {
                     None,
                 )
             }
-            cpal::SampleFormat::I16 => {
-                device.build_input_stream(
-                    &config,
-                    move |data: &[i16], _: &cpal::InputCallbackInfo| {
-                        let mut max = 0.0f32;
-                        for &sample in data {
-                            let abs = (sample as f32 / i16::MAX as f32).abs();
-                            if abs > max {
-                                max = abs;
-                            }
+            cpal::SampleFormat::I16 => device.build_input_stream(
+                &config,
+                move |data: &[i16], _: &cpal::InputCallbackInfo| {
+                    let mut max = 0.0f32;
+                    for &sample in data {
+                        let abs = (sample as f32 / i16::MAX as f32).abs();
+                        if abs > max {
+                            max = abs;
                         }
-                        let mut state = mic_level.lock();
-                        state.level = state.level * 0.7 + max * 0.3;
-                        if max > state.peak {
-                            state.peak = max;
-                        } else {
-                            state.peak *= 0.995;
-                        }
-                    },
-                    |err| eprintln!("Audio input error: {}", err),
-                    None,
-                )
-            }
+                    }
+                    let mut state = mic_level.lock();
+                    state.level = state.level * 0.7 + max * 0.3;
+                    if max > state.peak {
+                        state.peak = max;
+                    } else {
+                        state.peak *= 0.995;
+                    }
+                },
+                |err| eprintln!("Audio input error: {}", err),
+                None,
+            ),
             _ => return Err("Unsupported sample format".to_string()),
-        }.map_err(|e| format!("Failed to build stream: {}", e))?;
+        }
+        .map_err(|e| format!("Failed to build stream: {}", e))?;
 
-        stream.play().map_err(|e| format!("Failed to play stream: {}", e))?;
+        stream
+            .play()
+            .map_err(|e| format!("Failed to play stream: {}", e))?;
         self.input_stream = Some(stream);
 
         Ok(())

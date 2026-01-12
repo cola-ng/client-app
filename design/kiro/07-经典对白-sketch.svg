@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .movie-frame { fill: #1a1a2e; rx: 12; }
+      .subtitle-bar { fill: rgba(0,0,0,0.7); }
+      .dialogue-char-a { fill: #ddd6fe; stroke: #a5b4fc; stroke-width: 2; }
+      .dialogue-char-b { fill: #bfdbfe; stroke: #93c5fd; stroke-width: 2; }
+      .highlight { fill: #fef3c7; rx: 4; }
+    </style>
+    <linearGradient id="movieGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - 经典对白学习草图</text>
+  <text x="40" y="65" class="t p muted">电影/美剧经典场景 · AI 角色扮演 · 地道表达学习</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="830" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h3">← 返回场景中心</text>
+  <text x="700" y="125" class="t h2" text-anchor="middle">🎬 经典对白</text>
+
+  <!-- Movie Info Section -->
+  <rect x="60" y="160" width="900" height="200" class="movie-frame"/>
+  
+  <!-- Movie Poster Area -->
+  <rect x="80" y="180" width="140" height="160" fill="#374151" rx="8"/>
+  <text x="150" y="270" class="t h1 white" text-anchor="middle">🎥</text>
+  
+  <!-- Movie Details -->
+  <text x="250" y="210" class="t h2 white">《当幸福来敲门》</text>
+  <text x="250" y="235" class="t p" fill="#9ca3af">The Pursuit of Happyness (2006)</text>
+  <text x="250" y="265" class="t small" fill="#9ca3af">主演：Will Smith · 类型：励志/剧情</text>
+  
+  <rect x="250" y="285" width="80" height="24" fill="#374151" rx="12"/>
+  <text x="290" y="302" class="t small" fill="#9ca3af" text-anchor="middle">⭐ 8.5</text>
+  <rect x="340" y="285" width="100" height="24" fill="#374151" rx="12"/>
+  <text x="390" y="302" class="t small" fill="#9ca3af" text-anchor="middle">🎯 面试场景</text>
+  
+  <!-- Scene Selection -->
+  <text x="250" y="340" class="t small" fill="#9ca3af">选择场景：</text>
+  <rect x="330" y="325" width="120" height="28" class="chip-active"/>
+  <text x="390" y="344" class="t small white" text-anchor="middle">面试对话</text>
+  <rect x="460" y="325" width="120" height="28" class="chip"/>
+  <text x="520" y="344" class="t small" text-anchor="middle">父子对话</text>
+  <rect x="590" y="325" width="120" height="28" class="chip"/>
+  <text x="650" y="344" class="t small" text-anchor="middle">励志独白</text>
+
+  <!-- Video Player Placeholder -->
+  <rect x="720" y="180" width="220" height="160" fill="#0f172a" rx="8"/>
+  <text x="830" y="270" class="t h2 white" text-anchor="middle">▶</text>
+  <rect x="720" y="310" width="220" height="30" fill="url(#movieGrad)"/>
+  <text x="830" y="330" class="t small white" text-anchor="middle">00:45 / 02:30</text>
+
+  <!-- Dialogue Script Section -->
+  <rect x="60" y="380" width="900" height="350" class="card"/>
+  <text x="90" y="415" class="t h2">📜 对白脚本</text>
+  
+  <!-- Role Selection -->
+  <text x="400" y="415" class="t small muted">选择你的角色：</text>
+  <rect x="520" y="398" width="100" height="28" class="chip-active"/>
+  <text x="570" y="417" class="t small white" text-anchor="middle">Chris (求职者)</text>
+  <rect x="630" y="398" width="100" height="28" class="chip"/>
+  <text x="680" y="417" class="t small" text-anchor="middle">面试官</text>
+  
+  <!-- Dialogue Lines -->
+  <rect x="90" y="440" width="840" height="60" class="panel"/>
+  <circle cx="120" cy="470" r="16" class="dialogue-char-a"/>
+  <text x="120" y="475" class="t small" text-anchor="middle">👔</text>
+  <text x="150" y="460" class="t small accent">面试官</text>
+  <text x="150" y="480" class="t p">"What would you say if a man walked in here with no shirt,</text>
+  <text x="150" y="498" class="t p">and I hired him? What would you say?"</text>
+  
+  <rect x="90" y="510" width="840" height="60" class="panel" fill="#eef2ff"/>
+  <circle cx="120" cy="540" r="16" class="dialogue-char-b"/>
+  <text x="120" y="545" class="t small" text-anchor="middle">👤</text>
+  <text x="150" y="530" class="t small success">Chris (你的角色)</text>
+  <text x="150" y="550" class="t p">"He must have had on some really nice pants."</text>
+  <rect x="750" y="520" width="60" height="24" class="chip"/>
+  <text x="780" y="537" class="t small" text-anchor="middle">🎤 跟读</text>
+  <rect x="820" y="520" width="80" height="24" class="btn-primary"/>
+  <text x="860" y="537" class="t small white" text-anchor="middle">开始扮演</text>
+  
+  <rect x="90" y="580" width="840" height="60" class="panel"/>
+  <circle cx="120" cy="610" r="16" class="dialogue-char-a"/>
+  <text x="120" y="615" class="t small" text-anchor="middle">👔</text>
+  <text x="150" y="600" class="t small accent">面试官</text>
+  <text x="150" y="620" class="t p">"(laughs) That's a good answer. Chris, I'm going to be honest with you..."</text>
+  
+  <!-- Vocabulary Highlights -->
+  <rect x="90" y="660" width="840" height="60" class="panel"/>
+  <text x="110" y="685" class="t small muted">💡 本段重点表达：</text>
+  <rect x="220" y="668" width="120" height="24" class="highlight"/>
+  <text x="280" y="685" class="t small" text-anchor="middle">What would you say</text>
+  <rect x="350" y="668" width="100" height="24" class="highlight"/>
+  <text x="400" y="685" class="t small" text-anchor="middle">must have had</text>
+  <rect x="460" y="668" width="140" height="24" class="highlight"/>
+  <text x="530" y="685" class="t small" text-anchor="middle">be honest with you</text>
+
+  <!-- Right Panel: Learning Tools -->
+  <rect x="980" y="160" width="360" height="200" class="card"/>
+  <text x="1010" y="195" class="t h3">🎭 角色扮演模式</text>
+  
+  <rect x="1010" y="215" width="310" height="80" class="panel"/>
+  <text x="1030" y="245" class="t p">AI 将扮演面试官，你来扮演 Chris</text>
+  <text x="1030" y="270" class="t small muted">AI 会根据你的回答即兴发挥，创造真实对话体验</text>
+  
+  <rect x="1010" y="310" width="310" height="40" class="btn-primary"/>
+  <text x="1165" y="335" class="t p white" text-anchor="middle">🎬 开始角色扮演</text>
+
+  <!-- Expression Learning -->
+  <rect x="980" y="380" width="360" height="200" class="card"/>
+  <text x="1010" y="415" class="t h3">📖 表达学习</text>
+  
+  <rect x="1010" y="435" width="310" height="60" class="panel"/>
+  <text x="1030" y="458" class="t p accent">"What would you say if..."</text>
+  <text x="1030" y="480" class="t small muted">假设性问句，用于询问对方的看法</text>
+  
+  <rect x="1010" y="505" width="310" height="60" class="panel"/>
+  <text x="1030" y="528" class="t p accent">"He must have had..."</text>
+  <text x="1030" y="550" class="t small muted">must have + 过去分词，表示对过去的推测</text>
+
+  <!-- Cultural Notes -->
+  <rect x="980" y="600" width="360" height="130" class="card"/>
+  <text x="1010" y="635" class="t h3">🌍 文化背景</text>
+  
+  <rect x="1010" y="655" width="310" height="60" class="panel"/>
+  <text x="1030" y="680" class="t small">这段对话展示了美国面试中的幽默应对技巧。</text>
+  <text x="1030" y="700" class="t small">Chris 用机智的回答化解了尴尬局面，展现了</text>
+  <text x="1030" y="720" class="t small">他的应变能力和积极态度。</text>
+
+  <!-- Practice Options -->
+  <rect x="60" y="750" width="900" height="70" class="panel"/>
+  <text x="90" y="790" class="t h3">练习选项：</text>
+  
+  <rect x="200" y="768" width="120" height="36" class="chip"/>
+  <text x="260" y="791" class="t small" text-anchor="middle">🎤 全文跟读</text>
+  
+  <rect x="340" y="768" width="140" height="36" class="chip"/>
+  <text x="410" y="791" class="t small" text-anchor="middle">🎭 角色互换</text>
+  
+  <rect x="500" y="768" width="140" height="36" class="chip"/>
+  <text x="570" y="791" class="t small" text-anchor="middle">📝 表达替换练习</text>
+  
+  <rect x="660" y="768" width="140" height="36" class="chip"/>
+  <text x="730" y="791" class="t small" text-anchor="middle">💬 自由发挥</text>
+  
+  <rect x="820" y="768" width="120" height="36" class="btn-primary"/>
+  <text x="880" y="791" class="t small white" text-anchor="middle">收藏场景 ⭐</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="940" class="t small muted">设计要点：电影场景沉浸感 · 角色选择扮演 · 重点表达高亮 · 文化背景补充 · 多种练习模式</text>
+</svg>

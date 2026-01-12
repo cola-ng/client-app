@@ -2,7 +2,10 @@
 // Manages conversation context including topic, without triggering AI responses
 // Ensures AI only responds when user actually speaks
 
-use dora_node_api::{DoraNode, Event, arrow::array::{Array, StringArray}};
+use dora_node_api::{
+    arrow::array::{Array, StringArray},
+    DoraNode, Event,
+};
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -39,14 +42,14 @@ struct SessionState {
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
-    
+
     let state = Arc::new(Mutex::new(SessionState {
         current_topic: None,
         user_inputs_in_session: 0,
     }));
 
     let (mut node, mut events) = DoraNode::init_from_env()?;
-    
+
     log::info!("Session Context Manager started");
 
     while let Some(event) = events.recv() {
@@ -65,11 +68,11 @@ async fn main() -> Result<()> {
                                         topic_info.session_id,
                                         topic_info.topic
                                     );
-                                    
+
                                     let mut state = state.lock().unwrap();
                                     state.current_topic = Some(topic_info);
                                     state.user_inputs_in_session = 0;
-                                    
+
                                     // Send status but no chat input
                                     let status = json!({
                                         "status": "topic_ready",
@@ -77,7 +80,11 @@ async fn main() -> Result<()> {
                                     });
                                     let status_str = serde_json::to_string(&status)?;
                                     let status_array = StringArray::from(vec![status_str.as_str()]);
-                                    node.send_output("status".to_string().into(), metadata.parameters.clone(), status_array)?;
+                                    node.send_output(
+                                        "status".to_string().into(),
+                                        metadata.parameters.clone(),
+                                        status_array,
+                                    )?;
                                 }
                                 Err(e) => {
                                     log::error!("Failed to parse topic: {}", e);
@@ -94,15 +101,15 @@ async fn main() -> Result<()> {
                                         log::debug!("Ignoring empty user input");
                                         continue;
                                     }
-                                    
+
                                     log::info!("User input received: {}", user_input.text);
-                                    
+
                                     let mut state = state.lock().unwrap();
                                     state.user_inputs_in_session += 1;
                                     let is_first = state.user_inputs_in_session == 1;
-                                    
+
                                     // Get current session context
-                                    let (session_id, topic, target_words) = 
+                                    let (session_id, topic, target_words) =
                                         if let Some(ref topic_info) = state.current_topic {
                                             (
                                                 topic_info.session_id.clone(),
@@ -111,13 +118,14 @@ async fn main() -> Result<()> {
                                             )
                                         } else {
                                             (
-                                                user_input.session_id
+                                                user_input
+                                                    .session_id
                                                     .unwrap_or_else(|| "default".to_string()),
                                                 None,
                                                 None,
                                             )
                                         };
-                                    
+
                                     // Create contextual input
                                     let contextual = ContextualInput {
                                         user_text: user_input.text,
@@ -126,18 +134,22 @@ async fn main() -> Result<()> {
                                         target_words: target_words.clone(),
                                         is_first_in_session: is_first,
                                     };
-                                    
+
                                     // Output to AI
                                     let output_str = serde_json::to_string(&contextual)?;
                                     let output_array = StringArray::from(vec![output_str.as_str()]);
-                                    node.send_output("user_text".to_string().into(), metadata.parameters.clone(), output_array)?;
-                                    
+                                    node.send_output(
+                                        "user_text".to_string().into(),
+                                        metadata.parameters.clone(),
+                                        output_array,
+                                    )?;
+
                                     log::info!(
                                         "Forwarded user input to AI (session: {}, first: {})",
                                         session_id,
                                         is_first
                                     );
-                                    
+
                                     // If this is the first input, include topic in log
                                     if is_first && topic.is_some() {
                                         log::info!("Topic for this session: {:?}", topic);
@@ -177,9 +189,9 @@ async fn main() -> Result<()> {
 
 /// Extract bytes from ArrowData
 fn extract_bytes(data: &dora_node_api::ArrowData) -> Option<Vec<u8>> {
-    use dora_node_api::arrow::datatypes::DataType;
     use dora_node_api::arrow::array::UInt8Array;
-    
+    use dora_node_api::arrow::datatypes::DataType;
+
     let array = &data.0;
     match array.data_type() {
         DataType::UInt8 => {

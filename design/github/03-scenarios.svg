@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900">
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#f8fafc"/>
+  
+  <!-- Left Sidebar (simplified) -->
+  <rect x="0" y="0" width="240" height="900" fill="#1e293b"/>
+  <circle cx="120" cy="40" r="20" fill="#3b82f6"/>
+  <text x="120" y="80" font-size="14" fill="#cbd5e1" text-anchor="middle" font-weight="600">FLUENT AI</text>
+  
+  <!-- Nav items (Scenarios active) -->
+  <text x="60" y="147" font-size="15" fill="#94a3b8" font-weight="400">🏠 Dashboard</text>
+  <text x="60" y="191" font-size="15" fill="#94a3b8" font-weight="400">💬 AI Tutor</text>
+  <rect x="16" y="204" width="208" height="44" rx="8" fill="#3b82f6"/>
+  <text x="60" y="231" font-size="15" fill="#ffffff" font-weight="500">🎭 Scenarios</text>
+  
+  <!-- Main Content -->
+  <rect x="240" y="0" width="1160" height="900" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <text x="280" y="45" font-size="24" fill="#1e293b" font-weight="700">Immersive Scenarios</text>
+  <text x="280" y="70" font-size="14" fill="#64748b">Practice real-world conversations with AI characters</text>
+  
+  <!-- Filter Tabs -->
+  <rect x="280" y="100" width="100" height="36" rx="18" fill="#3b82f6"/>
+  <text x="330" y="123" font-size="13" fill="#ffffff" text-anchor="middle" font-weight="600">All</text>
+  
+  <rect x="395" y="100" width="100" height="36" rx="18" fill="#f1f5f9"/>
+  <text x="445" y="123" font-size="13" fill="#64748b" text-anchor="middle" font-weight="500">Travel</text>
+  
+  <rect x="510" y="100" width="100" height="36" rx="18" fill="#f1f5f9"/>
+  <text x="560" y="123" font-size="13" fill="#64748b" text-anchor="middle" font-weight="500">Work</text>
+  
+  <rect x="625" y="100" width="100" height="36" rx="18" fill="#f1f5f9"/>
+  <text x="675" y="123" font-size="13" fill="#64748b" text-anchor="middle" font-weight="500">Social</text>
+  
+  <rect x="740" y="100" width="100" height="36" rx="18" fill="#f1f5f9"/>
+  <text x="790" y="123" font-size="13" fill="#64748b" text-anchor="middle" font-weight="500">Movies</text>
+  
+  <!-- Scenario Cards Grid -->
+  
+  <!-- Card 1: Airport -->
+  <g id="scenario1">
+    <rect x="280" y="170" width="340" height="200" rx="16" fill="url(#airportGradient)" stroke="#cbd5e1" stroke-width="2"/>
+    <defs>
+      <linearGradient id="airportGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <!-- Emoji icon -->
+    <text x="310" y="220" font-size="48">✈️</text>
+    
+    <!-- Title and description -->
+    <text x="310" y="265" font-size="20" fill="#ffffff" font-weight="700">Airport Check-in</text>
+    <text x="310" y="290" font-size="13" fill="#dbeafe">Practice checking in for flights,</text>
+    <text x="310" y="308" font-size="13" fill="#dbeafe">handling luggage, and boarding</text>
+    
+    <!-- Metadata -->
+    <rect x="310" y="325" width="80" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="350" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Medium</text>
+    
+    <rect x="400" y="325" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="435" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 10 min</text>
+    
+    <rect x="480" y="325" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="535" y="342" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ American</text>
+  </g>
+  
+  <!-- Card 2: Restaurant -->
+  <g id="scenario2">
+    <rect x="640" y="170" width="340" height="200" rx="16" fill="url(#restaurantGradient)" stroke="#cbd5e1" stroke-width="2"/>
+    <defs>
+      <linearGradient id="restaurantGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <text x="670" y="220" font-size="48">🍽️</text>
+    <text x="670" y="265" font-size="20" fill="#ffffff" font-weight="700">Restaurant Dining</text>
+    <text x="670" y="290" font-size="13" fill="#fed7aa">Order food, make complaints,</text>
+    <text x="670" y="308" font-size="13" fill="#fed7aa">and handle the bill</text>
+    
+    <rect x="670" y="325" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="705" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Easy</text>
+    
+    <rect x="750" y="325" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="785" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 8 min</text>
+    
+    <rect x="830" y="325" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="885" y="342" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ British</text>
+  </g>
+  
+  <!-- Card 3: Hotel -->
+  <g id="scenario3">
+    <rect x="1000" y="170" width="340" height="200" rx="16" fill="url(#hotelGradient)" stroke="#cbd5e1" stroke-width="2"/>
+    <defs>
+      <linearGradient id="hotelGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <text x="1030" y="220" font-size="48">🏨</text>
+    <text x="1030" y="265" font-size="20" fill="#ffffff" font-weight="700">Hotel Booking</text>
+    <text x="1030" y="290" font-size="13" fill="#e9d5ff">Reserve rooms, check amenities,</text>
+    <text x="1030" y="308" font-size="13" fill="#e9d5ff">and handle issues</text>
+    
+    <rect x="1030" y="325" width="80" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1070" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Medium</text>
+    
+    <rect x="1120" y="325" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1155" y="342" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 12 min</text>
+    
+    <rect x="1200" y="325" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1255" y="342" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ Australian</text>
+  </g>
+  
+  <!-- Card 4: Job Interview -->
+  <g id="scenario4">
+    <rect x="280" y="400" width="340" height="200" rx="16" fill="url(#jobGradient)" stroke="#cbd5e1" stroke-width="2"/>
+    <defs>
+      <linearGradient id="jobGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <text x="310" y="450" font-size="48">💼</text>
+    <text x="310" y="495" font-size="20" fill="#ffffff" font-weight="700">Job Interview</text>
+    <text x="310" y="520" font-size="13" fill="#99f6e4">Answer common questions,</text>
+    <text x="310" y="538" font-size="13" fill="#99f6e4">discuss experience and goals</text>
+    
+    <rect x="310" y="555" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="345" y="572" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Hard</text>
+    
+    <rect x="390" y="555" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="425" y="572" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 15 min</text>
+    
+    <rect x="470" y="555" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="525" y="572" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ American</text>
+  </g>
+  
+  <!-- Card 5: Shopping -->
+  <g id="scenario5">
+    <rect x="640" y="400" width="340" height="200" rx="16" fill="url(#shoppingGradient)" stroke="#cbd5e1" stroke-width="2"/>
+    <defs>
+      <linearGradient id="shoppingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#db2777;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <text x="670" y="450" font-size="48">🛍️</text>
+    <text x="670" y="495" font-size="20" fill="#ffffff" font-weight="700">Shopping Mall</text>
+    <text x="670" y="520" font-size="13" fill="#fbcfe8">Try on clothes, ask for help,</text>
+    <text x="670" y="538" font-size="13" fill="#fbcfe8">and negotiate prices</text>
+    
+    <rect x="670" y="555" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="705" y="572" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Easy</text>
+    
+    <rect x="750" y="555" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="785" y="572" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 10 min</text>
+    
+    <rect x="830" y="555" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="885" y="572" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ British</text>
+  </g>
+  
+  <!-- Card 6: Movie Scene (Highlighted NEW) -->
+  <g id="scenario6">
+    <rect x="1000" y="400" width="340" height="200" rx="16" fill="url(#movieGradient)" stroke="#fbbf24" stroke-width="3"/>
+    <defs>
+      <linearGradient id="movieGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <!-- NEW Badge -->
+    <rect x="1020" y="415" width="60" height="24" rx="12" fill="#dc2626"/>
+    <text x="1050" y="432" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700">NEW</text>
+    
+    <text x="1030" y="465" font-size="48">🎬</text>
+    <text x="1030" y="510" font-size="20" fill="#ffffff" font-weight="700">Movie: The Terminal</text>
+    <text x="1030" y="535" font-size="13" fill="#fef3c7">Recreate famous airport scenes</text>
+    <text x="1030" y="553" font-size="13" fill="#fef3c7">from classic films</text>
+    
+    <rect x="1030" y="570" width="80" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1070" y="587" font-size="11" fill="#ffffff" text-anchor="middle">⭐ Medium</text>
+    
+    <rect x="1120" y="570" width="70" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1155" y="587" font-size="11" fill="#ffffff" text-anchor="middle">⏱️ 20 min</text>
+    
+    <rect x="1200" y="570" width="110" height="24" rx="12" fill="rgba(255,255,255,0.2)"/>
+    <text x="1255" y="587" font-size="11" fill="#ffffff" text-anchor="middle">🗣️ Mixed</text>
+  </g>
+  
+  <!-- More Scenarios Button -->
+  <rect x="280" y="630" width="1060" height="60" rx="12" fill="#f8fafc" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="810" y="665" font-size="16" fill="#64748b" text-anchor="middle" font-weight="600">+ Add Custom Scenario or Upload Movie Clip</text>
+  
+  <!-- Bottom Info Panel -->
+  <rect x="280" y="720" width="1060" height="140" rx="12" fill="#eff6ff"/>
+  <text x="310" y="755" font-size="18" fill="#1e293b" font-weight="700">💡 Pro Tip: Immersive Learning</text>
+  <text x="310" y="785" font-size="14" fill="#475569">Each scenario adapts to your skill level and tracks specific vocabulary.</text>
+  <text x="310" y="810" font-size="14" fill="#475569">Your mistakes are automatically converted to review cards for later practice.</text>
+  <text x="310" y="835" font-size="14" fill="#475569">Try different accents to improve your listening comprehension!</text>
+</svg>

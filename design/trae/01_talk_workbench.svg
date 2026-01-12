@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070A12"/>
+      <stop offset="1" stop-color="#0B1022"/>
+    </linearGradient>
+    <linearGradient id="aurora" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366F1" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#A855F7" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0.16"/>
+    </linearGradient>
+    <filter id="blur60" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.55"/>
+    </filter>
+    <style>
+      .t { font-family: Segoe UI, Arial, sans-serif; fill: #E5E7EB; }
+      .muted { fill: #94A3B8; }
+      .muted2 { fill: #64748B; }
+      .h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.2px; }
+      .h2 { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
+      .p { font-size: 12px; }
+      .p2 { font-size: 11px; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; fill: #9CA3AF; }
+      .chip { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.14); stroke-width: 1; }
+      .panel { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .panel2 { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1; }
+      .stroke { stroke: rgba(255,255,255,0.12); stroke-width: 1; }
+      .accent { fill: #A5B4FC; }
+      .good { fill: #34D399; }
+      .warn { fill: #FBBF24; }
+      .bad { fill: #FB7185; }
+      .btn { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.12); stroke-width: 1; }
+      .btn2 { fill: rgba(99,102,241,0.22); stroke: rgba(99,102,241,0.45); stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="820" fill="url(#bg)"/>
+  <g opacity="0.85" filter="url(#blur60)">
+    <ellipse cx="280" cy="160" rx="260" ry="160" fill="#6366F1" opacity="0.30"/>
+    <ellipse cx="1050" cy="220" rx="340" ry="220" fill="#A855F7" opacity="0.18"/>
+    <ellipse cx="980" cy="690" rx="380" ry="240" fill="#22C55E" opacity="0.10"/>
+  </g>
+  <rect x="0" y="0" width="1400" height="820" fill="url(#aurora)" opacity="0.55"/>
+
+  <text x="48" y="56" class="t h1">FluentFlow — Talk Workbench (桌面三栏不改 Header/Body 结构)</text>
+  <text x="48" y="80" class="t p muted">Talk 为主线：AI 主动引导 + 无打断纠错 → 成卡 → 自动复习计划（带入下一次对话）</text>
+
+  <g filter="url(#shadow)">
+    <rect x="40" y="110" width="1320" height="670" rx="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)"/>
+  </g>
+
+  <g>
+    <rect x="40" y="110" width="1320" height="72" rx="18" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+    <circle cx="78" cy="146" r="16" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)"/>
+    <rect x="105" y="130" width="34" height="34" rx="10" fill="rgba(99,102,241,0.25)" stroke="rgba(99,102,241,0.45)"/>
+    <text x="152" y="152" class="t h1" font-size="16px">FluentFlow</text>
+
+    <rect x="300" y="130" width="380" height="36" rx="12" class="panel"/>
+    <text x="318" y="152" class="t p muted2">Search: scenarios / clips / mistakes / cards…</text>
+
+    <rect x="700" y="130" width="96" height="36" rx="12" class="btn2"/>
+    <text x="724" y="152" class="t p">Start Talk</text>
+    <rect x="804" y="130" width="112" height="36" rx="12" class="btn"/>
+    <text x="826" y="152" class="t p muted">Quick Review</text>
+    <rect x="924" y="130" width="112" height="36" rx="12" class="btn"/>
+    <text x="944" y="152" class="t p muted">Shadowing</text>
+
+    <rect x="1138" y="132" width="120" height="32" rx="16" fill="rgba(52,211,153,0.12)" stroke="rgba(52,211,153,0.35)"/>
+    <circle cx="1154" cy="148" r="4" class="good"/>
+    <text x="1166" y="152" class="t p2">Streak 12</text>
+    <circle cx="1286" cy="146" r="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)"/>
+    <circle cx="1326" cy="146" r="14" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)"/>
+  </g>
+
+  <g>
+    <rect x="58" y="200" width="330" height="560" rx="16" class="panel"/>
+    <text x="80" y="230" class="t h2 muted">Scenes & Library</text>
+
+    <rect x="78" y="250" width="290" height="92" rx="14" class="panel2"/>
+    <text x="96" y="276" class="t p">Today’s Scene</text>
+    <text x="96" y="300" class="t p2 muted">Hotel check-in • 4 min • Accent: London</text>
+    <rect x="276" y="272" width="72" height="28" rx="14" class="btn2"/>
+    <text x="292" y="291" class="t p2">Resume</text>
+
+    <rect x="78" y="356" width="290" height="148" rx="14" class="panel2"/>
+    <text x="96" y="382" class="t p muted">Movie Clips (roleplay)</text>
+    <rect x="96" y="398" width="260" height="28" rx="10" class="chip"/>
+    <text x="110" y="417" class="t p2">The Godfather — “You come to me…”</text>
+    <rect x="96" y="432" width="260" height="28" rx="10" class="chip"/>
+    <text x="110" y="451" class="t p2">Notting Hill — “I’m just a girl…”</text>
+    <rect x="96" y="466" width="260" height="28" rx="10" class="chip"/>
+    <text x="110" y="485" class="t p2">The Intern — “I’m happy to meet you.”</text>
+
+    <rect x="78" y="520" width="290" height="220" rx="14" class="panel2"/>
+    <text x="96" y="546" class="t p muted">Assets</text>
+    <text x="96" y="570" class="t p2 muted2">New cards today</text>
+    <rect x="96" y="584" width="260" height="44" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="110" y="608" class="t p2">Phrase card</text>
+    <text x="220" y="608" class="t p2 muted">make a reservation</text>
+    <rect x="96" y="636" width="260" height="44" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="110" y="660" class="t p2">Correction card</text>
+    <text x="220" y="660" class="t p2 muted">I want to book a room</text>
+    <rect x="96" y="688" width="260" height="44" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="110" y="712" class="t p2">Pronunciation</text>
+    <text x="220" y="712" class="t p2 muted">/ˌrez.əˈveɪ.ʃən/</text>
+  </g>
+
+  <g>
+    <rect x="408" y="200" width="604" height="560" rx="16" class="panel"/>
+    <text x="430" y="230" class="t h2 muted">Talk</text>
+
+    <rect x="430" y="250" width="560" height="70" rx="14" class="panel2"/>
+    <text x="450" y="276" class="t p">AI Coach: “Let’s check in. You’re the guest, I’m the receptionist.”</text>
+    <text x="450" y="300" class="t p2 muted">Goal: ask for availability + make a reservation • Difficulty: easy</text>
+    <rect x="846" y="270" width="128" height="28" rx="14" class="chip"/>
+    <text x="862" y="289" class="t p2">Accent • London</text>
+
+    <rect x="430" y="336" width="560" height="292" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="450" y="368" class="t p2 muted">You</text>
+    <rect x="450" y="378" width="420" height="46" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="466" y="406" class="t p2">“Hi, I want book a room for two nights.”</text>
+    <text x="450" y="452" class="t p2 muted">Coach</text>
+    <rect x="450" y="462" width="520" height="74" rx="14" fill="rgba(99,102,241,0.10)" stroke="rgba(99,102,241,0.28)"/>
+    <text x="466" y="490" class="t p2">Nice! Small fix: “I want <tspan class="accent">to</tspan> book a room…”</text>
+    <text x="466" y="512" class="t p2 muted">Next: “Would you have any availability?”</text>
+    <rect x="450" y="548" width="320" height="40" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.10)"/>
+    <text x="466" y="573" class="t p2 muted">Floating card saved: “to book a room”</text>
+    <rect x="780" y="548" width="190" height="40" rx="14" fill="rgba(34,197,94,0.12)" stroke="rgba(34,197,94,0.30)"/>
+    <text x="796" y="573" class="t p2">15s micro-drill</text>
+
+    <rect x="430" y="642" width="560" height="100" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.10)"/>
+    <rect x="450" y="662" width="414" height="44" rx="14" class="chip"/>
+    <text x="466" y="689" class="t p2 muted">Speak or type… (press Space to talk)</text>
+    <rect x="872" y="662" width="118" height="44" rx="14" class="btn2"/>
+    <text x="902" y="689" class="t p2">Send</text>
+    <text x="450" y="726" class="mono">Auto-capture: mistakes • better phrasing • pronunciation • confidence</text>
+  </g>
+
+  <g>
+    <rect x="1032" y="200" width="310" height="560" rx="16" class="panel"/>
+    <text x="1054" y="230" class="t h2 muted">Coach Panel</text>
+
+    <rect x="1052" y="250" width="270" height="160" rx="14" class="panel2"/>
+    <text x="1070" y="276" class="t p">Live Notes</text>
+    <circle cx="1072" cy="306" r="5" class="warn"/>
+    <text x="1086" y="310" class="t p2 muted">Grammar</text>
+    <text x="1086" y="332" class="t p2 muted2">want + to + verb</text>
+    <circle cx="1072" cy="356" r="5" class="bad"/>
+    <text x="1086" y="360" class="t p2 muted">Pronunciation</text>
+    <text x="1086" y="382" class="t p2 muted2">reservation /ˌrez…/ stress on “-va-”</text>
+
+    <rect x="1052" y="420" width="270" height="180" rx="14" class="panel2"/>
+    <text x="1070" y="446" class="t p">Next Review Plan</text>
+    <rect x="1070" y="464" width="234" height="28" rx="10" class="chip"/>
+    <text x="1084" y="483" class="t p2">Due today: 18 cards</text>
+    <rect x="1070" y="500" width="234" height="28" rx="10" class="chip"/>
+    <text x="1084" y="519" class="t p2">Weak spot: articles (a/the)</text>
+    <rect x="1070" y="536" width="234" height="28" rx="10" class="chip"/>
+    <text x="1084" y="555" class="t p2">3-min shadowing: check-in clip</text>
+    <rect x="1070" y="566" width="110" height="28" rx="14" class="btn2"/>
+    <text x="1094" y="585" class="t p2">Start</text>
+
+    <rect x="1052" y="610" width="270" height="130" rx="14" class="panel2"/>
+    <text x="1070" y="636" class="t p">Confidence</text>
+    <rect x="1070" y="654" width="234" height="10" rx="5" fill="rgba(255,255,255,0.10)"/>
+    <rect x="1070" y="654" width="162" height="10" rx="5" fill="rgba(99,102,241,0.55)"/>
+    <text x="1070" y="684" class="t p2 muted">Trend: up • You spoke 1m 42s • 3 brave attempts</text>
+  </g>
+</svg>
+

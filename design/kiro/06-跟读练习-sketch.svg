@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .error { fill: #ef4444; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-record { fill: #ef4444; stroke: none; rx: 50; }
+      .btn-play { fill: #10b981; stroke: none; rx: 50; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .waveform { fill: none; stroke: #6366f1; stroke-width: 2; }
+      .waveform-user { fill: none; stroke: #10b981; stroke-width: 2; }
+      .score-ring { fill: none; stroke-width: 8; }
+      .score-bg { stroke: #e5e7eb; }
+      .score-fill { stroke: #10b981; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="40" y="40" class="t h1">SpeakFlow - 跟读练习草图</text>
+  <text x="40" y="65" class="t p muted">发音纠正 · 音波对比 · AI 评分 · 针对性训练</text>
+
+  <!-- Main App Frame -->
+  <rect x="40" y="90" width="1320" height="830" class="card" fill="#ffffff"/>
+  
+  <!-- Header -->
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h3">← 返回</text>
+  <text x="700" y="125" class="t h2" text-anchor="middle">🎤 跟读练习</text>
+  
+  <!-- Progress -->
+  <text x="1200" y="125" class="t small muted">3/10 句</text>
+  <rect x="1260" y="112" width="80" height="6" fill="#e5e7eb" rx="3"/>
+  <rect x="1260" y="112" width="24" height="6" fill="#6366f1" rx="3"/>
+
+  <!-- Main Practice Area -->
+  <rect x="60" y="160" width="900" height="650" fill="#fafbfc" rx="12"/>
+  
+  <!-- Current Sentence -->
+  <rect x="90" y="190" width="840" height="120" class="card"/>
+  <text x="510" y="230" class="t small muted" text-anchor="middle">跟读这句话：</text>
+  <text x="510" y="270" class="t h1" text-anchor="middle">"I'd like to make a reservation."</text>
+  <text x="510" y="300" class="t p muted" text-anchor="middle">/aɪd laɪk tə meɪk ə ˌrez.əˈveɪ.ʃən/</text>
+
+  <!-- Original Audio Waveform -->
+  <rect x="90" y="330" width="840" height="100" class="panel"/>
+  <text x="110" y="355" class="t small muted">🔊 原声</text>
+  <rect x="180" y="345" width="60" height="24" class="chip"/>
+  <text x="210" y="362" class="t small" text-anchor="middle">美式</text>
+  <rect x="250" y="345" width="60" height="24" class="chip"/>
+  <text x="280" y="362" class="t small" text-anchor="middle">英式</text>
+  <rect x="320" y="345" width="60" height="24" class="chip"/>
+  <text x="350" y="362" class="t small" text-anchor="middle">慢速</text>
+  
+  <!-- Waveform visualization -->
+  <path d="M110 400 Q130 380 150 400 Q170 420 190 400 Q210 380 230 400 Q250 420 270 400 Q290 380 310 400 Q330 420 350 400 Q370 380 390 400 Q410 420 430 400 Q450 380 470 400 Q490 420 510 400 Q530 380 550 400 Q570 420 590 400 Q610 380 630 400 Q650 420 670 400 Q690 380 710 400 Q730 420 750 400 Q770 380 790 400 Q810 420 830 400 Q850 380 870 400 Q890 420 900 400" class="waveform"/>
+  
+  <circle cx="880" cy="380" r="18" class="btn-play"/>
+  <text x="880" y="386" class="t small white" text-anchor="middle">▶</text>
+
+  <!-- User Recording Area -->
+  <rect x="90" y="450" width="840" height="140" class="panel"/>
+  <text x="110" y="480" class="t small muted">🎙️ 你的录音</text>
+  
+  <!-- User Waveform (after recording) -->
+  <path d="M110 530 Q130 515 150 530 Q170 545 190 530 Q210 515 230 530 Q250 545 270 530 Q290 515 310 530 Q330 545 350 530 Q370 515 390 530 Q410 545 430 530 Q450 515 470 530 Q490 545 510 530 Q530 515 550 530 Q570 545 590 530 Q610 515 630 530 Q650 545 670 530 Q690 515 710 530 Q730 545 750 530 Q770 515 790 530 Q810 545 830 530 Q850 515 870 530 Q890 545 900 530" class="waveform-user"/>
+  
+  <!-- Recording Button -->
+  <circle cx="510" y="560" r="30" class="btn-record"/>
+  <text x="510" y="566" class="t p white" text-anchor="middle">●</text>
+  <text x="510" y="600" class="t small muted" text-anchor="middle">按住录音</text>
+
+  <!-- Pronunciation Feedback -->
+  <rect x="90" y="610" width="840" height="180" class="card"/>
+  <text x="120" y="645" class="t h3">📊 发音分析</text>
+  
+  <!-- Word by Word Analysis -->
+  <rect x="120" y="665" width="780" height="50" class="panel"/>
+  <text x="150" y="695" class="t p success">I'd</text>
+  <text x="200" y="695" class="t p success">like</text>
+  <text x="260" y="695" class="t p success">to</text>
+  <text x="310" y="695" class="t p success">make</text>
+  <text x="380" y="695" class="t p success">a</text>
+  <text x="420" y="695" class="t p warning">reservation</text>
+  <text x="550" y="695" class="t small warning">← 重音位置需调整</text>
+  
+  <!-- Detailed Feedback -->
+  <rect x="120" y="725" width="380" height="50" fill="#fef3c7" rx="8"/>
+  <text x="140" y="750" class="t small warning">💡 "reservation" 的重音在第三音节：</text>
+  <text x="140" y="770" class="t small">re-ser-VA-tion，不是 RE-ser-va-tion</text>
+  
+  <rect x="520" y="725" width="380" height="50" class="panel"/>
+  <text x="540" y="755" class="t small">🎯 建议：多听几遍原声，注意 /veɪ/ 的发音</text>
+
+  <!-- Right Panel: Score & Stats -->
+  <rect x="980" y="160" width="360" height="300" class="card"/>
+  
+  <!-- Score Circle -->
+  <text x="1160" y="200" class="t h3" text-anchor="middle">本次得分</text>
+  <circle cx="1160" cy="290" r="60" class="score-ring score-bg"/>
+  <circle cx="1160" cy="290" r="60" class="score-ring score-fill" stroke-dasharray="320 377" transform="rotate(-90 1160 290)"/>
+  <text x="1160" y="300" class="t h1 success" text-anchor="middle">85</text>
+  <text x="1160" y="325" class="t small muted" text-anchor="middle">/ 100</text>
+  
+  <!-- Score Breakdown -->
+  <rect x="1010" y="380" width="300" height="60" class="panel"/>
+  <text x="1030" y="405" class="t small">准确度</text>
+  <rect x="1100" y="395" width="150" height="8" fill="#e5e7eb" rx="4"/>
+  <rect x="1100" y="395" width="135" height="8" fill="#10b981" rx="4"/>
+  <text x="1260" y="405" class="t small success">90</text>
+  <text x="1030" y="430" class="t small">流利度</text>
+  <rect x="1100" y="420" width="150" height="8" fill="#e5e7eb" rx="4"/>
+  <rect x="1100" y="420" width="120" height="8" fill="#f59e0b" rx="4"/>
+  <text x="1260" y="430" class="t small warning">80</text>
+
+  <!-- Practice History -->
+  <rect x="980" y="480" width="360" height="180" class="card"/>
+  <text x="1010" y="515" class="t h3">📈 练习记录</text>
+  
+  <rect x="1010" y="535" width="300" height="40" class="panel"/>
+  <text x="1030" y="560" class="t small">今日已练习</text>
+  <text x="1250" y="560" class="t p accent">12 句</text>
+  
+  <rect x="1010" y="585" width="300" height="40" class="panel"/>
+  <text x="1030" y="610" class="t small">平均得分</text>
+  <text x="1250" y="610" class="t p success">82 分</text>
+  
+  <rect x="1010" y="635" width="300" height="20" class="panel"/>
+  <text x="1030" y="650" class="t small muted">进步趋势：↑ 比昨天提高 5%</text>
+
+  <!-- Difficulty Settings -->
+  <rect x="980" y="680" width="360" height="130" class="card"/>
+  <text x="1010" y="715" class="t h3">⚙️ 练习设置</text>
+  
+  <text x="1010" y="745" class="t small">难度：</text>
+  <rect x="1070" y="730" width="60" height="26" class="chip"/>
+  <text x="1100" y="748" class="t small" text-anchor="middle">入门</text>
+  <rect x="1140" y="730" width="60" height="26" class="chip-active"/>
+  <text x="1170" y="748" class="t small white" text-anchor="middle">初级</text>
+  <rect x="1210" y="730" width="60" height="26" class="chip"/>
+  <text x="1240" y="748" class="t small" text-anchor="middle">中级</text>
+  
+  <text x="1010" y="785" class="t small">专项训练：</text>
+  <rect x="1100" y="770" width="80" height="26" class="chip"/>
+  <text x="1140" y="788" class="t small" text-anchor="middle">th 发音</text>
+  <rect x="1190" y="770" width="80" height="26" class="chip"/>
+  <text x="1230" y="788" class="t small" text-anchor="middle">r/l 区分</text>
+
+  <!-- Navigation Buttons -->
+  <rect x="90" y="810" width="120" height="45" class="btn-secondary"/>
+  <text x="150" y="838" class="t p" text-anchor="middle">← 上一句</text>
+  
+  <rect x="230" y="810" width="120" height="45" class="btn-secondary"/>
+  <text x="290" y="838" class="t p" text-anchor="middle">再来一次</text>
+  
+  <rect x="780" y="810" width="150" height="45" class="btn-primary"/>
+  <text x="855" y="838" class="t p white" text-anchor="middle">下一句 →</text>
+
+  <!-- Design Notes -->
+  <text x="40" y="940" class="t small muted">设计要点：音波可视化对比 · 逐词发音分析 · 实时评分反馈 · 专项训练入口 · 进步趋势追踪</text>
+</svg>
