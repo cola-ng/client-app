@@ -1,11 +1,12 @@
-
-
 pub mod about_panel;
 pub mod add_provider_modal;
 pub mod audio_panel;
 pub mod general_panel;
 pub mod provider_view;
 pub mod providers_panel;
+pub mod settings_scene;
+
+pub use settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
 
 use makepad_widgets::Cx;
 
