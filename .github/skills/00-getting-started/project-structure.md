@@ -127,7 +127,7 @@ pub mod content_view;
 pub mod toolbar;
 
 // Re-export commonly used items
-pub use home_screen::HomeScreen;
+pub use home_screen::HomeScene;
 
 // live_design registration - ORDER MATTERS!
 // Register dependencies before dependents
@@ -449,8 +449,8 @@ live_design! {
     use crate::shared::styles::*;
 
     // Import screens
-    use crate::home::home_screen::HomeScreen;
-    use crate::settings::settings_screen::SettingsScreen;
+    use crate::home::home_screen::HomeScene;
+    use crate::settings::settings_screen::SettingsScene;
     use crate::login::login_screen::LoginScreen;
 
     // Import modals
@@ -480,11 +480,11 @@ live_design! {
                             visible: true
                         }
 
-                        home_screen = <HomeScreen> {
+                        home_screen = <HomeScene> {
                             visible: false
                         }
 
-                        settings_screen = <SettingsScreen> {
+                        settings_screen = <SettingsScene> {
                             visible: false
                         }
                     }
@@ -808,8 +808,8 @@ Thumbs.db
 | Type | Convention | Example |
 |------|------------|---------|
 | Module | snake_case | `home_screen.rs` |
-| Widget | PascalCase in code | `HomeScreen` |
-| Action | PascalCase + Action | `HomeScreenAction` |
+| Widget | PascalCase in code | `HomeScene` |
+| Action | PascalCase + Action | `HomeSceneAction` |
 | Style | SCREAMING_SNAKE | `COLOR_PRIMARY` |
 | Icon | snake_case | `arrow_back.svg` |
 

@@ -237,7 +237,7 @@ live_design! {
     use link::widgets::*;
 
     use crate::shared::styles::*;
-    use crate::home::home_screen::HomeScreen;
+    use crate::home::home_screen::HomeScene;
 
     App = {{App}} {
         ui: <Root> {
@@ -248,7 +248,7 @@ live_design! {
                     show_bg: true
                     draw_bg: { color: (COLOR_BG) }
 
-                    <HomeScreen> {}
+                    <HomeScene> {}
                 }
             }
         }
@@ -426,7 +426,7 @@ live_design! {
     use crate::shared::styles::*;
     use crate::shared::widgets::*;
 
-    pub HomeScreen = {{HomeScreen}} {
+    pub HomeScene = {{HomeScene}} {
         width: Fill, height: Fill
         flow: Down
         spacing: (SPACING_LG)
@@ -457,11 +457,11 @@ live_design! {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct HomeScreen {
+pub struct HomeScene {
     #[deref] view: View,
 }
 
-impl Widget for HomeScreen {
+impl Widget for HomeScene {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
         self.widget_match_event(cx, event, scope);
@@ -472,7 +472,7 @@ impl Widget for HomeScreen {
     }
 }
 
-impl WidgetMatchEvent for HomeScreen {
+impl WidgetMatchEvent for HomeScene {
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions, _scope: &mut Scope) {
         if self.view.button(ids!(action_button)).clicked(&actions) {
             log!("Button clicked!");

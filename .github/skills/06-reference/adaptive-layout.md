@@ -93,7 +93,7 @@ Use `CachedWidget` to maintain widget state across variant switches:
 
 ```rust
 live_design! {
-    pub HomeScreen = <AdaptiveView> {
+    pub HomeScene = <AdaptiveView> {
         Desktop = <View> {
             flow: Right
 
@@ -227,7 +227,7 @@ fn switch_to_settings(&mut self, cx: &mut Cx) {
 live_design! {
     use link::widgets::*;
 
-    pub HomeScreen = <AdaptiveView> {
+    pub HomeScene = <AdaptiveView> {
         // Desktop: sidebar + tabbed dock
         Desktop = <View> {
             width: Fill, height: Fill
@@ -249,7 +249,7 @@ live_design! {
 
                 settings_page = <View> {
                     <CachedWidget> {
-                        settings = <SettingsScreen> {}
+                        settings = <SettingsScene> {}
                     }
                 }
             }
@@ -274,7 +274,7 @@ live_design! {
 
                         settings_page = <View> {
                             <CachedWidget> {
-                                settings = <SettingsScreen> {}
+                                settings = <SettingsScene> {}
                             }
                         }
                     }
@@ -396,4 +396,4 @@ live_design! {
 ## References
 
 - [AdaptiveView source](https://github.com/makepad/makepad/blob/main/widgets/src/adaptive_view.rs)
-- [Robrix HomeScreen](https://github.com/project-robius/robrix) - Production example
+- [Robrix HomeScene](https://github.com/project-robius/robrix) - Production example

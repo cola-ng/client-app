@@ -11,13 +11,14 @@ pub use audio_panel::AudioDevices;
 
 use makepad_widgets::Cx;
 
-pub fn live_design(cx: &mut Cx) {
+pub(super) fn live_design(cx: &mut Cx) {
     about_panel::live_design(cx);
     add_provider_modal::live_design(cx);
     audio_panel::live_design(cx);
     general_panel::live_design(cx);
     provider_view::live_design(cx);
     providers_panel::live_design(cx);
+    settings_scene::live_design(cx);
 }
 
 /// Get the default data location path

@@ -128,7 +128,7 @@ impl MofaApp for MyApp {
 ```rust
 // Good
 ids!(user_menu_overlay.user_profile)
-pub struct SettingsScreen { ... }
+pub struct SettingsScene { ... }
 
 // Bad
 ids!(userMenuOverlay.userProfile)  // camelCase not allowed

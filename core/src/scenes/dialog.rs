@@ -6,7 +6,7 @@ pub use dialog_scene::{DialogScene, DialogSceneWidgetRefExt};
 
 use makepad_widgets::Cx;
 
-pub fn live_design(cx: &mut Cx) {
+pub(super) fn live_design(cx: &mut Cx) {
     mofa_hero::live_design(cx);
     dialog_scene::live_design(cx);
 }

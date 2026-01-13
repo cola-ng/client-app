@@ -80,8 +80,8 @@ live_design! {
                         width: Fill, height: Fill
                         flow: Overlay
 
-                        home = <HomeScreen> {}
-                        settings = <SettingsScreen> { visible: false }
+                        home = <HomeScene> {}
+                        settings = <SettingsScene> { visible: false }
                         profile = <ProfileScreen> { visible: false }
                     }
                 }

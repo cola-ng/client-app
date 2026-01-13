@@ -9,8 +9,8 @@
 
 // App plugin system imports
 use colang_core::models::Preferences;
-use colang_core::scenes::dialog::{DialogScene, DialogSceneWidgetRefExt};
-use colang_core::scenes::settings::{SettingsScene, SettingsSceneWidgetRefExt};
+use colang_core::scenes::dialog::dialog_scene::{DialogScene, DialogSceneWidgetRefExt};
+use colang_core::scenes::settings::settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
 use widgets::StateChangeListener;
@@ -69,9 +69,6 @@ live_design! {
 
     use colang_shell::widgets::sidebar::Sidebar;
     use colang_shell::widgets::main_body::MainBody;
-    use colang_core::scenes::home::HomeScene;
-    use colang_core::scenes::dialog::DialogScene;
-    use colang_core::scenes::settings::SettingsScene;
 
     // Dark theme colors (imported for shader use)
     use widgets::theme::DARK_BG_DARK;
