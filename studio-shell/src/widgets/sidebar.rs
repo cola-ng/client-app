@@ -132,8 +132,15 @@ live_design! {
         }
 
         // Navigation buttons
+        home_tab = <SidebarMenuButton> {
+            text: "首页"
+            draw_icon: {
+                svg_file: dep("crate://self/resources/icons/home.svg")
+            }
+        }
+
         colang_tab = <SidebarMenuButton> {
-            text: "Colang"
+            text: "AI 对话"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/colang.svg")
             }
@@ -166,6 +173,7 @@ live_design! {
 
 #[derive(Clone, PartialEq)]
 pub enum SidebarSelection {
+    Home,
     Colang,
     MofaFM,
     Settings,
@@ -194,6 +202,12 @@ impl Widget for Sidebar {
             Event::Actions(actions) => actions.as_slice(),
             _ => return,
         };
+
+        // Handle Home tab click
+        if self.view.button(ids!(home_tab)).clicked(actions) {
+            println!("Home tab clicked");
+            self.handle_selection(cx, SidebarSelection::Home);
+        }
 
         // Handle Colang tab click
         if self.view.button(ids!(colang_tab)).clicked(actions) {
@@ -227,6 +241,12 @@ impl Sidebar {
 
         // Apply selected state based on what was clicked
         match &selection {
+            SidebarSelection::Home => {
+                println!("Home selected");
+                self.view
+                    .button(ids!(home_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+            }
             SidebarSelection::Colang => {
                 println!("Colang selected");
                 self.view
@@ -257,10 +277,11 @@ impl Sidebar {
             };
         }
 
-        // Clear MoFA FM and Settings
+        // Clear all nav items
         clear_selection!(
             self,
             cx,
+            ids!(home_tab),
             ids!(colang_tab),
             ids!(mofa_fm_tab),
             ids!(settings_tab)
@@ -278,6 +299,12 @@ impl SidebarRef {
             // Then restore based on current selection
             if let Some(selection) = inner.selection.clone() {
                 match selection {
+                    SidebarSelection::Home => {
+                        inner
+                            .view
+                            .button(ids!(home_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    }
                     SidebarSelection::Colang => {
                         inner
                             .view

@@ -12,6 +12,7 @@ use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 
 // App plugin system imports
 use colang::{ColangApp, ColangScreenWidgetRefExt};
+use home::HomeApp;
 use mofa_fm::{MoFaFMApp, MoFaFMScreenWidgetRefExt};
 use settings::data::Preferences;
 use settings::screen::SettingsScreenWidgetRefExt;
@@ -71,6 +72,7 @@ live_design! {
     use widgets::theme::INDIGO_100;
 
     use studio_shell::widgets::sidebar::Sidebar;
+    use home::screen::HomeScreen;
     use colang::screen::ColangScreen;
     use mofa_fm::screen::MoFaFMScreen;
     use settings::screen::SettingsScreen;
@@ -477,9 +479,14 @@ live_design! {
                         width: Fill, height: Fill
                         flow: Overlay
 
-                        colang_page = <ColangScreen> {
+                        home_page = <HomeScreen> {
                             width: Fill, height: Fill
                             visible: true
+                        }
+
+                        colang_page = <ColangScreen> {
+                            width: Fill, height: Fill
+                            visible: false
                         }
 
                         fm_page = <MoFaFMScreen> {
@@ -906,6 +913,7 @@ impl LiveRegister for App {
         // Register apps via MofaApp trait
         // Note: Widget types in live_design! macro still require compile-time imports
         // (Makepad constraint), but registration uses the standardized trait interface
+        <HomeApp as MofaApp>::live_design(cx);
         <ColangApp as MofaApp>::live_design(cx);
         <MoFaFMApp as MofaApp>::live_design(cx);
         <MoFaSettingsApp as MofaApp>::live_design(cx);
@@ -1179,6 +1187,76 @@ impl App {
 
     /// Handle sidebar menu item clicks
     fn handle_sidebar_clicks(&mut self, cx: &mut Cx, actions: &[Action]) {
+        // Home tab
+        if self
+            .ui
+            .button(ids!(sidebar_menu_overlay.sidebar_content.home_tab))
+            .clicked(actions)
+        {
+            self.sidebar_menu_open = false;
+            self.start_sidebar_slide_out(cx);
+            self.open_tabs.clear();
+            self.active_tab = None;
+            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+            // Stop any running timers
+            self.ui
+                .colang_screen(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .colang_page
+                ))
+                .stop_timers(cx);
+            self.ui
+                .mo_fa_fmscreen(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .fm_page
+                ))
+                .stop_timers(cx);
+            // Show home, hide others
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .home_page
+                ))
+                .apply_over(cx, live! { visible: true });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .colang_page
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .fm_page
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .settings_page
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui.redraw(cx);
+        }
+
         // Colang tab
         if self
             .ui
@@ -1205,6 +1283,15 @@ impl App {
                         .content_area
                         .main_content
                         .content
+                        .home_page
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
                         .fm_page
                 ))
                 .apply_over(cx, live! { visible: false });
@@ -1218,7 +1305,7 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .mo_fa_fmscreen(ids!(
+                .colang_screen(ids!(
                     body.dashboard_base
                         .content_area
                         .main_content
@@ -1248,6 +1335,15 @@ impl App {
                         .fm_page
                 ))
                 .apply_over(cx, live! { visible: true });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .home_page
+                ))
+                .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
                     body.dashboard_base
@@ -1290,6 +1386,15 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
+                .colang_screen(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .colang_page
+                ))
+                .stop_timers(cx);
+            self.ui
                 .mo_fa_fmscreen(ids!(
                     body.dashboard_base
                         .content_area
@@ -1298,6 +1403,24 @@ impl App {
                         .fm_page
                 ))
                 .stop_timers(cx);
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .home_page
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.dashboard_base
+                        .content_area
+                        .main_content
+                        .content
+                        .colang_page
+                ))
+                .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
                     body.dashboard_base

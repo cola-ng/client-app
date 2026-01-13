@@ -121,6 +121,72 @@ live_design! {
         }
     }
 
+    // Language dropdown
+    pub LanguageDropdown = <DropDown> {
+        width: 200, height: Fit
+        padding: {left: 12, right: 12, top: 10, bottom: 10}
+        popup_menu_position: BelowInput
+        labels: ["Auto", "简体中文", "English"]
+        values: [auto, zh_cn, en]
+        selected_item: 2
+        draw_bg: {
+            instance dark_mode: 0.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
+                let border = mix((SLATE_300), (SLATE_600), self.dark_mode);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                sdf.fill(bg);
+                sdf.stroke(border, 1.0);
+                return sdf.result;
+            }
+        }
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+        popup_menu: {
+            width: 200
+            draw_bg: {
+                instance dark_mode: 0.0
+                border_size: 1.0
+                fn pixel(self) -> vec4 {
+                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                    let bg = mix((WHITE), (SLATE_800), self.dark_mode);
+                    let border = mix((BORDER), (SLATE_600), self.dark_mode);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                    sdf.fill(bg);
+                    sdf.stroke(border, self.border_size);
+                    return sdf.result;
+                }
+            }
+            menu_item: {
+                width: Fill
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        let base = mix((WHITE), (SLATE_800), self.dark_mode);
+                        let hover_color = mix((GRAY_100), (SLATE_700), self.dark_mode);
+                        sdf.rect(0., 0., self.rect_size.x, self.rect_size.y);
+                        sdf.fill(mix(base, hover_color, self.hover));
+                        return sdf.result;
+                    }
+                }
+                draw_text: {
+                    instance dark_mode: 0.0
+                    fn get_color(self) -> vec4 {
+                        let base = mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                        return base;
+                    }
+                }
+            }
+        }
+    }
+
     // ========================================================================
     // General Tab Content
     // ========================================================================
@@ -151,6 +217,12 @@ live_design! {
             exit_checkbox = <SettingsCheckBox> {
                 text: "Exit when close main panel"
             }
+        }
+
+        <SettingsRow> {
+            <SettingsLabel> { text: "Language" }
+            <View> { width: Fill, height: Fit }
+            language_dropdown = <LanguageDropdown> {}
         }
 
         <HDivider> {}
