@@ -875,6 +875,18 @@ impl LiveRegister for App {
         widgets::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);
 
+        // Register dialog sub-modules first (before dialog scene)
+        colang_core::scenes::dialog::mofa_hero::live_design(cx);
+
+        // Register settings sub-modules first (before settings scene)
+        colang_core::scenes::settings::general_panel::live_design(cx);
+        colang_core::scenes::settings::audio_panel::live_design(cx);
+        colang_core::scenes::settings::about_panel::live_design(cx);
+        colang_core::scenes::settings::providers_panel::live_design(cx);
+        colang_core::scenes::settings::provider_view::live_design(cx);
+        colang_core::scenes::settings::add_provider_modal::live_design(cx);
+
+        // Then register the main scenes
         colang_core::scenes::home::live_design(cx);
         colang_core::scenes::dialog::live_design(cx);
         colang_core::scenes::settings::live_design(cx);
