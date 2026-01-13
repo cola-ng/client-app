@@ -139,15 +139,15 @@ live_design! {
             }
         }
 
-        colang_tab = <SidebarMenuButton> {
+        dialog_tab = <SidebarMenuButton> {
             text: "AI 对话"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/colang.svg")
             }
         }
 
-        mofa_fm_tab = <SidebarMenuButton> {
-            text: "MoFA FM"
+        review_tab = <SidebarMenuButton> {
+            text: "复习巩固"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/fm.svg")
             }
@@ -210,13 +210,13 @@ impl Widget for Sidebar {
         }
 
         // Handle Colang tab click
-        if self.view.button(ids!(colang_tab)).clicked(actions) {
+        if self.view.button(ids!(dialog_tab)).clicked(actions) {
             println!("Colang tab clicked");
             self.handle_selection(cx, SidebarSelection::Colang);
         }
 
         // Handle MoFA FM tab click
-        if self.view.button(ids!(mofa_fm_tab)).clicked(actions) {
+        if self.view.button(ids!(review_tab)).clicked(actions) {
             println!("MoFA FM tab clicked");
             self.handle_selection(cx, SidebarSelection::MofaFM);
         }
@@ -250,13 +250,13 @@ impl Sidebar {
             SidebarSelection::Colang => {
                 println!("Colang selected");
                 self.view
-                    .button(ids!(colang_tab))
+                    .button(ids!(dialog_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
             SidebarSelection::MofaFM => {
                 println!("MofaFM selected");
                 self.view
-                    .button(ids!(mofa_fm_tab))
+                    .button(ids!(review_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
             SidebarSelection::Settings => {
@@ -282,8 +282,8 @@ impl Sidebar {
             self,
             cx,
             ids!(home_tab),
-            ids!(colang_tab),
-            ids!(mofa_fm_tab),
+            ids!(dialog_tab),
+            ids!(review_tab),
             ids!(settings_tab)
         );
     }
@@ -308,13 +308,13 @@ impl SidebarRef {
                     SidebarSelection::Colang => {
                         inner
                             .view
-                            .button(ids!(colang_tab))
+                            .button(ids!(dialog_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                     SidebarSelection::MofaFM => {
                         inner
                             .view
-                            .button(ids!(mofa_fm_tab))
+                            .button(ids!(review_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                     SidebarSelection::Settings => {
@@ -341,7 +341,7 @@ impl SidebarRef {
             );
 
             // Colang
-            inner.view.button(ids!(colang_tab)).apply_over(
+            inner.view.button(ids!(dialog_tab)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
@@ -350,7 +350,7 @@ impl SidebarRef {
             );
 
             // MoFA FM tab
-            inner.view.button(ids!(mofa_fm_tab)).apply_over(
+            inner.view.button(ids!(review_tab)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }

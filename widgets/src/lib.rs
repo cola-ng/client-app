@@ -83,7 +83,7 @@ pub mod theme;
 pub mod waveform_view;
 
 // Re-export app trait types for convenience
-pub use app_trait::{AppInfo, AppRegistry, AppScene, StateChangeListener, TimerControl};
+pub use app_trait::{StateChangeListener, TimerControl};
 use makepad_widgets::Cx;
 
 /// Register all shared widgets with Makepad.

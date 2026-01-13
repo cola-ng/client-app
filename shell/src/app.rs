@@ -3,18 +3,16 @@
 //! This file contains the main App struct and all UI definitions.
 //! Organized into sections:
 //! - UI Definitions (live_design! macro)
-//! - Widget Structs (Dashboard, App)
+//! - Widget Structs (MainBody, App)
 //! - Event Handling (AppMain impl)
 //! - Helper Methods (organized by responsibility)
 
 // App plugin system imports
 use colang_core::models::Preferences;
-use colang_core::scenes::home::HomeScene;
-use colang_core::scenes::settings::SettingsScene;
-use colang_core::scenes::settings::screen::SettingsSceneWidgetRefExt;
-use colang_core::scenes::{DialogSceneWidgetRefExt, DialogScene};
+use colang_core::scenes::settings::{SettingsScene, SettingsSceneWidgetRefExt};
+use colang_core::scenes::{DialogScene, DialogSceneWidgetRefExt};
 use makepad_widgets::*;
-use widgets::{AppRegistry, AppScene, StateChangeListener};
+use widgets::StateChangeListener;
 
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 
@@ -70,13 +68,13 @@ live_design! {
     use widgets::theme::GRAY_700;
     use widgets::theme::INDIGO_100;
 
-    use studio_shell::widgets::sidebar::Sidebar;
-    use colang_core::scenes::HomeScene;
-    use colang_core::scenes::DialogScene;
-    use colang_core::scenes::SettingsScene;
+    use colang_shell::widgets::sidebar::Sidebar;
+    use colang_core::scenes::home::screen::HomeScene;
+    use colang_core::scenes::dialog::screen::DialogScene;
+    use colang_core::scenes::settings::screen::SettingsScene;
 
     // Logo image
-    MOFA_LOGO = dep("crate://self/resources/clang-logo.png")
+    COLANG_LOGO = dep("crate://self/resources/clang-logo.png")
 
     // ------------------------------------------------------------------------
     // Tab Widgets
@@ -189,7 +187,7 @@ live_design! {
         }
 
         tab_label = <Label> {
-            text: "MoFA FM"
+            text: "Home"
             draw_text: {
                 instance active: 0.0
                 instance dark_mode: 0.0
@@ -223,7 +221,7 @@ live_design! {
     }
 
     // ------------------------------------------------------------------------
-    // Dashboard Layout
+    // MainBody Layout
     // ------------------------------------------------------------------------
 
     // Dark theme colors (imported for shader use)
@@ -235,7 +233,7 @@ live_design! {
     use widgets::theme::HOVER_BG_DARK;
     use widgets::theme::DIVIDER_DARK;
 
-    Dashboard = {{Dashboard}} <View> {
+    MainBody = {{MainBody}} <View> {
         width: Fill, height: Fill
         flow: Overlay
         show_bg: true
@@ -247,7 +245,7 @@ live_design! {
         }
 
         // Base layer - header + content area
-        dashboard_base = <View> {
+        base = <View> {
             width: Fill, height: Fill
             flow: Down
 
@@ -290,7 +288,7 @@ live_design! {
 
                 logo = <Image> {
                     width: 40, height: 40
-                    source: (MOFA_LOGO)
+                    source: (COLANG_LOGO)
                 }
 
                 title = <Label> {
@@ -653,7 +651,7 @@ live_design! {
             pass: { clear_color: (DARK_BG) }
             flow: Overlay
 
-            body = <Dashboard> {}
+            body = <MainBody> {}
 
             sidebar_trigger_overlay = <View> {
                 width: 28, height: 28
@@ -798,12 +796,12 @@ live_design! {
 // ============================================================================
 
 #[derive(Live, LiveHook, Widget)]
-pub struct Dashboard {
+pub struct MainBody {
     #[deref]
     view: View,
 }
 
-impl Widget for Dashboard {
+impl Widget for MainBody {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
     }
@@ -833,9 +831,9 @@ pub struct App {
     sidebar_animation_start: f64,
     #[rust]
     sidebar_slide_in: bool,
-    /// Registry of installed apps (populated on init)
-    #[rust]
-    app_registry: AppRegistry,
+    // /// Registry of installed apps (populated on init)
+    // #[rust]
+    // app_registry: AppRegistry,
     /// Dark mode state
     #[rust]
     dark_mode: bool,
@@ -856,37 +854,13 @@ pub struct App {
 impl LiveHook for App {
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         // Initialize the app registry with all installed apps
-        self.app_registry.register(DialogScene::info());
-        self.app_registry.register(SettingsScene::info());
+        // self.app_registry.register(DialogScene::info());
+        // self.app_registry.register(SettingsScene::info());
 
         // Load user preferences and restore dark mode
         let prefs = Preferences::load();
         self.dark_mode = prefs.dark_mode;
         self.dark_mode_anim = if prefs.dark_mode { 1.0 } else { 0.0 };
-    }
-}
-
-// ============================================================================
-// APP REGISTRY METHODS
-// ============================================================================
-
-impl App {
-    /// Get the number of installed apps
-    #[allow(dead_code)]
-    pub fn app_count(&self) -> usize {
-        self.app_registry.len()
-    }
-
-    /// Get app info by ID
-    #[allow(dead_code)]
-    pub fn get_app_info(&self, id: &str) -> Option<&widgets::AppInfo> {
-        self.app_registry.find_by_id(id)
-    }
-
-    /// Get all registered apps
-    #[allow(dead_code)]
-    pub fn apps(&self) -> &[widgets::AppInfo] {
-        self.app_registry.apps()
     }
 }
 
@@ -904,9 +878,9 @@ impl LiveRegister for App {
         // Register scenes via AppScene trait
         // Note: Widget types in live_design! macro still require compile-time imports
         // (Makepad constraint), but registration uses the standardized trait interface
-        <HomeScene as AppScene>::live_design(cx);
-        <DialogScene as AppScene>::live_design(cx);
-        <SettingsScene as AppScene>::live_design(cx);
+        colang_core::scenes::home::live_design(cx);
+        colang_core::scenes::dialog::live_design(cx);
+        colang_core::scenes::settings::live_design(cx);
     }
 }
 
@@ -1016,7 +990,7 @@ impl App {
     fn handle_user_menu_hover(&mut self, cx: &mut Cx, event: &Event) {
         let user_btn = self
             .ui
-            .view(ids!(body.dashboard_base.header.user_profile_container));
+            .view(ids!(body.base.header.user_profile_container));
         let user_menu = self.ui.view(ids!(user_menu));
 
         match event.hits(cx, user_btn.area()) {
@@ -1079,12 +1053,12 @@ impl App {
 
     /// Handle header theme toggle button
     fn handle_theme_toggle(&mut self, cx: &mut Cx, event: &Event) {
-        let theme_btn = self.ui.view(ids!(body.dashboard_base.header.theme_toggle));
+        let theme_btn = self.ui.view(ids!(body.base.header.theme_toggle));
 
         match event.hits(cx, theme_btn.area()) {
             Hit::FingerHoverIn(_) => {
                 self.ui
-                    .view(ids!(body.dashboard_base.header.theme_toggle))
+                    .view(ids!(body.base.header.theme_toggle))
                     .apply_over(
                         cx,
                         live! {
@@ -1095,7 +1069,7 @@ impl App {
             }
             Hit::FingerHoverOut(_) => {
                 self.ui
-                    .view(ids!(body.dashboard_base.header.theme_toggle))
+                    .view(ids!(body.base.header.theme_toggle))
                     .apply_over(
                         cx,
                         live! {
@@ -1123,10 +1097,10 @@ impl App {
     fn update_theme_toggle_icon(&mut self, cx: &mut Cx) {
         let is_dark = self.dark_mode;
         self.ui
-            .view(ids!(body.dashboard_base.header.theme_toggle.sun_icon))
+            .view(ids!(body.base.header.theme_toggle.sun_icon))
             .set_visible(cx, !is_dark);
         self.ui
-            .view(ids!(body.dashboard_base.header.theme_toggle.moon_icon))
+            .view(ids!(body.base.header.theme_toggle.moon_icon))
             .set_visible(cx, is_dark);
         self.ui.redraw(cx);
     }
@@ -1191,7 +1165,7 @@ impl App {
             // Stop any running timers
             self.ui
                 .dialog_scene(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1201,7 +1175,7 @@ impl App {
             // Show home, hide others
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1210,7 +1184,7 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1219,7 +1193,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1228,7 +1202,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1241,7 +1215,7 @@ impl App {
         // Colang tab
         if self
             .ui
-            .button(ids!(sidebar_menu_overlay.sidebar_content.colang_tab))
+            .button(ids!(sidebar_menu_overlay.sidebar_content.dialog_tab))
             .clicked(actions)
         {
             self.sidebar_menu_open = false;
@@ -1251,7 +1225,7 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1260,7 +1234,7 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1269,7 +1243,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1278,7 +1252,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1287,7 +1261,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .dialog_scene(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1296,10 +1270,9 @@ impl App {
                 .start_timers(cx);
             self.ui.redraw(cx);
         }
-        // MoFA FM tab
         if self
             .ui
-            .button(ids!(sidebar_menu_overlay.sidebar_content.mofa_fm_tab))
+            .button(ids!(sidebar_menu_overlay.sidebar_content.review_tab))
             .clicked(actions)
         {
             self.sidebar_menu_open = false;
@@ -1309,7 +1282,7 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1318,7 +1291,7 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1327,7 +1300,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1336,7 +1309,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1359,7 +1332,7 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .dialog_scene(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1368,7 +1341,7 @@ impl App {
                 .stop_timers(cx);
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1377,7 +1350,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1386,7 +1359,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1395,7 +1368,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.dashboard_base
+                    body.base
                         .content_area
                         .main_content
                         .content
@@ -1520,7 +1493,7 @@ impl App {
     fn apply_dark_mode_panels(&mut self, cx: &mut Cx) {
         let dm = self.dark_mode_anim;
 
-        // Apply to main app background (Dashboard)
+        // Apply to main app background (MainBody)
         self.ui.view(ids!(body)).apply_over(
             cx,
             live! {
@@ -1529,7 +1502,7 @@ impl App {
         );
 
         // Apply to header
-        self.ui.view(ids!(body.dashboard_base.header)).apply_over(
+        self.ui.view(ids!(body.base.header)).apply_over(
             cx,
             live! {
                 draw_bg: { dark_mode: (dm) }
@@ -1583,7 +1556,7 @@ impl App {
 
         // Apply to close app button
         self.ui
-            .view(ids!(body.dashboard_base.header.close_app_btn))
+            .view(ids!(body.base.header.close_app_btn))
             .apply_over(
                 cx,
                 live! {
@@ -1766,7 +1739,7 @@ impl App {
         // Apply to Colang screen (main content)
         self.ui
             .dialog_scene(ids!(
-                body.dashboard_base
+                body.base
                     .content_area
                     .main_content
                     .content
@@ -1777,7 +1750,7 @@ impl App {
         // Apply to Settings screen in main content
         self.ui
             .settings_scene(ids!(
-                body.dashboard_base
+                body.base
                     .content_area
                     .main_content
                     .content
@@ -1984,7 +1957,7 @@ impl App {
     /// Handle MofaHero start/stop button clicks
     fn handle_mofa_hero_buttons(&mut self, cx: &mut Cx, event: &Event) {
         let start_view = self.ui.view(ids!(
-            body.dashboard_base
+            body.base
                 .content_area
                 .main_content
                 .content
@@ -1997,7 +1970,7 @@ impl App {
             Hit::FingerUp(_) => {
                 self.ui
                     .view(ids!(
-                        body.dashboard_base
+                        body.base
                             .content_area
                             .main_content
                             .content
@@ -2009,7 +1982,7 @@ impl App {
                     .set_visible(cx, false);
                 self.ui
                     .view(ids!(
-                        body.dashboard_base
+                        body.base
                             .content_area
                             .main_content
                             .content
@@ -2024,7 +1997,7 @@ impl App {
             _ => {}
         }
         let stop_view = self.ui.view(ids!(
-            body.dashboard_base
+            body.base
                 .content_area
                 .main_content
                 .content
@@ -2037,7 +2010,7 @@ impl App {
             Hit::FingerUp(_) => {
                 self.ui
                     .view(ids!(
-                        body.dashboard_base
+                        body.base
                             .content_area
                             .main_content
                             .content
@@ -2049,7 +2022,7 @@ impl App {
                     .set_visible(cx, true);
                 self.ui
                     .view(ids!(
-                        body.dashboard_base
+                        body.base
                             .content_area
                             .main_content
                             .content
