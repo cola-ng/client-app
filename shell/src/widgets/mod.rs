@@ -5,3 +5,6 @@
 
 pub mod mofa_hero;
 pub mod sidebar;
+pub mod tabs;
+pub mod main_body;
+
