@@ -11,8 +11,6 @@ use widgets::{AppInfo, AppScene};
 
 pub use crate::audio::AudioManager;
 pub use crate::db::Database;
-use crate::dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState};
-use crate::doubao_api::DoubaoClient;
 
 /// MoFA FM app descriptor
 pub struct DialogScene;

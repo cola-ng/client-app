@@ -16,7 +16,7 @@ use colang_core::scenes::{ColangScreenWidgetRefExt, DialogScene};
 use makepad_widgets::*;
 use widgets::{AppRegistry, AppScene, StateChangeListener};
 
-use crate::widgets::sidebar::SidebarWidgetRefExt;
+use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 
 // ============================================================================
 // TAB IDENTIFIER
@@ -906,7 +906,7 @@ impl LiveRegister for App {
         // Core widget libraries
         makepad_widgets::live_design(cx);
         widgets::live_design(cx);
-        crate::widgets::sidebar::live_design(cx);
+        colang_shell::widgets::sidebar::live_design(cx);
 
         // Register scenes via AppScene trait
         // Note: Widget types in live_design! macro still require compile-time imports

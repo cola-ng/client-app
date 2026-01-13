@@ -8,7 +8,7 @@ use std::thread;
 
 use crossbeam_channel::{Receiver, Sender, bounded};
 use dora_node_api::dora_core::config::{DataId, NodeId};
-use dora_node_api::{DoraNode, Event, IntoArrow, Parameter};
+use dora_node_api::{DoraNode, Event, Parameter};
 use parking_lot::RwLock;
 use tracing::{debug, error, info, warn};
 

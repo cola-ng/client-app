@@ -14,7 +14,7 @@ use crossbeam_channel::{Receiver, Sender, bounded};
 use dora_node_api::dora_core::config::{DataId, NodeId};
 use dora_node_api::{DoraNode, Event, IntoArrow, Parameter};
 use parking_lot::RwLock;
-use tracing::{debug, error, info, warn};
+use tracing::{error, info, warn};
 
 use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
 use crate::data::{ChatMessage, ControlCommand, DoraData, EventMetadata, MessageRole};

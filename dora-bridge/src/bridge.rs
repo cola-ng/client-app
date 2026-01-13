@@ -97,11 +97,11 @@ impl<T> BridgeSharedState<T> {
         }
     }
 
-    pub fn read(&self) -> parking_lot::RwLockReadGuard<T> {
+    pub fn read(&self) -> parking_lot::RwLockReadGuard<'_, T> {
         self.inner.read()
     }
 
-    pub fn write(&self) -> parking_lot::RwLockWriteGuard<T> {
+    pub fn write(&self) -> parking_lot::RwLockWriteGuard<'_, T> {
         self.inner.write()
     }
 }

@@ -2,12 +2,11 @@
 
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use serde::{Deserialize, Serialize};
+use sqlx::Row;
 use sqlx::sqlite::SqlitePool;
-use sqlx::{FromRow, Row};
 
 use crate::models::{
-    Conversation, ConversationAnnotation, IssueWord, LearningSession, UseLang, WordPracticeLog,
+    Conversation, ConversationAnnotation, IssueWord, LearningSession, WordPracticeLog,
 };
 
 /// Database manager for English Learning Companion

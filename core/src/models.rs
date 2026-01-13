@@ -3,13 +3,10 @@
 mod preferences;
 mod providers;
 
-use std::time::{SystemTime, UNIX_EPOCH};
-
 pub use preferences::*;
 pub use providers::*;
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::SqlitePool;
-use sqlx::{FromRow, Row};
+use sqlx::{FromRow};
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct IssueWord {

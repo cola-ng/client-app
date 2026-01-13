@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 
 use dora_node_api::arrow::array::{Array, StringArray};
 use dora_node_api::{DoraNode, Event};
-use eyre::{Context, Result};
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
