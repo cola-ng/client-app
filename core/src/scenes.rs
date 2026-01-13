@@ -12,6 +12,7 @@ pub mod settings;
 use makepad_widgets::Cx;
 
 pub fn live_design(cx: &mut Cx) {
+    println!("==============scenes live design");
     home::live_design(cx);
     dialog::live_design(cx);
     settings::live_design(cx);

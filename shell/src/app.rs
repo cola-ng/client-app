@@ -289,9 +289,11 @@ impl LiveRegister for App {
     fn live_register(cx: &mut Cx) {
         makepad_widgets::live_design(cx);
         widgets::live_design(cx);
+    println!("==============scenes live design");
         colang_core::scenes::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);
         colang_shell::widgets::tabs::live_design(cx);
+    println!("==============main_body live design");
         colang_shell::widgets::main_body::live_design(cx);
     }
 }
