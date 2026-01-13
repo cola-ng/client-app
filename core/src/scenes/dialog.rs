@@ -3,22 +3,20 @@
 pub mod audio;
 pub mod audio_player;
 pub mod database;
-pub mod dora_integration;
-pub mod doubao_api;
-pub mod log_bridge;
 pub mod mofa_hero;
 pub mod screen;
 
 pub use audio::AudioManager;
 pub use database::Database;
-pub use dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState};
-pub use doubao_api::DoubaoClient;
 pub use mofa_hero::{ConnectionStatus, MofaHero, MofaHeroAction};
 pub use screen::ColangScreen;
 pub use screen::ColangScreenWidgetRefExt; // Export WidgetRefExt for timer control
 
 use makepad_widgets::Cx;
 use widgets::{AppInfo, AppScene};
+
+use crate::dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState};
+use crate::doubao_api::DoubaoClient;
 
 /// MoFA FM app descriptor
 pub struct ColangApp;

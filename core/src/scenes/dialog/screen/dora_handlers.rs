@@ -7,8 +7,8 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 use crate::dora_integration::{DoraEvent, DoraIntegration};
-use crate::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
-use settings::data::Preferences;
+use crate::scenes::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
+use crate::scenes::settings::data::Preferences;
 
 use super::{ChatMessageEntry, ColangScreen};
 

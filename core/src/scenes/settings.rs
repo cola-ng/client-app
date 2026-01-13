@@ -3,7 +3,6 @@
 pub mod about_panel;
 pub mod add_provider_modal;
 pub mod audio_panel;
-pub mod data;
 pub mod general_panel;
 pub mod provider_view;
 pub mod providers_panel;
