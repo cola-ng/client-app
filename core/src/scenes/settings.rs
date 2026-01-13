@@ -20,12 +20,12 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::providers_panel::ProvidersPanel;
-    use crate::provider_view::ProviderView;
-    use crate::add_provider_modal::AddProviderModal;
-    use crate::general_panel::GeneralTab;
-    use crate::audio_panel::AudioTab;
-    use crate::about_panel::AboutTab;
+    use crate::scenes::settings::providers_panel::ProvidersPanel;
+    use crate::scenes::settings::provider_view::ProviderView;
+    use crate::scenes::settings::add_provider_modal::AddProviderModal;
+    use crate::scenes::settings::general_panel::GeneralTab;
+    use crate::scenes::settings::audio_panel::AudioTab;
+    use crate::scenes::settings::about_panel::AboutTab;
 
     // Vertical divider for sidebar
     VerticalDivider = <View> {

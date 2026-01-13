@@ -108,7 +108,7 @@ live_design! {
         stat_value = {
             draw_text: {
                 fn get_color(self) -> vec4 {
-                    return mix((SUCCESS_GREEN), (SUCCESS_GREEN), self.dark_mode);
+                    return mix((ACCENT_GREEN), (ACCENT_GREEN), self.dark_mode);
                 }
             }
         }
@@ -119,7 +119,7 @@ live_design! {
         stat_value = {
             draw_text: {
                 fn get_color(self) -> vec4 {
-                    return mix((WARNING_AMBER), (WARNING_AMBER), self.dark_mode);
+                    return mix((AMBER_500), (AMBER_500), self.dark_mode);
                 }
             }
         }
@@ -519,7 +519,7 @@ live_design! {
             insight_text = { text: "💡 你的冠词使用进步明显！a/an 错误率下降 40%" }
             insight_action = {
                 text: "持续保持"
-                draw_text: { color: (SUCCESS_GREEN) }
+                draw_text: { color: (ACCENT_GREEN) }
             }
         }
 
@@ -527,7 +527,7 @@ live_design! {
             insight_text = { text: "⚠️ 建议多练习过去时态，这是你目前的薄弱点" }
             insight_action = {
                 text: "点击开始专项练习 →"
-                draw_text: { color: (WARNING_AMBER) }
+                draw_text: { color: (AMBER_500) }
             }
         }
     }
