@@ -2,24 +2,28 @@
 
 pub mod audio;
 pub mod audio_player;
+pub mod database;
 pub mod dora_integration;
+pub mod doubao_api;
 pub mod log_bridge;
 pub mod mofa_hero;
 pub mod screen;
 
 pub use audio::AudioManager;
+pub use database::Database;
 pub use dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState};
+pub use doubao_api::DoubaoClient;
 pub use mofa_hero::{ConnectionStatus, MofaHero, MofaHeroAction};
-pub use screen::MoFaFMScreen;
-pub use screen::MoFaFMScreenWidgetRefExt; // Export WidgetRefExt for timer control
+pub use screen::ColangScreen;
+pub use screen::ColangScreenWidgetRefExt; // Export WidgetRefExt for timer control
 
 use makepad_widgets::Cx;
-use widgets::{AppInfo, MofaApp};
+use widgets::{AppInfo, AppScene};
 
 /// MoFA FM app descriptor
-pub struct MoFaFMApp;
+pub struct ColangApp;
 
-impl MofaApp for MoFaFMApp {
+impl AppScene for ColangApp {
     fn info() -> AppInfo {
         AppInfo {
             name: "MoFA FM",
@@ -37,5 +41,5 @@ impl MofaApp for MoFaFMApp {
 /// Register all MoFA FM widgets with Makepad
 /// (Kept for backwards compatibility - calls DoraApp::live_design)
 pub fn live_design(cx: &mut Cx) {
-    MoFaFMApp::live_design(cx);
+    ColangApp::live_design(cx);
 }

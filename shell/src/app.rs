@@ -12,12 +12,12 @@ use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 
 // App plugin system imports
 use colang::{ColangApp, ColangScreenWidgetRefExt};
-use home::HomeApp;
-use mofa_fm::{MoFaFMApp, MoFaFMScreenWidgetRefExt};
+use home::SceneApp;
+use mofa_fm::{MoFaFMScene, MoFaFMScreenWidgetRefExt};
 use settings::data::Preferences;
 use settings::screen::SettingsScreenWidgetRefExt;
-use settings::MoFaSettingsApp;
-use widgets::{AppRegistry, MofaApp, StateChangeListener};
+use settings::SettingsScene;
+use widgets::{AppRegistry, AppScene, StateChangeListener};
 
 // ============================================================================
 // TAB IDENTIFIER
@@ -864,9 +864,9 @@ pub struct App {
 impl LiveHook for App {
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         // Initialize the app registry with all installed apps
-        self.app_registry.register(MoFaFMApp::info());
+        self.app_registry.register(MoFaFMScene::info());
         self.app_registry.register(ColangApp::info());
-        self.app_registry.register(MoFaSettingsApp::info());
+        self.app_registry.register(SettingsScene::info());
 
         // Load user preferences and restore dark mode
         let prefs = Preferences::load();
@@ -910,13 +910,13 @@ impl LiveRegister for App {
         widgets::live_design(cx);
         studio_shell::widgets::sidebar::live_design(cx);
 
-        // Register apps via MofaApp trait
+        // Register scenes via AppScene trait
         // Note: Widget types in live_design! macro still require compile-time imports
         // (Makepad constraint), but registration uses the standardized trait interface
-        <HomeApp as MofaApp>::live_design(cx);
-        <ColangApp as MofaApp>::live_design(cx);
-        <MoFaFMApp as MofaApp>::live_design(cx);
-        <MoFaSettingsApp as MofaApp>::live_design(cx);
+        <SceneApp as AppScene>::live_design(cx);
+        <ColangApp as AppScene>::live_design(cx);
+        <MoFaFMScene as AppScene>::live_design(cx);
+        <SettingsScene as AppScene>::live_design(cx);
     }
 }
 

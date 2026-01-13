@@ -1,9 +1,0 @@
-[package]
-name = "home"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-makepad-widgets.workspace = true
-widgets = { path = "../../widgets" }
-log.workspace = true

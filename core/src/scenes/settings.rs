@@ -12,12 +12,12 @@ pub mod screen;
 pub use screen::SettingsScreenRef;
 
 use makepad_widgets::Cx;
-use widgets::{AppInfo, MofaApp};
+use widgets::{AppInfo, AppScene};
 
 /// MoFA Settings app descriptor
-pub struct MoFaSettingsApp;
+pub struct SettingsScene;
 
-impl MofaApp for MoFaSettingsApp {
+impl AppScene for SettingsScene {
     fn info() -> AppInfo {
         AppInfo {
             name: "Settings",
@@ -40,5 +40,5 @@ impl MofaApp for MoFaSettingsApp {
 /// Register all Settings widgets with Makepad
 /// (Kept for backwards compatibility - calls DoraApp::live_design)
 pub fn live_design(cx: &mut Cx) {
-    MoFaSettingsApp::live_design(cx);
+    SettingsScene::live_design(cx);
 }

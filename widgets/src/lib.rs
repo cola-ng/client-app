@@ -9,7 +9,7 @@
 //!
 //! ```rust,ignore
 //! use makepad_widgets::Cx;
-//! use mofa_widgets::{MofaApp, AppInfo};
+//! use mofa_widgets::{AppScene, AppInfo};
 //!
 //! // 1. Register widgets in your app's live_register
 //! impl LiveRegister for MyApp {
@@ -23,7 +23,7 @@
 //! ## Modules
 //!
 //! - [`theme`] - Color palette, fonts, and dark mode support
-//! - [`app_trait`] - Plugin app interface (`MofaApp`, `AppRegistry`)
+//! - [`app_trait`] - Plugin app interface (`AppScene`, `AppRegistry`)
 //! - [`participant_panel`] - User avatar with audio waveform
 //! - [`waveform_view`] - Real-time audio waveform visualization
 //! - [`log_panel`] - Scrollable Markdown log display
@@ -52,14 +52,14 @@
 //!
 //! ## Plugin Apps
 //!
-//! Apps implement the [`MofaApp`] trait for standardized registration:
+//! Apps implement the [`AppScene`] trait for standardized registration:
 //!
 //! ```rust,ignore
-//! use widgets::{MofaApp, AppInfo};
+//! use widgets::{AppScene, AppInfo};
 //!
 //! pub struct MyApp;
 //!
-//! impl MofaApp for MyApp {
+//! impl AppScene for MyApp {
 //!     fn info() -> AppInfo {
 //!         AppInfo {
 //!             name: "My App",
@@ -83,7 +83,7 @@ pub mod theme;
 pub mod waveform_view;
 
 // Re-export app trait types for convenience
-pub use app_trait::{AppInfo, AppRegistry, MofaApp, StateChangeListener, TimerControl};
+pub use app_trait::{AppInfo, AppRegistry, AppScene, StateChangeListener, TimerControl};
 
 use makepad_widgets::Cx;
 

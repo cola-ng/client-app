@@ -1,5 +1,5 @@
 [package]
-name = "colang"
+name = "colang-core"
 version.workspace = true
 edition.workspace = true
 
@@ -7,7 +7,6 @@ edition.workspace = true
 makepad-widgets.workspace = true
 widgets = { path = "../../widgets" }
 dora-bridge = { path = "../../dora-bridge" }
-settings = { path = "../settings" }
 parking_lot.workspace = true
 log.workspace = true
 sysinfo.workspace = true

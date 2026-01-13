@@ -1,22 +1,15 @@
 [package]
-name = "studio-shell"
+name = "colang-shell"
 version.workspace = true
 edition.workspace = true
 
 [features]
-default = ["mofa-fm", "colang", "settings", "home"]
-mofa-fm = ["dep:mofa-fm"]
-colang = ["dep:colang"]
-settings = ["dep:settings"]
-home = ["dep:home"]
+default = []
 
 [dependencies]
 makepad-widgets.workspace = true
-widgets = { path = "../widgets" }
-mofa-fm = { path = "../apps/mofa-fm", optional = true }
-colang = { path = "../apps/colang", optional = true }
-settings = { path = "../apps/settings", optional = true }
-home = { path = "../apps/home", optional = true }
+widgets = { workspace = true }
+colang-core = { workspace = true }
 
 # Audio
 cpal.workspace = true

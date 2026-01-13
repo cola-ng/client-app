@@ -1,4 +1,4 @@
-//! # MofaApp Trait - Plugin App Interface
+//! # AppScene Trait - Plugin App Interface
 //!
 //! This module defines the standard interface for apps that integrate with the MoFA Studio shell.
 //!
@@ -8,16 +8,16 @@
 //! still be imported directly in the shell. This trait provides:
 //!
 //! - **Standardized metadata** - App name, ID, description via [`AppInfo`]
-//! - **Consistent registration** - Widget registration via [`MofaApp::live_design`]
+//! - **Consistent registration** - Widget registration via [`AppScene::live_design`]
 //! - **Timer lifecycle** - Resource management via [`TimerControl`]
 //! - **Runtime queries** - App discovery via [`AppRegistry`]
 //!
 //! ## Usage in Shell
 //!
 //! ```rust,ignore
-//! use widgets::{MofaApp, AppRegistry};
-//! use mofa_fm::MoFaFMApp;
-//! use settings::MoFaSettingsApp;
+//! use widgets::{AppScene, AppRegistry};
+//! use mofa_fm::MoFaFMScene;
+//! use settings::SettingsScene;
 //!
 //! // In App struct
 //! #[rust]
@@ -25,25 +25,25 @@
 //!
 //! // In LiveHook::after_new_from_doc
 //! fn after_new_from_doc(&mut self, _cx: &mut Cx) {
-//!     self.app_registry.register(MoFaFMApp::info());
-//!     self.app_registry.register(MoFaSettingsApp::info());
+//!     self.app_registry.register(MoFaFMScene::info());
+//!     self.app_registry.register(SettingsScene::info());
 //! }
 //!
 //! // In LiveRegister
 //! fn live_register(cx: &mut Cx) {
-//!     <MoFaFMApp as MofaApp>::live_design(cx);
-//!     <MoFaSettingsApp as MofaApp>::live_design(cx);
+//!     <MoFaFMScene as AppScene>::live_design(cx);
+//!     <SettingsScene as AppScene>::live_design(cx);
 //! }
 //! ```
 //!
 //! ## Creating a New App
 //!
 //! ```rust,ignore
-//! use widgets::{MofaApp, AppInfo};
+//! use widgets::{AppScene, AppInfo};
 //!
 //! pub struct MyApp;
 //!
-//! impl MofaApp for MyApp {
+//! impl AppScene for MyApp {
 //!     fn info() -> AppInfo {
 //!         AppInfo {
 //!             name: "My App",
@@ -76,7 +76,7 @@ pub struct AppInfo {
 ///
 /// # Example
 /// ```ignore
-/// impl MofaApp for MoFaFMApp {
+/// impl AppScene for MoFaFMScene {
 ///     fn info() -> AppInfo {
 ///         AppInfo {
 ///             name: "MoFA FM",
@@ -90,7 +90,7 @@ pub struct AppInfo {
 ///     }
 /// }
 /// ```
-pub trait MofaApp {
+pub trait AppScene {
     /// Returns metadata about this app
     fn info() -> AppInfo
     where
