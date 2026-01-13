@@ -5,8 +5,8 @@ edition.workspace = true
 
 [dependencies]
 makepad-widgets.workspace = true
-widgets = { path = "../../widgets" }
-dora-bridge = { path = "../../dora-bridge" }
+widgets.workspace = true
+dora-bridge.workspace = true
 parking_lot.workspace = true
 log.workspace = true
 sysinfo.workspace = true

@@ -8,8 +8,8 @@ default = []
 
 [dependencies]
 makepad-widgets.workspace = true
-widgets = { workspace = true }
-colang-core = { workspace = true }
+widgets.workspace = true
+colang-core.workspace = true
 
 # Audio
 cpal.workspace = true
