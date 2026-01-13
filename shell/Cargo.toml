@@ -28,5 +28,5 @@ sysinfo = "0.32"
 ctrlc = "3.4"
 
 [[bin]]
-name = "mofa-studio"
+name = "colang"
 path = "src/main.rs"

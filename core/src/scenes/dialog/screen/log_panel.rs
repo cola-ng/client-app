@@ -1,13 +1,13 @@
-//! Log panel methods for ColangScreen
+//! Log panel methods for DialogScene
 //!
 //! Handles log display, filtering, and clipboard operations.
 
 use makepad_widgets::*;
 
-use super::ColangScreen;
+use super::DialogScene;
 use crate::log_bridge;
 
-impl ColangScreen {
+impl DialogScene {
     /// Toggle log panel visibility
     pub(super) fn toggle_log_panel(&mut self, cx: &mut Cx) {
         self.log_panel_collapsed = !self.log_panel_collapsed;

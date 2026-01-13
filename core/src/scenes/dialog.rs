@@ -5,8 +5,7 @@ pub mod screen;
 
 use makepad_widgets::Cx;
 pub use mofa_hero::{ConnectionStatus, MofaHero, MofaHeroAction};
-pub use screen::ColangScreen;
-pub use screen::ColangScreenWidgetRefExt; // Export WidgetRefExt for timer control
+pub use screen::DialogSceneWidgetRefExt; // Export WidgetRefExt for timer control
 use widgets::{AppInfo, AppScene};
 
 pub use crate::audio::AudioManager;

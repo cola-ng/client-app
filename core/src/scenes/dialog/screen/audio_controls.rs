@@ -1,12 +1,12 @@
-//! Audio control methods for ColangScreen
+//! Audio control methods for DialogScene
 //!
 //! Handles audio device selection, mic monitoring, and level visualization.
 
 use makepad_widgets::*;
 
-use super::ColangScreen;
+use super::DialogScene;
 
-impl ColangScreen {
+impl DialogScene {
     /// Initialize audio manager and populate device dropdowns
     pub(super) fn init_audio(&mut self, cx: &mut Cx) {
         let mut audio_manager = crate::audio::AudioManager::new();

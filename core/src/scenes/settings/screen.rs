@@ -131,7 +131,7 @@ live_design! {
     // Main Settings Screen
     // ========================================================================
 
-    pub SettingsScreen = {{SettingsScreen}} {
+    pub SettingsScene = {{SettingsScene}} {
         width: Fill, height: Fill
         flow: Overlay
         show_bg: true
@@ -210,7 +210,7 @@ enum SettingsTab {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct SettingsScreen {
+pub struct SettingsScene {
     #[deref]
     view: View,
 
@@ -239,7 +239,7 @@ pub struct SettingsScreen {
     audio_initialized: bool,
 }
 
-impl Widget for SettingsScreen {
+impl Widget for SettingsScene {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -515,7 +515,7 @@ impl Default for SettingsTab {
     }
 }
 
-impl SettingsScreen {
+impl SettingsScene {
     fn update_tab_selection(&mut self, cx: &mut Cx) {
         let tabs = [
             (ids!(content.sidebar.general_tab_btn), SettingsTab::General),
@@ -928,7 +928,7 @@ impl SettingsScreen {
     }
 }
 
-impl SettingsScreenRef {
+impl SettingsSceneRef {
     /// Initialize the settings screen with preferences
     pub fn init(&self, cx: &mut Cx, preferences: Preferences) {
         if let Some(mut inner) = self.borrow_mut() {

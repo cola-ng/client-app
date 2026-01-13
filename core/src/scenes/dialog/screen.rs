@@ -64,7 +64,7 @@ live_design! {
     }
 
     // Colang Screen - adaptive horizontal layout with left content and right log panel
-    pub ColangScreen = {{ColangScreen}} {
+    pub DialogScene = {{DialogScene}} {
         width: Fill, height: Fill
         flow: Right
         spacing: 0
@@ -1081,7 +1081,7 @@ impl ChatMessageEntry {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct ColangScreen {
+pub struct DialogScene {
     #[deref]
     view: View,
     #[rust]
@@ -1147,7 +1147,7 @@ pub struct ColangScreen {
     participant_levels: [f64; 2], // 0=myself, 1=teacher
 }
 
-impl Widget for ColangScreen {
+impl Widget for DialogScene {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -1515,7 +1515,7 @@ impl Widget for ColangScreen {
     }
 }
 
-impl ColangScreenRef {
+impl DialogSceneRef {
     /// Stop audio and dora timers - call this before hiding/removing the widget
     /// to prevent timer callbacks on inactive state
     /// Note: AEC blink animation is shader-driven and doesn't need stopping
@@ -1523,7 +1523,7 @@ impl ColangScreenRef {
         if let Some(inner) = self.borrow_mut() {
             cx.stop_timer(inner.audio_timer);
             cx.stop_timer(inner.dora_timer);
-            ::log::debug!("ColangScreen timers stopped");
+            ::log::debug!("DialogScene timers stopped");
         }
     }
 
@@ -1533,12 +1533,12 @@ impl ColangScreenRef {
         if let Some(mut inner) = self.borrow_mut() {
             inner.audio_timer = cx.start_interval(0.05); // 50ms for mic level
             inner.dora_timer = cx.start_interval(0.1); // 100ms for dora events
-            ::log::debug!("ColangScreen timers started");
+            ::log::debug!("DialogScene timers started");
         }
     }
 }
 
-impl StateChangeListener for ColangScreenRef {
+impl StateChangeListener for DialogSceneRef {
     fn on_dark_mode_change(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Apply dark mode to screen background

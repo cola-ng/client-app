@@ -1,12 +1,12 @@
-//! Chat panel methods for ColangScreen
+//! Chat panel methods for DialogScene
 //!
 //! Handles chat display, prompt input, and message formatting.
 
 use makepad_widgets::*;
 
-use super::{ChatMessageEntry, ColangScreen};
+use super::{ChatMessageEntry, DialogScene};
 
-impl ColangScreen {
+impl DialogScene {
     /// Send prompt to dora
     pub(super) fn send_prompt(&mut self, cx: &mut Cx) {
         let input_text = self

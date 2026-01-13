@@ -9,10 +9,10 @@
 
 // App plugin system imports
 use colang_core::models::Preferences;
-use colang_core::scenes::home::SceneApp;
+use colang_core::scenes::home::HomeScene;
 use colang_core::scenes::settings::SettingsScene;
-use colang_core::scenes::settings::screen::SettingsScreenWidgetRefExt;
-use colang_core::scenes::{ColangScreenWidgetRefExt, DialogScene};
+use colang_core::scenes::settings::screen::SettingsSceneWidgetRefExt;
+use colang_core::scenes::{DialogSceneWidgetRefExt, DialogScene};
 use makepad_widgets::*;
 use widgets::{AppRegistry, AppScene, StateChangeListener};
 
@@ -71,10 +71,9 @@ live_design! {
     use widgets::theme::INDIGO_100;
 
     use studio_shell::widgets::sidebar::Sidebar;
-    use home::screen::HomeScreen;
-    use colang::screen::ColangScreen;
-    use mofa_fm::screen::MoFaFMScreen;
-    use settings::screen::SettingsScreen;
+    use colang_core::scenes::HomeScene;
+    use colang_core::scenes::DialogScene;
+    use colang_core::scenes::SettingsScene;
 
     // Logo image
     MOFA_LOGO = dep("crate://self/resources/clang-logo.png")
@@ -478,23 +477,17 @@ live_design! {
                         width: Fill, height: Fill
                         flow: Overlay
 
-                        home_page = <HomeScreen> {
+                        home_scene = <HomeScene> {
                             width: Fill, height: Fill
                             visible: true
                         }
 
-                        colang_page = <ColangScreen> {
+                        dialog_scene = <DialogScene> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        fm_page = <MoFaFMScreen> {
-                            width: Fill, height: Fill
-                            visible: false
-                        }
-
-
-                        settings_page = <SettingsScreen> {
+                        settings_scene = <SettingsScene> {
                             width: Fill, height: Fill
                             visible: false
                         }
@@ -642,7 +635,7 @@ live_design! {
                     }
                 }
 
-                settings_tab_page = <SettingsScreen> {
+                settings_tab_page = <SettingsScene> {
                     width: Fill, height: Fill
                     visible: false
                 }
@@ -911,7 +904,7 @@ impl LiveRegister for App {
         // Register scenes via AppScene trait
         // Note: Widget types in live_design! macro still require compile-time imports
         // (Makepad constraint), but registration uses the standardized trait interface
-        <SceneApp as AppScene>::live_design(cx);
+        <HomeScene as AppScene>::live_design(cx);
         <DialogScene as AppScene>::live_design(cx);
         <SettingsScene as AppScene>::live_design(cx);
     }
@@ -1197,12 +1190,12 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             // Stop any running timers
             self.ui
-                .colang_screen(ids!(
+                .dialog_scene(ids!(
                     body.dashboard_base
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .stop_timers(cx);
             // Show home, hide others
@@ -1212,7 +1205,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .home_page
+                        .home_scene
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
@@ -1221,7 +1214,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1239,7 +1232,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .settings_page
+                        .settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui.redraw(cx);
@@ -1262,7 +1255,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
@@ -1271,7 +1264,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .home_page
+                        .home_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1289,16 +1282,16 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .settings_page
+                        .settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .colang_screen(ids!(
+                .dialog_scene(ids!(
                     body.dashboard_base
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .start_timers(cx);
             self.ui.redraw(cx);
@@ -1329,7 +1322,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .home_page
+                        .home_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1338,7 +1331,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1347,7 +1340,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .settings_page
+                        .settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui.redraw(cx);
@@ -1365,12 +1358,12 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
-                .colang_screen(ids!(
+                .dialog_scene(ids!(
                     body.dashboard_base
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1379,7 +1372,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .home_page
+                        .home_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1388,7 +1381,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .colang_page
+                        .dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1406,7 +1399,7 @@ impl App {
                         .content_area
                         .main_content
                         .content
-                        .settings_page
+                        .settings_scene
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui.redraw(cx);
@@ -1772,23 +1765,23 @@ impl App {
     fn apply_dark_mode_screens_with_value(&mut self, cx: &mut Cx, dm: f64) {
         // Apply to Colang screen (main content)
         self.ui
-            .colang_screen(ids!(
+            .dialog_scene(ids!(
                 body.dashboard_base
                     .content_area
                     .main_content
                     .content
-                    .colang_page
+                    .dialog_scene
             ))
             .on_dark_mode_change(cx, dm);
 
         // Apply to Settings screen in main content
         self.ui
-            .settings_screen(ids!(
+            .settings_scene(ids!(
                 body.dashboard_base
                     .content_area
                     .main_content
                     .content
-                    .settings_page
+                    .settings_scene
             ))
             .update_dark_mode(cx, dm);
 
@@ -1796,7 +1789,7 @@ impl App {
         if !self.open_tabs.is_empty() {
             if self.open_tabs.contains(&TabId::Settings) {
                 self.ui
-                    .settings_screen(ids!(body.tab_overlay.tab_content.settings_tab_page))
+                    .settings_scene(ids!(body.tab_overlay.tab_content.settings_tab_page))
                     .update_dark_mode(cx, dm);
             }
         }

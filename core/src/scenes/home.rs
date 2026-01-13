@@ -10,13 +10,13 @@
 pub mod screen;
 
 use makepad_widgets::Cx;
-pub use screen::{HomeScreen, HomeScreenWidgetRefExt};
+pub use screen::HomeSceneWidgetRefExt;
 use widgets::{AppInfo, AppScene};
 
 /// Home app descriptor
-pub struct SceneApp;
+pub struct HomeScene;
 
-impl AppScene for SceneApp {
+impl AppScene for HomeScene {
     fn info() -> AppInfo {
         AppInfo {
             name: "Home",
@@ -32,5 +32,5 @@ impl AppScene for SceneApp {
 
 /// Register all Home widgets with Makepad
 pub fn live_design(cx: &mut Cx) {
-    SceneApp::live_design(cx);
+    HomeScene::live_design(cx);
 }

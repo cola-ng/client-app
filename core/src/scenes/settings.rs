@@ -9,7 +9,7 @@ pub mod providers_panel;
 pub mod screen;
 
 use makepad_widgets::Cx;
-pub use screen::SettingsScreenRef;
+pub use screen::SettingsSceneRef;
 use widgets::{AppInfo, AppScene};
 
 /// MoFA Settings app descriptor
