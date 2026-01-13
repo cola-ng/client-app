@@ -6,10 +6,9 @@ pub mod provider_view;
 pub mod providers_panel;
 pub mod settings_scene;
 
-pub use settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
 pub use audio_panel::AudioDevices;
-
 use makepad_widgets::Cx;
+pub use settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
 
 pub(super) fn live_design(cx: &mut Cx) {
     about_panel::live_design(cx);

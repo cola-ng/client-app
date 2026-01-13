@@ -1,9 +1,7 @@
-
 pub mod dialog_scene;
 pub mod mofa_hero;
 
 pub use dialog_scene::{DialogScene, DialogSceneWidgetRefExt};
-
 use makepad_widgets::Cx;
 
 pub(super) fn live_design(cx: &mut Cx) {

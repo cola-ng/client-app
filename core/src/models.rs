@@ -6,7 +6,7 @@ mod providers;
 pub use preferences::*;
 pub use providers::*;
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow};
+use sqlx::FromRow;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct IssueWord {

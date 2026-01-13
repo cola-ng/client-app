@@ -588,7 +588,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.fm_page))
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -618,7 +620,9 @@ impl App {
                 .view(ids!(body.base.content_area.main_content.content.home_scene))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.fm_page))
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -643,7 +647,9 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.fm_page))
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(body.base.content_area.main_content.content.home_scene))
@@ -686,7 +692,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.fm_page))
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1271,7 +1279,7 @@ impl App {
                 .content_area
                 .main_content
                 .content
-                .fm_page
+                .dialog_scene
                 .mofa_hero
                 .action_section
                 .start_view
@@ -1284,7 +1292,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .fm_page
+                            .dialog_scene
                             .mofa_hero
                             .action_section
                             .start_view
@@ -1296,7 +1304,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .fm_page
+                            .dialog_scene
                             .mofa_hero
                             .action_section
                             .stop_view
@@ -1311,7 +1319,7 @@ impl App {
                 .content_area
                 .main_content
                 .content
-                .fm_page
+                .dialog_scene
                 .mofa_hero
                 .action_section
                 .stop_view
@@ -1324,7 +1332,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .fm_page
+                            .dialog_scene
                             .mofa_hero
                             .action_section
                             .start_view
@@ -1336,7 +1344,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .fm_page
+                            .dialog_scene
                             .mofa_hero
                             .action_section
                             .stop_view

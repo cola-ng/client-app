@@ -40,6 +40,7 @@ live_design! {
 
     use colang_core::scenes::home::home_scene::HomeScene;
     use colang_core::scenes::dialog::dialog_scene::DialogScene;
+    use colang_core::scenes::review::review_scene::ReviewScene;
     use colang_core::scenes::settings::settings_scene::SettingsScene;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
@@ -255,6 +256,11 @@ live_design! {
                         }
 
                         dialog_scene = <DialogScene> {
+                            width: Fill, height: Fill
+                            visible: false
+                        }
+
+                        review_scene = <ReviewScene> {
                             width: Fill, height: Fill
                             visible: false
                         }
