@@ -30,3 +30,35 @@ AI 甚至会将某些电影等里面的经典对白带入到聊天之中, 让用
 还提供复习, 跟读, 发音纠正 等功能.
 
 还提供英语助手帮你和别人一起聊天, 你的声音会经过 ai 助手跟其他在线用户沟通, 如果你在聊天里面有发音错误等,  ai 会帮你纠正. 你卡壳时也可以由 ai 帮你代为聊天.
+
+
+下面进行 apps/settings 页面的重新设计, 必要是参考 makepad 相关 skills:
+- General:
+    复选框: 开机启动
+    复选框: Exit when close main panel
+    ------------------------------------
+    Apperance:
+        一组单选按钮, 分别为: Auto, Normal Mode, Dark Mode
+    ------------------------------------
+    Storage:
+        Location file dir selector
+        Clear Cache button
+
+- Audio
+    Speaker: Move Speaker setting from ColangScreen to here, and add Test button.
+    classic two lines audio output and input volume settings.
+
+    Mic: Move Mic setting from ColangScreen to here, and add Test button.
+    classic two lines mic input and input volume settings.
+
+- AI Providers
+    try to convert current settings about providers to here.
+
+
+- About US
+    logo in center
+    Version update button
+    Release Notes buton
+    Feedback button
+    footer serive agreement| privacy policy
+    copy right
