@@ -361,8 +361,8 @@ live_design! {
 
             appearance_radios = <View> {
                 width: Fill, height: Fit
-                flow: Down
-                spacing: 8
+                flow: Right
+                spacing: 24
 
                 light_radio = <SettingsRadioButton> {
                     text: "Light Mode"
