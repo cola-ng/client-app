@@ -1,0 +1,298 @@
+//! General settings panel - startup, appearance, and storage options
+
+use makepad_widgets::*;
+
+live_design! {
+    use link::theme::*;
+    use link::widgets::*;
+    use link::shaders::*;
+
+    use widgets::theme::*;
+
+    // Reusable components for settings panels
+    pub SectionTitle = <Label> {
+        margin: {top: 16, bottom: 8}
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_BOLD>{ font_size: 13.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+    }
+
+    pub SettingsRow = <View> {
+        width: Fill, height: Fit
+        flow: Right
+        align: {y: 0.5}
+        spacing: 12
+        padding: {top: 8, bottom: 8}
+    }
+
+    pub SettingsLabel = <Label> {
+        width: Fit
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+    }
+
+    pub HDivider = <View> {
+        width: Fill, height: 1
+        margin: {top: 16, bottom: 8}
+        show_bg: true
+        draw_bg: {
+            instance dark_mode: 0.0
+            fn pixel(self) -> vec4 {
+                return mix((BORDER), (SLATE_700), self.dark_mode);
+            }
+        }
+    }
+
+    // Standard button style
+    pub SettingsButton = <Button> {
+        width: Fit, height: Fit
+        padding: {left: 16, right: 16, top: 8, bottom: 8}
+
+        draw_bg: {
+            instance hover: 0.0
+            instance pressed: 0.0
+            instance dark_mode: 0.0
+
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+
+                let light_normal = (SLATE_100);
+                let light_hover = (SLATE_200);
+                let dark_normal = (SLATE_700);
+                let dark_hover = (SLATE_600);
+
+                let normal = mix(light_normal, dark_normal, self.dark_mode);
+                let hover_color = mix(light_hover, dark_hover, self.dark_mode);
+                let bg = mix(normal, hover_color, self.hover);
+
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                sdf.fill(bg);
+                return sdf.result;
+            }
+        }
+
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_MEDIUM>{ font_size: 11.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+        }
+    }
+
+    // Simple checkbox style for settings
+    pub SettingsCheckBox = <CheckBox> {
+        width: Fit, height: Fit
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+    }
+
+    // Simple radio button style for settings
+    pub SettingsRadioButton = <RadioButton> {
+        width: Fit, height: Fit
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+    }
+
+    // ========================================================================
+    // General Tab Content
+    // ========================================================================
+
+    pub GeneralTab = <View> {
+        width: Fill, height: Fill
+        flow: Down
+        padding: 24
+
+        <Label> {
+            text: "General"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_BOLD>{ font_size: 18.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                }
+            }
+        }
+
+        <SettingsRow> {
+            startup_checkbox = <SettingsCheckBox> {
+                text: "Launch at system startup"
+            }
+        }
+
+        <SettingsRow> {
+            exit_checkbox = <SettingsCheckBox> {
+                text: "Exit when close main panel"
+            }
+        }
+
+        <HDivider> {}
+
+        // Appearance section
+        appearance_section = <View> {
+            width: Fill, height: Fit
+            flow: Down
+
+            <SectionTitle> { text: "Appearance" }
+
+            appearance_radios = <View> {
+                width: Fill, height: Fit
+                flow: Right
+                spacing: 24
+
+                light_radio = <SettingsRadioButton> {
+                    text: "Light Mode"
+                }
+
+                dark_radio = <SettingsRadioButton> {
+                    text: "Dark Mode"
+                }
+
+                auto_radio = <SettingsRadioButton> {
+                    text: "Follow System"
+                    animator: { selected = { default: on } }
+                }
+            }
+        }
+
+        <HDivider> {}
+
+        // Storage section
+        storage_section = <View> {
+            width: Fill, height: Fit
+            flow: Down
+
+            <SectionTitle> { text: "Storage" }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Data Location" }
+                <View> { width: Fill, height: Fit }
+                storage_path = <Label> {
+                    text: "~/Documents/colang"
+                    draw_text: {
+                        instance dark_mode: 0.0
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
+                        }
+                    }
+                }
+                browse_btn = <SettingsButton> { text: "Browse..." }
+                default_path_btn = <SettingsButton> { text: "Default" }
+                open_path_btn = <SettingsButton> { text: "Open" }
+            }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Cache" }
+                <View> { width: Fill, height: Fit }
+                cache_size = <Label> {
+                    text: "256 MB"
+                    draw_text: {
+                        instance dark_mode: 0.0
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
+                        }
+                    }
+                }
+                clear_cache_btn = <SettingsButton> { text: "Clear Cache" }
+            }
+        }
+
+        <View> { width: Fill, height: Fill }
+    }
+}
+
+/// Get the default data location path
+pub fn get_default_data_location() -> String {
+    dirs::document_dir()
+        .map(|p| p.join("colang").to_string_lossy().to_string())
+        .unwrap_or_else(|| "~/Documents/colang".to_string())
+}
+
+/// Open the data location in the system file explorer
+pub fn open_data_location(data_location: &str) {
+    use std::process::Command;
+    
+    let path = if data_location.is_empty() {
+        get_default_data_location()
+    } else {
+        data_location.to_string()
+    };
+    
+    // Create directory if it doesn't exist
+    let _ = std::fs::create_dir_all(&path);
+    
+    // Open file explorer based on OS
+    #[cfg(target_os = "windows")]
+    {
+        let _ = Command::new("explorer").arg(&path).spawn();
+    }
+    
+    #[cfg(target_os = "macos")]
+    {
+        let _ = Command::new("open").arg(&path).spawn();
+    }
+    
+    #[cfg(target_os = "linux")]
+    {
+        let _ = Command::new("xdg-open").arg(&path).spawn();
+    }
+}
+
+/// Clear the application cache directory
+pub fn clear_cache() -> Result<(), std::io::Error> {
+    if let Some(cache_dir) = dirs::cache_dir() {
+        let app_cache = cache_dir.join("colang");
+        if app_cache.exists() {
+            std::fs::remove_dir_all(&app_cache)?;
+        }
+    }
+    Ok(())
+}
+
+/// Open a folder picker dialog and return the selected path
+pub fn browse_data_location(current_location: &str) -> Option<String> {
+    use std::path::PathBuf;
+    
+    // Get the current data location as starting point
+    let start_dir = if current_location.is_empty() {
+        dirs::document_dir().unwrap_or_else(|| PathBuf::from("."))
+    } else {
+        PathBuf::from(current_location)
+    };
+
+    // Spawn the dialog in a blocking context since rfd dialogs are blocking on desktop
+    let dialog = rfd::FileDialog::new()
+        .set_title("Select Data Location")
+        .set_directory(&start_dir);
+    
+    dialog.pick_folder().map(|folder| folder.to_string_lossy().to_string())
+}

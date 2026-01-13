@@ -1,7 +1,10 @@
 //! MoFA Settings App - Provider configuration and preferences
 
+pub mod about_panel;
 pub mod add_provider_modal;
+pub mod audio_panel;
 pub mod data;
+pub mod general_panel;
 pub mod provider_view;
 pub mod providers_panel;
 pub mod screen;
@@ -24,6 +27,9 @@ impl MofaApp for MoFaSettingsApp {
     }
 
     fn live_design(cx: &mut Cx) {
+        general_panel::live_design(cx);
+        audio_panel::live_design(cx);
+        about_panel::live_design(cx);
         providers_panel::live_design(cx);
         provider_view::live_design(cx);
         add_provider_modal::live_design(cx);

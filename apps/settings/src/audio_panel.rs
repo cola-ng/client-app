@@ -1,0 +1,289 @@
+//! Audio settings panel - microphone and speaker configuration
+
+use makepad_widgets::*;
+
+live_design! {
+    use link::theme::*;
+    use link::widgets::*;
+    use link::shaders::*;
+
+    use widgets::theme::*;
+
+    use crate::general_panel::SectionTitle;
+    use crate::general_panel::SettingsRow;
+    use crate::general_panel::SettingsLabel;
+    use crate::general_panel::SettingsButton;
+    use crate::general_panel::HDivider;
+
+    // Audio device dropdown
+    pub AudioDeviceDropdown = <DropDown> {
+        width: Fill, height: Fit
+        padding: {left: 12, right: 12, top: 10, bottom: 10}
+        popup_menu_position: BelowInput
+        labels: ["Default Device"]
+        values: []
+        selected_item: 0
+        draw_bg: {
+            instance dark_mode: 0.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
+                let border = mix((SLATE_300), (SLATE_600), self.dark_mode);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                sdf.fill(bg);
+                sdf.stroke(border, 1.0);
+                return sdf.result;
+            }
+        }
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
+        popup_menu: {
+            width: 300
+            draw_bg: {
+                instance dark_mode: 0.0
+                border_size: 1.0
+                fn pixel(self) -> vec4 {
+                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                    let bg = mix((WHITE), (SLATE_800), self.dark_mode);
+                    let border = mix((BORDER), (SLATE_600), self.dark_mode);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                    sdf.fill(bg);
+                    sdf.stroke(border, self.border_size);
+                    return sdf.result;
+                }
+            }
+            menu_item: {
+                width: Fill
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        let base = mix((WHITE), (SLATE_800), self.dark_mode);
+                        let hover_color = mix((GRAY_100), (SLATE_700), self.dark_mode);
+                        sdf.rect(0., 0., self.rect_size.x, self.rect_size.y);
+                        sdf.fill(mix(base, hover_color, self.hover));
+                        return sdf.result;
+                    }
+                }
+                draw_text: {
+                    instance dark_mode: 0.0
+                    fn get_color(self) -> vec4 {
+                        let base = mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                        return base;
+                    }
+                }
+            }
+        }
+    }
+
+    // ========================================================================
+    // Audio Tab Content
+    // ========================================================================
+
+    pub AudioTab = <View> {
+        width: Fill, height: Fill
+        flow: Down
+        padding: 24
+
+        <Label> {
+            text: "Audio"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_BOLD>{ font_size: 18.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                }
+            }
+        }
+
+        // Speaker section
+        speaker_section = <View> {
+            width: Fill, height: Fit
+            flow: Down
+            margin: {top: 20}
+
+            <SectionTitle> { text: "Speaker" }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Output Device" width: 120 }
+                speaker_device = <AudioDeviceDropdown> {}
+                speaker_test_btn = <SettingsButton> { text: "Test" }
+            }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Volume" width: 120 }
+                speaker_volume = <Slider> {
+                    width: Fill, height: Fit
+                    min: 0.0, max: 100.0
+                    step: 1.0
+                    text: ""
+                }
+                speaker_volume_label = <Label> {
+                    width: 40
+                    text: "80%"
+                    draw_text: {
+                        instance dark_mode: 0.0
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
+                        }
+                    }
+                }
+            }
+        }
+
+        <HDivider> {}
+
+        // Microphone section
+        mic_section = <View> {
+            width: Fill, height: Fit
+            flow: Down
+
+            <SectionTitle> { text: "Microphone" }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Input Device" width: 120 }
+                mic_device = <AudioDeviceDropdown> {}
+                mic_test_btn = <SettingsButton> { text: "Test" }
+            }
+
+            <SettingsRow> {
+                <SettingsLabel> { text: "Input Volume" width: 120 }
+                mic_volume = <Slider> {
+                    width: Fill, height: Fit
+                    min: 0.0, max: 100.0
+                    step: 1.0
+                    text: ""
+                }
+                mic_volume_label = <Label> {
+                    width: 40
+                    text: "75%"
+                    draw_text: {
+                        instance dark_mode: 0.0
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
+                        }
+                    }
+                }
+            }
+
+            // Mic level meter
+            <SettingsRow> {
+                <SettingsLabel> { text: "Input Level" width: 120 }
+                mic_level_meter = <View> {
+                    width: Fill, height: 8
+                    show_bg: true
+                    draw_bg: {
+                        instance level: 0.3
+                        instance dark_mode: 0.0
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            // Background
+                            let bg = mix((SLATE_200), (SLATE_700), self.dark_mode);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                            sdf.fill(bg);
+                            // Level indicator
+                            let level_width = self.rect_size.x * self.level;
+                            sdf.box(0., 0., level_width, self.rect_size.y, 4.0);
+                            sdf.fill((GREEN_500));
+                            return sdf.result;
+                        }
+                    }
+                }
+                <View> { width: 40, height: Fit }
+            }
+        }
+
+        <View> { width: Fill, height: Fill }
+    }
+}
+
+/// Audio device information
+pub struct AudioDevices {
+    pub input_devices: Vec<String>,
+    pub output_devices: Vec<String>,
+    pub input_labels: Vec<String>,
+    pub output_labels: Vec<String>,
+}
+
+/// Initialize and enumerate audio devices using cpal
+pub fn init_audio_devices() -> AudioDevices {
+    use cpal::traits::{DeviceTrait, HostTrait};
+    
+    let host = cpal::default_host();
+    
+    // Get input devices
+    let default_input_name = host.default_input_device().and_then(|d| d.name().ok());
+    let mut input_labels = Vec::new();
+    let mut input_devices = Vec::new();
+    
+    if let Ok(inputs) = host.input_devices() {
+        for device in inputs {
+            if let Ok(name) = device.name() {
+                let is_default = default_input_name.as_ref().map_or(false, |d| d == &name);
+                let label = if is_default {
+                    format!("Default ({})", name)
+                } else {
+                    name.clone()
+                };
+                input_labels.push(label);
+                input_devices.push(name);
+            }
+        }
+    }
+    
+    // Sort with default first
+    if !input_labels.is_empty() {
+        let default_idx = input_labels.iter().position(|l| l.starts_with("Default ("));
+        if let Some(idx) = default_idx {
+            if idx != 0 {
+                input_labels.swap(0, idx);
+                input_devices.swap(0, idx);
+            }
+        }
+    }
+    
+    // Get output devices
+    let default_output_name = host.default_output_device().and_then(|d| d.name().ok());
+    let mut output_labels = Vec::new();
+    let mut output_devices = Vec::new();
+    
+    if let Ok(outputs) = host.output_devices() {
+        for device in outputs {
+            if let Ok(name) = device.name() {
+                let is_default = default_output_name.as_ref().map_or(false, |d| d == &name);
+                let label = if is_default {
+                    format!("Default ({})", name)
+                } else {
+                    name.clone()
+                };
+                output_labels.push(label);
+                output_devices.push(name);
+            }
+        }
+    }
+    
+    // Sort with default first
+    if !output_labels.is_empty() {
+        let default_idx = output_labels.iter().position(|l| l.starts_with("Default ("));
+        if let Some(idx) = default_idx {
+            if idx != 0 {
+                output_labels.swap(0, idx);
+                output_devices.swap(0, idx);
+            }
+        }
+    }
+    
+    AudioDevices {
+        input_devices,
+        output_devices,
+        input_labels,
+        output_labels,
+    }
+}

@@ -1,102 +1,43 @@
-//! Settings Screen - Main settings interface with tabs
-//!
-//! Tabs: General, Audio, AI Providers, About
+//! Settings screen - main entry point with tab navigation
 
 use crate::data::{Preferences, Provider, ProviderId};
 use crate::provider_view::ProviderViewWidgetExt;
 use crate::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
+use crate::general_panel;
+use crate::audio_panel;
 use makepad_widgets::*;
 
 live_design! {
     use link::theme::*;
-    use link::shaders::*;
     use link::widgets::*;
+    use link::shaders::*;
 
     use widgets::theme::*;
 
     use crate::providers_panel::ProvidersPanel;
     use crate::provider_view::ProviderView;
     use crate::add_provider_modal::AddProviderModal;
+    use crate::general_panel::GeneralTab;
+    use crate::audio_panel::AudioTab;
+    use crate::about_panel::AboutTab;
 
-    // ========================================================================
-    // Reusable Components
-    // ========================================================================
-
-    // Settings section title
-    SectionTitle = <Label> {
-        width: Fill, height: Fit
-        margin: {bottom: 8, top: 16}
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
-            fn get_color(self) -> vec4 {
-                return mix((SLATE_700), (SLATE_300), self.dark_mode);
-            }
-        }
-    }
-
-    // Settings item row with label
-    SettingsRow = <View> {
-        width: Fill, height: Fit
-        flow: Right
-        padding: {top: 8, bottom: 8}
-        align: {y: 0.5}
-        spacing: 12
-    }
-
-    // Settings label
-    SettingsLabel = <Label> {
-        width: Fit, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Settings description text
-    SettingsDesc = <Label> {
-        width: Fill, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 11.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Horizontal divider
-    HDivider = <View> {
-        width: Fill, height: 1
-        margin: {top: 12, bottom: 12}
-        show_bg: true
-        draw_bg: {
-            instance dark_mode: 0.0
-            fn pixel(self) -> vec4 {
-                return mix((BORDER), (BORDER_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Vertical divider
+    // Vertical divider for sidebar
     VerticalDivider = <View> {
         width: 1, height: Fill
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                return mix((BORDER), (BORDER_DARK), self.dark_mode);
+                return mix((BORDER), (SLATE_700), self.dark_mode);
             }
         }
     }
 
-    // Tab button for sidebar
+    // Tab button in sidebar
     TabButton = <Button> {
         width: Fill, height: Fit
-        padding: {left: 16, right: 16, top: 12, bottom: 12}
+        padding: {left: 12, right: 12, top: 10, bottom: 10}
+        align: {x: 0.0, y: 0.5}
 
         draw_bg: {
             instance hover: 0.0
@@ -168,406 +109,6 @@ live_design! {
         }
     }
 
-    // Standard button style
-    SettingsButton = <Button> {
-        width: Fit, height: Fit
-        padding: {left: 16, right: 16, top: 8, bottom: 8}
-
-        draw_bg: {
-            instance hover: 0.0
-            instance pressed: 0.0
-            instance dark_mode: 0.0
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-
-                let light_normal = (SLATE_100);
-                let light_hover = (SLATE_200);
-                let dark_normal = (SLATE_700);
-                let dark_hover = (SLATE_600);
-
-                let normal = mix(light_normal, dark_normal, self.dark_mode);
-                let hover_color = mix(light_hover, dark_hover, self.dark_mode);
-                let bg = mix(normal, hover_color, self.hover);
-
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                sdf.fill(bg);
-                return sdf.result;
-            }
-        }
-
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
-
-        animator: {
-            hover = {
-                default: off
-                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
-                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
-            }
-        }
-    }
-
-    // Primary action button
-    PrimaryButton = <Button> {
-        width: Fit, height: Fit
-        padding: {left: 16, right: 16, top: 8, bottom: 8}
-
-        draw_bg: {
-            instance hover: 0.0
-            instance pressed: 0.0
-            instance dark_mode: 0.0
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let normal = (ACCENT_BLUE);
-                let hover_color = (BLUE_600);
-                let bg = mix(normal, hover_color, self.hover);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                sdf.fill(bg);
-                return sdf.result;
-            }
-        }
-
-        draw_text: {
-            text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-            fn get_color(self) -> vec4 { return (WHITE); }
-        }
-
-        animator: {
-            hover = {
-                default: off
-                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
-                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
-            }
-        }
-    }
-
-    // Simple checkbox style for settings
-    SettingsCheckBox = <CheckBox> {
-        width: Fit, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Simple radio button style for settings
-    SettingsRadioButton = <RadioButton> {
-        width: Fit, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Audio device dropdown
-    AudioDeviceDropdown = <DropDown> {
-        width: Fill, height: Fit
-        padding: {left: 12, right: 12, top: 10, bottom: 10}
-        popup_menu_position: BelowInput
-        labels: ["Default Device"]
-        values: []
-        selected_item: 0
-        draw_bg: {
-            instance dark_mode: 0.0
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
-                let border = mix((SLATE_300), (SLATE_600), self.dark_mode);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                sdf.fill(bg);
-                sdf.stroke(border, 1.0);
-                return sdf.result;
-            }
-        }
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
-        popup_menu: {
-            width: 300
-            draw_bg: {
-                instance dark_mode: 0.0
-                border_size: 1.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    let bg = mix((WHITE), (SLATE_800), self.dark_mode);
-                    let border = mix((BORDER), (SLATE_600), self.dark_mode);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
-                    sdf.fill(bg);
-                    sdf.stroke(border, self.border_size);
-                    return sdf.result;
-                }
-            }
-            menu_item: {
-                width: Fill
-                draw_bg: {
-                    instance dark_mode: 0.0
-                    fn pixel(self) -> vec4 {
-                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                        let base = mix((WHITE), (SLATE_800), self.dark_mode);
-                        let hover_color = mix((GRAY_100), (SLATE_700), self.dark_mode);
-                        sdf.rect(0., 0., self.rect_size.x, self.rect_size.y);
-                        sdf.fill(mix(base, hover_color, self.hover));
-                        return sdf.result;
-                    }
-                }
-                draw_text: {
-                    instance dark_mode: 0.0
-                    fn get_color(self) -> vec4 {
-                        let base = mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                        return base;
-                    }
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // General Tab Content
-    // ========================================================================
-
-    GeneralTab = <View> {
-        width: Fill, height: Fill
-        flow: Down
-        padding: 24
-
-        <Label> {
-            text: "General"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_BOLD>{ font_size: 18.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                }
-            }
-        }
-
-        <SettingsRow> {
-            startup_checkbox = <SettingsCheckBox> {
-                text: "Launch at system startup"
-            }
-        }
-
-        <SettingsRow> {
-            exit_checkbox = <SettingsCheckBox> {
-                text: "Exit when close main panel"
-            }
-        }
-
-        <HDivider> {}
-
-        // Appearance section
-        appearance_section = <View> {
-            width: Fill, height: Fit
-            flow: Down
-
-            <SectionTitle> { text: "Appearance" }
-
-            appearance_radios = <View> {
-                width: Fill, height: Fit
-                flow: Right
-                spacing: 24
-
-                light_radio = <SettingsRadioButton> {
-                    text: "Light Mode"
-                }
-
-                dark_radio = <SettingsRadioButton> {
-                    text: "Dark Mode"
-                }
-
-                auto_radio = <SettingsRadioButton> {
-                    text: "Follow System"
-                    animator: { selected = { default: on } }
-                }
-            }
-        }
-
-        <HDivider> {}
-
-        // Storage section
-        storage_section = <View> {
-            width: Fill, height: Fit
-            flow: Down
-
-            <SectionTitle> { text: "Storage" }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Data Location" }
-                <View> { width: Fill, height: Fit }
-                storage_path = <Label> {
-                    text: "~/Documents/colang"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                        }
-                    }
-                }
-                browse_btn = <SettingsButton> { text: "Browse..." }
-                default_path_btn = <SettingsButton> { text: "Default" }
-                open_path_btn = <SettingsButton> { text: "Open" }
-            }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Cache" }
-                <View> { width: Fill, height: Fit }
-                cache_size = <Label> {
-                    text: "256 MB"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                        }
-                    }
-                }
-                clear_cache_btn = <SettingsButton> { text: "Clear Cache" }
-            }
-        }
-
-        <View> { width: Fill, height: Fill }
-    }
-
-    // ========================================================================
-    // Audio Tab Content
-    // ========================================================================
-
-    AudioTab = <View> {
-        width: Fill, height: Fill
-        flow: Down
-        padding: 24
-
-        <Label> {
-            text: "Audio"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_BOLD>{ font_size: 18.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                }
-            }
-        }
-
-        // Speaker section
-        speaker_section = <View> {
-            width: Fill, height: Fit
-            flow: Down
-            margin: {top: 20}
-
-            <SectionTitle> { text: "Speaker" }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Output Device" width: 120 }
-                speaker_device = <AudioDeviceDropdown> {}
-                speaker_test_btn = <SettingsButton> { text: "Test" }
-            }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Volume" width: 120 }
-                speaker_volume = <Slider> {
-                    width: Fill, height: Fit
-                    min: 0.0, max: 100.0
-                    step: 1.0
-                    text: ""
-                }
-                speaker_volume_label = <Label> {
-                    width: 40
-                    text: "80%"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                        }
-                    }
-                }
-            }
-        }
-
-        <HDivider> {}
-
-        // Microphone section
-        mic_section = <View> {
-            width: Fill, height: Fit
-            flow: Down
-
-            <SectionTitle> { text: "Microphone" }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Input Device" width: 120 }
-                mic_device = <AudioDeviceDropdown> {}
-                mic_test_btn = <SettingsButton> { text: "Test" }
-            }
-
-            <SettingsRow> {
-                <SettingsLabel> { text: "Input Volume" width: 120 }
-                mic_volume = <Slider> {
-                    width: Fill, height: Fit
-                    min: 0.0, max: 100.0
-                    step: 1.0
-                    text: ""
-                }
-                mic_volume_label = <Label> {
-                    width: 40
-                    text: "75%"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                        }
-                    }
-                }
-            }
-
-            // Mic level meter
-            <SettingsRow> {
-                <SettingsLabel> { text: "Input Level" width: 120 }
-                mic_level_meter = <View> {
-                    width: Fill, height: 8
-                    show_bg: true
-                    draw_bg: {
-                        instance level: 0.3
-                        instance dark_mode: 0.0
-                        fn pixel(self) -> vec4 {
-                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            // Background
-                            let bg = mix((SLATE_200), (SLATE_700), self.dark_mode);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
-                            sdf.fill(bg);
-                            // Level indicator
-                            let level_width = self.rect_size.x * self.level;
-                            sdf.box(0., 0., level_width, self.rect_size.y, 4.0);
-                            sdf.fill((GREEN_500));
-                            return sdf.result;
-                        }
-                    }
-                }
-                <View> { width: 40, height: Fit }
-            }
-        }
-
-        <View> { width: Fill, height: Fill }
-    }
-
     // ========================================================================
     // AI Providers Tab Content
     // ========================================================================
@@ -584,159 +125,6 @@ live_design! {
 
         // Right panel - provider details
         provider_view = <ProviderView> {}
-    }
-
-    // ========================================================================
-    // About Tab Content
-    // ========================================================================
-
-    AboutTab = <View> {
-        width: Fill, height: Fill
-        flow: Down
-        padding: 24
-        align: {x: 0.5}
-
-        <View> { width: Fill, height: Fill }
-
-        // Logo
-        logo_container = <View> {
-            width: Fit, height: Fit
-            align: {x: 0.5, y: 0.5}
-
-            <RoundedView> {
-                width: 80, height: 80
-                show_bg: true
-                draw_bg: {
-                    color: (ACCENT_BLUE)
-                    border_radius: 16.0
-                }
-                align: {x: 0.5, y: 0.5}
-
-                <Label> {
-                    text: "开"
-                    draw_text: {
-                        text_style: <FONT_BOLD>{ font_size: 36.0 }
-                        fn get_color(self) -> vec4 { return (WHITE); }
-                    }
-                }
-            }
-        }
-
-        // App name and version
-        <View> {
-            width: Fit, height: Fit
-            flow: Down
-            margin: {top: 16}
-            align: {x: 0.5}
-
-            <Label> {
-                text: "开朗英语"
-                draw_text: {
-                    instance dark_mode: 0.0
-                    text_style: <FONT_BOLD>{ font_size: 20.0 }
-                    fn get_color(self) -> vec4 {
-                        return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                    }
-                }
-            }
-
-            version_label = <Label> {
-                text: "Version 1.0.0"
-                margin: {top: 4}
-                draw_text: {
-                    instance dark_mode: 0.0
-                    text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                    fn get_color(self) -> vec4 {
-                        return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                    }
-                }
-            }
-        }
-
-        // Action buttons
-        <View> {
-            width: Fit, height: Fit
-            flow: Down
-            margin: {top: 24}
-            spacing: 12
-            align: {x: 0.5}
-
-            check_update_btn = <PrimaryButton> {
-                width: 200
-                text: "Check for Updates"
-            }
-
-            release_notes_btn = <SettingsButton> {
-                width: 200
-                text: "Release Notes"
-            }
-
-            feedback_btn = <SettingsButton> {
-                width: 200
-                text: "Send Feedback"
-            }
-        }
-
-        <View> { width: Fill, height: Fill }
-
-        // Footer links
-        footer = <View> {
-            width: Fill, height: Fit
-            flow: Down
-            align: {x: 0.5}
-
-            links_row = <View> {
-                width: Fit, height: Fit
-                flow: Right
-                spacing: 8
-                align: {x: 0.5}
-
-                terms_link = <LinkLabel> {
-                    text: "Service Agreement"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((ACCENT_BLUE), (ACCENT_BLUE_DARK), self.dark_mode);
-                        }
-                    }
-                }
-
-                <Label> {
-                    text: "|"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                        }
-                    }
-                }
-
-                privacy_link = <LinkLabel> {
-                    text: "Privacy Policy"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((ACCENT_BLUE), (ACCENT_BLUE_DARK), self.dark_mode);
-                        }
-                    }
-                }
-            }
-
-            copyright = <Label> {
-                text: "© 2026 Colang English. All rights reserved."
-                margin: {top: 8}
-                draw_text: {
-                    instance dark_mode: 0.0
-                    text_style: <FONT_REGULAR>{ font_size: 10.0 }
-                    fn get_color(self) -> vec4 {
-                        return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
-                    }
-                }
-            }
-        }
     }
 
     // ========================================================================
@@ -874,9 +262,7 @@ impl Widget for SettingsScreen {
             }
             if let Some(prefs) = &self.preferences {
                 self.data_location = prefs.data_location.clone().unwrap_or_else(|| {
-                    dirs::document_dir()
-                        .map(|p| p.join("colang").to_string_lossy().to_string())
-                        .unwrap_or_else(|| "~/Documents/colang".to_string())
+                    general_panel::get_default_data_location()
                 });
                 self.view
                     .label(ids!(content.pages.general_page.storage_section.storage_path))
@@ -1072,7 +458,7 @@ impl Widget for SettingsScreen {
             .button(ids!(content.pages.general_page.storage_section.open_path_btn))
             .clicked(actions)
         {
-            self.open_data_location();
+            general_panel::open_data_location(&self.data_location);
         }
 
         // Handle clear cache button
@@ -1146,84 +532,22 @@ impl SettingsScreen {
     }
 
     fn init_audio_devices(&mut self, cx: &mut Cx) {
-        use cpal::traits::{DeviceTrait, HostTrait};
+        let devices = audio_panel::init_audio_devices();
         
-        let host = cpal::default_host();
-        
-        // Get input devices
-        let default_input_name = host.default_input_device().and_then(|d| d.name().ok());
-        let mut input_labels = Vec::new();
-        self.input_devices.clear();
-        
-        if let Ok(input_devices) = host.input_devices() {
-            for device in input_devices {
-                if let Ok(name) = device.name() {
-                    let is_default = default_input_name.as_ref().map_or(false, |d| d == &name);
-                    let label = if is_default {
-                        format!("Default ({})", name)
-                    } else {
-                        name.clone()
-                    };
-                    input_labels.push(label);
-                    self.input_devices.push(name);
-                }
-            }
-        }
-        
-        // Sort with default first
-        if !input_labels.is_empty() {
-            // Find default index
-            let default_idx = input_labels.iter().position(|l| l.starts_with("Default ("));
-            if let Some(idx) = default_idx {
-                if idx != 0 {
-                    input_labels.swap(0, idx);
-                    self.input_devices.swap(0, idx);
-                }
-            }
-        }
-        
-        // Get output devices
-        let default_output_name = host.default_output_device().and_then(|d| d.name().ok());
-        let mut output_labels = Vec::new();
-        self.output_devices.clear();
-        
-        if let Ok(output_devices) = host.output_devices() {
-            for device in output_devices {
-                if let Ok(name) = device.name() {
-                    let is_default = default_output_name.as_ref().map_or(false, |d| d == &name);
-                    let label = if is_default {
-                        format!("Default ({})", name)
-                    } else {
-                        name.clone()
-                    };
-                    output_labels.push(label);
-                    self.output_devices.push(name);
-                }
-            }
-        }
-        
-        // Sort with default first
-        if !output_labels.is_empty() {
-            let default_idx = output_labels.iter().position(|l| l.starts_with("Default ("));
-            if let Some(idx) = default_idx {
-                if idx != 0 {
-                    output_labels.swap(0, idx);
-                    self.output_devices.swap(0, idx);
-                }
-            }
-        }
+        self.input_devices = devices.input_devices;
+        self.output_devices = devices.output_devices;
         
         // Populate input dropdown
-        if !input_labels.is_empty() {
+        if !devices.input_labels.is_empty() {
             let dropdown = self.view.drop_down(ids!(content.pages.audio_page.mic_section.mic_device));
-            dropdown.set_labels(cx, input_labels);
+            dropdown.set_labels(cx, devices.input_labels);
             dropdown.set_selected_item(cx, 0);
         }
         
         // Populate output dropdown
-        if !output_labels.is_empty() {
+        if !devices.output_labels.is_empty() {
             let dropdown = self.view.drop_down(ids!(content.pages.audio_page.speaker_section.speaker_device));
-            dropdown.set_labels(cx, output_labels);
+            dropdown.set_labels(cx, devices.output_labels);
             dropdown.set_selected_item(cx, 0);
         }
         
@@ -1534,36 +858,20 @@ impl SettingsScreen {
     }
 
     fn browse_data_location(&mut self, cx: &mut Cx) {
-        // Use rfd to open a folder picker dialog
-        use std::path::PathBuf;
-        
-        // Get the current data location as starting point
-        let start_dir = if self.data_location.is_empty() {
-            dirs::document_dir().unwrap_or_else(|| PathBuf::from("."))
-        } else {
-            PathBuf::from(&self.data_location)
-        };
-
-        // Spawn the dialog in a blocking context since rfd dialogs are blocking on desktop
-        let dialog = rfd::FileDialog::new()
-            .set_title("Select Data Location")
-            .set_directory(&start_dir);
-        
-        if let Some(folder) = dialog.pick_folder() {
-            let path_str = folder.to_string_lossy().to_string();
-            self.data_location = path_str.clone();
+        if let Some(folder) = general_panel::browse_data_location(&self.data_location) {
+            self.data_location = folder.clone();
             
             // Update the label in the UI
             self.view
                 .label(ids!(content.pages.general_page.storage_section.storage_path))
-                .set_text(cx, &path_str);
+                .set_text(cx, &folder);
             
             // Save to preferences
             if self.preferences.is_none() {
                 self.preferences = Some(Preferences::load());
             }
             if let Some(prefs) = &mut self.preferences {
-                prefs.data_location = Some(path_str);
+                prefs.data_location = Some(folder);
                 if let Err(e) = prefs.save() {
                     eprintln!("Failed to save data location: {}", e);
                 }
@@ -1574,31 +882,17 @@ impl SettingsScreen {
     }
 
     fn clear_cache(&mut self, cx: &mut Cx) {
-        // Get cache directory
-        if let Some(cache_dir) = dirs::cache_dir() {
-            let app_cache = cache_dir.join("colang");
-            if app_cache.exists() {
-                if let Err(e) = std::fs::remove_dir_all(&app_cache) {
-                    eprintln!("Failed to clear cache: {}", e);
-                } else {
-                    // Update cache size label
-                    self.view
-                        .label(ids!(content.pages.general_page.storage_section.cache_size))
-                        .set_text(cx, "0 MB");
-                    self.view.redraw(cx);
-                }
-            }
+        if general_panel::clear_cache().is_ok() {
+            // Update cache size label
+            self.view
+                .label(ids!(content.pages.general_page.storage_section.cache_size))
+                .set_text(cx, "0 MB");
+            self.view.redraw(cx);
         }
     }
 
-    fn get_default_data_location() -> String {
-        dirs::document_dir()
-            .map(|p| p.join("colang").to_string_lossy().to_string())
-            .unwrap_or_else(|| "~/Documents/colang".to_string())
-    }
-
     fn reset_to_default_location(&mut self, cx: &mut Cx) {
-        let default_path = Self::get_default_data_location();
+        let default_path = general_panel::get_default_data_location();
         self.data_location = default_path.clone();
         
         // Update the label in the UI
@@ -1618,35 +912,6 @@ impl SettingsScreen {
         }
         
         self.view.redraw(cx);
-    }
-
-    fn open_data_location(&self) {
-        use std::process::Command;
-        
-        let path = if self.data_location.is_empty() {
-            Self::get_default_data_location()
-        } else {
-            self.data_location.clone()
-        };
-        
-        // Create directory if it doesn't exist
-        let _ = std::fs::create_dir_all(&path);
-        
-        // Open file explorer based on OS
-        #[cfg(target_os = "windows")]
-        {
-            let _ = Command::new("explorer").arg(&path).spawn();
-        }
-        
-        #[cfg(target_os = "macos")]
-        {
-            let _ = Command::new("open").arg(&path).spawn();
-        }
-        
-        #[cfg(target_os = "linux")]
-        {
-            let _ = Command::new("xdg-open").arg(&path).spawn();
-        }
     }
 }
 
