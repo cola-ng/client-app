@@ -7,8 +7,7 @@ use sqlx::sqlite::SqlitePool;
 use sqlx::{FromRow, Row};
 
 use crate::models::{
-    Conversation, ConversationAnnotation, ConversationAnnotationType, LearningSession, SpeakerType,
-    UseLanguage, WordPracticeLog,
+    Conversation, ConversationAnnotation, IssueWord, LearningSession, UseLang, WordPracticeLog,
 };
 
 /// Database manager for English Learning Companion

@@ -2,7 +2,7 @@
 
 use makepad_widgets::*;
 
-use crate::data::{Provider, ProviderConnectionStatus, ProviderId, ProviderType};
+use crate::models::{Provider, ProviderConnectionStatus, ProviderId, ProviderType};
 
 live_design! {
     use link::theme::*;

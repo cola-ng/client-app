@@ -5,7 +5,7 @@ use makepad_widgets::*;
 use super::provider_view::ProviderViewWidgetExt;
 use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
 use super::{audio_panel, general_panel};
-use crate::data::{Preferences, Provider, ProviderId};
+use crate::models::{Preferences, Provider, ProviderId};
 
 live_design! {
     use link::theme::*;
@@ -393,11 +393,11 @@ impl Widget for SettingsScreen {
                     name,
                     url: host,
                     api_key: if key.is_empty() { None } else { Some(key) },
-                    provider_type: crate::data::ProviderType::Custom,
+                    provider_type: crate::models::ProviderType::Custom,
                     enabled: true,
                     models: vec![],
                     is_custom: true,
-                    connection_status: crate::data::ProviderConnectionStatus::Disconnected,
+                    connection_status: crate::models::ProviderConnectionStatus::Disconnected,
                 };
 
                 self.add_custom_provider(cx, provider);

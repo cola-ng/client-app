@@ -8,15 +8,15 @@
 //! - Helper Methods (organized by responsibility)
 
 // App plugin system imports
-use colang::{ColangApp, ColangScreenWidgetRefExt};
-use home::SceneApp;
+use colang_core::models::Preferences;
+use colang_core::scenes::home::SceneApp;
+use colang_core::scenes::settings::SettingsScene;
+use colang_core::scenes::settings::screen::SettingsScreenWidgetRefExt;
+use colang_core::scenes::{ColangScreenWidgetRefExt, DialogScene};
 use makepad_widgets::*;
-use mofa_fm::{MoFaFMScene, MoFaFMScreenWidgetRefExt};
-use settings::SettingsScene;
-use settings::data::Preferences;
-use settings::screen::SettingsScreenWidgetRefExt;
-use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 use widgets::{AppRegistry, AppScene, StateChangeListener};
+
+use crate::widgets::sidebar::SidebarWidgetRefExt;
 
 // ============================================================================
 // TAB IDENTIFIER
@@ -863,8 +863,7 @@ pub struct App {
 impl LiveHook for App {
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         // Initialize the app registry with all installed apps
-        self.app_registry.register(MoFaFMScene::info());
-        self.app_registry.register(ColangApp::info());
+        self.app_registry.register(DialogScene::info());
         self.app_registry.register(SettingsScene::info());
 
         // Load user preferences and restore dark mode
@@ -907,14 +906,13 @@ impl LiveRegister for App {
         // Core widget libraries
         makepad_widgets::live_design(cx);
         widgets::live_design(cx);
-        studio_shell::widgets::sidebar::live_design(cx);
+        crate::widgets::sidebar::live_design(cx);
 
         // Register scenes via AppScene trait
         // Note: Widget types in live_design! macro still require compile-time imports
         // (Makepad constraint), but registration uses the standardized trait interface
         <SceneApp as AppScene>::live_design(cx);
-        <ColangApp as AppScene>::live_design(cx);
-        <MoFaFMScene as AppScene>::live_design(cx);
+        <DialogScene as AppScene>::live_design(cx);
         <SettingsScene as AppScene>::live_design(cx);
     }
 }
@@ -1207,15 +1205,6 @@ impl App {
                         .colang_page
                 ))
                 .stop_timers(cx);
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .stop_timers(cx);
             // Show home, hide others
             self.ui
                 .view(ids!(
@@ -1361,15 +1350,6 @@ impl App {
                         .settings_page
                 ))
                 .apply_over(cx, live! { visible: false });
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .start_timers(cx);
             self.ui.redraw(cx);
         }
 
@@ -1391,15 +1371,6 @@ impl App {
                         .main_content
                         .content
                         .colang_page
-                ))
-                .stop_timers(cx);
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1799,17 +1770,6 @@ impl App {
 
     /// Apply dark mode to screens with a specific value
     fn apply_dark_mode_screens_with_value(&mut self, cx: &mut Cx, dm: f64) {
-        // Apply to MoFA FM screen (main content)
-        self.ui
-            .mo_fa_fmscreen(ids!(
-                body.dashboard_base
-                    .content_area
-                    .main_content
-                    .content
-                    .fm_page
-            ))
-            .on_dark_mode_change(cx, dm);
-
         // Apply to Colang screen (main content)
         self.ui
             .colang_screen(ids!(
@@ -1959,29 +1919,6 @@ impl App {
         self.ui
             .view(ids!(body.tab_overlay))
             .set_visible(cx, any_tabs_open);
-
-        // Manage FM page timers
-        if any_tabs_open && !was_overlay_visible {
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .stop_timers(cx);
-        } else if !any_tabs_open && was_overlay_visible {
-            self.ui
-                .mo_fa_fmscreen(ids!(
-                    body.dashboard_base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .start_timers(cx);
-        }
 
         // Update tab visibility
         self.ui

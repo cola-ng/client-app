@@ -2,7 +2,7 @@
 
 use makepad_widgets::*;
 
-use crate::data::ProviderId;
+use crate::models::ProviderId;
 
 live_design! {
     use link::theme::*;

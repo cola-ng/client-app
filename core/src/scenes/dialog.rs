@@ -15,9 +15,9 @@ use crate::dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState
 use crate::doubao_api::DoubaoClient;
 
 /// MoFA FM app descriptor
-pub struct ColangApp;
+pub struct DialogScene;
 
-impl AppScene for ColangApp {
+impl AppScene for DialogScene {
     fn info() -> AppInfo {
         AppInfo {
             name: "MoFA FM",
@@ -35,5 +35,5 @@ impl AppScene for ColangApp {
 /// Register all MoFA FM widgets with Makepad
 /// (Kept for backwards compatibility - calls DoraApp::live_design)
 pub fn live_design(cx: &mut Cx) {
-    ColangApp::live_design(cx);
+    DialogScene::live_design(cx);
 }

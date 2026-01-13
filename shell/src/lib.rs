@@ -1,4 +1,4 @@
-//! MoFA Studio Shell - Main application shell
+//! Shell - Main application shell
 
 pub mod widgets;
 

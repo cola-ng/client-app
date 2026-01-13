@@ -8,8 +8,8 @@ use std::path::PathBuf;
 use makepad_widgets::*;
 
 use super::{ChatMessageEntry, ColangScreen};
-use crate::data::Preferences;
 use crate::dora_integration::{DoraEvent, DoraIntegration};
+use crate::models::Preferences;
 use crate::scenes::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
 
 impl ColangScreen {

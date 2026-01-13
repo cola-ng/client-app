@@ -1,10 +1,11 @@
 //! User preferences storage
 
-use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 
-use super::providers::{get_supported_providers, Provider, ProviderId};
+use serde::{Deserialize, Serialize};
+
+use super::providers::{Provider, ProviderId, get_supported_providers};
 
 /// User preferences for the dashboard
 #[derive(Clone, Debug, Serialize, Deserialize, Default)]

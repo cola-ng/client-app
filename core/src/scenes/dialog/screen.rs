@@ -1091,7 +1091,7 @@ pub struct ColangScreen {
     #[rust]
     splitter_dragging: bool,
     #[rust]
-    audio_manager: Option<super::audio::AudioManager>,
+    audio_manager: Option<crate::audio::AudioManager>,
     #[rust]
     audio_timer: Timer,
     #[rust]
@@ -1141,7 +1141,7 @@ pub struct ColangScreen {
 
     // Audio playback
     #[rust]
-    audio_player: Option<std::sync::Arc<super::audio_player::AudioPlayer>>,
+    audio_player: Option<std::sync::Arc<crate::audio_player::AudioPlayer>>,
     // Participant audio levels for decay animation (matches conference-dashboard)
     #[rust]
     participant_levels: [f64; 2], // 0=myself, 1=teacher
