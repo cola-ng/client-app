@@ -38,9 +38,9 @@ live_design! {
     use widgets::theme::TEXT_PRIMARY_DARK;
     use widgets::theme::TEXT_SECONDARY_DARK;
 
-    use colang_core::scenes::home_scene::HomeScene;
-    use colang_core::scenes::dialog_scene::DialogScene;
-    use colang_core::scenes::settings_scene::SettingsScene;
+    use colang_core::scenes::home::home_scene::HomeScene;
+    use colang_core::scenes::dialog::dialog_scene::DialogScene;
+    use colang_core::scenes::settings::settings_scene::SettingsScene;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
 
