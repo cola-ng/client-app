@@ -407,7 +407,7 @@ live_design! {
                     }
                 }
 
-                settings_tab_page = <SettingsScreen> {
+                settings_tab_page = <SettingsScene> {
                     width: Fill, height: Fill
                     visible: false
                 }
