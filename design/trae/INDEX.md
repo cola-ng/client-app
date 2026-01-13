@@ -7,5 +7,5 @@
 - [03_review_srs.svg](file:///d:/Works/colang/desktop/design/trae/03_review_srs.svg)
 - [04_shadowing_pronunciation.svg](file:///d:/Works/colang/desktop/design/trae/04_shadowing_pronunciation.svg)
 - [05_live_proxy.svg](file:///d:/Works/colang/desktop/design/trae/05_live_proxy.svg)
-- [kailang_english_icon.svg](file:///d:/Works/colang/desktop/design/trae/kailang_english_icon.svg)
+- [colang_english_icon.svg](file:///d:/Works/colang/desktop/design/trae/colang_english_icon.svg)
 - [FEATURES.md](file:///d:/Works/colang/desktop/design/trae/FEATURES.md)

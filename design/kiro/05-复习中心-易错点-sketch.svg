@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .error { fill: #ef4444; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .chip-success { fill: #dcfce7; stroke: #86efac; stroke-width: 1; rx: 20; }
+      .chip-warning { fill: #fef3c7; stroke: #fcd34d; stroke-width: 1; rx: 20; }
+      .chip-error { fill: #fee2e2; stroke: #fca5a5; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .sidebar { fill: #fafbfc; stroke: #f1f5f9; stroke-width: 1; }
+      .pill { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 999; }
+      .divider { stroke: #e5e7eb; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  <text x="40" y="40" class="t h1">开朗英语 - 复习中心（易错点页草图）</text>
+  <text x="40" y="65" class="t p muted">点击“易错点”后：按类型/频次/影响排序，进入专项微练习，并可一键“带入下一次对话”</text>
+
+  <rect x="40" y="90" width="1320" height="830" class="card"/>
+
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h2">📚 复习中心</text>
+
+  <rect x="250" y="102" width="80" height="32" class="chip"/>
+  <text x="290" y="123" class="t small" text-anchor="middle">待复习</text>
+  <rect x="340" y="102" width="80" height="32" class="chip-active"/>
+  <text x="380" y="123" class="t small white" text-anchor="middle">易错点</text>
+  <rect x="430" y="102" width="80" height="32" class="chip"/>
+  <text x="470" y="123" class="t small" text-anchor="middle">已掌握</text>
+  <rect x="520" y="102" width="80" height="32" class="chip"/>
+  <text x="560" y="123" class="t small" text-anchor="middle">统计</text>
+
+  <!-- Left: Mistake Explorer -->
+  <rect x="60" y="160" width="600" height="150" class="card"/>
+  <text x="90" y="195" class="t h2">🧭 易错点概览</text>
+  <text x="90" y="220" class="t small muted">把错误当作“训练入口”：按影响优先级排序，避免盲目刷题</text>
+  <rect x="90" y="235" width="140" height="32" class="pill"/>
+  <text x="110" y="256" class="t small muted">筛选：全部类型</text>
+  <rect x="240" y="235" width="140" height="32" class="pill"/>
+  <text x="260" y="256" class="t small muted">排序：影响优先</text>
+  <rect x="390" y="235" width="160" height="32" class="pill"/>
+  <text x="410" y="256" class="t small muted">范围：近 7 天</text>
+  <rect x="560" y="235" width="80" height="32" class="btn-secondary"/>
+  <text x="600" y="256" class="t small" text-anchor="middle">搜索</text>
+
+  <rect x="60" y="330" width="600" height="180" class="card"/>
+  <text x="90" y="365" class="t h2">🧩 分类与专项</text>
+  <text x="550" y="365" class="t small accent">生成训练计划 →</text>
+  <rect x="90" y="385" width="170" height="92" class="chip-warning"/>
+  <text x="175" y="418" class="t h2 warning" text-anchor="middle">12</text>
+  <text x="175" y="442" class="t small" text-anchor="middle">语法错误</text>
+  <text x="175" y="462" class="t small muted" text-anchor="middle">时态·冠词·介词</text>
+  <rect x="275" y="385" width="170" height="92" class="chip-error"/>
+  <text x="360" y="418" class="t h2 error" text-anchor="middle">8</text>
+  <text x="360" y="442" class="t small" text-anchor="middle">发音问题</text>
+  <text x="360" y="462" class="t small muted" text-anchor="middle">th·r·重音</text>
+  <rect x="460" y="385" width="170" height="92" class="chip"/>
+  <text x="545" y="418" class="t h2 accent" text-anchor="middle">5</text>
+  <text x="545" y="442" class="t small" text-anchor="middle">用词不当</text>
+  <text x="545" y="462" class="t small muted" text-anchor="middle">搭配·语境</text>
+
+  <rect x="60" y="530" width="600" height="280" class="card"/>
+  <text x="90" y="565" class="t h2">📌 易错点列表（可点进训练）</text>
+  <text x="550" y="565" class="t small muted">Top 10</text>
+
+  <rect x="90" y="585" width="540" height="52" class="panel"/>
+  <text x="110" y="616" class="t p">🔸 want to + 动词原形</text>
+  <text x="420" y="616" class="t small warning">出错 3 次</text>
+  <rect x="520" y="596" width="50" height="28" class="chip"/>
+  <text x="545" y="615" class="t small" text-anchor="middle">练</text>
+  <rect x="576" y="596" width="54" height="28" class="chip"/>
+  <text x="603" y="615" class="t small" text-anchor="middle">带入聊</text>
+
+  <rect x="90" y="645" width="540" height="52" class="panel"/>
+  <text x="110" y="676" class="t p">🔸 冠词：a / the 的使用</text>
+  <text x="420" y="676" class="t small warning">出错 2 次</text>
+  <rect x="520" y="656" width="50" height="28" class="chip"/>
+  <text x="545" y="675" class="t small" text-anchor="middle">练</text>
+  <rect x="576" y="656" width="54" height="28" class="chip"/>
+  <text x="603" y="675" class="t small" text-anchor="middle">带入聊</text>
+
+  <rect x="90" y="705" width="540" height="52" class="panel"/>
+  <text x="110" y="736" class="t p">🔸 发音：reservation 重音</text>
+  <text x="420" y="736" class="t small error">卡壳 4 次</text>
+  <rect x="520" y="716" width="50" height="28" class="chip"/>
+  <text x="545" y="735" class="t small" text-anchor="middle">练</text>
+  <rect x="576" y="716" width="54" height="28" class="chip"/>
+  <text x="603" y="735" class="t small" text-anchor="middle">带入聊</text>
+
+  <!-- Right: Focus Trainer -->
+  <rect x="680" y="160" width="660" height="210" class="card"/>
+  <text x="710" y="195" class="t h2">🎯 专项训练（当前选中：want to）</text>
+  <text x="710" y="220" class="t small muted">点击“练”进入：1) 规则一句话 2) 15 秒替换练 3) 立刻回到复习/对话</text>
+  <rect x="710" y="235" width="600" height="110" class="panel"/>
+  <text x="730" y="260" class="t p">规则：want <tspan class="accent">to</tspan> + 动词原形</text>
+  <text x="730" y="286" class="t small muted">你：I want book a room.</text>
+  <text x="730" y="312" class="t small success">✅ 建议：I want <tspan class="accent">to</tspan> book a room.</text>
+  <rect x="1200" y="252" width="110" height="32" class="btn-primary"/>
+  <text x="1255" y="273" class="t small white" text-anchor="middle">开始 15s</text>
+  <rect x="1200" y="292" width="110" height="32" class="btn-secondary"/>
+  <text x="1255" y="313" class="t small" text-anchor="middle">加入计划</text>
+
+  <rect x="680" y="390" width="660" height="160" class="card"/>
+  <text x="710" y="425" class="t h2">🧠 AI 建议（用于“无感带入对话”）</text>
+  <rect x="710" y="445" width="600" height="84" class="panel"/>
+  <text x="730" y="470" class="t p">今天对话里我会刻意制造 3 次 “want to” 的使用场景</text>
+  <text x="730" y="494" class="t small muted">你只需要继续说，AI 会在对话中温和提醒，不打断</text>
+  <rect x="1180" y="458" width="130" height="32" class="chip-active"/>
+  <text x="1245" y="479" class="t small white" text-anchor="middle">带入下一次对话</text>
+
+  <rect x="680" y="570" width="660" height="240" class="card"/>
+  <text x="710" y="605" class="t h2">📎 错误溯源（为什么会错）</text>
+  <rect x="710" y="625" width="600" height="100" class="panel"/>
+  <text x="730" y="650" class="t p">来源：酒店入住场景 · 1月10日对话</text>
+  <text x="730" y="676" class="t small muted">回放：你说错的那一句 + AI 当时的温和纠错</text>
+  <rect x="1200" y="642" width="110" height="32" class="btn-secondary"/>
+  <text x="1255" y="663" class="t small" text-anchor="middle">回放</text>
+  <rect x="710" y="738" width="600" height="52" class="panel"/>
+  <text x="730" y="770" class="t small muted">下一步：把“错误”转成 1 张纠错卡 + 2 个对话提示</text>
+  <rect x="1200" y="750" width="110" height="32" class="btn-primary"/>
+  <text x="1255" y="771" class="t small white" text-anchor="middle">生成卡片</text>
+
+  <text x="40" y="940" class="t small muted">交互：易错点 → 15 秒微练习 → 加入“对话带入计划” → 下次对话自然复现并强化</text>
+</svg>
+

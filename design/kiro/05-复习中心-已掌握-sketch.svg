@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="950" viewBox="0 0 1400 950">
+  <defs>
+    <style>
+      .t { font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif; fill: #1a1a2e; }
+      .h1 { font-size: 24px; font-weight: 700; }
+      .h2 { font-size: 16px; font-weight: 600; }
+      .h3 { font-size: 14px; font-weight: 600; }
+      .p { font-size: 13px; }
+      .small { font-size: 11px; }
+      .muted { fill: #6b7280; }
+      .accent { fill: #6366f1; }
+      .success { fill: #10b981; }
+      .warning { fill: #f59e0b; }
+      .error { fill: #ef4444; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1.5; rx: 16; }
+      .panel { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .chip { fill: #eef2ff; stroke: #c7d2fe; stroke-width: 1; rx: 20; }
+      .chip-active { fill: #6366f1; stroke: #4f46e5; stroke-width: 1; rx: 20; }
+      .chip-success { fill: #dcfce7; stroke: #86efac; stroke-width: 1; rx: 20; }
+      .btn-primary { fill: #6366f1; stroke: none; rx: 12; }
+      .btn-secondary { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; rx: 12; }
+      .header { fill: #ffffff; stroke: #f1f5f9; stroke-width: 1; }
+      .pill { fill: #ffffff; stroke: #e5e7eb; stroke-width: 1; rx: 999; }
+      .divider { stroke: #e5e7eb; stroke-width: 1; }
+      .barbg { fill: #e5e7eb; rx: 6; }
+      .barfill { fill: #10b981; rx: 6; }
+      .barfill2 { fill: #6366f1; rx: 6; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
+  <text x="40" y="40" class="t h1">开朗英语 - 复习中心（已掌握页草图）</text>
+  <text x="40" y="65" class="t p muted">点击“已掌握”后：查看长期掌握资产、安排“低频复测”，并把高价值句子沉淀到表达库</text>
+
+  <rect x="40" y="90" width="1320" height="830" class="card"/>
+
+  <rect x="40" y="90" width="1320" height="56" class="header"/>
+  <text x="70" y="125" class="t h2">📚 复习中心</text>
+
+  <rect x="250" y="102" width="80" height="32" class="chip"/>
+  <text x="290" y="123" class="t small" text-anchor="middle">待复习</text>
+  <rect x="340" y="102" width="80" height="32" class="chip"/>
+  <text x="380" y="123" class="t small" text-anchor="middle">易错点</text>
+  <rect x="430" y="102" width="80" height="32" class="chip-active"/>
+  <text x="470" y="123" class="t small white" text-anchor="middle">已掌握</text>
+  <rect x="520" y="102" width="80" height="32" class="chip"/>
+  <text x="560" y="123" class="t small" text-anchor="middle">统计</text>
+
+  <!-- Left: Mastered Library -->
+  <rect x="60" y="160" width="600" height="150" class="card"/>
+  <text x="90" y="195" class="t h2">✅ 已掌握资产库</text>
+  <text x="90" y="220" class="t small muted">已掌握不等于永远不会忘：这里做“低打扰复测”，防止回退</text>
+  <rect x="90" y="235" width="150" height="32" class="pill"/>
+  <text x="110" y="256" class="t small muted">筛选：词卡/句卡</text>
+  <rect x="250" y="235" width="150" height="32" class="pill"/>
+  <text x="270" y="256" class="t small muted">排序：最近复测</text>
+  <rect x="410" y="235" width="120" height="32" class="pill"/>
+  <text x="430" y="256" class="t small muted">标签：全部</text>
+  <rect x="540" y="235" width="100" height="32" class="btn-secondary"/>
+  <text x="590" y="256" class="t small" text-anchor="middle">导出</text>
+
+  <rect x="60" y="330" width="600" height="480" class="card"/>
+  <text x="90" y="365" class="t h2">📚 已掌握列表（可复测）</text>
+  <text x="550" y="365" class="t small muted">共 312</text>
+
+  <rect x="90" y="385" width="540" height="62" class="panel"/>
+  <text x="110" y="414" class="t h3">reservation</text>
+  <text x="110" y="438" class="t small muted">来源：酒店入住 · 1月10日对话</text>
+  <rect x="420" y="402" width="120" height="14" class="barbg"/>
+  <rect x="420" y="402" width="92" height="14" class="barfill"/>
+  <text x="548" y="414" class="t small success">92%</text>
+  <rect x="560" y="402" width="70" height="30" class="chip-success"/>
+  <text x="595" y="422" class="t small" text-anchor="middle">复测</text>
+
+  <rect x="90" y="455" width="540" height="62" class="panel"/>
+  <text x="110" y="484" class="t h3">make a reservation</text>
+  <text x="110" y="508" class="t small muted">句卡 · 可直接加入表达库</text>
+  <rect x="420" y="472" width="120" height="14" class="barbg"/>
+  <rect x="420" y="472" width="98" height="14" class="barfill"/>
+  <text x="548" y="484" class="t small success">98%</text>
+  <rect x="560" y="472" width="70" height="30" class="chip-success"/>
+  <text x="595" y="492" class="t small" text-anchor="middle">加入库</text>
+
+  <rect x="90" y="525" width="540" height="62" class="panel"/>
+  <text x="110" y="554" class="t h3">availability</text>
+  <text x="110" y="578" class="t small muted">发音卡 · 可进行多口音对比复测</text>
+  <rect x="420" y="542" width="120" height="14" class="barbg"/>
+  <rect x="420" y="542" width="80" height="14" class="barfill2"/>
+  <text x="548" y="554" class="t small accent">80%</text>
+  <rect x="560" y="542" width="70" height="30" class="btn-secondary"/>
+  <text x="595" y="562" class="t small" text-anchor="middle">练听</text>
+
+  <rect x="90" y="595" width="540" height="62" class="panel"/>
+  <text x="110" y="624" class="t h3">I’d like to…</text>
+  <text x="110" y="648" class="t small muted">表达模板 · 下一次对话优先复现</text>
+  <rect x="420" y="612" width="120" height="14" class="barbg"/>
+  <rect x="420" y="612" width="104" height="14" class="barfill"/>
+  <text x="548" y="624" class="t small success">100%</text>
+  <rect x="560" y="612" width="70" height="30" class="btn-secondary"/>
+  <text x="595" y="632" class="t small" text-anchor="middle">标星</text>
+
+  <rect x="90" y="665" width="540" height="120" class="panel"/>
+  <text x="110" y="694" class="t p muted">列表继续…（滚动）</text>
+  <text x="110" y="720" class="t small muted">你只需要做“偶尔复测”，其余由 SRS 自动安排</text>
+  <rect x="520" y="704" width="110" height="32" class="btn-primary"/>
+  <text x="575" y="725" class="t small white" text-anchor="middle">开始复测队列</text>
+
+  <!-- Right: Retest Plan + Express Library -->
+  <rect x="680" y="160" width="660" height="180" class="card"/>
+  <text x="710" y="195" class="t h2">🧪 复测计划（低打扰）</text>
+  <rect x="710" y="215" width="600" height="100" class="panel"/>
+  <text x="730" y="240" class="t p">今天只复测：6 张（每张 10 秒）</text>
+  <text x="730" y="265" class="t small muted">原则：不影响“敢开口”，复测像刷牙一样轻量</text>
+  <rect x="1180" y="232" width="130" height="32" class="chip-active"/>
+  <text x="1245" y="253" class="t small white" text-anchor="middle">加入今日任务</text>
+  <rect x="1180" y="272" width="130" height="32" class="btn-secondary"/>
+  <text x="1245" y="293" class="t small" text-anchor="middle">稍后提醒</text>
+
+  <rect x="680" y="360" width="660" height="220" class="card"/>
+  <text x="710" y="395" class="t h2">🌟 表达库（从已掌握句卡沉淀）</text>
+  <text x="710" y="420" class="t small muted">作用：下一次 AI 对话优先用这些句式引导你说出来</text>
+  <rect x="710" y="438" width="600" height="46" class="panel"/>
+  <text x="730" y="466" class="t p">“I’d like to make a reservation for two.”</text>
+  <rect x="1210" y="446" width="100" height="30" class="chip-success"/>
+  <text x="1260" y="466" class="t small" text-anchor="middle">已收藏</text>
+  <rect x="710" y="492" width="600" height="46" class="panel"/>
+  <text x="730" y="520" class="t p">“Would you have any availability?”</text>
+  <rect x="1210" y="500" width="100" height="30" class="btn-secondary"/>
+  <text x="1260" y="520" class="t small" text-anchor="middle">收藏</text>
+
+  <rect x="680" y="600" width="660" height="210" class="card"/>
+  <text x="710" y="635" class="t h2">🧠 遗忘预警（提前防回退）</text>
+  <rect x="710" y="655" width="600" height="130" class="panel"/>
+  <text x="730" y="680" class="t p">这些“已掌握”卡片近期有回退风险：</text>
+  <text x="730" y="705" class="t small warning">• availability（发音评分从 90% → 80%）</text>
+  <text x="730" y="728" class="t small warning">• articles（对话中出现 2 次误用）</text>
+  <text x="730" y="754" class="t small muted">点击即可加入复测队列 / 带入对话训练</text>
+  <rect x="1180" y="704" width="130" height="32" class="btn-primary"/>
+  <text x="1245" y="725" class="t small white" text-anchor="middle">一键加入</text>
+
+  <text x="40" y="940" class="t small muted">交互：已掌握 → 低频复测 → 表达库沉淀 → 对话优先复现，长期稳定输出</text>
+</svg>
+
