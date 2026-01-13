@@ -12,9 +12,15 @@ use makepad_widgets::*;
 use widgets::StateChangeListener;
 use widgets::participant_panel::ParticipantPanelWidgetExt;
 
+use super::ChatMessageEntry;
+use super::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
 use crate::dora_integration::{DoraCommand, DoraIntegration};
 use crate::log_bridge;
-use mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
+
+mod audio_controls;
+mod chat_panel;
+mod dora_handlers;
+mod log_panel;
 
 live_design! {
     use link::theme::*;
@@ -1049,7 +1055,6 @@ live_design! {
         }
     }
 }
-
 
 #[derive(Live, LiveHook, Widget)]
 pub struct DialogScene {

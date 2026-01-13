@@ -1,8 +1,5 @@
-mod audio_controls;
-mod chat_panel;
+
 pub mod dialog_scene;
-mod dora_handlers;
-mod log_panel;
 pub mod mofa_hero;
 
 pub use dialog_scene::{DialogScene, DialogSceneWidgetRefExt};
@@ -13,7 +10,6 @@ pub fn live_design(cx: &mut Cx) {
     mofa_hero::live_design(cx);
     dialog_scene::live_design(cx);
 }
-
 
 /// Chat message entry for display
 #[derive(Clone, Debug)]

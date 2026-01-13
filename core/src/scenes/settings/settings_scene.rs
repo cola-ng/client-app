@@ -2,9 +2,9 @@
 
 use makepad_widgets::*;
 
+use super::provider_view::ProviderViewWidgetExt;
+use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
 use crate::models::{Preferences, Provider, ProviderId};
-use provider_view::ProviderViewWidgetExt;
-use providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
 
 live_design! {
     use link::theme::*;
@@ -17,6 +17,7 @@ live_design! {
     use crate::scenes::settings::provider_view::ProviderView;
     use crate::scenes::settings::add_provider_modal::AddProviderModal;
     use crate::scenes::settings::general_panel::GeneralTab;
+    use crate::scenes::settings::*;
     use crate::scenes::settings::audio_panel::AudioTab;
     use crate::scenes::settings::about_panel::AboutTab;
 
@@ -263,7 +264,7 @@ impl Widget for SettingsScene {
                 self.data_location = prefs
                     .data_location
                     .clone()
-                    .unwrap_or_else(|| general_panel::get_default_data_location());
+                    .unwrap_or_else(|| super::get_default_data_location());
                 self.view
                     .label(ids!(
                         content.pages.general_page.storage_section.storage_path
@@ -464,7 +465,7 @@ impl Widget for SettingsScene {
             ))
             .clicked(actions)
         {
-            general_panel::open_data_location(&self.data_location);
+            super::open_data_location(&self.data_location);
         }
 
         // Handle clear cache button
@@ -540,7 +541,7 @@ impl SettingsScene {
     }
 
     fn init_audio_devices(&mut self, cx: &mut Cx) {
-        let devices = audio_panel::init_audio_devices();
+        let devices = super::init_audio_devices();
 
         self.input_devices = devices.input_devices;
         self.output_devices = devices.output_devices;
@@ -866,7 +867,7 @@ impl SettingsScene {
     }
 
     fn browse_data_location(&mut self, cx: &mut Cx) {
-        if let Some(folder) = general_panel::browse_data_location(&self.data_location) {
+        if let Some(folder) = super::browse_data_location(&self.data_location) {
             self.data_location = folder.clone();
 
             // Update the label in the UI
@@ -892,7 +893,7 @@ impl SettingsScene {
     }
 
     fn clear_cache(&mut self, cx: &mut Cx) {
-        if general_panel::clear_cache().is_ok() {
+        if super::clear_cache().is_ok() {
             // Update cache size label
             self.view
                 .label(ids!(content.pages.general_page.storage_section.cache_size))
@@ -902,7 +903,7 @@ impl SettingsScene {
     }
 
     fn reset_to_default_location(&mut self, cx: &mut Cx) {
-        let default_path = general_panel::get_default_data_location();
+        let default_path = super::get_default_data_location();
         self.data_location = default_path.clone();
 
         // Update the label in the UI
