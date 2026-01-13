@@ -12,9 +12,9 @@ live_design! {
     HERO_RADIUS = 4.0
 
     // Dark mode colors
-    use mofa_widgets::theme::PANEL_BG_DARK;
-    use mofa_widgets::theme::TEXT_PRIMARY_DARK;
-    use mofa_widgets::theme::TEXT_SECONDARY_DARK;
+    use widgets::theme::PANEL_BG_DARK;
+    use widgets::theme::TEXT_PRIMARY_DARK;
+    use widgets::theme::TEXT_SECONDARY_DARK;
 
     // Icons
     ICO_START = dep("crate://self/resources/icons/start.svg")

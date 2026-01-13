@@ -12,15 +12,15 @@ use makepad_widgets::*;
 use widgets::StateChangeListener;
 use widgets::participant_panel::ParticipantPanelWidgetExt;
 
+pub mod audio_controls;
+pub mod chat_panel;
+pub mod dora_handlers;
+pub mod log_panel;
+pub mod mofa_hero;
+
 use crate::dora_integration::{DoraCommand, DoraIntegration};
 use crate::log_bridge;
-use crate::scenes::dialog::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
-
-mod audio_controls;
-mod chat_panel;
-mod dora_handlers;
-mod log_panel;
-mod mofa_hero;
+use mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
 
 live_design! {
     use link::theme::*;
@@ -30,7 +30,7 @@ live_design! {
     use widgets::theme::*;
     use widgets::participant_panel::ParticipantPanel;
     use widgets::log_panel::LogPanel;
-    use crate::mofa_hero::MofaHero;
+    use crate::scenes::dialog::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)
     SECTION_SPACING = 12.0

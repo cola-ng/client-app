@@ -2,12 +2,12 @@
 
 use makepad_widgets::*;
 
-mod about_panel;
-mod add_provider_modal;
-mod audio_panel;
-mod general_panel;
-mod provider_view;
-mod providers_panel;
+pub mod about_panel;
+pub mod add_provider_modal;
+pub mod audio_panel;
+pub mod general_panel;
+pub mod provider_view;
+pub mod providers_panel;
 
 use crate::models::{Preferences, Provider, ProviderId};
 use provider_view::ProviderViewWidgetExt;

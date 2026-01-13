@@ -62,3 +62,7 @@ AI 甚至会将某些电影等里面的经典对白带入到聊天之中, 让用
     Feedback button
     footer serive agreement| privacy policy
     copy right
+
+
+
+$env:MAKEPAD="lines"; cargo +nightly build --workspace && cargo +nightly run --bin colang

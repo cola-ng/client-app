@@ -9,7 +9,7 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::general_panel::SettingsButton;
+    use crate::scenes::settings::general_panel::SettingsButton;
 
     // Primary action button
     pub PrimaryButton = <Button> {
