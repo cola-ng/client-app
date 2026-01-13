@@ -4,6 +4,15 @@ pub mod dialog;
 pub mod home;
 pub mod settings;
 
-pub use dialog::{DialogScene, DialogSceneWidgetRefExt};
-pub use home::{HomeScene, HomeSceneWidgetRefExt};
-pub use settings::{SettingsScene, SettingsSceneWidgetRefExt};
+// pub use dialog::{DialogScene, DialogSceneWidgetRefExt};
+// pub use home::{HomeScene, HomeSceneWidgetRefExt};
+// pub use settings::{SettingsScene, SettingsSceneWidgetRefExt};
+
+
+use makepad_widgets::Cx;
+
+pub fn live_design(cx: &mut Cx) {
+    home::live_design(cx);
+    dialog::live_design(cx);
+    settings::live_design(cx);
+}

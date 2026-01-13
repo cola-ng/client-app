@@ -10,7 +10,7 @@
 // App plugin system imports
 use colang_core::models::Preferences;
 use colang_core::scenes::settings::{SettingsScene, SettingsSceneWidgetRefExt};
-use colang_core::scenes::{DialogScene, DialogSceneWidgetRefExt};
+use colang_core::scenes::dialog::{DialogScene, DialogSceneWidgetRefExt};
 use makepad_widgets::*;
 use widgets::StateChangeListener;
 
@@ -875,10 +875,7 @@ impl LiveRegister for App {
         widgets::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);
 
-        // Then register the main scenes
-        colang_core::scenes::home::live_design(cx);
-        colang_core::scenes::dialog::live_design(cx);
-        colang_core::scenes::settings::live_design(cx);
+        colang_core::scenes::live_design(cx);
     }
 }
 
