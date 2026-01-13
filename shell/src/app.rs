@@ -69,9 +69,9 @@ live_design! {
     use widgets::theme::INDIGO_100;
 
     use colang_shell::widgets::sidebar::Sidebar;
-    use colang_core::scenes::home::screen::HomeScene;
-    use colang_core::scenes::dialog::screen::DialogScene;
-    use colang_core::scenes::settings::screen::SettingsScene;
+    use colang_core::scenes::HomeScene;
+    use colang_core::scenes::DialogScene;
+    use colang_core::scenes::SettingsScene;
 
     // Logo image
     COLANG_LOGO = dep("crate://self/resources/clang-logo.png")
@@ -988,9 +988,7 @@ impl App {
 impl App {
     /// Handle user menu hover
     fn handle_user_menu_hover(&mut self, cx: &mut Cx, event: &Event) {
-        let user_btn = self
-            .ui
-            .view(ids!(body.base.header.user_profile_container));
+        let user_btn = self.ui.view(ids!(body.base.header.user_profile_container));
         let user_menu = self.ui.view(ids!(user_menu));
 
         match event.hits(cx, user_btn.area()) {
@@ -1165,48 +1163,24 @@ impl App {
             // Stop any running timers
             self.ui
                 .dialog_scene(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .stop_timers(cx);
             // Show home, hide others
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .home_scene
-                ))
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
+                .view(ids!(body.base.content_area.main_content.content.fm_page))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .settings_scene
+                    body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui.redraw(cx);
@@ -1225,47 +1199,23 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .home_scene
-                ))
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(body.base.content_area.main_content.content.fm_page))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .settings_scene
+                    body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .dialog_scene(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .start_timers(cx);
             self.ui.redraw(cx);
@@ -1281,39 +1231,19 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
+                .view(ids!(body.base.content_area.main_content.content.fm_page))
                 .apply_over(cx, live! { visible: true });
             self.ui
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
+                .apply_over(cx, live! { visible: false });
+            self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .home_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .settings_scene
+                    body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui.redraw(cx);
@@ -1332,47 +1262,23 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .dialog_scene(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .stop_timers(cx);
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .home_scene
-                ))
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .dialog_scene
+                    body.base.content_area.main_content.content.dialog_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .fm_page
-                ))
+                .view(ids!(body.base.content_area.main_content.content.fm_page))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .settings_scene
+                    body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui.redraw(cx);
@@ -1739,22 +1645,14 @@ impl App {
         // Apply to Colang screen (main content)
         self.ui
             .dialog_scene(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .dialog_scene
+                body.base.content_area.main_content.content.dialog_scene
             ))
             .on_dark_mode_change(cx, dm);
 
         // Apply to Settings screen in main content
         self.ui
             .settings_scene(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .settings_scene
+                body.base.content_area.main_content.content.settings_scene
             ))
             .update_dark_mode(cx, dm);
 

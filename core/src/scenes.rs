@@ -7,4 +7,4 @@ pub mod settings;
 // Re-exports
 pub use dialog::{DialogScene, DialogSceneWidgetRefExt};
 pub use home::{HomeScene, HomeSceneWidgetRefExt};
-pub use settings::SettingsScene;
+pub use settings::{SettingsScene, SettingsSceneWidgetRefExt};
