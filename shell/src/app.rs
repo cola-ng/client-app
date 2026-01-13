@@ -69,9 +69,9 @@ live_design! {
     use widgets::theme::INDIGO_100;
 
     use colang_shell::widgets::sidebar::Sidebar;
-    use colang_core::scenes::HomeScene;
-    use colang_core::scenes::DialogScene;
-    use colang_core::scenes::SettingsScene;
+    use colang_core::scenes::home::HomeScene;
+    use colang_core::scenes::dialog::DialogScene;
+    use colang_core::scenes::settings::SettingsScene;
 
     // Logo image
     COLANG_LOGO = dep("crate://self/resources/clang-logo.png")
@@ -875,9 +875,6 @@ impl LiveRegister for App {
         widgets::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);
 
-        // Register scenes via AppScene trait
-        // Note: Widget types in live_design! macro still require compile-time imports
-        // (Makepad constraint), but registration uses the standardized trait interface
         colang_core::scenes::home::live_design(cx);
         colang_core::scenes::dialog::live_design(cx);
         colang_core::scenes::settings::live_design(cx);
