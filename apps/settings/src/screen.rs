@@ -272,47 +272,67 @@ live_design! {
         }
     }
 
-    // Device selector (using RoundedView instead of Dropdown)
-    DeviceSelector = <RoundedView> {
+    // Audio device dropdown
+    AudioDeviceDropdown = <DropDown> {
         width: Fill, height: Fit
-        flow: Right
         padding: {left: 12, right: 12, top: 10, bottom: 10}
-        align: {y: 0.5}
-        show_bg: true
+        popup_menu_position: BelowInput
+        labels: ["Default Device"]
+        values: []
+        selected_item: 0
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 6.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
                 let border = mix((SLATE_300), (SLATE_600), self.dark_mode);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
                 sdf.fill(bg);
                 sdf.stroke(border, 1.0);
                 return sdf.result;
             }
         }
-
-        <Label> {
-            width: Fill, height: Fit
-            text: "Default Device"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                }
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
             }
         }
-
-        // Dropdown arrow indicator
-        <Label> {
-            text: "▾"
-            draw_text: {
+        popup_menu: {
+            width: 300
+            draw_bg: {
                 instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 10.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_MUTED), (TEXT_MUTED_DARK), self.dark_mode);
+                border_size: 1.0
+                fn pixel(self) -> vec4 {
+                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                    let bg = mix((WHITE), (SLATE_800), self.dark_mode);
+                    let border = mix((BORDER), (SLATE_600), self.dark_mode);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                    sdf.fill(bg);
+                    sdf.stroke(border, self.border_size);
+                    return sdf.result;
+                }
+            }
+            menu_item: {
+                width: Fill
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        let base = mix((WHITE), (SLATE_800), self.dark_mode);
+                        let hover_color = mix((GRAY_100), (SLATE_700), self.dark_mode);
+                        sdf.rect(0., 0., self.rect_size.x, self.rect_size.y);
+                        sdf.fill(mix(base, hover_color, self.hover));
+                        return sdf.result;
+                    }
+                }
+                draw_text: {
+                    instance dark_mode: 0.0
+                    fn get_color(self) -> vec4 {
+                        let base = mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                        return base;
+                    }
                 }
             }
         }
@@ -456,7 +476,7 @@ live_design! {
 
             <SettingsRow> {
                 <SettingsLabel> { text: "Output Device" width: 120 }
-                speaker_device = <DeviceSelector> {}
+                speaker_device = <AudioDeviceDropdown> {}
                 speaker_test_btn = <SettingsButton> { text: "Test" }
             }
 
@@ -493,7 +513,7 @@ live_design! {
 
             <SettingsRow> {
                 <SettingsLabel> { text: "Input Device" width: 120 }
-                mic_device = <DeviceSelector> {}
+                mic_device = <AudioDeviceDropdown> {}
                 mic_test_btn = <SettingsButton> { text: "Test" }
             }
 
@@ -820,6 +840,15 @@ pub struct SettingsScreen {
 
     #[rust]
     data_location: String,
+
+    #[rust]
+    input_devices: Vec<String>,
+
+    #[rust]
+    output_devices: Vec<String>,
+
+    #[rust]
+    audio_initialized: bool,
 }
 
 impl Widget for SettingsScreen {
@@ -853,6 +882,12 @@ impl Widget for SettingsScreen {
                     .label(ids!(content.pages.general_page.storage_section.storage_path))
                     .set_text(cx, &self.data_location);
             }
+        }
+
+        // Initialize audio devices
+        if !self.audio_initialized {
+            self.init_audio_devices(cx);
+            self.audio_initialized = true;
         }
 
         // Extract actions for button clicks
@@ -1107,6 +1142,91 @@ impl SettingsScreen {
                 },
             );
         }
+        self.view.redraw(cx);
+    }
+
+    fn init_audio_devices(&mut self, cx: &mut Cx) {
+        use cpal::traits::{DeviceTrait, HostTrait};
+        
+        let host = cpal::default_host();
+        
+        // Get input devices
+        let default_input_name = host.default_input_device().and_then(|d| d.name().ok());
+        let mut input_labels = Vec::new();
+        self.input_devices.clear();
+        
+        if let Ok(input_devices) = host.input_devices() {
+            for device in input_devices {
+                if let Ok(name) = device.name() {
+                    let is_default = default_input_name.as_ref().map_or(false, |d| d == &name);
+                    let label = if is_default {
+                        format!("Default ({})", name)
+                    } else {
+                        name.clone()
+                    };
+                    input_labels.push(label);
+                    self.input_devices.push(name);
+                }
+            }
+        }
+        
+        // Sort with default first
+        if !input_labels.is_empty() {
+            // Find default index
+            let default_idx = input_labels.iter().position(|l| l.starts_with("Default ("));
+            if let Some(idx) = default_idx {
+                if idx != 0 {
+                    input_labels.swap(0, idx);
+                    self.input_devices.swap(0, idx);
+                }
+            }
+        }
+        
+        // Get output devices
+        let default_output_name = host.default_output_device().and_then(|d| d.name().ok());
+        let mut output_labels = Vec::new();
+        self.output_devices.clear();
+        
+        if let Ok(output_devices) = host.output_devices() {
+            for device in output_devices {
+                if let Ok(name) = device.name() {
+                    let is_default = default_output_name.as_ref().map_or(false, |d| d == &name);
+                    let label = if is_default {
+                        format!("Default ({})", name)
+                    } else {
+                        name.clone()
+                    };
+                    output_labels.push(label);
+                    self.output_devices.push(name);
+                }
+            }
+        }
+        
+        // Sort with default first
+        if !output_labels.is_empty() {
+            let default_idx = output_labels.iter().position(|l| l.starts_with("Default ("));
+            if let Some(idx) = default_idx {
+                if idx != 0 {
+                    output_labels.swap(0, idx);
+                    self.output_devices.swap(0, idx);
+                }
+            }
+        }
+        
+        // Populate input dropdown
+        if !input_labels.is_empty() {
+            let dropdown = self.view.drop_down(ids!(content.pages.audio_page.mic_section.mic_device));
+            dropdown.set_labels(cx, input_labels);
+            dropdown.set_selected_item(cx, 0);
+        }
+        
+        // Populate output dropdown
+        if !output_labels.is_empty() {
+            let dropdown = self.view.drop_down(ids!(content.pages.audio_page.speaker_section.speaker_device));
+            dropdown.set_labels(cx, output_labels);
+            dropdown.set_selected_item(cx, 0);
+        }
+        
         self.view.redraw(cx);
     }
 
