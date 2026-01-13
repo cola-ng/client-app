@@ -373,7 +373,7 @@ live_design! {
                 }
 
                 auto_radio = <SettingsRadioButton> {
-                    text: "Follow system"
+                    text: "Follow System"
                     animator: { selected = { default: on } }
                 }
             }
@@ -392,7 +392,7 @@ live_design! {
                 <SettingsLabel> { text: "Data Location" }
                 <View> { width: Fill, height: Fit }
                 storage_path = <Label> {
-                    text: "~/Documents/ColangEnglish"
+                    text: "~/Documents/colang"
                     draw_text: {
                         instance dark_mode: 0.0
                         text_style: <FONT_REGULAR>{ font_size: 11.0 }
@@ -402,6 +402,8 @@ live_design! {
                     }
                 }
                 browse_btn = <SettingsButton> { text: "Browse..." }
+                default_path_btn = <SettingsButton> { text: "Default" }
+                open_path_btn = <SettingsButton> { text: "Open" }
             }
 
             <SettingsRow> {
@@ -815,6 +817,9 @@ pub struct SettingsScreen {
 
     #[rust]
     dark_mode: f64,
+
+    #[rust]
+    data_location: String,
 }
 
 impl Widget for SettingsScreen {
@@ -831,6 +836,23 @@ impl Widget for SettingsScreen {
             let default_id = ProviderId::from("openai");
             self.selected_provider_id = Some(default_id.clone());
             self.load_provider_to_view(cx, &default_id);
+        }
+
+        // Initialize data location from preferences
+        if self.data_location.is_empty() {
+            if self.preferences.is_none() {
+                self.preferences = Some(Preferences::load());
+            }
+            if let Some(prefs) = &self.preferences {
+                self.data_location = prefs.data_location.clone().unwrap_or_else(|| {
+                    dirs::document_dir()
+                        .map(|p| p.join("colang").to_string_lossy().to_string())
+                        .unwrap_or_else(|| "~/Documents/colang".to_string())
+                });
+                self.view
+                    .label(ids!(content.pages.general_page.storage_section.storage_path))
+                    .set_text(cx, &self.data_location);
+            }
         }
 
         // Extract actions for button clicks
@@ -989,6 +1011,42 @@ impl Widget for SettingsScreen {
             .clicked(actions)
         {
             self.sync_models(cx);
+        }
+
+        // Handle browse button for data location
+        if self
+            .view
+            .button(ids!(content.pages.general_page.storage_section.browse_btn))
+            .clicked(actions)
+        {
+            self.browse_data_location(cx);
+        }
+
+        // Handle default path button
+        if self
+            .view
+            .button(ids!(content.pages.general_page.storage_section.default_path_btn))
+            .clicked(actions)
+        {
+            self.reset_to_default_location(cx);
+        }
+
+        // Handle open path button
+        if self
+            .view
+            .button(ids!(content.pages.general_page.storage_section.open_path_btn))
+            .clicked(actions)
+        {
+            self.open_data_location();
+        }
+
+        // Handle clear cache button
+        if self
+            .view
+            .button(ids!(content.pages.general_page.storage_section.clear_cache_btn))
+            .clicked(actions)
+        {
+            self.clear_cache(cx);
         }
 
         // Handle appearance radio buttons
@@ -1352,6 +1410,122 @@ impl SettingsScreen {
 
         if let Some(provider_id) = self.selected_provider_id.clone() {
             self.load_provider_to_view(cx, &provider_id);
+        }
+    }
+
+    fn browse_data_location(&mut self, cx: &mut Cx) {
+        // Use rfd to open a folder picker dialog
+        use std::path::PathBuf;
+        
+        // Get the current data location as starting point
+        let start_dir = if self.data_location.is_empty() {
+            dirs::document_dir().unwrap_or_else(|| PathBuf::from("."))
+        } else {
+            PathBuf::from(&self.data_location)
+        };
+
+        // Spawn the dialog in a blocking context since rfd dialogs are blocking on desktop
+        let dialog = rfd::FileDialog::new()
+            .set_title("Select Data Location")
+            .set_directory(&start_dir);
+        
+        if let Some(folder) = dialog.pick_folder() {
+            let path_str = folder.to_string_lossy().to_string();
+            self.data_location = path_str.clone();
+            
+            // Update the label in the UI
+            self.view
+                .label(ids!(content.pages.general_page.storage_section.storage_path))
+                .set_text(cx, &path_str);
+            
+            // Save to preferences
+            if self.preferences.is_none() {
+                self.preferences = Some(Preferences::load());
+            }
+            if let Some(prefs) = &mut self.preferences {
+                prefs.data_location = Some(path_str);
+                if let Err(e) = prefs.save() {
+                    eprintln!("Failed to save data location: {}", e);
+                }
+            }
+            
+            self.view.redraw(cx);
+        }
+    }
+
+    fn clear_cache(&mut self, cx: &mut Cx) {
+        // Get cache directory
+        if let Some(cache_dir) = dirs::cache_dir() {
+            let app_cache = cache_dir.join("colang");
+            if app_cache.exists() {
+                if let Err(e) = std::fs::remove_dir_all(&app_cache) {
+                    eprintln!("Failed to clear cache: {}", e);
+                } else {
+                    // Update cache size label
+                    self.view
+                        .label(ids!(content.pages.general_page.storage_section.cache_size))
+                        .set_text(cx, "0 MB");
+                    self.view.redraw(cx);
+                }
+            }
+        }
+    }
+
+    fn get_default_data_location() -> String {
+        dirs::document_dir()
+            .map(|p| p.join("colang").to_string_lossy().to_string())
+            .unwrap_or_else(|| "~/Documents/colang".to_string())
+    }
+
+    fn reset_to_default_location(&mut self, cx: &mut Cx) {
+        let default_path = Self::get_default_data_location();
+        self.data_location = default_path.clone();
+        
+        // Update the label in the UI
+        self.view
+            .label(ids!(content.pages.general_page.storage_section.storage_path))
+            .set_text(cx, &default_path);
+        
+        // Save to preferences (None means use default)
+        if self.preferences.is_none() {
+            self.preferences = Some(Preferences::load());
+        }
+        if let Some(prefs) = &mut self.preferences {
+            prefs.data_location = None; // None means default
+            if let Err(e) = prefs.save() {
+                eprintln!("Failed to save data location: {}", e);
+            }
+        }
+        
+        self.view.redraw(cx);
+    }
+
+    fn open_data_location(&self) {
+        use std::process::Command;
+        
+        let path = if self.data_location.is_empty() {
+            Self::get_default_data_location()
+        } else {
+            self.data_location.clone()
+        };
+        
+        // Create directory if it doesn't exist
+        let _ = std::fs::create_dir_all(&path);
+        
+        // Open file explorer based on OS
+        #[cfg(target_os = "windows")]
+        {
+            let _ = Command::new("explorer").arg(&path).spawn();
+        }
+        
+        #[cfg(target_os = "macos")]
+        {
+            let _ = Command::new("open").arg(&path).spawn();
+        }
+        
+        #[cfg(target_os = "linux")]
+        {
+            let _ = Command::new("xdg-open").arg(&path).spawn();
         }
     }
 }

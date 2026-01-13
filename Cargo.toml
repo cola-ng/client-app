@@ -54,6 +54,7 @@ reqwest-eventsource = "0.6.0"
 tokio-stream = "0.1"
 tokio-util = "0.7"
 minimp3 = "0.5"
+rfd = "0.15"
 
 # External git dependencies
 outfox-openai = { version = "0.2.0", git = "https://github.com/outfox-ai/outfox.git" }

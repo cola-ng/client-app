@@ -16,6 +16,9 @@ pub struct Preferences {
     /// Dark mode preference (true = dark, false = light)
     #[serde(default)]
     pub dark_mode: bool,
+    /// Custom data storage location
+    #[serde(default)]
+    pub data_location: Option<String>,
 }
 
 impl Preferences {
