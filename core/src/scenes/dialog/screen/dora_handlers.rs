@@ -2,15 +2,15 @@
 //!
 //! Handles dataflow control, event processing, and participant panel updates.
 
-use makepad_widgets::*;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-use crate::dora_integration::{DoraEvent, DoraIntegration};
-use crate::scenes::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
-use crate::scenes::settings::data::Preferences;
+use makepad_widgets::*;
 
 use super::{ChatMessageEntry, ColangScreen};
+use crate::data::Preferences;
+use crate::dora_integration::{DoraEvent, DoraIntegration};
+use crate::scenes::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
 
 impl ColangScreen {
     // =====================================================
@@ -144,7 +144,8 @@ impl ColangScreen {
                     let session_id = message.session_id.clone();
 
                     // Debug logging for chat messages
-                    ::log::info!("[Chat] sender={}, session_id={:?}, is_streaming={}, content_len={}, pending_count={}, finalized_count={}",
+                    ::log::info!(
+                        "[Chat] sender={}, session_id={:?}, is_streaming={}, content_len={}, pending_count={}, finalized_count={}",
                         sender,
                         session_id,
                         message.is_streaming,
@@ -218,7 +219,8 @@ impl ColangScreen {
 
                         // Add to finalized messages
                         self.chat_messages.push(entry);
-                        // Keep chat messages bounded (prevents O(n²) slowdown and markdown overflow)
+                        // Keep chat messages bounded (prevents O(n²) slowdown and markdown
+                        // overflow)
                         if self.chat_messages.len() > 500 {
                             self.chat_messages.remove(0);
                         }
@@ -272,13 +274,13 @@ impl ColangScreen {
             let band_levels: [f32; 8] = if waveform_data.is_empty() {
                 [0.0f32; 8]
             } else {
-                let samples = &waveform_data;
+                let samples: &Vec<f32> = &waveform_data;
                 let band_size = samples.len() / 8;
                 let mut levels = [0.0f32; 8];
                 let peak = samples
                     .iter()
-                    .map(|s| s.abs())
-                    .fold(0.0f32, |a, b| a.max(b));
+                    .map(|s: &f32| s.abs())
+                    .fold(0.0f32, |a: f32, b: f32| a.max(b));
                 let norm_factor = if peak > 0.01 { 1.0 / peak } else { 1.0 };
 
                 for i in 0..8 {

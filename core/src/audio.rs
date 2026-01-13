@@ -1,10 +1,11 @@
 //! Audio device management and mic level monitoring
 
+use std::sync::Arc;
+
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{Device, Host, Stream, StreamConfig};
-use crossbeam_channel::{unbounded, Receiver, Sender};
+use crossbeam_channel::{Receiver, Sender, unbounded};
 use parking_lot::Mutex;
-use std::sync::Arc;
 
 /// Audio device info
 #[derive(Clone, Debug)]

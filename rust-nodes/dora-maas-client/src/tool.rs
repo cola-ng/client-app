@@ -3,14 +3,13 @@
 //! This module provides the infrastructure for integrating MCP (Model Context Protocol)
 //! tools with the LLM streaming client, enabling function calling capabilities.
 
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use eyre::Result;
-use rmcp::{
-    model::{CallToolRequestParam, CallToolResult, Tool as McpTool},
-    service::{RunningService, ServerSink},
-    RoleClient,
-};
+use rmcp::RoleClient;
+use rmcp::model::{CallToolRequestParam, CallToolResult, Tool as McpTool};
+use rmcp::service::{RunningService, ServerSink};
 use serde_json::Value;
 
 /// Trait for tool implementations that can be called by the LLM

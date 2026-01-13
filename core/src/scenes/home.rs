@@ -9,10 +9,8 @@
 
 pub mod screen;
 
-pub use screen::HomeScreen;
-pub use screen::HomeScreenWidgetRefExt;
-
 use makepad_widgets::Cx;
+pub use screen::{HomeScreen, HomeScreenWidgetRefExt};
 use widgets::{AppInfo, AppScene};
 
 /// Home app descriptor

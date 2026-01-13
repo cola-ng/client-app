@@ -1,13 +1,14 @@
-use eyre::{eyre, Result};
+use std::time::Duration;
+
+use eyre::{Result, eyre};
 use outfox_openai::spec::{
     ChatCompletionMessageToolCall, CreateChatCompletionRequest, CreateChatCompletionResponse,
 };
 use reqwest::Client as HttpClient;
-use std::time::Duration;
 use tokio::sync::mpsc;
 use tokio_util::sync::CancellationToken;
 
-use crate::config::{get_env_or_value, GeminiConfig, OpenaiConfig};
+use crate::config::{GeminiConfig, OpenaiConfig, get_env_or_value};
 
 /// Trait for chat completion clients supporting multiple providers.
 ///
@@ -41,7 +42,8 @@ pub trait ChatClient: Send + Sync {
     /// * `chunk_sender` - Channel to send text chunks as they arrive
     ///
     /// # Returns
-    /// * `Result<(String, Option<Vec<ChatCompletionMessageToolCall>>)>` - The complete accumulated response text and any tool calls
+    /// * `Result<(String, Option<Vec<ChatCompletionMessageToolCall>>)>` - The complete accumulated
+    ///   response text and any tool calls
     async fn complete_streaming(
         &self,
         request: CreateChatCompletionRequest,

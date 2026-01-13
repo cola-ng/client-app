@@ -1,10 +1,12 @@
 //! DoraBridge trait and common bridge functionality
 
-use crate::data::{DoraData, EventMetadata};
-use crate::error::BridgeResult;
+use std::sync::Arc;
+
 use crossbeam_channel::{Receiver, Sender};
 use parking_lot::RwLock;
-use std::sync::Arc;
+
+use crate::data::{DoraData, EventMetadata};
+use crate::error::BridgeResult;
 
 /// Bridge connection state
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

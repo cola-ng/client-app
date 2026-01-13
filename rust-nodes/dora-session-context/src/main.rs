@@ -2,14 +2,13 @@
 // Manages conversation context including topic, without triggering AI responses
 // Ensures AI only responds when user actually speaks
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray},
-    DoraNode, Event,
-};
+use std::sync::{Arc, Mutex};
+
+use dora_node_api::arrow::array::{Array, StringArray};
+use dora_node_api::{DoraNode, Event};
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct TopicInfo {

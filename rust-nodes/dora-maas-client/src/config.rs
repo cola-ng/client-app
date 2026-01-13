@@ -3,15 +3,15 @@ use std::path::PathBuf;
 use std::process::Stdio;
 use std::sync::Arc;
 
-use figment::{
-    providers::{Env, Format, Json, Toml, Yaml},
-    Figment,
-};
-use rmcp::{service::RunningService, transport::ConfigureCommandExt, RoleClient, ServiceExt};
+use figment::Figment;
+use figment::providers::{Env, Format, Json, Toml, Yaml};
+use rmcp::service::RunningService;
+use rmcp::transport::ConfigureCommandExt;
+use rmcp::{RoleClient, ServiceExt};
 use serde::Deserialize;
 
 use crate::client::{ChatClient, GeminiClient, OpenaiClient};
-use crate::tool::{get_mcp_tools, Tool, ToolSet};
+use crate::tool::{Tool, ToolSet, get_mcp_tools};
 
 /// Main configuration structure for the MaaS client.
 ///

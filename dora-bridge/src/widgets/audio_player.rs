@@ -6,19 +6,19 @@
 //! - Buffer status output back to dora
 //! - Participant audio levels for LED visualization (consolidated from participant_panel)
 
+use std::sync::Arc;
+use std::thread;
+
+use arrow::array::Array;
+use crossbeam_channel::{Receiver, Sender, bounded};
+use dora_node_api::dora_core::config::{DataId, NodeId};
+use dora_node_api::{DoraNode, Event, IntoArrow, Parameter};
+use parking_lot::RwLock;
+use tracing::{debug, error, info, warn};
+
 use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
 use crate::data::{AudioData, DoraData, EventMetadata};
 use crate::error::{BridgeError, BridgeResult};
-use arrow::array::Array;
-use crossbeam_channel::{bounded, Receiver, Sender};
-use dora_node_api::{
-    dora_core::config::{DataId, NodeId},
-    DoraNode, Event, IntoArrow, Parameter,
-};
-use parking_lot::RwLock;
-use std::sync::Arc;
-use std::thread;
-use tracing::{debug, error, info, warn};
 
 // NOTE: LED visualization (band levels) is calculated in screen.rs from output waveform
 // This is more accurate since it reflects what's actually being played,
@@ -199,7 +199,8 @@ impl AudioPlayerBridge {
                             sample_count, audio_data.sample_rate, input_id
                         );
 
-                        // Extract participant ID from input_id (e.g., "audio_student1" -> "student1")
+                        // Extract participant ID from input_id (e.g., "audio_student1" ->
+                        // "student1")
                         let participant_id = input_id
                             .strip_prefix("audio_")
                             .unwrap_or("unknown")
@@ -209,8 +210,9 @@ impl AudioPlayerBridge {
                         let question_id = event_meta.get("question_id");
 
                         // Send session_start ONCE per question_id on FIRST audio chunk
-                        // (matching conference-dashboard behavior: send on first audio OR when session_status="started")
-                        // This marks when audio playback begins for a new LLM/TTS response
+                        // (matching conference-dashboard behavior: send on first audio OR when
+                        // session_status="started") This marks when audio
+                        // playback begins for a new LLM/TTS response
                         // The controller waits for this signal to advance to the next speaker
                         if let Some(qid) = question_id {
                             // Only send if we haven't sent for this question_id yet
@@ -264,9 +266,10 @@ impl AudioPlayerBridge {
                         // (more accurate since it reflects what's actually being played)
                         // The bridge only tracks active speaker for session management
 
-                        // IMPORTANT: Override participant_id from input_id (more reliable than metadata)
-                        // input_id is "audio_student1" -> participant_id is "student1"
-                        // Also ensure question_id is set for smart reset support
+                        // IMPORTANT: Override participant_id from input_id (more reliable than
+                        // metadata) input_id is "audio_student1" ->
+                        // participant_id is "student1" Also ensure
+                        // question_id is set for smart reset support
                         let mut audio_data_with_participant = audio_data.clone();
                         audio_data_with_participant.participant_id = Some(participant_id.clone());
                         if let Some(qid) = question_id {
@@ -286,7 +289,8 @@ impl AudioPlayerBridge {
 
                         // Send audio_complete signal back to text-segmenter
                         // This allows the next segment to be released
-                        // CRITICAL: This must be sent for every audio chunk to keep the pipeline flowing
+                        // CRITICAL: This must be sent for every audio chunk to keep the pipeline
+                        // flowing
                         if let Err(e) = Self::send_audio_complete(node, input_id, &event_meta) {
                             warn!("Failed to send audio_complete: {}", e);
                         } else {

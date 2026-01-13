@@ -3,16 +3,15 @@
 //! Manages the lifecycle of dora bridges and routes data between
 //! the dora dataflow and MoFA widgets.
 
-use crossbeam_channel::{bounded, Receiver, Sender};
-use dora_bridge::{
-    controller::DataflowController,
-    data::{AudioData, ChatMessage, LogEntry},
-    dispatcher::DynamicNodeDispatcher,
-};
-use parking_lot::RwLock;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::thread;
+
+use crossbeam_channel::{Receiver, Sender, bounded};
+use dora_bridge::controller::DataflowController;
+use dora_bridge::data::{AudioData, ChatMessage, LogEntry};
+use dora_bridge::dispatcher::DynamicNodeDispatcher;
+use parking_lot::RwLock;
 
 // NOTE: ParticipantAudioData removed - LED visualization is calculated in screen.rs
 // from output waveform (more accurate since it reflects what's actually being played)
@@ -74,7 +73,8 @@ pub enum DoraEvent {
     BridgeDisconnected { bridge_name: String },
     /// Audio received
     AudioReceived { data: AudioData },
-    // NOTE: ParticipantAudioReceived removed - LED visualization calculated in screen.rs from output waveform
+    // NOTE: ParticipantAudioReceived removed - LED visualization calculated in screen.rs from
+    // output waveform
     /// Chat message received
     ChatReceived { message: ChatMessage },
     /// Log entry received
@@ -242,7 +242,8 @@ impl DoraIntegration {
 
                         match DataflowController::new(&dataflow_path) {
                             Ok(mut controller) => {
-                                // Pass env vars to controller so they're explicitly added to dora start command
+                                // Pass env vars to controller so they're explicitly added to dora
+                                // start command
                                 controller.set_envs(env_vars.clone());
 
                                 let mut disp = DynamicNodeDispatcher::new(controller);
@@ -466,7 +467,8 @@ impl DoraIntegration {
                                     let _ = event_tx.send(DoraEvent::LogReceived { entry });
                                 }
                                 dora_bridge::DoraData::Json(json) => {
-                                    // JSON data from bridges (unused - LED visualization done in screen.rs)
+                                    // JSON data from bridges (unused - LED visualization done in
+                                    // screen.rs)
                                     log::debug!(
                                         "Received JSON from {}: input_id={}, data={:?}",
                                         node_id,

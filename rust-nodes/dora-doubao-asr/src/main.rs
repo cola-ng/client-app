@@ -3,12 +3,10 @@
 // 不再直接操作数据库，由 history-db-writer 负责保存对话历史
 
 use base64::Engine;
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    DoraNode, Event,
-};
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{DoraNode, Event};
 use eyre::{Context, Result};
-use reqwest::{header, Client};
+use reqwest::{Client, header};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 

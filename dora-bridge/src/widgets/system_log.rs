@@ -5,17 +5,20 @@
 //! - Aggregated log entries to the widget
 //! - Per-source filtering capability
 
-use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
-use crate::data::{current_timestamp, DoraData, EventMetadata, LogEntry, LogLevel};
-use crate::error::{BridgeError, BridgeResult};
-use arrow::array::Array;
-use crossbeam_channel::{bounded, Receiver, Sender};
-use dora_node_api::{dora_core::config::NodeId, DoraNode, Event, Parameter};
-use parking_lot::RwLock;
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::thread;
+
+use arrow::array::Array;
+use crossbeam_channel::{Receiver, Sender, bounded};
+use dora_node_api::dora_core::config::NodeId;
+use dora_node_api::{DoraNode, Event, Parameter};
+use parking_lot::RwLock;
 use tracing::{debug, error, info, warn};
+
+use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
+use crate::data::{DoraData, EventMetadata, LogEntry, LogLevel, current_timestamp};
+use crate::error::{BridgeError, BridgeResult};
 
 /// System log bridge - receives logs from multiple dora nodes
 pub struct SystemLogBridge {

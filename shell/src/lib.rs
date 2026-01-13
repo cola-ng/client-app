@@ -2,8 +2,9 @@
 
 pub mod widgets;
 
-use parking_lot::Mutex;
 use std::sync::Arc;
+
+use parking_lot::Mutex;
 
 /// Shared state for the application
 #[derive(Default)]

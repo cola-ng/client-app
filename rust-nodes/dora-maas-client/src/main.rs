@@ -21,11 +21,9 @@ use std::collections::{BTreeMap, HashMap};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
-use dora_node_api::{
-    arrow::array::{Array, AsArray, StringArray},
-    dora_core::config::DataId,
-    DoraNode, Event, Parameter,
-};
+use dora_node_api::arrow::array::{Array, AsArray, StringArray};
+use dora_node_api::dora_core::config::DataId;
+use dora_node_api::{DoraNode, Event, Parameter};
 use eyre::{Context, Result};
 use outfox_openai::spec::{
     ChatCompletionMessageToolCall, ChatCompletionRequestAssistantMessage,
@@ -44,7 +42,7 @@ mod segmenter;
 mod streaming;
 mod tool;
 
-use config::{format_anchor_context, load_anchor_context, Config};
+use config::{Config, format_anchor_context, load_anchor_context};
 use segmenter::StreamSegmenter;
 use tool::ToolSet;
 
@@ -467,7 +465,8 @@ async fn main() -> Result<()> {
                         // Process the conversation with automatic tool handling
                         // FIX: Added loop to handle tool calls without waiting for user input
                         // When the LLM calls a tool, we execute it and immediately send the results
-                        // back to get the final response, instead of waiting for the next user message
+                        // back to get the final response, instead of waiting for the next user
+                        // message
                         let mut continue_conversation = true;
                         while continue_conversation {
                             continue_conversation = false; // Default to not continuing unless we have tool calls
@@ -483,7 +482,8 @@ async fn main() -> Result<()> {
 
                             // Create chat completion request with the mapped model name
                             let mut request = CreateChatCompletionRequest::new(
-                                model_name.clone(), // Use the mapped model name, not the config model ID
+                                model_name.clone(), /* Use the mapped model name, not the config
+                                                     * model ID */
                                 session.messages.clone(),
                             );
 
@@ -704,7 +704,8 @@ async fn main() -> Result<()> {
                                         .context("Failed to send status output")?;
 
                                         // FIX: Handle tool calls from streaming response
-                                        // When the LLM returns tool calls, we either execute them locally (enable_local_mcp=true)
+                                        // When the LLM returns tool calls, we either execute them
+                                        // locally (enable_local_mcp=true)
                                         // or pass them back to the client (enable_local_mcp=false)
                                         if let Some(tool_calls) = tool_calls {
                                             send_log(
@@ -822,15 +823,18 @@ async fn main() -> Result<()> {
                                                     session.add_tool_message(tool_call_id, result);
                                                 }
 
-                                                // After tool execution, immediately make another request to get the final response
-                                                // Don't wait for user input - we need to send the tool results back to the LLM
+                                                // After tool execution, immediately make another
+                                                // request to get the final response
+                                                // Don't wait for user input - we need to send the
+                                                // tool results back to the LLM
                                                 send_log(
                                                     &mut node,
                                                     "DEBUG",
                                                     "Sending tool results back to LLM for final response",
                                                 )?;
 
-                                                // Set flag to continue the conversation with tool results
+                                                // Set flag to continue the conversation with tool
+                                                // results
                                                 continue_conversation = true;
                                             } else {
                                                 // Pass tool calls back to client
@@ -847,12 +851,13 @@ async fn main() -> Result<()> {
                                                     DataId::from("tool_calls".to_string()),
                                                     Default::default(),
                                                     StringArray::from(vec![
-                                                        tool_calls_json.as_str()
+                                                        tool_calls_json.as_str(),
                                                     ]),
                                                 )
                                                 .context("Failed to send tool calls")?;
 
-                                                // Don't continue conversation - wait for tool results from client
+                                                // Don't continue conversation - wait for tool
+                                                // results from client
                                                 continue_conversation = false;
                                             }
                                         } else {
@@ -916,7 +921,7 @@ async fn main() -> Result<()> {
                                             DataId::from("text".to_string()),
                                             error_metadata,
                                             StringArray::from(vec![
-                                                format!("Error: {}", e).as_str()
+                                                format!("Error: {}", e).as_str(),
                                             ]),
                                         )
                                         .context("Failed to send error")?;
@@ -969,7 +974,7 @@ async fn main() -> Result<()> {
                                             DataId::from("text".to_string()),
                                             error_metadata,
                                             StringArray::from(vec![
-                                                format!("Error: {}", e).as_str()
+                                                format!("Error: {}", e).as_str(),
                                             ]),
                                         )
                                         .context("Failed to send error output")?;
@@ -1372,8 +1377,14 @@ async fn main() -> Result<()> {
 
                                 // Debug context information
                                 let node_id = node.id();
-                                let context_msg = format!("🔍 DEBUG CONTEXT:\n  Node ID: {:?}\n  Session ID: {}\n  Input Port: control\n  Raw Control Text: '{}'\n  Control Text Length: {}\n  Metadata Parameters: {:?}",
-                                    node_id, session_id, control_text, control_text.len(), metadata.parameters);
+                                let context_msg = format!(
+                                    "🔍 DEBUG CONTEXT:\n  Node ID: {:?}\n  Session ID: {}\n  Input Port: control\n  Raw Control Text: '{}'\n  Control Text Length: {}\n  Metadata Parameters: {:?}",
+                                    node_id,
+                                    session_id,
+                                    control_text,
+                                    control_text.len(),
+                                    metadata.parameters
+                                );
                                 send_log(&mut node, "WARNING", &context_msg)?;
                                 send_log(
                                     &mut node,
@@ -1412,7 +1423,13 @@ async fn main() -> Result<()> {
                                     )?;
                                 }
 
-                                send_log(&mut node, "WARNING", &format!("  This suggests LLM1 is incorrectly receiving control commands!"))?;
+                                send_log(
+                                    &mut node,
+                                    "WARNING",
+                                    &format!(
+                                        "  This suggests LLM1 is incorrectly receiving control commands!"
+                                    ),
+                                )?;
                             }
                         }
 
@@ -1427,7 +1444,14 @@ async fn main() -> Result<()> {
                                 )
                             };
                             if cancelled_count > 0 {
-                                send_log(&mut node, "INFO", &format!("🛑 Cancelled {} active streaming request(s) for session: {} (history preserved)", cancelled_count, session_id))?;
+                                send_log(
+                                    &mut node,
+                                    "INFO",
+                                    &format!(
+                                        "🛑 Cancelled {} active streaming request(s) for session: {} (history preserved)",
+                                        cancelled_count, session_id
+                                    ),
+                                )?;
 
                                 // Send session_status: "cancelled" to signal cancellation
                                 let mut end_metadata = BTreeMap::new();
@@ -1444,7 +1468,14 @@ async fn main() -> Result<()> {
                                 )
                                 .context("Failed to send end signal on cancel")?;
                             } else {
-                                send_log(&mut node, "INFO", &format!("🛑 Cancel requested but no active streaming for session: {}", session_id))?;
+                                send_log(
+                                    &mut node,
+                                    "INFO",
+                                    &format!(
+                                        "🛑 Cancel requested but no active streaming for session: {}",
+                                        session_id
+                                    ),
+                                )?;
                             }
                             node.send_output(
                                 DataId::from("status".to_string()),
@@ -1467,10 +1498,18 @@ async fn main() -> Result<()> {
                                 )
                             };
                             if cancelled_count > 0 {
-                                send_log(&mut node, "INFO", &format!("🔄 Cancelled {} active streaming request(s) for session: {}", cancelled_count, session_id))?;
+                                send_log(
+                                    &mut node,
+                                    "INFO",
+                                    &format!(
+                                        "🔄 Cancelled {} active streaming request(s) for session: {}",
+                                        cancelled_count, session_id
+                                    ),
+                                )?;
                             }
 
-                            // Send session_status: "reset" to signal reset (always, even if nothing was cancelled)
+                            // Send session_status: "reset" to signal reset (always, even if nothing
+                            // was cancelled)
                             let mut end_metadata = BTreeMap::new();
                             end_metadata.insert(
                                 "session_status".to_string(),
@@ -1744,8 +1783,9 @@ async fn main() -> Result<()> {
                                             Parameter::String(error_msg.clone()),
                                         );
 
-                                        // For cancellation errors, send empty text (just metadata signal)
-                                        // For other errors, send the error message text
+                                        // For cancellation errors, send empty text (just metadata
+                                        // signal) For other
+                                        // errors, send the error message text
                                         let text_content = if error_type == "cancelled" {
                                             "" // Empty - don't contaminate downstream with error text
                                         } else {
@@ -1802,8 +1842,9 @@ async fn main() -> Result<()> {
                                             Parameter::String(error_msg.clone()),
                                         );
 
-                                        // For cancellation errors, send empty text (just metadata signal)
-                                        // For other errors, send the error message text
+                                        // For cancellation errors, send empty text (just metadata
+                                        // signal) For other
+                                        // errors, send the error message text
                                         let text_content = if error_type == "cancelled" {
                                             "" // Empty - don't contaminate downstream with error text
                                         } else {
@@ -1826,7 +1867,8 @@ async fn main() -> Result<()> {
                                     session.manage_history(config.max_history_exchanges);
                                 }
 
-                                // Send final empty text message with session_status="ended" for bridge
+                                // Send final empty text message with session_status="ended" for
+                                // bridge
                                 let mut final_metadata = metadata.parameters.clone();
                                 final_metadata.insert(
                                     "session_status".to_string(),
@@ -1874,7 +1916,8 @@ async fn main() -> Result<()> {
                                         session.add_assistant_message(assistant_message);
                                         session.manage_history(config.max_history_exchanges);
 
-                                        // Send final empty text message with session_status="ended" for bridge
+                                        // Send final empty text message with session_status="ended"
+                                        // for bridge
                                         let mut final_metadata = metadata.parameters.clone();
                                         final_metadata.insert(
                                             "session_status".to_string(),

@@ -215,14 +215,14 @@ pub struct AudioDevices {
 /// Initialize and enumerate audio devices using cpal
 pub fn init_audio_devices() -> AudioDevices {
     use cpal::traits::{DeviceTrait, HostTrait};
-    
+
     let host = cpal::default_host();
-    
+
     // Get input devices
     let default_input_name = host.default_input_device().and_then(|d| d.name().ok());
     let mut input_labels = Vec::new();
     let mut input_devices = Vec::new();
-    
+
     if let Ok(inputs) = host.input_devices() {
         for device in inputs {
             if let Ok(name) = device.name() {
@@ -237,7 +237,7 @@ pub fn init_audio_devices() -> AudioDevices {
             }
         }
     }
-    
+
     // Sort with default first
     if !input_labels.is_empty() {
         let default_idx = input_labels.iter().position(|l| l.starts_with("Default ("));
@@ -248,12 +248,12 @@ pub fn init_audio_devices() -> AudioDevices {
             }
         }
     }
-    
+
     // Get output devices
     let default_output_name = host.default_output_device().and_then(|d| d.name().ok());
     let mut output_labels = Vec::new();
     let mut output_devices = Vec::new();
-    
+
     if let Ok(outputs) = host.output_devices() {
         for device in outputs {
             if let Ok(name) = device.name() {
@@ -268,10 +268,12 @@ pub fn init_audio_devices() -> AudioDevices {
             }
         }
     }
-    
+
     // Sort with default first
     if !output_labels.is_empty() {
-        let default_idx = output_labels.iter().position(|l| l.starts_with("Default ("));
+        let default_idx = output_labels
+            .iter()
+            .position(|l| l.starts_with("Default ("));
         if let Some(idx) = default_idx {
             if idx != 0 {
                 output_labels.swap(0, idx);
@@ -279,7 +281,7 @@ pub fn init_audio_devices() -> AudioDevices {
             }
         }
     }
-    
+
     AudioDevices {
         input_devices,
         output_devices,

@@ -3,10 +3,11 @@
 //! This module sets up a custom logger that captures all log messages
 //! and makes them available to the UI via a channel.
 
-use crossbeam_channel::{bounded, Receiver, Sender};
+use std::sync::atomic::{AtomicBool, Ordering};
+
+use crossbeam_channel::{Receiver, Sender, bounded};
 use log::{Level, LevelFilter, Log, Metadata, Record};
 use once_cell::sync::OnceCell;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 /// Global log channel sender
 static LOG_SENDER: OnceCell<Sender<LogMessage>> = OnceCell::new();

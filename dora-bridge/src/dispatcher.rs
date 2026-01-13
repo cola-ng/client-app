@@ -4,6 +4,14 @@
 //! dora dynamic nodes. Each widget type has its own bridge that
 //! connects as a separate dynamic node.
 
+use std::collections::HashMap;
+use std::sync::Arc;
+
+use crossbeam_channel::Receiver;
+use parking_lot::RwLock;
+use tracing::{debug, error, info, warn};
+
+use crate::MofaNodeType;
 use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
 use crate::controller::DataflowController;
 use crate::error::{BridgeError, BridgeResult};
@@ -11,12 +19,6 @@ use crate::parser::MofaNodeSpec;
 use crate::widgets::{
     AudioPlayerBridge, MicInputBridge, PromptInputBridge, SystemLogBridge, TextInputBridge,
 };
-use crate::MofaNodeType;
-use crossbeam_channel::Receiver;
-use parking_lot::RwLock;
-use std::collections::HashMap;
-use std::sync::Arc;
-use tracing::{debug, error, info, warn};
 
 /// Binding between a widget and its dora node
 #[derive(Debug, Clone)]

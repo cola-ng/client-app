@@ -1,7 +1,8 @@
 //! Add Provider Modal - Dialog for adding custom providers
 
-use crate::data::{Provider, ProviderConnectionStatus, ProviderId, ProviderType};
 use makepad_widgets::*;
+
+use crate::data::{Provider, ProviderConnectionStatus, ProviderId, ProviderType};
 
 live_design! {
     use link::theme::*;
@@ -303,11 +304,7 @@ impl AddProviderModalRef {
             let host = inner.view.text_input(ids!(host_input)).text();
             let key = {
                 let k = inner.view.text_input(ids!(key_input)).text();
-                if k.is_empty() {
-                    None
-                } else {
-                    Some(k)
-                }
+                if k.is_empty() { None } else { Some(k) }
             };
 
             if name.is_empty() || host.is_empty() {

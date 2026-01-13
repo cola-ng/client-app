@@ -640,32 +640,63 @@ impl Widget for HomeScreen {
 impl WidgetMatchEvent for HomeScreen {
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions, _scope: &mut Scope) {
         // Handle button click - navigate to conversation
-        if self.button(ids!(welcome_card.welcome_content.start_button)).clicked(actions) {
+        if self
+            .button(ids!(welcome_card.welcome_content.start_button))
+            .clicked(actions)
+        {
             // TODO: Emit action to navigate to AI conversation screen
         }
 
         // Handle quick action clicks - finger_up returns an Option
-        if self.view(ids!(actions_card.actions_row.action_scenario.action_panel)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(actions_card.actions_row.action_scenario.action_panel))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to scenario simulation
         }
-        if self.view(ids!(actions_card.actions_row.action_dialogue.action_panel)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(actions_card.actions_row.action_dialogue.action_panel))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to classic dialogues
         }
-        if self.view(ids!(actions_card.actions_row.action_reading.action_panel)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(actions_card.actions_row.action_reading.action_panel))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to reading practice
         }
-        if self.view(ids!(actions_card.actions_row.action_assistant.action_panel)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(actions_card.actions_row.action_assistant.action_panel))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to real-time assistant
         }
 
         // Handle scenario card clicks
-        if self.view(ids!(scenarios_card.scenarios_row.scenario_hotel)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(scenarios_card.scenarios_row.scenario_hotel))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to hotel scenario
         }
-        if self.view(ids!(scenarios_card.scenarios_row.scenario_restaurant)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(scenarios_card.scenarios_row.scenario_restaurant))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to restaurant scenario
         }
-        if self.view(ids!(scenarios_card.scenarios_row.scenario_interview)).finger_up(actions).is_some() {
+        if self
+            .view(ids!(scenarios_card.scenarios_row.scenario_interview))
+            .finger_up(actions)
+            .is_some()
+        {
             // TODO: Navigate to interview scenario
         }
     }
@@ -675,9 +706,12 @@ impl HomeScreen {
     /// Apply dark mode to all components
     pub fn apply_dark_mode(&mut self, cx: &mut Cx, dark_mode: f64) {
         // Apply to main background
-        self.view.apply_over(cx, live! {
-            draw_bg: { dark_mode: (dark_mode) }
-        });
+        self.view.apply_over(
+            cx,
+            live! {
+                draw_bg: { dark_mode: (dark_mode) }
+            },
+        );
 
         // Apply to all cards recursively
         self.apply_dark_mode_recursive(cx, dark_mode);
@@ -690,11 +724,17 @@ impl HomeScreen {
         };
 
         // Apply to major sections
-        self.view(ids!(content_scroll.content.left_column.welcome_card)).apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.left_column.tasks_card)).apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.left_column.actions_card)).apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.right_column.stats_card)).apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.right_column.insights_card)).apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.right_column.scenarios_card)).apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.left_column.welcome_card))
+            .apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.left_column.tasks_card))
+            .apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.left_column.actions_card))
+            .apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.right_column.stats_card))
+            .apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.right_column.insights_card))
+            .apply_over(cx, dark_mode_update);
+        self.view(ids!(content_scroll.content.right_column.scenarios_card))
+            .apply_over(cx, dark_mode_update);
     }
 }

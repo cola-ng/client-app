@@ -8,7 +8,10 @@
 /// ```
 /// let mut segmenter = StreamSegmenter::new(10);
 /// assert_eq!(segmenter.add_chunk("Hello"), None);
-/// assert_eq!(segmenter.add_chunk(" world."), Some("Hello world.".to_string()));
+/// assert_eq!(
+///     segmenter.add_chunk(" world."),
+///     Some("Hello world.".to_string())
+/// );
 /// ```
 pub struct StreamSegmenter {
     buffer: String,
@@ -248,7 +251,7 @@ impl StreamSegmenter {
     ///
     /// Removes common markdown symbols that would sound awkward when spoken:
     /// - Bold: **text** → text
-    /// - Italic: *text* → text  
+    /// - Italic: *text* → text
     /// - Headers: ## text → text
     /// - Code: `code` → code
     /// - Links: [text](url) → text

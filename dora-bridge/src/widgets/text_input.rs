@@ -5,20 +5,20 @@
 //! - Text responses (streaming)
 //! - Status updates
 
-use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
-use crate::data::{ChatMessage, ControlCommand, DoraData, EventMetadata, MessageRole};
-use crate::error::{BridgeError, BridgeResult};
-use arrow::array::Array;
-use crossbeam_channel::{bounded, Receiver, Sender};
-use dora_node_api::{
-    dora_core::config::{DataId, NodeId},
-    DoraNode, Event, IntoArrow, Parameter,
-};
-use parking_lot::RwLock;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::thread;
+
+use arrow::array::Array;
+use crossbeam_channel::{Receiver, Sender, bounded};
+use dora_node_api::dora_core::config::{DataId, NodeId};
+use dora_node_api::{DoraNode, Event, IntoArrow, Parameter};
+use parking_lot::RwLock;
 use tracing::{debug, error, info, warn};
+
+use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
+use crate::data::{ChatMessage, ControlCommand, DoraData, EventMetadata, MessageRole};
+use crate::error::{BridgeError, BridgeResult};
 
 /// Prompt input bridge - sends texts to dora, receives responses
 pub struct TextInputBridge {

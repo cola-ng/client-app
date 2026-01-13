@@ -2,12 +2,13 @@
 //!
 //! Adapted from conference-dashboard for mofa-fm.
 
-use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use crossbeam_channel::{unbounded, Receiver, Sender};
-use parking_lot::Mutex;
 use std::collections::VecDeque;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+use crossbeam_channel::{Receiver, Sender, unbounded};
+use parking_lot::Mutex;
 
 /// Segment tracking for knowing which participant and question owns audio in the buffer
 #[derive(Clone, Debug)]

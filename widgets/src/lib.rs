@@ -84,14 +84,15 @@ pub mod waveform_view;
 
 // Re-export app trait types for convenience
 pub use app_trait::{AppInfo, AppRegistry, AppScene, StateChangeListener, TimerControl};
-
 use makepad_widgets::Cx;
 
 /// Register all shared widgets with Makepad.
 ///
-/// This function must be called during app initialization, typically in `LiveRegister::live_register`.
+/// This function must be called during app initialization, typically in
+/// `LiveRegister::live_register`.
 ///
-/// **Important**: Theme is registered first as other widgets depend on its font and color definitions.
+/// **Important**: Theme is registered first as other widgets depend on its font and color
+/// definitions.
 ///
 /// # Example
 ///

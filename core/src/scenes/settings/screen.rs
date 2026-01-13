@@ -1,11 +1,11 @@
 //! Settings screen - main entry point with tab navigation
 
-use crate::data::{Preferences, Provider, ProviderId};
-use crate::provider_view::ProviderViewWidgetExt;
-use crate::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
-use crate::general_panel;
-use crate::audio_panel;
 use makepad_widgets::*;
+
+use super::provider_view::ProviderViewWidgetExt;
+use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
+use super::{audio_panel, general_panel};
+use crate::data::{Preferences, Provider, ProviderId};
 
 live_design! {
     use link::theme::*;
@@ -261,11 +261,14 @@ impl Widget for SettingsScreen {
                 self.preferences = Some(Preferences::load());
             }
             if let Some(prefs) = &self.preferences {
-                self.data_location = prefs.data_location.clone().unwrap_or_else(|| {
-                    general_panel::get_default_data_location()
-                });
+                self.data_location = prefs
+                    .data_location
+                    .clone()
+                    .unwrap_or_else(|| general_panel::get_default_data_location());
                 self.view
-                    .label(ids!(content.pages.general_page.storage_section.storage_path))
+                    .label(ids!(
+                        content.pages.general_page.storage_section.storage_path
+                    ))
                     .set_text(cx, &self.data_location);
             }
         }
@@ -446,7 +449,9 @@ impl Widget for SettingsScreen {
         // Handle default path button
         if self
             .view
-            .button(ids!(content.pages.general_page.storage_section.default_path_btn))
+            .button(ids!(
+                content.pages.general_page.storage_section.default_path_btn
+            ))
             .clicked(actions)
         {
             self.reset_to_default_location(cx);
@@ -455,7 +460,9 @@ impl Widget for SettingsScreen {
         // Handle open path button
         if self
             .view
-            .button(ids!(content.pages.general_page.storage_section.open_path_btn))
+            .button(ids!(
+                content.pages.general_page.storage_section.open_path_btn
+            ))
             .clicked(actions)
         {
             general_panel::open_data_location(&self.data_location);
@@ -464,7 +471,9 @@ impl Widget for SettingsScreen {
         // Handle clear cache button
         if self
             .view
-            .button(ids!(content.pages.general_page.storage_section.clear_cache_btn))
+            .button(ids!(
+                content.pages.general_page.storage_section.clear_cache_btn
+            ))
             .clicked(actions)
         {
             self.clear_cache(cx);
@@ -533,24 +542,28 @@ impl SettingsScreen {
 
     fn init_audio_devices(&mut self, cx: &mut Cx) {
         let devices = audio_panel::init_audio_devices();
-        
+
         self.input_devices = devices.input_devices;
         self.output_devices = devices.output_devices;
-        
+
         // Populate input dropdown
         if !devices.input_labels.is_empty() {
-            let dropdown = self.view.drop_down(ids!(content.pages.audio_page.mic_section.mic_device));
+            let dropdown = self
+                .view
+                .drop_down(ids!(content.pages.audio_page.mic_section.mic_device));
             dropdown.set_labels(cx, devices.input_labels);
             dropdown.set_selected_item(cx, 0);
         }
-        
+
         // Populate output dropdown
         if !devices.output_labels.is_empty() {
-            let dropdown = self.view.drop_down(ids!(content.pages.audio_page.speaker_section.speaker_device));
+            let dropdown = self.view.drop_down(ids!(
+                content.pages.audio_page.speaker_section.speaker_device
+            ));
             dropdown.set_labels(cx, devices.output_labels);
             dropdown.set_selected_item(cx, 0);
         }
-        
+
         self.view.redraw(cx);
     }
 
@@ -702,11 +715,7 @@ impl SettingsScreen {
                         content.pages.providers_page.provider_view.api_key_input
                     ))
                     .text();
-                if key.is_empty() {
-                    None
-                } else {
-                    Some(key)
-                }
+                if key.is_empty() { None } else { Some(key) }
             };
 
             if self.preferences.is_none() {
@@ -860,12 +869,14 @@ impl SettingsScreen {
     fn browse_data_location(&mut self, cx: &mut Cx) {
         if let Some(folder) = general_panel::browse_data_location(&self.data_location) {
             self.data_location = folder.clone();
-            
+
             // Update the label in the UI
             self.view
-                .label(ids!(content.pages.general_page.storage_section.storage_path))
+                .label(ids!(
+                    content.pages.general_page.storage_section.storage_path
+                ))
                 .set_text(cx, &folder);
-            
+
             // Save to preferences
             if self.preferences.is_none() {
                 self.preferences = Some(Preferences::load());
@@ -876,7 +887,7 @@ impl SettingsScreen {
                     eprintln!("Failed to save data location: {}", e);
                 }
             }
-            
+
             self.view.redraw(cx);
         }
     }
@@ -894,12 +905,14 @@ impl SettingsScreen {
     fn reset_to_default_location(&mut self, cx: &mut Cx) {
         let default_path = general_panel::get_default_data_location();
         self.data_location = default_path.clone();
-        
+
         // Update the label in the UI
         self.view
-            .label(ids!(content.pages.general_page.storage_section.storage_path))
+            .label(ids!(
+                content.pages.general_page.storage_section.storage_path
+            ))
             .set_text(cx, &default_path);
-        
+
         // Save to preferences (None means use default)
         if self.preferences.is_none() {
             self.preferences = Some(Preferences::load());
@@ -910,7 +923,7 @@ impl SettingsScreen {
                 eprintln!("Failed to save data location: {}", e);
             }
         }
-        
+
         self.view.redraw(cx);
     }
 }

@@ -305,34 +305,34 @@ live_design! {
 /// Get the default data location path
 pub fn get_default_data_location() -> String {
     dirs::document_dir()
-        .map(|p| p.join("colang").to_string_lossy().to_string())
+        .map(|p: std::path::PathBuf| p.join("colang").to_string_lossy().to_string())
         .unwrap_or_else(|| "~/Documents/colang".to_string())
 }
 
 /// Open the data location in the system file explorer
 pub fn open_data_location(data_location: &str) {
     use std::process::Command;
-    
+
     let path = if data_location.is_empty() {
         get_default_data_location()
     } else {
         data_location.to_string()
     };
-    
+
     // Create directory if it doesn't exist
     let _ = std::fs::create_dir_all(&path);
-    
+
     // Open file explorer based on OS
     #[cfg(target_os = "windows")]
     {
         let _ = Command::new("explorer").arg(&path).spawn();
     }
-    
+
     #[cfg(target_os = "macos")]
     {
         let _ = Command::new("open").arg(&path).spawn();
     }
-    
+
     #[cfg(target_os = "linux")]
     {
         let _ = Command::new("xdg-open").arg(&path).spawn();
@@ -353,7 +353,7 @@ pub fn clear_cache() -> Result<(), std::io::Error> {
 /// Open a folder picker dialog and return the selected path
 pub fn browse_data_location(current_location: &str) -> Option<String> {
     use std::path::PathBuf;
-    
+
     // Get the current data location as starting point
     let start_dir = if current_location.is_empty() {
         dirs::document_dir().unwrap_or_else(|| PathBuf::from("."))
@@ -365,6 +365,8 @@ pub fn browse_data_location(current_location: &str) -> Option<String> {
     let dialog = rfd::FileDialog::new()
         .set_title("Select Data Location")
         .set_directory(&start_dir);
-    
-    dialog.pick_folder().map(|folder| folder.to_string_lossy().to_string())
+
+    dialog
+        .pick_folder()
+        .map(|folder: std::path::PathBuf| folder.to_string_lossy().to_string())
 }

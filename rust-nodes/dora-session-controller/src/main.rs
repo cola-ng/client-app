@@ -1,10 +1,8 @@
 // Dora Node: Session Controller
 // Controls learning session flow: start, stop, reset, next
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    ArrowData, DoraNode, Event,
-};
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{ArrowData, DoraNode, Event};
 use eyre::Result;
 use serde::{Deserialize, Serialize};
 

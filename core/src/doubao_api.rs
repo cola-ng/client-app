@@ -1,11 +1,12 @@
 // Doubao (豆包) Volcanic Engine API Integration
 // Provides ASR (Speech Recognition), TTS (Text-to-Speech), and Chat capabilities
 
+use std::error::Error;
+
 use futures::stream::StreamExt;
-use reqwest::{header, Client};
+use reqwest::{Client, header};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::error::Error;
 
 const DOUBAO_API_BASE: &str = "https://openspeech.bytedance.com/api/v1";
 const DOUBAO_CHAT_API_BASE: &str = "https://ark.cn-beijing.volces.com/api/v3";

@@ -11,13 +11,15 @@ mod chat_panel;
 mod dora_handlers;
 mod log_panel;
 
+use std::path::PathBuf;
+
+use makepad_widgets::*;
+use widgets::StateChangeListener;
+use widgets::participant_panel::ParticipantPanelWidgetExt;
+
 use crate::dora_integration::{DoraCommand, DoraIntegration};
 use crate::log_bridge;
-use crate::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
-use makepad_widgets::*;
-use std::path::PathBuf;
-use widgets::participant_panel::ParticipantPanelWidgetExt;
-use widgets::StateChangeListener;
+use crate::scenes::dialog::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
 
 live_design! {
     use link::theme::*;
@@ -1089,7 +1091,7 @@ pub struct ColangScreen {
     #[rust]
     splitter_dragging: bool,
     #[rust]
-    audio_manager: Option<crate::audio::AudioManager>,
+    audio_manager: Option<super::audio::AudioManager>,
     #[rust]
     audio_timer: Timer,
     #[rust]
@@ -1139,7 +1141,7 @@ pub struct ColangScreen {
 
     // Audio playback
     #[rust]
-    audio_player: Option<std::sync::Arc<crate::audio_player::AudioPlayer>>,
+    audio_player: Option<std::sync::Arc<super::audio_player::AudioPlayer>>,
     // Participant audio levels for decay animation (matches conference-dashboard)
     #[rust]
     participant_levels: [f64; 2], // 0=myself, 1=teacher
@@ -1767,7 +1769,8 @@ impl StateChangeListener for ColangScreenRef {
                 );
 
             // Apply dark mode to log content Markdown
-            // Use apply_over with font_color - this works because font_color is a top-level property
+            // Use apply_over with font_color - this works because font_color is a top-level
+            // property
             if dark_mode > 0.5 {
                 inner
                     .view

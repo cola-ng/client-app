@@ -4,16 +4,15 @@
 
 use std::fs;
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    ArrowData, DoraNode, Event,
-};
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{ArrowData, DoraNode, Event};
 use eyre::{Context, Result};
 use futures_util::{SinkExt, StreamExt};
 use minimp3::{Decoder, Frame};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
+use tokio_tungstenite::connect_async;
+use tokio_tungstenite::tungstenite::protocol::Message;
 
 /// 综合响应格式 (来自 english-teacher/json_data)
 #[derive(Debug, Serialize, Deserialize)]
@@ -160,7 +159,8 @@ async fn main() -> Result<()> {
 
                                 // Convert MP3 bytes to Float32 mono samples for audio player
                                 // Decode MP3 to PCM samples using minimp3
-                                // minimp3 Frame.data contains interleaved i16 samples: [L, R, L, R, ...] for stereo
+                                // minimp3 Frame.data contains interleaved i16 samples: [L, R, L, R,
+                                // ...] for stereo
 
                                 let mut decoder = Decoder::new(&audio_bytes[..]);
                                 let mut audio_samples: Vec<f32> = Vec::new();
@@ -186,7 +186,8 @@ async fn main() -> Result<()> {
                                             );
 
                                             // Convert i16 PCM to f32 normalized samples
-                                            // data is Vec<i16> with interleaved channels: [L,R,L,R,...] for stereo
+                                            // data is Vec<i16> with interleaved channels:
+                                            // [L,R,L,R,...] for stereo
                                             if channels == 2 {
                                                 // Stereo: data is interleaved [L0, R0, L1, R1, ...]
                                                 // Convert to mono by averaging left and right
@@ -217,8 +218,13 @@ async fn main() -> Result<()> {
                                     }
                                 }
 
-                                log::info!("Decoded {} MP3 bytes to {} mono samples at {}Hz (source: {} channels)", 
-                                    audio_bytes.len(), audio_samples.len(), actual_sample_rate, total_channels);
+                                log::info!(
+                                    "Decoded {} MP3 bytes to {} mono samples at {}Hz (source: {} channels)",
+                                    audio_bytes.len(),
+                                    audio_samples.len(),
+                                    actual_sample_rate,
+                                    total_channels
+                                );
 
                                 let audio_array =
                                     dora_node_api::arrow::array::ListArray::from_iter_primitive::<

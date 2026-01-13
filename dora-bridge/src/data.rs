@@ -1,8 +1,9 @@
 //! Data types for MoFA-Dora communication
 
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+use serde::{Deserialize, Serialize};
 
 /// Unified data type for all MoFA-Dora communication
 #[derive(Debug, Clone)]

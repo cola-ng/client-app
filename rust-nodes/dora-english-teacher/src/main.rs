@@ -3,16 +3,15 @@
 // 使用 structured outputs 一次性输出: 用户文本 + AI回复 + 语法分析
 // 输出: json_data (JSON: {session_id, user_text, reply_text, issues[], pronunciation_issues[]})
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    DoraNode, Event,
-};
-use eyre::{Context, Result};
-use reqwest::{header, Client};
-use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::collections::VecDeque;
 use std::sync::Mutex;
+
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{DoraNode, Event};
+use eyre::{Context, Result};
+use reqwest::{Client, header};
+use serde::{Deserialize, Serialize};
+use serde_json::json;
 
 /// ASR 输出格式
 #[derive(Debug, Serialize, Deserialize)]

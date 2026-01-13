@@ -1,7 +1,8 @@
 //! Provider View - Right panel for provider configuration
 
-use crate::data::{Provider, ProviderConnectionStatus, ProviderId};
 use makepad_widgets::*;
+
+use crate::data::{Provider, ProviderConnectionStatus, ProviderId};
 
 live_design! {
     use link::theme::*;
@@ -678,11 +679,7 @@ impl ProviderViewRef {
             let api_host = inner.view.text_input(ids!(api_host_input)).text();
             let api_key = {
                 let key = inner.view.text_input(ids!(api_key_input)).text();
-                if key.is_empty() {
-                    None
-                } else {
-                    Some(key)
-                }
+                if key.is_empty() { None } else { Some(key) }
             };
 
             (api_host, api_key)

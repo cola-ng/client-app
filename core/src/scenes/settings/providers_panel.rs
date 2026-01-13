@@ -1,7 +1,8 @@
 //! Providers Panel - List of AI providers
 
-use crate::data::ProviderId;
 use makepad_widgets::*;
+
+use crate::data::ProviderId;
 
 live_design! {
     use link::theme::*;

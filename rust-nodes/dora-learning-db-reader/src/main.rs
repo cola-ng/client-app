@@ -2,15 +2,14 @@
 // 专门负责从数据库随机读取问题词汇
 // 基于间隔重复算法选择需要复习的词汇
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    DoraNode, Event,
-};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{DoraNode, Event};
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::SqlitePool;
 use sqlx::Row;
-use std::time::{SystemTime, UNIX_EPOCH};
+use sqlx::sqlite::SqlitePool;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct IssueWord {

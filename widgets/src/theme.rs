@@ -69,12 +69,12 @@
 //!
 //! ## Important Notes
 //!
-//! - **Hex colors in shaders**: Theme constants like `(ACCENT_BLUE)` work in
-//!   `live_design!{}` properties but NOT inside shader `fn pixel()` functions.
-//!   Use `vec4()` literals for shader code.
+//! - **Hex colors in shaders**: Theme constants like `(ACCENT_BLUE)` work in `live_design!{}`
+//!   properties but NOT inside shader `fn pixel()` functions. Use `vec4()` literals for shader
+//!   code.
 //!
-//! - **Lexer issues**: Some hex values are adjusted to avoid Rust lexer conflicts
-//!   (e.g., `#1e293b` → `#1f293b` because `1e` looks like scientific notation).
+//! - **Lexer issues**: Some hex values are adjusted to avoid Rust lexer conflicts (e.g., `#1e293b`
+//!   → `#1f293b` because `1e` looks like scientific notation).
 
 use makepad_widgets::*;
 

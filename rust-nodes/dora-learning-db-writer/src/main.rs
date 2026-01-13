@@ -4,14 +4,13 @@
 // 1. 接收 user_text 输入（纯文本），存储用户消息到 conversations 表
 // 2. 接收 ai_json 输入（综合JSON），存储用户消息+AI回复+语法分析到数据库
 
-use dora_node_api::{
-    arrow::array::{Array, StringArray, UInt8Array},
-    DoraNode, Event,
-};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use dora_node_api::arrow::array::{Array, StringArray, UInt8Array};
+use dora_node_api::{DoraNode, Event};
 use eyre::{Context, Result};
 use serde::{Deserialize, Serialize};
 use sqlx::sqlite::SqlitePool;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// 综合响应（来自 english-teacher）
 #[derive(Debug, Serialize, Deserialize)]

@@ -7,16 +7,15 @@
 //! - Event Handling (AppMain impl)
 //! - Helper Methods (organized by responsibility)
 
-use makepad_widgets::*;
-use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
-
 // App plugin system imports
 use colang::{ColangApp, ColangScreenWidgetRefExt};
 use home::SceneApp;
+use makepad_widgets::*;
 use mofa_fm::{MoFaFMScene, MoFaFMScreenWidgetRefExt};
+use settings::SettingsScene;
 use settings::data::Preferences;
 use settings::screen::SettingsScreenWidgetRefExt;
-use settings::SettingsScene;
+use studio_shell::widgets::sidebar::SidebarWidgetRefExt;
 use widgets::{AppRegistry, AppScene, StateChangeListener};
 
 // ============================================================================

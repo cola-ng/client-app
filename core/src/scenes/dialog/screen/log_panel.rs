@@ -2,10 +2,10 @@
 //!
 //! Handles log display, filtering, and clipboard operations.
 
-use crate::log_bridge;
 use makepad_widgets::*;
 
 use super::ColangScreen;
+use crate::log_bridge;
 
 impl ColangScreen {
     /// Toggle log panel visibility

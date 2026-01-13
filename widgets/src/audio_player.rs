@@ -6,12 +6,13 @@
 //! - Buffer status reporting for backpressure control
 //! - Uses channels for thread-safe communication
 
-use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use crossbeam_channel::{unbounded, Receiver, Sender};
-use parking_lot::Mutex;
 use std::collections::VecDeque;
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+use crossbeam_channel::{Receiver, Sender, unbounded};
+use parking_lot::Mutex;
 
 /// Segment tracking for knowing which participant owns audio in the buffer
 #[derive(Clone, Debug)]
@@ -438,7 +439,8 @@ fn run_audio_thread(
             s.is_playing = is_playing.load(Ordering::Relaxed);
             s.waveform = buf.get_waveform(512);
             s.current_question_id = current_question_id.load(Ordering::Relaxed);
-            // Get current participant from buffer segment tracking - reflects what's actually playing
+            // Get current participant from buffer segment tracking - reflects what's actually
+            // playing
             s.current_participant_idx = buf.current_participant();
         }
 

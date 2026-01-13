@@ -1,9 +1,10 @@
+use std::time::Duration;
+
 use bytes::Bytes;
-use eyre::{eyre, Result};
+use eyre::{Result, eyre};
 use futures::StreamExt;
 use reqwest_eventsource::{Event, EventSource};
 use serde::Deserialize;
-use std::time::Duration;
 use tokio_util::sync::CancellationToken;
 
 /// Reasons why a request was cancelled
@@ -55,7 +56,6 @@ pub struct DeltaFunctionCall {
     pub arguments: Option<String>,
 }
 
-use outfox_openai::spec::{ChatCompletionMessageToolCall, ChatCompletionToolType, FunctionCall};
 /// Parse Server-Sent Events (SSE) stream from OpenAI-compatible APIs.
 ///
 /// This function handles the streaming response format used by OpenAI's chat
@@ -79,6 +79,8 @@ use outfox_openai::spec::{ChatCompletionMessageToolCall, ChatCompletionToolType,
 /// data: [DONE]
 /// ```
 use std::collections::HashMap;
+
+use outfox_openai::spec::{ChatCompletionMessageToolCall, ChatCompletionToolType, FunctionCall};
 
 /// Accumulates tool call deltas during streaming
 #[derive(Default)]

@@ -5,10 +5,6 @@ pub mod home;
 pub mod settings;
 
 // Re-exports
-pub use dialog::ColangApp;
-pub use dialog::ColangScreen;
-pub use dialog::ColangScreenWidgetRefExt;
-pub use home::SceneApp as HomeApp;
-pub use home::HomeScreen;
-pub use home::HomeScreenWidgetRefExt;
+pub use dialog::{ColangApp, ColangScreen, ColangScreenWidgetRefExt};
+pub use home::{HomeScreen, HomeScreenWidgetRefExt, SceneApp as HomeApp};
 pub use settings::SettingsScene;

@@ -1,20 +1,16 @@
 //! MoFA FM App - AI-powered audio streaming and voice interface
 
-pub mod audio;
-pub mod audio_player;
-pub mod database;
 pub mod mofa_hero;
 pub mod screen;
 
-pub use audio::AudioManager;
-pub use database::Database;
+use makepad_widgets::Cx;
 pub use mofa_hero::{ConnectionStatus, MofaHero, MofaHeroAction};
 pub use screen::ColangScreen;
 pub use screen::ColangScreenWidgetRefExt; // Export WidgetRefExt for timer control
-
-use makepad_widgets::Cx;
 use widgets::{AppInfo, AppScene};
 
+pub use crate::audio::AudioManager;
+pub use crate::db::Database;
 use crate::dora_integration::{DoraCommand, DoraEvent, DoraIntegration, DoraState};
 use crate::doubao_api::DoubaoClient;
 

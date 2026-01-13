@@ -3,18 +3,18 @@
 //! Connects to dora as `mofa-mic-input` dynamic node.
 //! Receives audio from UI's microphone and sends to ASR nodes.
 
+use std::sync::Arc;
+use std::thread;
+
+use crossbeam_channel::{Receiver, Sender, bounded};
+use dora_node_api::dora_core::config::{DataId, NodeId};
+use dora_node_api::{DoraNode, Event, IntoArrow, Parameter};
+use parking_lot::RwLock;
+use tracing::{debug, error, info, warn};
+
 use crate::bridge::{BridgeEvent, BridgeState, DoraBridge};
 use crate::data::{AudioData, DoraData, EventMetadata};
 use crate::error::{BridgeError, BridgeResult};
-use crossbeam_channel::{bounded, Receiver, Sender};
-use dora_node_api::{
-    dora_core::config::{DataId, NodeId},
-    DoraNode, Event, IntoArrow, Parameter,
-};
-use parking_lot::RwLock;
-use std::sync::Arc;
-use std::thread;
-use tracing::{debug, error, info, warn};
 
 /// Mic input bridge - receives audio from UI, sends to dora
 pub struct MicInputBridge {
