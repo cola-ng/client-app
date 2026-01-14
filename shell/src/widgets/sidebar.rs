@@ -203,21 +203,16 @@ impl Widget for Sidebar {
             _ => return,
         };
 
-        // Handle Home tab click
         if self.view.button(ids!(home_tab)).clicked(actions) {
             println!("Home tab clicked");
             self.handle_selection(cx, SidebarSelection::Home);
         }
 
-        // Handle Colang tab click
         if self.view.button(ids!(dialog_tab)).clicked(actions) {
-            println!("Colang tab clicked");
             self.handle_selection(cx, SidebarSelection::Colang);
         }
 
-        // Handle MoFA FM tab click
         if self.view.button(ids!(review_tab)).clicked(actions) {
-            println!("MoFA FM tab clicked");
             self.handle_selection(cx, SidebarSelection::MofaFM);
         }
 
@@ -349,7 +344,6 @@ impl SidebarRef {
                 },
             );
 
-            // MoFA FM tab
             inner.view.button(ids!(review_tab)).apply_over(
                 cx,
                 live! {

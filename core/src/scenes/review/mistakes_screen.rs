@@ -179,7 +179,7 @@ live_design! {
                         text: "卡壳 4 次"
                         draw_text: {
                             text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                            color: (vec4(0.937, 0.267, 0.267, 1.0))
+                            color: (ACCENT_RED)
                         }
                     }
                     <SecondaryButton> { text: "练" margin: {left: 8} }
