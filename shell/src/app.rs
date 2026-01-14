@@ -376,6 +376,8 @@ impl AppMain for App {
         self.handle_login_clicks(cx, &actions);
         self.handle_mofa_hero_buttons(cx, event);
         self.handle_dialog_screen_buttons(cx, &actions);
+        self.handle_review_screen_buttons(cx, &actions);
+        self.handle_home_screen_buttons(cx, &actions);
         self.handle_tab_clicks(cx, &actions);
         self.handle_tab_close_clicks(cx, event);
     }
@@ -1779,6 +1781,107 @@ impl App {
             // Hide other scenes
             self.ui
                 .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.settings_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            
+            self.ui.redraw(cx);
+        }
+    }
+
+    fn handle_review_screen_buttons(&mut self, cx: &mut Cx, actions: &[Action]) {
+        // Handle "选择场景" button click
+        if self
+            .ui
+            .button(ids!(
+                body.base.content_area.main_content.content.review_screen
+                    .content_scroll
+                    .content
+                    .header_row
+                    .select_scene_btn
+            ))
+            .clicked(actions)
+        {
+            // Navigate to scene center
+            self.sidebar_menu_open = false;
+            self.open_tabs.clear();
+            self.active_tab = None;
+            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+            
+            // Hide review scene, show scene center
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center
+                ))
+                .apply_over(cx, live! { visible: true });
+            
+            // Hide other scenes
+            self.ui
+                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dialog_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.settings_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            
+            self.ui.redraw(cx);
+        }
+    }
+
+    fn handle_home_screen_buttons(&mut self, cx: &mut Cx, actions: &[Action]) {
+        // Handle "选择场景" button click
+        if self
+            .ui
+            .button(ids!(
+                body.base.content_area.main_content.content.home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .welcome_card
+                    .select_scene_btn
+            ))
+            .clicked(actions)
+        {
+            // Navigate to scene center
+            self.sidebar_menu_open = false;
+            self.open_tabs.clear();
+            self.active_tab = None;
+            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+            
+            // Hide home scene, show scene center
+            self.ui
+                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center
+                ))
+                .apply_over(cx, live! { visible: true });
+            
+            // Hide other scenes
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dialog_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
