@@ -7,14 +7,14 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::scenes::review::components::ReviewTabButton;
-    use crate::scenes::review::components::SectionTitle;
-    use crate::scenes::review::due_screen::DueScreen;
-    use crate::scenes::review::mistakes_screen::MistakesScreen;
-    use crate::scenes::review::mastered_screen::MasteredScreen;
-    use crate::scenes::review::stats_screen::StatsScreen;
+    use crate::screens::review::components::ReviewTabButton;
+    use crate::screens::review::components::SectionTitle;
+    use crate::screens::review::due_screen::DueScreen;
+    use crate::screens::review::mistakes_screen::MistakesScreen;
+    use crate::screens::review::mastered_screen::MasteredScreen;
+    use crate::screens::review::stats_screen::StatsScreen;
 
-    pub ReviewScene = {{ReviewScene}} {
+    pub ReviewScreen = {{ReviewScreen}} {
         width: Fill, height: Fill
         show_bg: true
         draw_bg: {
@@ -86,14 +86,14 @@ enum ReviewTab {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct ReviewScene {
+pub struct ReviewScreen {
     #[deref]
     view: View,
     #[rust]
     tab: ReviewTab,
 }
 
-impl Widget for ReviewScene {
+impl Widget for ReviewScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -141,7 +141,7 @@ impl Widget for ReviewScene {
     }
 }
 
-impl ReviewScene {
+impl ReviewScreen {
     fn apply_tab_state(&mut self, cx: &mut Cx) {
         let is_due = self.tab == ReviewTab::Due;
         let is_mistakes = self.tab == ReviewTab::Mistakes;

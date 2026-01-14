@@ -9,11 +9,11 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::scenes::settings::general_panel::SectionTitle;
-    use crate::scenes::settings::general_panel::SettingsRow;
-    use crate::scenes::settings::general_panel::SettingsLabel;
-    use crate::scenes::settings::general_panel::SettingsButton;
-    use crate::scenes::settings::general_panel::HDivider;
+    use crate::screens::settings::general_panel::SectionTitle;
+    use crate::screens::settings::general_panel::SettingsRow;
+    use crate::screens::settings::general_panel::SettingsLabel;
+    use crate::screens::settings::general_panel::SettingsButton;
+    use crate::screens::settings::general_panel::HDivider;
 
     // Audio device dropdown
     pub AudioDeviceDropdown = <DropDown> {

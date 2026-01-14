@@ -1,12 +1,12 @@
-//! Chat panel methods for DialogScene
+//! Chat panel methods for DialogScreen
 //!
 //! Handles chat display, prompt input, and message formatting.
 
 use makepad_widgets::*;
 
-use super::{ChatMessageEntry, DialogScene};
+use super::{ChatMessageEntry, DialogScreen};
 
-impl DialogScene {
+impl DialogScreen {
     /// Send prompt to dora
     pub(super) fn send_prompt(&mut self, cx: &mut Cx) {
         let input_text = self

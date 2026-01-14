@@ -30,7 +30,7 @@ live_design! {
     use widgets::theme::*;
     use widgets::participant_panel::ParticipantPanel;
     use widgets::log_panel::LogPanel;
-    use crate::scenes::dialog::mofa_hero::MofaHero;
+    use crate::screens::dialog::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)
     SECTION_SPACING = 12.0
@@ -65,7 +65,7 @@ live_design! {
     }
 
     // Colang Screen - refreshed layout inspired by the sketch
-    pub DialogScene = {{DialogScene}} {
+    pub DialogScreen = {{DialogScreen}} {
         width: Fill, height: Fill
         flow: Overlay
         padding: { left: 16, right: 16, top: 16, bottom: 16 }
@@ -750,7 +750,7 @@ live_design! {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct DialogScene {
+pub struct DialogScreen {
     #[deref]
     view: View,
     #[rust]
@@ -795,7 +795,7 @@ pub struct DialogScene {
     participant_levels: [f64; 2], // 0=myself, 1=teacher
 }
 
-impl Widget for DialogScene {
+impl Widget for DialogScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -1043,7 +1043,7 @@ impl Widget for DialogScene {
     }
 }
 
-impl DialogSceneRef {
+impl DialogScreenRef {
     /// Stop audio and dora timers - call this before hiding/removing the widget
     /// to prevent timer callbacks on inactive state
     /// Note: AEC blink animation is shader-driven and doesn't need stopping
@@ -1051,7 +1051,7 @@ impl DialogSceneRef {
         if let Some(inner) = self.borrow_mut() {
             cx.stop_timer(inner.audio_timer);
             cx.stop_timer(inner.dora_timer);
-            ::log::debug!("DialogScene timers stopped");
+            ::log::debug!("DialogScreen timers stopped");
         }
     }
 
@@ -1061,12 +1061,12 @@ impl DialogSceneRef {
         if let Some(mut inner) = self.borrow_mut() {
             inner.audio_timer = cx.start_interval(0.05); // 50ms for mic level
             inner.dora_timer = cx.start_interval(0.1); // 100ms for dora events
-            ::log::debug!("DialogScene timers started");
+            ::log::debug!("DialogScreen timers started");
         }
     }
 }
 
-impl StateChangeListener for DialogSceneRef {
+impl StateChangeListener for DialogScreenRef {
     fn on_dark_mode_change(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Apply dark mode to screen background

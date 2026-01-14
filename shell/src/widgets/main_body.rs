@@ -38,11 +38,11 @@ live_design! {
     use widgets::theme::TEXT_PRIMARY_DARK;
     use widgets::theme::TEXT_SECONDARY_DARK;
 
-    use colang_core::scenes::home::home_scene::HomeScene;
-    use colang_core::scenes::dialog::dialog_scene::DialogScene;
-    use colang_core::scenes::review::review_scene::ReviewScene;
-    use colang_core::scenes::scene_center::scene_center_scene::SceneCenter;
-    use colang_core::scenes::settings::settings_scene::SettingsScene;
+    use colang_core::screens::home::home_screen::HomeScreen;
+    use colang_core::screens::dialog::dialog_screen::DialogScreen;
+    use colang_core::screens::review::review_screen::ReviewScreen;
+    use colang_core::screens::scene_center::scene_center_screen::SceneCenter;
+    use colang_core::screens::settings::settings_screen::SettingsScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
 
@@ -265,27 +265,27 @@ live_design! {
                         width: Fill, height: Fill
                         flow: Overlay
 
-                        home_scene = <HomeScene> {
+                        home_screen = <HomeScreen> {
                             width: Fill, height: Fill
                             visible: true
                         }
 
-                        dialog_scene = <DialogScene> {
+                        dialog_screen = <DialogScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        scene_center_scene = <SceneCenter> {
+                        scene_center = <SceneCenter> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        review_scene = <ReviewScene> {
+                        review_screen = <ReviewScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        settings_scene = <SettingsScene> {
+                        settings_screen = <SettingsScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
@@ -433,7 +433,7 @@ live_design! {
                     }
                 }
 
-                settings_tab_page = <SettingsScene> {
+                settings_tab_page = <SettingsScreen> {
                     width: Fill, height: Fill
                     visible: false
                 }

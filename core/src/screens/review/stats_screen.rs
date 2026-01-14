@@ -7,13 +7,13 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::scenes::review::components::CardBase;
-    use crate::scenes::review::components::MutedText;
-    use crate::scenes::review::components::PanelBase;
-    use crate::scenes::review::components::PillButton;
-    use crate::scenes::review::components::PrimaryButton;
-    use crate::scenes::review::components::SecondaryButton;
-    use crate::scenes::review::components::SectionTitle;
+    use crate::screens::review::components::CardBase;
+    use crate::screens::review::components::MutedText;
+    use crate::screens::review::components::PanelBase;
+    use crate::screens::review::components::PillButton;
+    use crate::screens::review::components::PrimaryButton;
+    use crate::screens::review::components::SecondaryButton;
+    use crate::screens::review::components::SectionTitle;
 
     pub StatsScreen = <View> {
         width: Fill, height: Fit

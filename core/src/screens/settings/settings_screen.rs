@@ -13,13 +13,13 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::scenes::settings::providers_panel::ProvidersPanel;
-    use crate::scenes::settings::provider_view::ProviderView;
-    use crate::scenes::settings::add_provider_modal::AddProviderModal;
-    use crate::scenes::settings::general_panel::GeneralTab;
-    use crate::scenes::settings::*;
-    use crate::scenes::settings::audio_panel::AudioTab;
-    use crate::scenes::settings::about_panel::AboutTab;
+    use crate::screens::settings::providers_panel::ProvidersPanel;
+    use crate::screens::settings::provider_view::ProviderView;
+    use crate::screens::settings::add_provider_modal::AddProviderModal;
+    use crate::screens::settings::general_panel::GeneralTab;
+    use crate::screens::settings::*;
+    use crate::screens::settings::audio_panel::AudioTab;
+    use crate::screens::settings::about_panel::AboutTab;
 
     // Vertical divider for sidebar
     VerticalDivider = <View> {
@@ -131,7 +131,7 @@ live_design! {
     // Main Settings Screen
     // ========================================================================
 
-    pub SettingsScene = {{SettingsScene}} {
+    pub SettingsScreen = {{SettingsScreen}} {
         width: Fill, height: Fill
         flow: Overlay
         show_bg: true
@@ -210,7 +210,7 @@ enum SettingsTab {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct SettingsScene {
+pub struct SettingsScreen {
     #[deref]
     view: View,
 
@@ -239,7 +239,7 @@ pub struct SettingsScene {
     audio_initialized: bool,
 }
 
-impl Widget for SettingsScene {
+impl Widget for SettingsScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -515,7 +515,7 @@ impl Default for SettingsTab {
     }
 }
 
-impl SettingsScene {
+impl SettingsScreen {
     fn update_tab_selection(&mut self, cx: &mut Cx) {
         let tabs = [
             (ids!(content.sidebar.general_tab_btn), SettingsTab::General),
@@ -928,7 +928,7 @@ impl SettingsScene {
     }
 }
 
-impl SettingsSceneRef {
+impl SettingsScreenRef {
     /// Initialize the settings screen with preferences
     pub fn init(&self, cx: &mut Cx, preferences: Preferences) {
         if let Some(mut inner) = self.borrow_mut() {

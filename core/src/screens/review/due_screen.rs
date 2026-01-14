@@ -7,14 +7,14 @@ live_design! {
 
     use widgets::theme::*;
 
-    use crate::scenes::review::components::CalendarCell;
-    use crate::scenes::review::components::CardBase;
-    use crate::scenes::review::components::MiniStat;
-    use crate::scenes::review::components::MutedText;
-    use crate::scenes::review::components::PanelBase;
-    use crate::scenes::review::components::ProgressBar;
-    use crate::scenes::review::components::ReviewActionButton;
-    use crate::scenes::review::components::SectionTitle;
+    use crate::screens::review::components::CalendarCell;
+    use crate::screens::review::components::CardBase;
+    use crate::screens::review::components::MiniStat;
+    use crate::screens::review::components::MutedText;
+    use crate::screens::review::components::PanelBase;
+    use crate::screens::review::components::ProgressBar;
+    use crate::screens::review::components::ReviewActionButton;
+    use crate::screens::review::components::SectionTitle;
 
     pub DueScreen = <View> {
         width: Fill, height: Fit

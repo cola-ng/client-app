@@ -573,7 +573,7 @@ live_design! {
     // Main Home Screen
     // ========================================================================
 
-    pub HomeScene = {{HomeScene}} {
+    pub HomeScreen = {{HomeScreen}} {
         width: Fill, height: Fill
         show_bg: true
         draw_bg: {
@@ -619,14 +619,14 @@ live_design! {
     }
 }
 
-/// HomeScene widget
+/// HomeScreen widget
 #[derive(Live, LiveHook, Widget)]
-pub struct HomeScene {
+pub struct HomeScreen {
     #[deref]
     view: View,
 }
 
-impl Widget for HomeScene {
+impl Widget for HomeScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
         self.widget_match_event(cx, event, scope);
@@ -637,7 +637,7 @@ impl Widget for HomeScene {
     }
 }
 
-impl WidgetMatchEvent for HomeScene {
+impl WidgetMatchEvent for HomeScreen {
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions, _scope: &mut Scope) {
         // Handle button click - navigate to conversation
         if self
@@ -702,7 +702,7 @@ impl WidgetMatchEvent for HomeScene {
     }
 }
 
-impl HomeScene {
+impl HomeScreen {
     /// Apply dark mode to all components
     pub fn apply_dark_mode(&mut self, cx: &mut Cx, dark_mode: f64) {
         // Apply to main background

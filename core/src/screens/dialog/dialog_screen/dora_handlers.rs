@@ -1,4 +1,4 @@
-//! Dora integration handlers for DialogScene
+//! Dora integration handlers for DialogScreen
 //!
 //! Handles dataflow control, event processing, and participant panel updates.
 
@@ -7,12 +7,12 @@ use std::path::PathBuf;
 
 use makepad_widgets::*;
 
-use super::{ChatMessageEntry, DialogScene};
+use super::{ChatMessageEntry, DialogScreen};
 use crate::dora_integration::{DoraEvent, DoraIntegration};
 use crate::models::Preferences;
-use crate::scenes::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
+use crate::screens::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
 
-impl DialogScene {
+impl DialogScreen {
     // =====================================================
     // Dora Integration Methods
     // =====================================================

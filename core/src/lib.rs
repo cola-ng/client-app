@@ -5,4 +5,4 @@ pub mod dora_integration;
 pub mod doubao_api;
 pub mod log_bridge;
 pub mod models;
-pub mod scenes;
+pub mod screens;

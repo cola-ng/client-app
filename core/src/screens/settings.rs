@@ -4,11 +4,11 @@ pub mod audio_panel;
 pub mod general_panel;
 pub mod provider_view;
 pub mod providers_panel;
-pub mod settings_scene;
+pub mod settings_screen;
 
 pub use audio_panel::AudioDevices;
 use makepad_widgets::Cx;
-pub use settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
+pub use settings_screen::{SettingsScreen, SettingsScreenWidgetRefExt};
 
 pub(super) fn live_design(cx: &mut Cx) {
     about_panel::live_design(cx);
@@ -17,7 +17,7 @@ pub(super) fn live_design(cx: &mut Cx) {
     general_panel::live_design(cx);
     provider_view::live_design(cx);
     providers_panel::live_design(cx);
-    settings_scene::live_design(cx);
+    settings_screen::live_design(cx);
 }
 
 /// Get the default data location path
