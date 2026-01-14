@@ -1,7 +1,10 @@
 //! Screen modules for Colang Desktop
 
+pub mod assistant;
+pub mod classic_dialogues;
 pub mod dialog;
 pub mod home;
+pub mod reading;
 pub mod review;
 pub mod scene_center;
 pub mod settings;
@@ -19,4 +22,7 @@ pub fn live_design(cx: &mut Cx) {
     review::live_design(cx);
     scene_center::live_design(cx);
     settings::live_design(cx);
+    assistant::live_design(cx);
+    reading::live_design(cx);
+    classic_dialogues::live_design(cx);
 }

@@ -1,0 +1,150 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#0F172A"/>
+  
+  <!-- Main Container -->
+  <rect x="20" y="20" width="1160" height="860" rx="16" fill="#1E293B"/>
+  
+  <!-- Header -->
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#F1F5F9">🎬 经典对白</text>
+  <text x="60" y="115" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8">从电影、美剧、TED 学地道表达</text>
+  
+  <!-- Category Tabs -->
+  <g id="category-tabs">
+    <rect x="60" y="140" width="120" height="40" rx="8" fill="#4F46E5"/>
+    <text x="120" y="165" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">🎬 电影</text>
+    
+    <rect x="190" y="140" width="120" height="40" rx="8" fill="#334155"/>
+    <text x="250" y="165" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">📺 美剧</text>
+    
+    <rect x="320" y="140" width="120" height="40" rx="8" fill="#334155"/>
+    <text x="380" y="165" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">🎤 TED</text>
+    
+    <rect x="450" y="140" width="120" height="40" rx="8" fill="#334155"/>
+    <text x="510" y="165" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">💼 商务</text>
+  </g>
+  
+  <!-- Search Bar -->
+  <rect x="800" y="140" width="340" height="40" rx="8" fill="#334155"/>
+  <text x="820" y="165" font-family="Arial, sans-serif" font-size="13" fill="#64748B">🔍 搜索场景、演员、台词...</text>
+  
+  <!-- Main Content Area -->
+  <g id="featured-scene">
+    <!-- Featured Video Card -->
+    <rect x="60" y="210" width="700" height="400" rx="12" fill="#334155"/>
+    
+    <!-- Video Thumbnail -->
+    <rect x="80" y="230" width="660" height="280" rx="8" fill="#1E293B"/>
+    <text x="410" y="355" font-family="Arial, sans-serif" font-size="16" fill="#64748B" text-anchor="middle">▶️</text>
+    <text x="410" y="385" font-family="Arial, sans-serif" font-size="13" fill="#64748B" text-anchor="middle">The Pursuit of Happyness (2006)</text>
+    
+    <!-- Movie Info -->
+    <text x="80" y="545" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#F1F5F9">面试经典场景</text>
+    <text x="80" y="570" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8">来自《当幸福来敲门》· 商务英语 · 中级</text>
+    
+    <!-- Action Buttons -->
+    <rect x="80" y="585" width="150" height="40" rx="8" fill="#10B981"/>
+    <text x="155" y="610" font-family="Arial, sans-serif" font-size="13" fill="white" text-anchor="middle">🎭 开始练习</text>
+    
+    <rect x="250" y="585" width="120" height="40" rx="8" fill="#475569"/>
+    <text x="310" y="610" font-family="Arial, sans-serif" font-size="13" fill="#F1F5F9" text-anchor="middle">💾 收藏</text>
+    
+    <rect x="390" y="585" width="120" height="40" rx="8" fill="#475569"/>
+    <text x="450" y="610" font-family="Arial, sans-serif" font-size="13" fill="#F1F5F9" text-anchor="middle">📊 查看词汇</text>
+  </g>
+  
+  <!-- Side Panel: Scene Details -->
+  <g id="scene-details">
+    <rect x="780" y="210" width="360" height="600" rx="12" fill="#334155"/>
+    
+    <!-- Dialogue Preview -->
+    <text x="810" y="245" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#F1F5F9">📝 台词预览</text>
+    
+    <!-- Chris (Applicant) -->
+    <rect x="810" y="265" width="310" height="100" rx="8" fill="#475569"/>
+    <text x="830" y="285" font-family="Arial, sans-serif" font-size="11" font-weight="600" fill="#10B981">Chris Gardner</text>
+    <text x="830" y="305" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">"I'm Chris Gardner. I have</text>
+    <text x="830" y="323" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">a question for you. What</text>
+    <text x="830" y="341" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">would you say if a man walked</text>
+    <text x="830" y="359" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">in here with no shirt..."</text>
+    
+    <!-- Interviewer -->
+    <rect x="810" y="380" width="310" height="80" rx="8" fill="#475569"/>
+    <text x="830" y="400" font-family="Arial, sans-serif" font-size="11" font-weight="600" fill="#4F46E5">Interviewer</text>
+    <text x="830" y="420" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">"I'd say he must have</text>
+    <text x="830" y="438" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">had on some really nice</text>
+    <text x="830" y="456" font-family="Arial, sans-serif" font-size="12" fill="#F1F5F9">pants."</text>
+    
+    <!-- Key Phrases Section -->
+    <text x="810" y="495" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#F1F5F9">🔑 关键表达</text>
+    
+    <rect x="810" y="510" width="310" height="120" rx="8" fill="#475569"/>
+    
+    <g id="phrase-1">
+      <rect x="830" y="525" width="270" height="30" rx="6" fill="#1E293B"/>
+      <text x="845" y="545" font-family="Arial, sans-serif" font-size="11" fill="#10B981">have a question for sb</text>
+      <text x="1080" y="545" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="end">向某人提问</text>
+    </g>
+    
+    <g id="phrase-2">
+      <rect x="830" y="565" width="270" height="30" rx="6" fill="#1E293B"/>
+      <text x="845" y="585" font-family="Arial, sans-serif" font-size="11" fill="#10B981">must have done</text>
+      <text x="1080" y="585" font-family="Arial, sans-serif" font-size="10" fill="#64748B" text-anchor="end">一定做过...</text>
+    </g>
+    
+    <!-- Difficulty Indicators -->
+    <text x="810" y="660" font-family="Arial, sans-serif" font-size="15" font-weight="600" fill="#F1F5F9">📈 难度分析</text>
+    
+    <rect x="810" y="675" width="310" height="120" rx="8" fill="#475569"/>
+    
+    <g id="difficulty">
+      <text x="830" y="700" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">词汇难度</text>
+      <rect x="930" y="688" width="150" height="8" rx="4" fill="#1E293B"/>
+      <rect x="930" y="688" width="105" height="8" rx="4" fill="#FBBF24"/>
+      <text x="1090" y="695" font-family="Arial, sans-serif" font-size="10" fill="#FBBF24" text-anchor="end">中等</text>
+      
+      <text x="830" y="725" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">语速</text>
+      <rect x="930" y="713" width="150" height="8" rx="4" fill="#1E293B"/>
+      <rect x="930" y="713" width="90" height="8" rx="4" fill="#10B981"/>
+      <text x="1090" y="720" font-family="Arial, sans-serif" font-size="10" fill="#10B981" text-anchor="end">正常</text>
+      
+      <text x="830" y="750" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">俚语/文化</text>
+      <rect x="930" y="738" width="150" height="8" rx="4" fill="#1E293B"/>
+      <rect x="930" y="738" width="120" height="8" rx="4" fill="#EF4444"/>
+      <text x="1090" y="745" font-family="Arial, sans-serif" font-size="10" fill="#EF4444" text-anchor="end">较多</text>
+      
+      <text x="830" y="775" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">推荐等级</text>
+      <text x="1090" y="775" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#4F46E5" text-anchor="end">B1-B2</text>
+    </g>
+  </g>
+  
+  <!-- More Scenes Grid -->
+  <text x="60" y="645" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#F1F5F9">🎥 更多经典场景</text>
+  
+  <g id="more-scenes">
+    <!-- Scene Card 1 -->
+    <rect x="60" y="665" width="220" height="140" rx="10" fill="#334155"/>
+    <rect x="75" y="680" width="190" height="80" rx="6" fill="#1E293B"/>
+    <text x="170" y="725" font-family="Arial, sans-serif" font-size="12" fill="#64748B" text-anchor="middle">▶️</text>
+    <text x="80" y="780" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#F1F5F9">Friends - Coffee Shop</text>
+    <text x="80" y="795" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">日常对话 · 初级</text>
+    
+    <!-- Scene Card 2 -->
+    <rect x="300" y="665" width="220" height="140" rx="10" fill="#334155"/>
+    <rect x="315" y="680" width="190" height="80" rx="6" fill="#1E293B"/>
+    <text x="410" y="725" font-family="Arial, sans-serif" font-size="12" fill="#64748B" text-anchor="middle">▶️</text>
+    <text x="320" y="780" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#F1F5F9">The Social Network</text>
+    <text x="320" y="795" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">商务谈判 · 高级</text>
+    
+    <!-- Scene Card 3 -->
+    <rect x="540" y="665" width="220" height="140" rx="10" fill="#334155"/>
+    <rect x="555" y="680" width="190" height="80" rx="6" fill="#1E293B"/>
+    <text x="650" y="725" font-family="Arial, sans-serif" font-size="12" fill="#64748B" text-anchor="middle">▶️</text>
+    <text x="560" y="780" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#F1F5F9">TED - Simon Sinek</text>
+    <text x="560" y="795" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8">演讲 · 中高级</text>
+  </g>
+  
+  <!-- Practice Mode Button -->
+  <rect x="60" y="830" width="1080" height="50" rx="10" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="2"/>
+  <text x="600" y="860" font-family="Arial, sans-serif" font-size="14" fill="#A5B4FC" text-anchor="middle">💡 提示: 选择你喜欢的场景，AI 会扮演对方角色与你对戏</text>
+</svg>

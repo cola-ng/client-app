@@ -59,6 +59,10 @@ impl Config {
             .extract()
     }
 
+    pub fn profile_url(&self) -> String {
+        format!("{}/me/", self.website_url)
+    }
+
     /// Ensure ~/.colang directory exists, create if it doesn't
     fn ensure_config_dir() -> Result<PathBuf, figment::Error> {
         let home_dir = dirs::home_dir().ok_or_else(|| {
@@ -76,7 +80,6 @@ impl Config {
             let default_config_path = config_dir.join("config.toml");
             if !default_config_path.exists() {
                 let default_content = r#"# Colang Configuration
-
 # Website URL for desktop authentication
 # website_url = "http://127.0.0.1:6108"
 

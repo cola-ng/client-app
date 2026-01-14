@@ -1,0 +1,123 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#0F172A"/>
+  
+  <!-- Main Container -->
+  <rect x="20" y="20" width="1160" height="860" rx="16" fill="#1E293B"/>
+  
+  <!-- Header -->
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#F1F5F9">🎤 跟读练习</text>
+  <text x="60" y="115" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8">发音纠正 · 音波对比 · AI 智能评分</text>
+  
+  <!-- Progress Bar -->
+  <rect x="60" y="140" width="1080" height="50" rx="12" fill="#334155"/>
+  <text x="90" y="165" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8">练习进度</text>
+  <rect x="90" y="175" width="900" height="8" rx="4" fill="#1E293B"/>
+  <rect x="90" y="175" width="450" height="8" rx="4" fill="#10B981"/>
+  <text x="1000" y="182" font-family="Arial, sans-serif" font-size="14" fill="#F1F5F9">3/6 句</text>
+  
+  <!-- Main Exercise Area -->
+  <rect x="60" y="220" width="1080" height="600" rx="12" fill="#334155"/>
+  
+  <!-- Current Sentence Display -->
+  <rect x="90" y="260" width="1020" height="120" rx="10" fill="#475569"/>
+  <text x="570" y="300" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8" text-anchor="middle">原文</text>
+  <text x="570" y="335" font-family="Arial, sans-serif" font-size="20" fill="#F1F5F9" text-anchor="middle">Could you please help me with this?</text>
+  <text x="570" y="360" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8" text-anchor="middle">你能帮我一下吗？</text>
+  
+  <!-- Audio Visualization -->
+  <g id="waveform-comparison">
+    <!-- Native Speaker Waveform -->
+    <text x="90" y="420" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">🔊 标准发音</text>
+    <rect x="90" y="430" width="1020" height="80" rx="8" fill="#1E293B"/>
+    
+    <!-- Simulated waveform -->
+    <path d="M 120 470 Q 150 450, 180 470 T 240 470 T 300 470 T 360 470 T 420 470 T 480 470 T 540 470 T 600 470 T 660 470 T 720 470 T 780 470 T 840 470 T 900 470 T 960 470 T 1020 470" 
+          stroke="#10B981" stroke-width="2" fill="none"/>
+    
+    <!-- Play button -->
+    <circle cx="1050" cy="470" r="20" fill="#10B981"/>
+    <path d="M 1045 460 L 1060 470 L 1045 480 Z" fill="white"/>
+    
+    <!-- Your Recording Waveform -->
+    <text x="90" y="540" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">🎙️ 你的发音</text>
+    <rect x="90" y="550" width="1020" height="80" rx="8" fill="#1E293B"/>
+    
+    <!-- Simulated waveform with differences -->
+    <path d="M 120 590 Q 150 575, 180 590 T 240 590 T 300 590 T 360 590 T 420 590 T 480 590 T 540 590 T 600 590 T 660 590 T 720 590 T 780 590 T 840 590 T 900 590 T 960 590 T 1020 590" 
+          stroke="#EF4444" stroke-width="2" fill="none"/>
+    
+    <!-- Highlighted error area -->
+    <rect x="350" y="560" width="60" height="60" rx="4" fill="#EF4444" fill-opacity="0.2" stroke="#EF4444" stroke-width="2" stroke-dasharray="3,3"/>
+    
+    <!-- Play button -->
+    <circle cx="1050" cy="590" r="20" fill="#4F46E5"/>
+    <path d="M 1045 580 L 1060 590 L 1045 600 Z" fill="white"/>
+  </g>
+  
+  <!-- AI Feedback Section -->
+  <rect x="90" y="650" width="1020" height="140" rx="10" fill="#475569"/>
+  <text x="120" y="680" font-family="Arial, sans-serif" font-size="14" font-weight="600" fill="#F1F5F9">🧠 AI 评分与建议</text>
+  
+  <!-- Score Display -->
+  <g id="score-display">
+    <circle cx="200" cy="740" r="35" fill="#10B981" fill-opacity="0.2" stroke="#10B981" stroke-width="3"/>
+    <text x="200" y="750" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#10B981" text-anchor="middle">85</text>
+    <text x="200" y="775" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">总分</text>
+  </g>
+  
+  <!-- Detailed Scores -->
+  <g id="detailed-scores">
+    <g id="pronunciation-score">
+      <text x="280" y="710" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">发音准确度</text>
+      <rect x="280" y="715" width="200" height="6" rx="3" fill="#1E293B"/>
+      <rect x="280" y="715" width="180" height="6" rx="3" fill="#10B981"/>
+      <text x="490" y="720" font-family="Arial, sans-serif" font-size="11" fill="#10B981">90%</text>
+    </g>
+    
+    <g id="fluency-score">
+      <text x="280" y="740" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">流畅度</text>
+      <rect x="280" y="745" width="200" height="6" rx="3" fill="#1E293B"/>
+      <rect x="280" y="745" width="160" height="6" rx="3" fill="#FBBF24"/>
+      <text x="490" y="750" font-family="Arial, sans-serif" font-size="11" fill="#FBBF24">80%</text>
+    </g>
+    
+    <g id="intonation-score">
+      <text x="280" y="770" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">语调</text>
+      <rect x="280" y="775" width="200" height="6" rx="3" fill="#1E293B"/>
+      <rect x="280" y="775" width="170" height="6" rx="3" fill="#10B981"/>
+      <text x="490" y="780" font-family="Arial, sans-serif" font-size="11" fill="#10B981">85%</text>
+    </g>
+  </g>
+  
+  <!-- Feedback Text -->
+  <g id="feedback-text">
+    <text x="520" y="710" font-family="Arial, sans-serif" font-size="12" fill="#FCA5A5">⚠️ 需要注意</text>
+    <text x="520" y="730" font-family="Arial, sans-serif" font-size="11" fill="#CBD5E1">"help" 的发音稍重，注意轻读</text>
+    
+    <text x="520" y="755" font-family="Arial, sans-serif" font-size="12" fill="#86EFAC">✓ 做得好</text>
+    <text x="520" y="775" font-family="Arial, sans-serif" font-size="11" fill="#CBD5E1">"Could you" 的连读非常自然！</text>
+  </g>
+  
+  <!-- Action Buttons -->
+  <g id="action-buttons">
+    <rect x="300" y="835" width="180" height="50" rx="10" fill="#475569"/>
+    <text x="390" y="865" font-family="Arial, sans-serif" font-size="14" fill="#F1F5F9" text-anchor="middle">⏮️ 上一句</text>
+    
+    <rect x="510" y="835" width="180" height="50" rx="10" fill="#EF4444"/>
+    <circle cx="570" cy="860" r="18" fill="white"/>
+    <circle cx="570" cy="860" r="8" fill="#EF4444"/>
+    <text x="610" y="865" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">重录</text>
+    
+    <rect x="720" y="835" width="180" height="50" rx="10" fill="#10B981"/>
+    <text x="810" y="865" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">下一句 ⏭️</text>
+  </g>
+  
+  <!-- Settings and Tips -->
+  <rect x="950" y="260" width="130" height="120" rx="8" fill="#475569"/>
+  <text x="1015" y="285" font-family="Arial, sans-serif" font-size="11" font-weight="600" fill="#F1F5F9" text-anchor="middle">⚙️ 设置</text>
+  <text x="1015" y="310" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">语速: 1.0x</text>
+  <text x="1015" y="330" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">口音: 美式</text>
+  <text x="1015" y="350" font-family="Arial, sans-serif" font-size="10" fill="#94A3B8" text-anchor="middle">难度: 中级</text>
+  <text x="1015" y="370" font-family="Arial, sans-serif" font-size="10" fill="#4F46E5" text-anchor="middle">更改 →</text>
+</svg>

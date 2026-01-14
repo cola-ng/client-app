@@ -1,70 +1,151 @@
 #!/usr/bin/env pwsh
-# Initialize English Learning Companion Database
-# This script creates the SQLite database and populates it with seed data
+# Initialize Colang English Learning Database
+# This script creates the SQLite database and populates it with migrations and seed data
+
+param(
+    [switch]$Reset = $false,
+    [string]$DbPath = "$PSScriptRoot\learning.db"
+)
 
 $ErrorActionPreference = "Stop"
 
-$dbPath = Join-Path $PSScriptRoot "learning_companion.db"
 $migrationsPath = Join-Path (Split-Path $PSScriptRoot -Parent) "migrations"
-$seedDataPath = Join-Path (Split-Path $PSScriptRoot -Parent) "seed_data.sql"
+$seedDataPath = Join-Path $PSScriptRoot "seed_data.sql"
 
-Write-Host "Initializing English Learning Companion Database..." -ForegroundColor Cyan
-Write-Host "Database path: $dbPath" -ForegroundColor Gray
+Write-Host "==================================" -ForegroundColor Cyan
+Write-Host "Colang Database Initialization" -ForegroundColor Cyan
+Write-Host "==================================" -ForegroundColor Cyan
+Write-Host ""
 
-# Check if database already exists
-if (Test-Path $dbPath) {
-    $response = Read-Host "Database already exists. Recreate? (y/N)"
-    if ($response -ne "y" -and $response -ne "Y") {
-        Write-Host "Keeping existing database." -ForegroundColor Yellow
+# Check if database exists
+$dbExists = Test-Path $DbPath
+
+if ($dbExists -and $Reset) {
+    Write-Host "⚠️  Removing existing database..." -ForegroundColor Yellow
+    Remove-Item $DbPath -Force
+    $dbExists = $false
+    Write-Host "✓ Database removed" -ForegroundColor Green
+    Write-Host ""
+}
+
+if ($dbExists) {
+    Write-Host "ℹ️  Database already exists at: $DbPath" -ForegroundColor Yellow
+    Write-Host "   Use -Reset flag to recreate it." -ForegroundColor Yellow
+    Write-Host ""
+    $response = Read-Host "Apply migrations to existing database? (y/N)"
+    if ($response -ne 'y' -and $response -ne 'Y') {
+        Write-Host "Aborted." -ForegroundColor Yellow
         exit 0
     }
-    Remove-Item $dbPath -Force
-    Write-Host "Removed existing database." -ForegroundColor Yellow
 }
 
 # Check if sqlite3 is available
 $sqliteCmd = Get-Command sqlite3 -ErrorAction SilentlyContinue
 if (-not $sqliteCmd) {
-    Write-Host "Error: sqlite3 command not found. Please install SQLite." -ForegroundColor Red
-    Write-Host "Download from: https://www.sqlite.org/download.html" -ForegroundColor Yellow
+    Write-Host "❌ Error: sqlite3 command not found" -ForegroundColor Red
+    Write-Host "   Please install SQLite from: https://www.sqlite.org/download.html" -ForegroundColor Yellow
     exit 1
 }
 
-# Run migrations
-Write-Host "`nApplying migrations..." -ForegroundColor Cyan
+# Get migration files
 $migrationFiles = Get-ChildItem -Path $migrationsPath -Filter "*.sql" | Sort-Object Name
 
-foreach ($migrationFile in $migrationFiles) {
-    Write-Host "  - $($migrationFile.Name)" -ForegroundColor Gray
-    Get-Content $migrationFile.FullName | sqlite3 $dbPath
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Error applying migration: $($migrationFile.Name)" -ForegroundColor Red
+if ($migrationFiles.Count -eq 0) {
+    Write-Host "❌ No migration files found in $migrationsPath" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "📂 Found $($migrationFiles.Count) migration file(s)" -ForegroundColor Cyan
+Write-Host ""
+
+# Apply each migration
+foreach ($file in $migrationFiles) {
+    Write-Host "Applying migration: $($file.Name)" -ForegroundColor White
+    
+    try {
+        $sql = Get-Content $file.FullName -Raw
+        $output = $sql | sqlite3 $DbPath 2>&1
+        
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "❌ Failed to apply migration: $($file.Name)" -ForegroundColor Red
+            Write-Host "   Error: $output" -ForegroundColor Red
+            exit 1
+        }
+        
+        Write-Host "   ✓ Applied successfully" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Error applying migration: $($file.Name)" -ForegroundColor Red
+        Write-Host "   $_" -ForegroundColor Red
         exit 1
     }
 }
 
-Write-Host "Migrations completed successfully." -ForegroundColor Green
+Write-Host ""
 
-# Load seed data
-if (Test-Path $seedDataPath) {
-    Write-Host "`nLoading seed data..." -ForegroundColor Cyan
-    Get-Content $seedDataPath | sqlite3 $dbPath
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Warning: Some seed data may not have loaded correctly." -ForegroundColor Yellow
-    } else {
-        Write-Host "Seed data loaded successfully." -ForegroundColor Green
+# Ask about sample data
+if (-not $dbExists -or $Reset) {
+    Write-Host "Would you like to load sample data? (Y/n): " -NoNewline -ForegroundColor Cyan
+    $loadData = Read-Host
+    
+    if ($loadData -ne 'n' -and $loadData -ne 'N') {
+        if (Test-Path $seedDataPath) {
+            Write-Host ""
+            Write-Host "Loading sample data..." -ForegroundColor White
+            
+            try {
+                $sql = Get-Content $seedDataPath -Raw
+                $output = $sql | sqlite3 $DbPath 2>&1
+                
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "❌ Failed to load sample data" -ForegroundColor Red
+                    Write-Host "   Error: $output" -ForegroundColor Red
+                    exit 1
+                }
+                
+                Write-Host "✓ Sample data loaded successfully" -ForegroundColor Green
+            }
+            catch {
+                Write-Host "❌ Error loading sample data" -ForegroundColor Red
+                Write-Host "   $_" -ForegroundColor Red
+                exit 1
+            }
+        }
+        else {
+            Write-Host "⚠️  Seed data file not found: $seedDataPath" -ForegroundColor Yellow
+        }
     }
-} else {
-    Write-Host "`nWarning: Seed data file not found at $seedDataPath" -ForegroundColor Yellow
 }
 
-# Verify database
-Write-Host "`nVerifying database..." -ForegroundColor Cyan
-$tableCount = sqlite3 $dbPath "SELECT COUNT(*) FROM sqlite_master WHERE type='table';"
-Write-Host "  - Tables created: $tableCount" -ForegroundColor Gray
+Write-Host ""
+Write-Host "==================================" -ForegroundColor Cyan
+Write-Host "✨ Database initialization complete!" -ForegroundColor Green
+Write-Host "==================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Database location: $DbPath" -ForegroundColor White
+Write-Host ""
 
-$wordCount = sqlite3 $dbPath "SELECT COUNT(*) FROM issue_words;"
-Write-Host "  - Issue words: $wordCount" -ForegroundColor Gray
+# Show some statistics
+Write-Host "Database Statistics:" -ForegroundColor Cyan
+$stats = @"
+SELECT 
+    (SELECT COUNT(*) FROM sqlite_master WHERE type='table') as total_tables,
+    (SELECT COUNT(*) FROM scenarios) as scenarios,
+    (SELECT COUNT(*) FROM scene_dialogues) as dialogues,
+    (SELECT COUNT(*) FROM classic_dialogue_sources) as classic_sources,
+    (SELECT COUNT(*) FROM classic_dialogue_clips) as classic_clips,
+    (SELECT COUNT(*) FROM reading_exercises) as reading_exercises,
+    (SELECT COUNT(*) FROM issue_words) as issue_words,
+    (SELECT COUNT(*) FROM conversations) as conversations,
+    (SELECT COUNT(*) FROM learning_sessions) as sessions
+"@
 
-Write-Host "`nDatabase initialization complete!" -ForegroundColor Green
-Write-Host "Database location: $dbPath" -ForegroundColor Cyan
+try {
+    $result = $stats | sqlite3 $DbPath ".mode line"
+    Write-Host $result -ForegroundColor White
+}
+catch {
+    Write-Host "⚠️  Could not display statistics" -ForegroundColor Yellow
+}
+
+Write-Host ""

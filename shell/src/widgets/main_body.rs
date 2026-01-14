@@ -43,11 +43,14 @@ live_design! {
     use colang_core::screens::review::review_screen::ReviewScreen;
     use colang_core::screens::scene_center::scene_center_screen::SceneCenter;
     use colang_core::screens::settings::settings_screen::SettingsScreen;
+    use colang_core::screens::assistant::assistant_screen::AssistantScreen;
+    use colang_core::screens::reading::reading_screen::ReadingScreen;
+    use colang_core::screens::classic_dialogues::classic_dialogues_screen::ClassicDialoguesScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
 
     // Logo image
-    COLANG_LOGO = dep("crate://self/resources/clang-logo.png")
+    COLANG_LOGO = dep("crate://self/resources/colang-logo.png")
 
     pub MainBody = {{MainBody}} <View> {
         width: Fill, height: Fill
@@ -281,6 +284,21 @@ live_design! {
                         }
 
                         review_screen = <ReviewScreen> {
+                            width: Fill, height: Fill
+                            visible: false
+                        }
+
+                        assistant_screen = <AssistantScreen> {
+                            width: Fill, height: Fill
+                            visible: false
+                        }
+
+                        reading_screen = <ReadingScreen> {
+                            width: Fill, height: Fill
+                            visible: false
+                        }
+
+                        classic_dialogues_screen = <ClassicDialoguesScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }

@@ -15,7 +15,6 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 use std::{io, thread};
 
-use crate::config::Config;
 use colang_core::models::Preferences;
 use colang_core::screens::dialog::dialog_screen::DialogScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
@@ -24,6 +23,8 @@ use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use widgets::StateChangeListener;
+
+use crate::config::Config;
 
 // ============================================================================
 // TAB IDENTIFIER
@@ -298,7 +299,7 @@ impl LiveHook for App {
         // Initialize configuration directory and load config
         // This ensures ~/.colang directory exists on first run
         let _ = Config::load().unwrap_or_default();
-        
+
         // Initialize the app registry with all installed apps
         // self.app_registry.register(DialogScreen::info());
         // self.app_registry.register(SettingsScreen::info());
@@ -506,7 +507,14 @@ impl App {
             .button(ids!(body.base.header.user_profile_container.login_btn))
             .clicked(actions)
         {
-            self.start_desktop_login(cx);
+            if self.auth_token.is_some() {
+                // Open user profile page when already logged in
+                let config = Config::load().unwrap_or_default();
+                let _ = webbrowser::open(&config.profile_url());
+            } else {
+                // Start desktop login flow when not logged in
+                self.start_desktop_login(cx);
+            }
         }
     }
 
@@ -582,12 +590,12 @@ impl App {
         };
 
         let redirect_uri = format!("http://127.0.0.1:{}/auth/callback", port);
-        
+
         // Load configuration
         let config = Config::load().unwrap_or_default();
         let website_url = config.website_url;
         let api_url = config.api_url;
-        
+
         let authorize_url = format!(
             "{}/auth?redirect_uri={}&state={}",
             website_url.trim_end_matches('/'),
@@ -793,7 +801,9 @@ impl App {
                 .stop_timers(cx);
             // Show home, hide others
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
@@ -808,6 +818,25 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.scene_center
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -835,7 +864,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -845,6 +876,25 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.scene_center
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -875,7 +925,28 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -912,7 +983,28 @@ impl App {
                 ))
                 .stop_timers(cx);
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -954,7 +1046,28 @@ impl App {
                 ))
                 .stop_timers(cx);
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1760,7 +1873,11 @@ impl App {
         if self
             .ui
             .button(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .dialog_screen
                     .main_layout
                     .left_column
                     .chat_container
@@ -1775,14 +1892,14 @@ impl App {
             self.open_tabs.clear();
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            
+
             // Stop dialog scene timers
             self.ui
                 .dialog_screen(ids!(
                     body.base.content_area.main_content.content.dialog_screen
                 ))
                 .stop_timers(cx);
-            
+
             // Hide dialog scene, show scene center
             self.ui
                 .view(ids!(
@@ -1794,10 +1911,12 @@ impl App {
                     body.base.content_area.main_content.content.scene_center
                 ))
                 .apply_over(cx, live! { visible: true });
-            
+
             // Hide other scenes
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1809,7 +1928,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
-            
+
             self.ui.redraw(cx);
         }
     }
@@ -1819,7 +1938,11 @@ impl App {
         if self
             .ui
             .button(ids!(
-                body.base.content_area.main_content.content.review_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .review_screen
                     .content_scroll
                     .content
                     .header_row
@@ -1832,7 +1955,7 @@ impl App {
             self.open_tabs.clear();
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            
+
             // Hide review scene, show scene center
             self.ui
                 .view(ids!(
@@ -1844,10 +1967,12 @@ impl App {
                     body.base.content_area.main_content.content.scene_center
                 ))
                 .apply_over(cx, live! { visible: true });
-            
+
             // Hide other scenes
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1859,7 +1984,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
-            
+
             self.ui.redraw(cx);
         }
     }
@@ -1869,7 +1994,11 @@ impl App {
         if self
             .ui
             .button(ids!(
-                body.base.content_area.main_content.content.home_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
                     .content_scroll
                     .content
                     .left_column
@@ -1883,17 +2012,19 @@ impl App {
             self.open_tabs.clear();
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            
+
             // Hide home scene, show scene center
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.home_screen))
+                .view(ids!(
+                    body.base.content_area.main_content.content.home_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.scene_center
                 ))
                 .apply_over(cx, live! { visible: true });
-            
+
             // Hide other scenes
             self.ui
                 .view(ids!(
@@ -1907,12 +2038,328 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
+                    body.base.content_area.main_content.content.assistant_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.reading_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .classic_dialogues_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
-            
+
             self.ui.redraw(cx);
         }
+
+        // Handle "开始对话" button - navigate to dialog screen
+        if self
+            .ui
+            .button(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .welcome_card
+                    .welcome_content
+                    .start_button
+            ))
+            .clicked(actions)
+        {
+            self.navigate_to_dialog_screen(cx);
+        }
+
+        // Handle quick action: 场景模拟 - navigate to scene center
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .actions_card
+                    .actions_row
+                    .action_scenario
+                    .action_panel
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_scene_center(cx);
+        }
+
+        // Handle quick action: 经典对白 - navigate to classic dialogues
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .actions_card
+                    .actions_row
+                    .action_dialogue
+                    .action_panel
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_classic_dialogues(cx);
+        }
+
+        // Handle quick action: 跟读练习 - navigate to reading practice
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .actions_card
+                    .actions_row
+                    .action_reading
+                    .action_panel
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_reading_practice(cx);
+        }
+
+        // Handle quick action: 实时助手 - navigate to assistant
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .left_column
+                    .actions_card
+                    .actions_row
+                    .action_assistant
+                    .action_panel
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_assistant(cx);
+        }
+
+        // Handle scenario cards
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .right_column
+                    .scenarios_card
+                    .scenarios_row
+                    .scenario_hotel
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_scene_center(cx);
+        }
+
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .right_column
+                    .scenarios_card
+                    .scenarios_row
+                    .scenario_restaurant
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_scene_center(cx);
+        }
+
+        if self
+            .ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .home_screen
+                    .content_scroll
+                    .content
+                    .right_column
+                    .scenarios_card
+                    .scenarios_row
+                    .scenario_interview
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.navigate_to_scene_center(cx);
+        }
+    }
+
+    // Helper navigation methods
+    fn navigate_to_dialog_screen(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.dialog_screen
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.ui
+            .dialog_screen(ids!(
+                body.base.content_area.main_content.content.dialog_screen
+            ))
+            .start_timers(cx);
+        self.ui.redraw(cx);
+    }
+
+    fn navigate_to_scene_center(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.scene_center
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.ui.redraw(cx);
+    }
+
+    fn navigate_to_assistant(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.assistant_screen
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.ui.redraw(cx);
+    }
+
+    fn navigate_to_reading_practice(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.reading_screen
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.ui.redraw(cx);
+    }
+
+    fn navigate_to_classic_dialogues(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .classic_dialogues_screen
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.ui.redraw(cx);
+    }
+
+    fn hide_all_screens(&mut self, cx: &mut Cx) {
+        self.sidebar_menu_open = false;
+        self.open_tabs.clear();
+        self.active_tab = None;
+        self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+
+        // Stop dialog timers if running
+        self.ui
+            .dialog_screen(ids!(
+                body.base.content_area.main_content.content.dialog_screen
+            ))
+            .stop_timers(cx);
+
+        // Hide all screens
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.home_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.dialog_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.review_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.scene_center
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.assistant_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.reading_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .classic_dialogues_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.settings_screen
+            ))
+            .apply_over(cx, live! { visible: false });
     }
 }
 

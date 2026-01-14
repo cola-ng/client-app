@@ -1,0 +1,110 @@
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#0F172A"/>
+  
+  <!-- Main Container -->
+  <rect x="20" y="20" width="1160" height="860" rx="16" fill="#1E293B"/>
+  
+  <!-- Title Section -->
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#F1F5F9">🤝 实时助手</text>
+  <text x="60" y="115" font-family="Arial, sans-serif" font-size="14" fill="#94A3B8">与真人聊天时获得 AI 实时辅助</text>
+  
+  <!-- Connection Status -->
+  <rect x="60" y="150" width="1080" height="80" rx="12" fill="#334155"/>
+  <circle cx="90" cy="190" r="8" fill="#10B981"/>
+  <text x="115" y="195" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#F1F5F9">已连接 WhatsApp</text>
+  <text x="115" y="215" font-family="Arial, sans-serif" font-size="12" fill="#94A3B8">正在监听对话...</text>
+  
+  <!-- Settings Button -->
+  <rect x="1000" y="170" width="100" height="40" rx="8" fill="#4F46E5"/>
+  <text x="1030" y="195" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">设置</text>
+  
+  <!-- Main Content Area -->
+  <g id="conversation-monitor">
+    <!-- Left Panel: Real-time Conversation -->
+    <rect x="60" y="260" width="540" height="560" rx="12" fill="#334155"/>
+    <text x="90" y="300" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#F1F5F9">💬 实时对话</text>
+    
+    <!-- Conversation Messages -->
+    <!-- Friend message -->
+    <rect x="90" y="330" width="420" height="70" rx="8" fill="#475569"/>
+    <text x="110" y="355" font-family="Arial, sans-serif" font-size="13" fill="#CBD5E1">Friend (15:23)</text>
+    <text x="110" y="378" font-family="Arial, sans-serif" font-size="14" fill="#F1F5F9">Hey! Do you want to grab dinner</text>
+    <text x="110" y="395" font-family="Arial, sans-serif" font-size="14" fill="#F1F5F9">tonight?</text>
+    
+    <!-- AI Suggestion for response -->
+    <rect x="90" y="420" width="460" height="90" rx="8" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="110" y="445" font-family="Arial, sans-serif" font-size="12" fill="#A5B4FC">💡 AI 建议回复 (点击采用)</text>
+    <text x="110" y="468" font-family="Arial, sans-serif" font-size="14" fill="#E0E7FF">"Sure! I'd love to. What time works"</text>
+    <text x="110" y="488" font-family="Arial, sans-serif" font-size="14" fill="#E0E7FF">for you?"</text>
+    
+    <!-- Your message -->
+    <rect x="180" y="530" width="380" height="50" rx="8" fill="#10B981"/>
+    <text x="200" y="555" font-family="Arial, sans-serif" font-size="13" fill="#D1FAE5">You (15:24)</text>
+    <text x="200" y="575" font-family="Arial, sans-serif" font-size="14" fill="white">Sure! I'd love to. What time?</text>
+    
+    <!-- Writing indicator -->
+    <rect x="90" y="750" width="460" height="50" rx="8" fill="#475569" fill-opacity="0.5"/>
+    <text x="110" y="780" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8">正在输入... AI 正在分析并准备建议</text>
+  </g>
+  
+  <g id="ai-assistance-panel">
+    <!-- Right Panel: AI Assistance -->
+    <rect x="620" y="260" width="520" height="560" rx="12" fill="#334155"/>
+    <text x="650" y="300" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#F1F5F9">🧠 AI 辅助面板</text>
+    
+    <!-- Quick Translation -->
+    <rect x="650" y="330" width="460" height="100" rx="8" fill="#475569"/>
+    <text x="670" y="355" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">⚡ 快速翻译</text>
+    <rect x="670" y="370" width="410" height="40" rx="6" fill="#1E293B"/>
+    <text x="680" y="395" font-family="Arial, sans-serif" font-size="13" fill="#94A3B8">输入中文，AI 生成英文回复...</text>
+    
+    <!-- Grammar Check -->
+    <rect x="650" y="450" width="460" height="120" rx="8" fill="#475569"/>
+    <text x="670" y="475" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">✅ 语法检查</text>
+    <text x="670" y="500" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">正在输入: "I want go dinner"</text>
+    
+    <rect x="670" y="515" width="410" height="40" rx="6" fill="#EF4444" fill-opacity="0.2" stroke="#EF4444" stroke-width="1"/>
+    <text x="680" y="535" font-family="Arial, sans-serif" font-size="12" fill="#FCA5A5">❌ 语法错误: 缺少 "to"</text>
+    <text x="680" y="550" font-family="Arial, sans-serif" font-size="12" fill="#10B981">✓ 建议: "I want to go to dinner"</text>
+    
+    <!-- Vocabulary Help -->
+    <rect x="650" y="590" width="460" height="100" rx="8" fill="#475569"/>
+    <text x="670" y="615" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">📚 词汇助手</text>
+    <text x="670" y="640" font-family="Arial, sans-serif" font-size="12" fill="#CBD5E1">点击查词或获取同义词替换建议</text>
+    
+    <g id="word-suggestion">
+      <rect x="670" y="655" width="100" height="25" rx="4" fill="#4F46E5" fill-opacity="0.3"/>
+      <text x="720" y="673" font-family="Arial, sans-serif" font-size="11" fill="#A5B4FC" text-anchor="middle">delicious</text>
+    </g>
+    
+    <!-- Confidence Meter -->
+    <rect x="650" y="710" width="460" height="90" rx="8" fill="#475569"/>
+    <text x="670" y="735" font-family="Arial, sans-serif" font-size="13" font-weight="600" fill="#F1F5F9">🎯 置信度</text>
+    <text x="670" y="755" font-family="Arial, sans-serif" font-size="11" fill="#94A3B8">AI 对当前回复建议的置信度</text>
+    
+    <!-- Progress bar -->
+    <rect x="670" y="770" width="410" height="10" rx="5" fill="#1E293B"/>
+    <rect x="670" y="770" width="328" height="10" rx="5" fill="#10B981"/>
+    <text x="1090" y="778" font-family="Arial, sans-serif" font-size="11" fill="#10B981" text-anchor="end">80%</text>
+  </g>
+  
+  <!-- Feature Toggle Bar -->
+  <rect x="60" y="840" width="1080" height="60" rx="8" fill="#334155"/>
+  
+  <g id="feature-toggles">
+    <rect x="90" y="858" width="140" height="30" rx="6" fill="#10B981"/>
+    <text x="160" y="878" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">✓ 自动建议</text>
+    
+    <rect x="250" y="858" width="140" height="30" rx="6" fill="#10B981"/>
+    <text x="320" y="878" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">✓ 语法检查</text>
+    
+    <rect x="410" y="858" width="140" height="30" rx="6" fill="#475569"/>
+    <text x="480" y="878" font-family="Arial, sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">发音纠正</text>
+    
+    <rect x="570" y="858" width="140" height="30" rx="6" fill="#475569"/>
+    <text x="640" y="878" font-family="Arial, sans-serif" font-size="12" fill="#94A3B8" text-anchor="middle">自动翻译</text>
+  </g>
+  
+  <text x="1000" y="878" font-family="Arial, sans-serif" font-size="13" fill="#4F46E5">更多设置 →</text>
+</svg>
