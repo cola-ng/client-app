@@ -82,6 +82,10 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
+    
+    FONT_REGULAR = <THEME_FONT_REGULAR> {}
+    FONT_MEDIUM = <THEME_FONT_MEDIUM> {}
+    FONT_SEMIBOLD = <THEME_FONT_BOLD> {}
 
     // Import colors from theme (single source of truth)
     use crate::theme::PANEL_BG;

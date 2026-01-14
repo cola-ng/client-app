@@ -404,12 +404,10 @@ live_design! {
 
                             voice_input_btn = <Button> {
                                 width: 40, height: 40
-                                text: ""
+                                text: "🎤"
                                 draw_bg: { color: (ACCENT_GREEN) border_radius: 20.0 }
                                 draw_text: { color: (WHITE) text_style: <FONT_MEDIUM>{ font_size: 16.0 } }
                                 icon_walk: { width: 0, height: 0 }
-                                // Use an emoji glyph to mimic the sketch mic
-                                label: "🎤"
                             }
 
                             send_prompt_btn = <Button> {
