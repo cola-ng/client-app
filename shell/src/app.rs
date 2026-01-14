@@ -8,11 +8,20 @@
 //! - Helper Methods (organized by responsibility)
 
 // App plugin system imports
+use std::collections::HashMap;
+use std::io::{BufRead, BufReader, Write};
+use std::net::TcpListener;
+use std::sync::mpsc;
+use std::time::{Duration, Instant};
+use std::{io, thread};
+
 use colang_core::models::Preferences;
-use colang_core::scenes::dialog::dialog_scene::{DialogScene, DialogSceneWidgetRefExt};
-use colang_core::scenes::settings::settings_scene::{SettingsScene, SettingsSceneWidgetRefExt};
+use colang_core::scenes::dialog::dialog_scene::DialogSceneWidgetRefExt;
+use colang_core::scenes::settings::settings_scene::SettingsSceneWidgetRefExt;
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 use widgets::StateChangeListener;
 
 // ============================================================================
@@ -24,6 +33,11 @@ use widgets::StateChangeListener;
 pub enum TabId {
     Profile,
     Settings,
+}
+
+enum DesktopAuthResult {
+    Success(String),
+    Error(String),
 }
 
 // ============================================================================
@@ -266,6 +280,16 @@ pub struct App {
     /// Whether initial theme has been applied (on first draw)
     #[rust]
     theme_initialized: bool,
+    #[rust]
+    auth_token: Option<String>,
+    #[rust]
+    desktop_auth_in_progress: bool,
+    #[rust]
+    desktop_auth_state: Option<String>,
+    #[rust]
+    desktop_auth_redirect_uri: Option<String>,
+    #[rust]
+    desktop_auth_rx: Option<mpsc::Receiver<DesktopAuthResult>>,
 }
 
 impl LiveHook for App {
@@ -278,6 +302,11 @@ impl LiveHook for App {
         let prefs = Preferences::load();
         self.dark_mode = prefs.dark_mode;
         self.dark_mode_anim = if prefs.dark_mode { 1.0 } else { 0.0 };
+        self.auth_token = prefs.auth_token;
+        self.desktop_auth_in_progress = false;
+        self.desktop_auth_state = None;
+        self.desktop_auth_redirect_uri = None;
+        self.desktop_auth_rx = None;
     }
 }
 
@@ -313,6 +342,7 @@ impl AppMain for App {
                 self.apply_dark_mode_screens(cx);
                 // Update header theme toggle icon
                 self.update_theme_toggle_icon(cx);
+                self.update_login_button_label(cx);
             }
         }
 
@@ -335,14 +365,15 @@ impl AppMain for App {
             _ => &[],
         };
 
+        self.poll_desktop_auth(cx);
+
         // Handle hover events
-        self.handle_user_menu_hover(cx, event);
         self.handle_sidebar_hover(cx, event);
         self.handle_theme_toggle(cx, event);
 
         // Handle click events
         self.handle_sidebar_clicks(cx, &actions);
-        self.handle_user_menu_clicks(cx, &actions);
+        self.handle_login_clicks(cx, &actions);
         self.handle_mofa_hero_buttons(cx, event);
         self.handle_tab_clicks(cx, &actions);
         self.handle_tab_close_clicks(cx, event);
@@ -459,6 +490,176 @@ impl App {
             self.ui.view(ids!(user_menu)).set_visible(cx, false);
             self.open_or_switch_tab(cx, TabId::Settings);
         }
+    }
+
+    fn handle_login_clicks(&mut self, cx: &mut Cx, actions: &[Action]) {
+        if self
+            .ui
+            .button(ids!(body.base.header.user_profile_container.login_btn))
+            .clicked(actions)
+        {
+            self.start_desktop_login(cx);
+        }
+    }
+
+    fn poll_desktop_auth(&mut self, cx: &mut Cx) {
+        let rx = match &self.desktop_auth_rx {
+            Some(rx) => rx,
+            None => return,
+        };
+
+        let result = match rx.try_recv() {
+            Ok(v) => v,
+            Err(std::sync::mpsc::TryRecvError::Empty) => return,
+            Err(std::sync::mpsc::TryRecvError::Disconnected) => {
+                self.desktop_auth_rx = None;
+                self.desktop_auth_in_progress = false;
+                self.desktop_auth_state = None;
+                self.desktop_auth_redirect_uri = None;
+                self.update_login_button_label(cx);
+                return;
+            }
+        };
+
+        self.desktop_auth_rx = None;
+        self.desktop_auth_in_progress = false;
+
+        match result {
+            DesktopAuthResult::Success(token) => {
+                self.auth_token = Some(token.clone());
+                let mut prefs = Preferences::load();
+                prefs.auth_token = Some(token);
+                let _ = prefs.save();
+            }
+            DesktopAuthResult::Error(message) => {
+                eprintln!("Desktop login failed: {}", message);
+            }
+        }
+
+        self.desktop_auth_state = None;
+        self.desktop_auth_redirect_uri = None;
+        self.update_login_button_label(cx);
+    }
+
+    fn update_login_button_label(&mut self, cx: &mut Cx) {
+        let id = ids!(body.base.header.user_profile_container.login_btn);
+        if self.desktop_auth_in_progress {
+            self.ui
+                .button(id)
+                .apply_over(cx, live! { text: "登录中..." });
+        } else if self.auth_token.is_some() {
+            self.ui.button(id).apply_over(cx, live! { text: "已登录" });
+        } else {
+            self.ui.button(id).apply_over(cx, live! { text: "登录" });
+        }
+        self.ui.redraw(cx);
+    }
+
+    fn start_desktop_login(&mut self, cx: &mut Cx) {
+        if self.desktop_auth_in_progress {
+            return;
+        }
+
+        let state = Uuid::new_v4().to_string();
+        let listener = match TcpListener::bind("127.0.0.1:0") {
+            Ok(l) => l,
+            Err(_) => return,
+        };
+
+        let _ = listener.set_nonblocking(true);
+        let port = match listener.local_addr() {
+            Ok(addr) => addr.port(),
+            Err(_) => return,
+        };
+
+        let redirect_uri = format!("http://127.0.0.1:{}/desktop-auth/callback", port);
+        let website_url = std::env::var("COLANG_WEBSITE_URL")
+            .unwrap_or_else(|_| "http://127.0.0.1:5173".to_string());
+        let authorize_url = format!(
+            "{}/desktop/authorize?redirect_uri={}&state={}",
+            website_url.trim_end_matches('/'),
+            encode_query_component(&redirect_uri),
+            encode_query_component(&state)
+        );
+
+        let api_url =
+            std::env::var("COLANG_API_URL").unwrap_or_else(|_| "http://127.0.0.1:5800".to_string());
+
+        self.desktop_auth_in_progress = true;
+        self.desktop_auth_state = Some(state.clone());
+        self.desktop_auth_redirect_uri = Some(redirect_uri.clone());
+        self.update_login_button_label(cx);
+
+        let (tx, rx) = mpsc::channel::<DesktopAuthResult>();
+        self.desktop_auth_rx = Some(rx);
+
+        thread::spawn(move || {
+            let deadline = Instant::now() + Duration::from_secs(5 * 60);
+            loop {
+                match listener.accept() {
+                    Ok((mut stream, _)) => {
+                        let uri = {
+                            let mut first_line = String::new();
+                            let mut reader = BufReader::new(&stream);
+                            let _ = reader.read_line(&mut first_line);
+                            first_line
+                                .split_whitespace()
+                                .nth(1)
+                                .unwrap_or("/")
+                                .to_string()
+                        };
+                        let params = parse_query_params(&uri);
+                        let code = params.get("code").cloned().unwrap_or_default();
+                        let returned_state = params.get("state").cloned().unwrap_or_default();
+
+                        let body = if code.is_empty() || returned_state.is_empty() {
+                            "<html><body>Invalid request.</body></html>"
+                        } else if returned_state != state {
+                            "<html><body>Invalid state.</body></html>"
+                        } else {
+                            "<html><body>登录成功，可以关闭此页面。</body></html>"
+                        };
+
+                        let _ = write!(
+                            stream,
+                            "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+                            body.as_bytes().len(),
+                            body
+                        );
+                        let _ = stream.flush();
+
+                        if code.is_empty() || returned_state.is_empty() {
+                            let _ = tx.send(DesktopAuthResult::Error("missing code/state".into()));
+                            break;
+                        }
+                        if returned_state != state {
+                            let _ = tx.send(DesktopAuthResult::Error("invalid state".into()));
+                            break;
+                        }
+
+                        let result = exchange_desktop_code(&api_url, &code, &redirect_uri)
+                            .map(DesktopAuthResult::Success)
+                            .unwrap_or_else(DesktopAuthResult::Error);
+                        let _ = tx.send(result);
+                        break;
+                    }
+                    Err(e) if e.kind() == io::ErrorKind::WouldBlock => {
+                        if Instant::now() > deadline {
+                            let _ = tx.send(DesktopAuthResult::Error("timeout".into()));
+                            break;
+                        }
+                        thread::sleep(Duration::from_millis(100));
+                        continue;
+                    }
+                    Err(_) => {
+                        let _ = tx.send(DesktopAuthResult::Error("listener failed".into()));
+                        break;
+                    }
+                }
+            }
+        });
+
+        let _ = webbrowser::open(&authorize_url);
     }
 
     /// Handle header theme toggle button
@@ -1198,7 +1399,7 @@ impl App {
         let profile_active = self.active_tab == Some(TabId::Profile);
         let settings_active = self.active_tab == Some(TabId::Settings);
 
-        let was_overlay_visible = self.ui.view(ids!(body.tab_overlay)).visible();
+        let _was_overlay_visible = self.ui.view(ids!(body.tab_overlay)).visible();
 
         self.ui
             .view(ids!(body.tab_overlay))
@@ -1355,6 +1556,116 @@ impl App {
             _ => {}
         }
     }
+}
+
+fn encode_query_component(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    for b in input.bytes() {
+        let ok = matches!(
+            b,
+            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' | b'-' | b'.' | b'_' | b'~'
+        );
+        if ok {
+            out.push(b as char);
+        } else {
+            out.push('%');
+            out.push_str(&format!("{:02X}", b));
+        }
+    }
+    out
+}
+
+fn decode_query_component(input: &str) -> String {
+    let bytes = input.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        match bytes[i] {
+            b'+' => {
+                out.push(b' ');
+                i += 1;
+            }
+            b'%' if i + 2 < bytes.len() => {
+                let h1 = bytes[i + 1];
+                let h2 = bytes[i + 2];
+                let v1 = (h1 as char).to_digit(16);
+                let v2 = (h2 as char).to_digit(16);
+                if let (Some(v1), Some(v2)) = (v1, v2) {
+                    out.push(((v1 << 4) | v2) as u8);
+                    i += 3;
+                } else {
+                    out.push(bytes[i]);
+                    i += 1;
+                }
+            }
+            b => {
+                out.push(b);
+                i += 1;
+            }
+        }
+    }
+    String::from_utf8_lossy(&out).to_string()
+}
+
+fn parse_query_params(uri: &str) -> HashMap<String, String> {
+    let query = match uri.split_once('?') {
+        Some((_, q)) => q,
+        None => return HashMap::new(),
+    };
+    let mut out = HashMap::new();
+    for part in query.split('&') {
+        if part.is_empty() {
+            continue;
+        }
+        let (k, v) = match part.split_once('=') {
+            Some((k, v)) => (k, v),
+            None => (part, ""),
+        };
+        out.insert(decode_query_component(k), decode_query_component(v));
+    }
+    out
+}
+
+#[derive(Serialize)]
+struct ConsumeDesktopCodeRequest {
+    code: String,
+    redirect_uri: String,
+}
+
+#[derive(Deserialize)]
+struct ConsumeDesktopCodeResponse {
+    access_token: String,
+}
+
+fn exchange_desktop_code(api_url: &str, code: &str, redirect_uri: &str) -> Result<String, String> {
+    let endpoint = format!("{}/api/desktop/auth/consume", api_url.trim_end_matches('/'));
+
+    let client = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(15))
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let res = client
+        .post(endpoint)
+        .json(&ConsumeDesktopCodeRequest {
+            code: code.to_string(),
+            redirect_uri: redirect_uri.to_string(),
+        })
+        .send()
+        .map_err(|e| e.to_string())?;
+
+    if !res.status().is_success() {
+        let status = res.status();
+        let body = res.text().unwrap_or_default();
+        return Err(if body.is_empty() {
+            format!("HTTP {}", status.as_u16())
+        } else {
+            body
+        });
+    }
+
+    let data: ConsumeDesktopCodeResponse = res.json().map_err(|e| e.to_string())?;
+    Ok(data.access_token)
 }
 
 // ============================================================================

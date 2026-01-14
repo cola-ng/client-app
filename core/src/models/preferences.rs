@@ -20,6 +20,8 @@ pub struct Preferences {
     /// Custom data storage location
     #[serde(default)]
     pub data_location: Option<String>,
+    #[serde(default)]
+    pub auth_token: Option<String>,
 }
 
 impl Preferences {
@@ -123,5 +125,11 @@ impl Preferences {
     /// Get all enabled providers
     pub fn get_enabled_providers(&self) -> Vec<&Provider> {
         self.providers.iter().filter(|p| p.enabled).collect()
+    }
+
+    pub fn authorization_header_value(&self) -> Option<String> {
+        self.auth_token
+            .as_ref()
+            .map(|token| format!("Bearer {}", token))
     }
 }

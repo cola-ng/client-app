@@ -24,6 +24,9 @@ serde_json.workspace = true
 log.workspace = true
 env_logger.workspace = true
 dirs.workspace = true
+uuid.workspace = true
+reqwest = { workspace = true, features = ["blocking"] }
+webbrowser.workspace = true
 sysinfo = "0.32"
 ctrlc = "3.4"
 

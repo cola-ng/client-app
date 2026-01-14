@@ -194,42 +194,56 @@ live_design! {
                     spacing: 4
                     cursor: Hand
 
-                    user_profile_btn = <View> {
-                        width: 32, height: 32
-                        padding: {left: 6, top: 8, right: 10, bottom: 8}
-                        show_bg: true
+                    login_btn = <Button> {
+                        width: Fit, height: 32
+                        padding: {left: 12, right: 12, top: 8, bottom: 8}
+                        align: {x: 0.5, y: 0.5}
+                        text: "登录"
+
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            }
+                        }
+
                         draw_bg: {
+                            instance hover: 0.0
+                            instance pressed: 0.0
+                            instance dark_mode: 0.0
+
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                let cx = self.rect_size.x * 0.5;
-                                let cy = self.rect_size.y * 0.5;
-                                sdf.circle(cx, cy, 15.0);
-                                sdf.fill((HOVER_BG));
+                                let r = 8.0;
+                                let bg_light = (SLATE_50);
+                                let bg_dark = (SLATE_800);
+                                let hover_light = (SLATE_200);
+                                let hover_dark = (SLATE_700);
+                                let border_light = (GRAY_300);
+                                let border_dark = (SLATE_700);
+                                let base = mix(bg_light, bg_dark, self.dark_mode);
+                                let hover = mix(hover_light, hover_dark, self.dark_mode);
+                                let fill = mix(base, hover, self.hover);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
+                                sdf.fill(fill);
+                                let border = mix(border_light, border_dark, self.dark_mode);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
+                                sdf.stroke(border, 1.0);
                                 return sdf.result;
                             }
                         }
 
-                        <Icon> {
-                            draw_icon: {
-                                svg_file: dep("crate://self/resources/icons/user.svg")
-                                fn get_color(self) -> vec4 { return (GRAY_600); }
+                        animator: {
+                            hover = {
+                                default: off
+                                off = { from: {all: Forward {duration: 0.08}} apply: {draw_bg: {hover: 0.0}} }
+                                on = { from: {all: Forward {duration: 0.08}} apply: {draw_bg: {hover: 1.0}} }
                             }
-                            icon_walk: {width: 16, height: 16}
-                        }
-                    }
-
-                    dropdown_arrow = <View> {
-                        width: 12, height: Fill
-                        draw_bg: {
-                            fn pixel(self) -> vec4 {
-                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                let cx = self.rect_size.x * 0.5;
-                                let cy = self.rect_size.y * 0.5;
-                                sdf.move_to(cx - 4.0, cy - 2.0);
-                                sdf.line_to(cx, cy + 2.0);
-                                sdf.line_to(cx + 4.0, cy - 2.0);
-                                sdf.stroke((SLATE_400), 1.5);
-                                return sdf.result;
+                            pressed = {
+                                default: off
+                                off = { from: {all: Forward {duration: 0.05}} apply: {draw_bg: {pressed: 0.0}} }
+                                on = { from: {all: Forward {duration: 0.02}} apply: {draw_bg: {pressed: 1.0}} }
                             }
                         }
                     }
