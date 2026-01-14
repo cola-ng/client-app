@@ -15,6 +15,7 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 use std::{io, thread};
 
+use crate::config::Config;
 use colang_core::models::Preferences;
 use colang_core::screens::dialog::dialog_screen::DialogScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
@@ -294,6 +295,10 @@ pub struct App {
 
 impl LiveHook for App {
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
+        // Initialize configuration directory and load config
+        // This ensures ~/.colang directory exists on first run
+        let _ = Config::load().unwrap_or_default();
+        
         // Initialize the app registry with all installed apps
         // self.app_registry.register(DialogScreen::info());
         // self.app_registry.register(SettingsScreen::info());
@@ -530,6 +535,7 @@ impl App {
         match result {
             DesktopAuthResult::Success(token) => {
                 self.auth_token = Some(token.clone());
+                println!("Desktop login succeeded, token: {}", token);
                 let mut prefs = Preferences::load();
                 prefs.auth_token = Some(token);
                 let _ = prefs.save();
@@ -575,18 +581,21 @@ impl App {
             Err(_) => return,
         };
 
-        let redirect_uri = format!("http://127.0.0.1:{}/desktop-auth/callback", port);
-        let website_url = std::env::var("COLANG_WEBSITE_URL")
-            .unwrap_or_else(|_| "http://127.0.0.1:6108".to_string());
+        let redirect_uri = format!("http://127.0.0.1:{}/auth/callback", port);
+        
+        // Load configuration
+        let config = Config::load().unwrap_or_default();
+        let website_url = config.website_url;
+        let api_url = config.api_url;
+        
         let authorize_url = format!(
-            "{}/desktop/authorize?redirect_uri={}&state={}",
+            "{}/auth?redirect_uri={}&state={}",
             website_url.trim_end_matches('/'),
             encode_query_component(&redirect_uri),
             encode_query_component(&state)
         );
 
-        let api_url =
-            std::env::var("COLANG_API_URL").unwrap_or_else(|_| "http://127.0.0.1:5800".to_string());
+        println!("Opening browser for URL: {}", authorize_url);
 
         self.desktop_auth_in_progress = true;
         self.desktop_auth_state = Some(state.clone());
@@ -1703,10 +1712,18 @@ struct ConsumeDesktopCodeResponse {
 }
 
 fn exchange_desktop_code(api_url: &str, code: &str, redirect_uri: &str) -> Result<String, String> {
-    let endpoint = format!("{}/api/desktop/auth/consume", api_url.trim_end_matches('/'));
+    let endpoint = format!("{}/auth/consume", api_url.trim_end_matches('/'));
 
     let client = reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(15))
+        .default_headers({
+            let mut headers = reqwest::header::HeaderMap::new();
+            headers.insert(
+                reqwest::header::ACCEPT,
+                reqwest::header::HeaderValue::from_static("application/json"),
+            );
+            headers
+        })
         .build()
         .map_err(|e| e.to_string())?;
 

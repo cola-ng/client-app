@@ -22,10 +22,10 @@ live_design! {
 
     CardBase = <RoundedView> {
         show_bg: true
+        border_radius: 16.0
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 16.0
-            fn get_color(self) -> vec4 {
+            fn pixel(self) -> vec4 {
                 return mix((WHITE), (SLATE_800), self.dark_mode);
             }
         }
@@ -33,10 +33,10 @@ live_design! {
 
     PanelBase = <RoundedView> {
         show_bg: true
+        border_radius: 8.0
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
-            fn get_color(self) -> vec4 {
+            fn pixel(self) -> vec4 {
                 return mix((SLATE_50), (SLATE_700), self.dark_mode);
             }
         }
@@ -164,9 +164,7 @@ live_design! {
                         padding: {left: 12, right: 12}
                         show_bg: true
                         draw_bg: {
-                            instance dark_mode: 0.0
-                            border_radius: 16.0
-                            fn get_color(self) -> vec4 {
+                            instance dark_mode: 0.0 fn get_color(self) -> vec4 {
                                 return mix((ACCENT_INDIGO), (INDIGO_500), self.dark_mode);
                             }
                         }
@@ -332,8 +330,9 @@ live_design! {
                                     return vec4(0.396, 0.416, 0.961, 0.2);  // Indigo with transparency
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 12.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "🎬"
@@ -436,8 +435,9 @@ live_design! {
                                     return vec4(0.063, 0.725, 0.502, 0.2);  // Green
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 12.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "🍽️"
@@ -484,8 +484,9 @@ live_design! {
                                     return vec4(0.961, 0.624, 0.043, 0.2);  // Amber
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 12.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "✈️"
@@ -532,8 +533,9 @@ live_design! {
                                     return vec4(0.396, 0.416, 0.961, 0.2);  // Indigo
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 12.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "💼"
@@ -580,8 +582,9 @@ live_design! {
                                     return vec4(0.063, 0.725, 0.502, 0.2);  // Green
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 12.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "🛒"
@@ -663,8 +666,9 @@ live_design! {
                                     return vec4(0.1, 0.1, 0.18, 1.0);  // Dark
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 8.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "🎥"
@@ -715,8 +719,9 @@ live_design! {
                                     return vec4(0.1, 0.1, 0.18, 1.0);
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 8.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "📺"
@@ -767,8 +772,9 @@ live_design! {
                                     return vec4(0.1, 0.1, 0.18, 1.0);
                                 }
                             }
-                            align: {x: 0.5, y: 0.5}
                             border_radius: 8.0
+
+                            align: {x: 0.5, y: 0.5}
 
                             icon = <Label> {
                                 text: "🎤"

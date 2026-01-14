@@ -29,6 +29,7 @@ reqwest = { workspace = true, features = ["blocking"] }
 webbrowser.workspace = true
 sysinfo = "0.32"
 ctrlc = "3.4"
+figment = { version = "0.10", features = ["toml", "yaml", "json", "env"] }
 
 [[bin]]
 name = "colang"
