@@ -146,11 +146,8 @@ live_design! {
                     search_placeholder = <Label> {
                         text: "搜索场景..."
                         draw_text: {
-                            instance dark_mode: 0.0
+                            color: (TEXT_MUTED)
                             text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                            fn get_color(self) -> vec4 {
-                                return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
-                            }
                         }
                     }
                 }
@@ -203,7 +200,7 @@ live_design! {
                     spacing: 16
                     align: {y: 0.5}
 
-                    icon_area = <View> {
+                    icon_area = <RoundedView> {
                         width: 90, height: Fit
                         flow: Down
                         align: {x: 0.5, y: 0.5}
@@ -316,11 +313,10 @@ live_design! {
                     }
                 }
 
-                smart_cards = <View> {
+                smart_cards = <ScrollXView> {
                     width: Fill, height: 200
                     flow: Right
                     spacing: 16
-                    scroll_on: ("x", "y")
 
                     card1 = <CardBase> {
                         width: 200, height: Fill
@@ -328,7 +324,7 @@ live_design! {
                         flow: Down
                         spacing: 8
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: Fill, height: 85
                             show_bg: true
                             draw_bg: {
@@ -432,7 +428,7 @@ live_design! {
                         flow: Down
                         spacing: 8
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
@@ -480,7 +476,7 @@ live_design! {
                         flow: Down
                         spacing: 8
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
@@ -528,7 +524,7 @@ live_design! {
                         flow: Down
                         spacing: 8
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
@@ -576,7 +572,7 @@ live_design! {
                         flow: Down
                         spacing: 8
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
@@ -659,7 +655,7 @@ live_design! {
                         flow: Right
                         spacing: 12
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
@@ -711,7 +707,7 @@ live_design! {
                         flow: Right
                         spacing: 12
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
@@ -763,7 +759,7 @@ live_design! {
                         flow: Right
                         spacing: 12
 
-                        icon_area = <View> {
+                        icon_area = <RoundedView> {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
