@@ -212,6 +212,33 @@ live_design! {
                                     border_radius: 12.0
                                 }
                             }
+
+                            select_scene_btn = <Button> {
+                                width: Fit, height: Fit
+                                padding: { left: 12, right: 12, top: 8, bottom: 8 }
+                                text: "选择场景"
+                                draw_text: {
+                                    instance dark_mode: 0.0
+                                    text_style: <FONT_MEDIUM>{ font_size: 11.0 }
+                                    fn get_color(self) -> vec4 {
+                                        return mix((ACCENT_INDIGO), (INDIGO_300), self.dark_mode);
+                                    }
+                                }
+                                draw_bg: {
+                                    instance dark_mode: 0.0
+                                    instance hover: 0.0
+                                    fn pixel(self) -> vec4 {
+                                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                        let r = 12.0;
+                                        let light = mix((INDIGO_100), (SLATE_200), self.hover);
+                                        let dark = mix((INDIGO_900), (SLATE_700), self.hover);
+                                        let color = mix(light, dark, self.dark_mode);
+                                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
+                                        sdf.fill(color);
+                                        return sdf.result;
+                                    }
+                                }
+                            }
                         }
                     }
 

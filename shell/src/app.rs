@@ -375,6 +375,7 @@ impl AppMain for App {
         self.handle_sidebar_clicks(cx, &actions);
         self.handle_login_clicks(cx, &actions);
         self.handle_mofa_hero_buttons(cx, event);
+        self.handle_dialog_scene_buttons(cx, &actions);
         self.handle_tab_clicks(cx, &actions);
         self.handle_tab_close_clicks(cx, event);
     }
@@ -795,6 +796,11 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
                     body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
@@ -823,6 +829,11 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.review_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -862,6 +873,53 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.settings_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui.redraw(cx);
+        }
+
+        // Scene Center tab
+        if self
+            .ui
+            .button(ids!(sidebar_menu_overlay.sidebar_content.scene_center_tab))
+            .clicked(actions)
+        {
+            self.sidebar_menu_open = false;
+            self.start_sidebar_slide_out(cx);
+            self.open_tabs.clear();
+            self.active_tab = None;
+            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+            self.ui
+                .dialog_scene(ids!(
+                    body.base.content_area.main_content.content.dialog_scene
+                ))
+                .stop_timers(cx);
+            self.ui
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dialog_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
+                ))
+                .apply_over(cx, live! { visible: true });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
                     body.base.content_area.main_content.content.settings_scene
                 ))
                 .apply_over(cx, live! { visible: false });
@@ -895,6 +953,11 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.review_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1666,6 +1729,71 @@ fn exchange_desktop_code(api_url: &str, code: &str, redirect_uri: &str) -> Resul
 
     let data: ConsumeDesktopCodeResponse = res.json().map_err(|e| e.to_string())?;
     Ok(data.access_token)
+}
+
+// ============================================================================
+// DIALOG SCENE BUTTON HANDLERS
+// ============================================================================
+
+impl App {
+    fn handle_dialog_scene_buttons(&mut self, cx: &mut Cx, actions: &[Action]) {
+        // Handle "选择场景" button click
+        if self
+            .ui
+            .button(ids!(
+                body.base.content_area.main_content.content.dialog_scene
+                    .main_layout
+                    .left_column
+                    .chat_container
+                    .chat_info
+                    .chat_actions
+                    .select_scene_btn
+            ))
+            .clicked(actions)
+        {
+            // Navigate to scene center
+            self.sidebar_menu_open = false;
+            self.open_tabs.clear();
+            self.active_tab = None;
+            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
+            
+            // Stop dialog scene timers
+            self.ui
+                .dialog_scene(ids!(
+                    body.base.content_area.main_content.content.dialog_scene
+                ))
+                .stop_timers(cx);
+            
+            // Hide dialog scene, show scene center
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dialog_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.scene_center_scene
+                ))
+                .apply_over(cx, live! { visible: true });
+            
+            // Hide other scenes
+            self.ui
+                .view(ids!(body.base.content_area.main_content.content.home_scene))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.review_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.settings_scene
+                ))
+                .apply_over(cx, live! { visible: false });
+            
+            self.ui.redraw(cx);
+        }
+    }
 }
 
 // ============================================================================

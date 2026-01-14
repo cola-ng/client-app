@@ -1,0 +1,235 @@
+warning: unused import: `BridgeError`
+  --> dora-bridge\src\parser.rs:14:20
+   |
+14 | use crate::error::{BridgeError, BridgeResult};
+   |                    ^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `debug`
+  --> dora-bridge\src\widgets\prompt_input.rs:17:15
+   |
+17 | use tracing::{debug, error, info, warn};
+   |               ^^^^^
+
+warning: unused variable: `data`
+   --> dora-bridge\src\widgets\mic_input.rs:147:32
+    |
+147 |             Event::Input { id, data, metadata } => {
+    |                                ^^^^ help: try ignoring the field: `data: _`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `control_receiver` is never read
+  --> dora-bridge\src\widgets\text_input.rs:40:5
+   |
+24 | pub struct TextInputBridge {
+   |            --------------- field in this struct
+...
+40 |     control_receiver: Receiver<ControlCommand>,
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dora-bridge` (lib) generated 4 warnings (run `cargo fix --lib -p dora-bridge` to apply 3 suggestions)
+warning: unused variable: `user_text`
+   --> rust-nodes\dora-english-teacher\src\main.rs:318:5
+    |
+318 |     user_text: &str,
+    |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_user_text`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `words`
+   --> rust-nodes\dora-english-teacher\src\main.rs:321:5
+    |
+321 |     words: Option<&Vec<WordTiming>>,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_words`
+
+warning: `dora-english-teacher` (bin "dora-english-teacher") generated 2 warnings (run `cargo fix --bin "dora-english-teacher" -p dora-english-teacher` to apply 2 suggestions)
+warning: variable does not need to be mutable
+   --> rust-nodes\dora-learning-db-writer\src\main.rs:122:29
+    |
+122 |                         let mut result = StorageResult {
+    |                             ----^^^^^^
+    |                             |
+    |                             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `session_id`
+   --> rust-nodes\dora-learning-db-writer\src\main.rs:104:41
+    |
+104 |                         let (user_text, session_id) =
+    |                                         ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_session_id`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `save_pronunciation_issue` is never used
+   --> rust-nodes\dora-learning-db-writer\src\main.rs:385:10
+    |
+385 | async fn save_pronunciation_issue(
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `dora-learning-db-writer` (bin "dora-learning-db-writer") generated 3 warnings (run `cargo fix --bin "dora-learning-db-writer" -p dora-learning-db-writer` to apply 2 suggestions)
+   Compiling colang-core v0.1.0 (D:\Works\colang\desktop\core)
+warning: unused import: `crate::streaming::CancellationReason`
+  --> rust-nodes\dora-maas-client\src\main.rs:50:5
+   |
+50 | use crate::streaming::CancellationReason;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `tool_count`
+   --> rust-nodes\dora-maas-client\src\main.rs:334:21
+    |
+334 |                 let tool_count = ts.tools().len();
+    |                     ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_tool_count`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `metadata_clone`
+   --> rust-nodes\dora-maas-client\src\main.rs:565:37
+    |
+565 | ...                   let metadata_clone = metadata.parameters.clone();
+    |                           ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_metadata_clone`
+
+warning: unused variable: `metadata_clone`
+    --> rust-nodes\dora-maas-client\src\main.rs:1617:37
+     |
+1617 | ...                   let metadata_clone = metadata.parameters.clone();
+     |                           ^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_metadata_clone`
+
+warning: field `request_timeout_secs` is never read
+  --> rust-nodes\dora-maas-client\src\config.rs:37:9
+   |
+21 | pub struct Config {
+   |            ------ field in this struct
+...
+37 |     pub request_timeout_secs: u64,
+   |         ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `Config` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: enum `CancellationReason` is never used
+  --> rust-nodes\dora-maas-client\src\streaming.rs:12:10
+   |
+12 | pub enum CancellationReason {
+   |          ^^^^^^^^^^^^^^^^^^
+
+warning: `dora-maas-client` (bin "dora-maas-client") generated 6 warnings (run `cargo fix --bin "dora-maas-client" -p dora-maas-client` to apply 4 suggestions)
+warning: unused variable: `cx`
+   --> core\src\scenes\home\home_scene.rs:641:34
+    |
+641 |     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions, _scope: &mut Scope) {
+    |                                  ^^ help: if this is intentional, prefix it with an underscore: `_cx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `select_input_device` and `select_output_device` are never used
+  --> core\src\scenes\dialog\dialog_scene\audio_controls.rs:62:19
+   |
+ 9 | impl DialogScene {
+   | ---------------- methods in this implementation
+...
+62 |     pub(super) fn select_input_device(&mut self, _cx: &mut Cx, device_name: &str) {
+   |                   ^^^^^^^^^^^^^^^^^^^
+...
+71 |     pub(super) fn select_output_device(&mut self, device_name: &str) {
+   |                   ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `toggle_log_overlay` is never used
+  --> core\src\scenes\dialog\dialog_scene\log_panel.rs:12:19
+   |
+10 | impl DialogScene {
+   | ---------------- method in this implementation
+11 |     /// Toggle log overlay visibility
+12 |     pub(super) fn toggle_log_overlay(&mut self, cx: &mut Cx) {
+   |                   ^^^^^^^^^^^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:217:46
+    |
+217 |             let item = self.view.view(item_id.clone());
+    |                                              ^^^^^^^^
+    |
+    = note: `#[warn(suspicious_double_ref_op)]` on by default
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:231:51
+    |
+231 | ...                   self.view.view(item_id.clone()).apply_over(
+    |                                             ^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:239:51
+    |
+239 | ...                   self.view.view(item_id.clone()).apply_over(
+    |                                             ^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:261:51
+    |
+261 | ...                   self.view.view(item_id.clone()).apply_over(
+    |                                             ^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:269:51
+    |
+269 | ...                   self.view.view(item_id.clone()).apply_over(
+    |                                             ^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:325:47
+    |
+325 |                         self.view.view(item_id.clone()).apply_over(
+    |                                               ^^^^^^^^
+
+warning: using `.clone()` on a double reference, which returns `&[makepad_widgets::LiveId]` instead of cloning the inner type
+   --> core\src\scenes\settings\providers_panel.rs:333:47
+    |
+333 |                         self.view.view(item_id.clone()).apply_over(
+    |                                               ^^^^^^^^
+
+   Compiling colang-shell v0.1.0 (D:\Works\colang\desktop\shell)
+warning: `colang-core` (lib) generated 10 warnings (run `cargo fix --lib -p colang-core` to apply 1 suggestion)
+warning: field `user_menu_open` is never read
+   --> shell\src\app.rs:250:5
+    |
+246 | pub struct App {
+    |            --- field in this struct
+...
+250 |     user_menu_open: bool,
+    |     ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `handle_user_menu_hover` and `handle_user_menu_clicks` are never used
+   --> shell\src\app.rs:434:8
+    |
+432 | impl App {
+    | -------- methods in this implementation
+433 |     /// Handle user menu hover
+434 |     fn handle_user_menu_hover(&mut self, cx: &mut Cx, event: &Event) {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+...
+474 |     fn handle_user_menu_clicks(&mut self, cx: &mut Cx, actions: &[Action]) {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `open_or_switch_tab` is never used
+    --> shell\src\app.rs:1360:8
+     |
+1358 | impl App {
+     | -------- method in this implementation
+1359 |     /// Open a tab or switch to it if already open
+1360 |     fn open_or_switch_tab(&mut self, cx: &mut Cx, tab_id: TabId) {
+     |        ^^^^^^^^^^^^^^^^^^
+
+warning: `colang-shell` (bin "colang") generated 3 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 19.51s

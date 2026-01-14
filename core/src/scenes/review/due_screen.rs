@@ -377,7 +377,7 @@ live_design! {
                             }
                         }
                     }
-                    <MutedText> { text: "这些内容会自动融入你的下次 AI 对话中" }
+                    <MutedText> { text: "这些内容会自动融入你的下次 交流对话中" }
                 }
             }
 

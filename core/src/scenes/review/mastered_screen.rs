@@ -186,7 +186,7 @@ live_design! {
                 flow: Down
                 spacing: 10
                 <SectionTitle> { text: "🌟 表达库（从已掌握句卡沉淀）" }
-                <MutedText> { text: "下一次 AI 对话优先用这些句式引导你说出来" }
+                <MutedText> { text: "下一次 交流对话优先用这些句式引导你说出来" }
                 line1 = <PanelBase> {
                     width: Fill, height: Fit
                     padding: 12

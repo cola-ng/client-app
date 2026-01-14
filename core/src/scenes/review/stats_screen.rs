@@ -56,7 +56,7 @@ live_design! {
             k4 = <CardBase> { width: Fill, height: Fit padding: 16 flow: Down spacing: 6
                 <SectionTitle> { text: "🗣️ 开口时长" }
                 <Label> { text: "47 min" draw_text: { text_style: <FONT_BOLD>{ font_size: 22.0 } color: (TEXT_PRIMARY) } }
-                <MutedText> { text: "本周 AI 对话/跟读合计" }
+                <MutedText> { text: "本周 交流对话/跟读合计" }
             }
         }
 
