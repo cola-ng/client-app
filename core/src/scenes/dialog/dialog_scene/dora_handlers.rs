@@ -254,12 +254,8 @@ impl DialogScene {
             }
         }
 
-        // Update audio buffer level in mofa_hero (from audio player)
+        // Update participant visualization from audio player
         let (is_playing, active_idx, waveform_data) = if let Some(ref player) = self.audio_player {
-            let buffer_pct = player.buffer_fill_percentage() / 100.0;
-            self.view
-                .mofa_hero(ids!(left_column.mofa_hero))
-                .set_buffer_level(cx, buffer_pct);
             (
                 player.is_playing(),
                 player.current_participant_idx(),

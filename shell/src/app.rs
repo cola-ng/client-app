@@ -574,7 +574,7 @@ impl App {
 
         let redirect_uri = format!("http://127.0.0.1:{}/desktop-auth/callback", port);
         let website_url = std::env::var("COLANG_WEBSITE_URL")
-            .unwrap_or_else(|_| "http://127.0.0.1:5173".to_string());
+            .unwrap_or_else(|_| "http://127.0.0.1:6108".to_string());
         let authorize_url = format!(
             "{}/desktop/authorize?redirect_uri={}&state={}",
             website_url.trim_end_matches('/'),

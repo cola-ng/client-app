@@ -12,10 +12,10 @@ impl DialogScene {
         let input_text = self
             .view
             .text_input(ids!(
-                left_column
+                main_layout
+                    .left_column
                     .prompt_container
                     .prompt_section
-                    .prompt_row
                     .prompt_input
             ))
             .text();
@@ -41,10 +41,10 @@ impl DialogScene {
         // Clear input field
         self.view
             .text_input(ids!(
-                left_column
+                main_layout
+                    .left_column
                     .prompt_container
                     .prompt_section
-                    .prompt_row
                     .prompt_input
             ))
             .set_text(cx, "");
@@ -100,10 +100,10 @@ impl DialogScene {
         // Clear prompt input
         self.view
             .text_input(ids!(
-                left_column
+                main_layout
+                    .left_column
                     .prompt_container
                     .prompt_section
-                    .prompt_row
                     .prompt_input
             ))
             .set_text(cx, "");
@@ -152,7 +152,8 @@ impl DialogScene {
 
         self.view
             .markdown(ids!(
-                left_column
+                main_layout
+                    .left_column
                     .chat_container
                     .chat_section
                     .chat_scroll
@@ -165,7 +166,13 @@ impl DialogScene {
         let chat_count = self.chat_messages.len() + self.pending_streaming_messages.len();
         if chat_count > self.last_chat_count {
             self.view
-                .view(ids!(left_column.chat_container.chat_section.chat_scroll))
+                .view(ids!(
+                    main_layout
+                        .left_column
+                        .chat_container
+                        .chat_section
+                        .chat_scroll
+                ))
                 .set_scroll_pos(cx, DVec2 { x: 0.0, y: 1e10 });
             self.last_chat_count = chat_count;
         }

@@ -1,4 +1,4 @@
-//! MofaHero Widget - System status bar with Dataflow and Audio Buffer panels
+//! MofaHero Widget - Session control strip for the AI dialog screen
 
 use makepad_widgets::*;
 
@@ -8,345 +8,202 @@ live_design! {
     use link::widgets::*;
     use widgets::theme::*;
 
-    // Local layout constants (colors imported from theme)
-    HERO_RADIUS = 4.0
-
-    // Dark mode colors
-    use widgets::theme::PANEL_BG_DARK;
-    use widgets::theme::TEXT_PRIMARY_DARK;
-    use widgets::theme::TEXT_SECONDARY_DARK;
-
     // Icons
     ICO_START = dep("crate://self/resources/icons/start.svg")
     ICO_STOP = dep("crate://self/resources/icons/stop.svg")
 
-    // Dataflow status button (Ready/Connected/Failed with color change) - taller to fit text
-    DataflowButton = <Button> {
-        width: Fill, height: 22
-        text: "Connected"
+    // Badge for connection state
+    StatusBadge = <RoundedView> {
+        width: Fit, height: Fit
+        padding: { left: 12, right: 12, top: 6, bottom: 6 }
+        draw_bg: {
+            color: (ACCENT_GREEN)
+            border_radius: 12.0
+        }
+        status_label = <Label> {
+            text: "Ready"
+            draw_text: {
+                color: (WHITE)
+                text_style: <FONT_SEMIBOLD>{ font_size: 11.0 }
+            }
+        }
+    }
+
+    // Section title
+    SectionTitle = <Label> {
         draw_text: {
-            color: (WHITE)
-            text_style: <FONT_SEMIBOLD>{ font_size: 10.0 }
-            text_wrap: Word
-            fn get_color(self) -> vec4 {
-                return self.color;
-            }
-        }
-        draw_bg: {
-            instance status: 0.0  // 0=ready(green), 1=connected(neon green, blinking), 2=failed(red)
-            instance blink: 0.0   // blink phase for animation
-            border_radius: 4.0
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let green = vec4(0.13, 0.77, 0.37, 1.0);        // Ready green
-                let neon_green = vec4(0.0, 1.0, 0.5, 1.0);       // Connected neon green
-                let red = vec4(0.95, 0.25, 0.25, 1.0);           // Failed red
-
-                // Calculate color based on status
-                let base_color = mix(
-                    green,
-                    red,
-                    step(1.5, self.status)  // Switch to red when status > 1.5
-                );
-
-                // Apply blinking for connected state (status ~ 1.0)
-                let blink_factor = smoothstep(
-                    0.4 - 0.1 * sin(self.blink * 12.566),  // 60Hz = 2*pi*60, divide by frames for smooth
-                    0.6 + 0.1 * sin(self.blink * 12.566),
-                    step(0.5, self.status) * (1.0 - step(1.5, self.status))  // Only when status is ~1.0
-                );
-
-                // Mix between base color and neon green based on blink
-                let final_color = mix(base_color, neon_green, blink_factor * step(0.5, self.status) * (1.0 - step(1.5, self.status)));
-
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
-                sdf.fill(final_color);
-                return sdf.result;
-            }
+            color: (TEXT_PRIMARY)
+            text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
         }
     }
 
-    // Reusable status dot component
-    StatusDot = <View> {
-        width: 10, height: 10
-        show_bg: true
-        draw_bg: {
-            instance status: 0.0  // 0=inactive(gray), 1=good(green), 2=warning(yellow), 3=critical(red)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let center = self.rect_size * 0.5;
-                let radius = min(center.x, center.y) - 0.5;
-                sdf.circle(center.x, center.y, radius);
-
-                let gray = vec4(0.62, 0.65, 0.69, 1.0);
-                let green = vec4(0.13, 0.77, 0.37, 1.0);
-                let yellow = vec4(0.95, 0.75, 0.2, 1.0);
-                let red = vec4(0.95, 0.25, 0.25, 1.0);
-
-                let color = mix(
-                    mix(gray, green, step(0.5, self.status)),
-                    mix(yellow, red, step(2.5, self.status)),
-                    step(1.5, self.status)
-                );
-                sdf.fill(color);
-                return sdf.result;
-            }
-        }
-    }
-
-    // Connection dot (for dataflow status - green when connected)
-    ConnectionDot = <View> {
-        width: 10, height: 10
-        show_bg: true
-        draw_bg: {
-            color: (GRAY_400)
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let center = self.rect_size * 0.5;
-                let radius = min(center.x, center.y) - 0.5;
-                sdf.circle(center.x, center.y, radius);
-                sdf.fill(self.color);
-                return sdf.result;
-            }
-        }
-    }
-
-    // Reusable LED gauge component (10 segments)
-    LedGauge = <View> {
-        width: Fill, height: 16
-        show_bg: true
-        draw_bg: {
-            instance fill_pct: 0.0
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-
-                let num_segs = 10.0;
-                let gap = 2.0;
-                let seg_width = (self.rect_size.x - gap * (num_segs + 1.0)) / num_segs;
-                let seg_height = self.rect_size.y - 2.0;
-                let active_segs = self.fill_pct * num_segs;
-                let dim = vec4(0.90, 0.91, 0.93, 1.0);
-
-                // Colors: blue -> green -> yellow -> red
-                let c0 = vec4(0.23, 0.51, 0.97, 1.0);
-                let c1 = vec4(0.20, 0.65, 0.90, 1.0);
-                let c2 = vec4(0.20, 0.78, 0.75, 1.0);
-                let c3 = vec4(0.20, 0.83, 0.55, 1.0);
-                let c4 = vec4(0.30, 0.85, 0.40, 1.0);
-                let c5 = vec4(0.55, 0.85, 0.30, 1.0);
-                let c6 = vec4(0.80, 0.82, 0.22, 1.0);
-                let c7 = vec4(0.95, 0.70, 0.20, 1.0);
-                let c8 = vec4(0.95, 0.50, 0.20, 1.0);
-                let c9 = vec4(0.95, 0.30, 0.20, 1.0);
-
-                // Draw each segment manually
-                let x0 = gap + 0.0 * (seg_width + gap);
-                sdf.box(x0, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c0, step(0.5, active_segs)));
-
-                let x1 = gap + 1.0 * (seg_width + gap);
-                sdf.box(x1, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c1, step(1.5, active_segs)));
-
-                let x2 = gap + 2.0 * (seg_width + gap);
-                sdf.box(x2, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c2, step(2.5, active_segs)));
-
-                let x3 = gap + 3.0 * (seg_width + gap);
-                sdf.box(x3, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c3, step(3.5, active_segs)));
-
-                let x4 = gap + 4.0 * (seg_width + gap);
-                sdf.box(x4, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c4, step(4.5, active_segs)));
-
-                let x5 = gap + 5.0 * (seg_width + gap);
-                sdf.box(x5, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c5, step(5.5, active_segs)));
-
-                let x6 = gap + 6.0 * (seg_width + gap);
-                sdf.box(x6, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c6, step(6.5, active_segs)));
-
-                let x7 = gap + 7.0 * (seg_width + gap);
-                sdf.box(x7, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c7, step(7.5, active_segs)));
-
-                let x8 = gap + 8.0 * (seg_width + gap);
-                sdf.box(x8, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c8, step(8.5, active_segs)));
-
-                let x9 = gap + 9.0 * (seg_width + gap);
-                sdf.box(x9, 1.0, seg_width, seg_height, 1.5);
-                sdf.fill(mix(dim, c9, step(9.5, active_segs)));
-
-                return sdf.result;
-            }
-        }
-    }
-
-    // Status section template - equal width for all sections
-    StatusSection = <RoundedView> {
-        width: Fill, height: Fill
-        padding: { left: 12, right: 12, top: 8, bottom: 8 }
-        draw_bg: {
-            instance dark_mode: 0.0
-            border_radius: (HERO_RADIUS)
-            fn get_color(self) -> vec4 {
-                return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);
-            }
-        }
-        flow: Down
-        spacing: 4
-        align: {x: 0.0, y: 0.0}
-    }
-
-    // Status label with dark mode support
-    StatusLabel = <Label> {
+    // Muted helper text
+    HintText = <Label> {
         draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_MEDIUM>{ font_size: 10.0 }
-            fn get_color(self) -> vec4 {
-                return mix((GRAY_700), (TEXT_SECONDARY_DARK), self.dark_mode);
-            }
-        }
-    }
-
-    // Percentage label with dark mode support
-    PctLabel = <Label> {
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 10.0 }
-            fn get_color(self) -> vec4 {
-                return mix((GRAY_500), (TEXT_SECONDARY_DARK), self.dark_mode);
-            }
+            color: (TEXT_SECONDARY)
+            text_style: <FONT_REGULAR>{ font_size: 11.0 }
         }
     }
 
     pub MofaHero = {{MofaHero}} {
-        width: Fill, height: 72
+        width: Fill, height: 78
         flow: Right
-        spacing: 8
+        spacing: 10
 
-        // Action section (start/stop toggle) - matches conference-dashboard pattern
+        // Start / Stop card
         action_section = <RoundedView> {
-            width: Fill, height: Fill
-            padding: { left: 12, right: 12, top: 8, bottom: 8 }
+            width: 260, height: Fill
+            padding: { left: 14, right: 14, top: 10, bottom: 10 }
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: (HERO_RADIUS)
+                border_radius: 12.0
                 fn get_color(self) -> vec4 {
                     return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);
                 }
             }
-            flow: Down
-            spacing: 4
-            align: {x: 0.5, y: 0.5}
+            flow: Right
+            spacing: 10
+            align: {x: 0.0, y: 0.5}
 
-            // Start state (visible when not running)
             start_view = <View> {
-                width: Fill, height: Fill
-                flow: Down
-                spacing: 4
-                align: {x: 0.5, y: 0.5}
+                width: Fill, height: Fit
+                flow: Right
+                spacing: 10
+                align: {x: 0.0, y: 0.5}
                 cursor: Hand
 
-                action_start_label = <StatusLabel> {
-                    text: "Start Colang"
-                }
-
-                start_btn = <View> {
-                    width: 24, height: 20
-                    align: {x: 0.5, y: 0.5}
+                start_icon = <View> {
+                    width: 32, height: 32
+                    show_bg: true
+                    draw_bg: {
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            sdf.circle(self.rect_size.x * 0.5, self.rect_size.y * 0.5, 14.0);
+                            sdf.fill(vec4(0.133, 0.773, 0.373, 0.15));
+                            return sdf.result;
+                        }
+                    }
                     <Icon> {
                         draw_icon: {
                             svg_file: (ICO_START)
-                            fn get_color(self) -> vec4 {
-                                return vec4(0.133, 0.773, 0.373, 1.0);  // Green #22c55e
-                            }
+                            fn get_color(self) -> vec4 { return vec4(0.133, 0.773, 0.373, 1.0); }
                         }
                         icon_walk: {width: 20, height: 20}
                     }
                 }
+
+                start_text = <View> {
+                    width: Fill, height: Fit
+                    flow: Down
+                    spacing: 2
+                    start_label = <Label> {
+                        text: "Start"
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            }
+                        }
+                    }
+                    start_hint = <HintText> { text: "启动对话 & 数据流" }
+                }
             }
 
-            // Stop state (hidden by default, shown when running)
             stop_view = <View> {
                 visible: false
-                width: Fill, height: Fill
-                flow: Down
-                spacing: 4
-                align: {x: 0.5, y: 0.5}
+                width: Fill, height: Fit
+                flow: Right
+                spacing: 10
+                align: {x: 0.0, y: 0.5}
                 cursor: Hand
 
-                action_stop_label = <StatusLabel> {
-                    text: "Stop Colang"
-                }
-
-                stop_btn = <View> {
-                    width: 24, height: 20
-                    align: {x: 0.5, y: 0.5}
+                stop_icon = <View> {
+                    width: 32, height: 32
+                    show_bg: true
+                    draw_bg: {
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            sdf.circle(self.rect_size.x * 0.5, self.rect_size.y * 0.5, 14.0);
+                            sdf.fill(vec4(0.937, 0.267, 0.267, 0.15));
+                            return sdf.result;
+                        }
+                    }
                     <Icon> {
                         draw_icon: {
                             svg_file: (ICO_STOP)
-                            fn get_color(self) -> vec4 {
-                                return vec4(0.937, 0.267, 0.267, 1.0);  // Red #ef4444
-                            }
+                            fn get_color(self) -> vec4 { return vec4(0.937, 0.267, 0.267, 1.0); }
                         }
                         icon_walk: {width: 20, height: 20}
                     }
                 }
+
+                stop_text = <View> {
+                    width: Fill, height: Fit
+                    flow: Down
+                    spacing: 2
+                    stop_label = <Label> {
+                        text: "Stop"
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            }
+                        }
+                    }
+                    stop_hint = <HintText> { text: "暂停当前会话" }
+                }
             }
         }
 
-        // Dataflow status section - matches conference-dashboard pattern
-        connection_section = <StatusSection> {
-            <View> {
-                width: Fill, height: Fit
-                flow: Right
-                spacing: 6
-                align: {x: 0.0, y: 0.5}
-
-                connection_dot = <ConnectionDot> {}
-                dataflow_label = <StatusLabel> {
-                    text: "Dataflow"
+        status_section = <RoundedView> {
+            width: 180, height: Fill
+            padding: { left: 14, right: 14, top: 10, bottom: 10 }
+            draw_bg: {
+                instance dark_mode: 0.0
+                border_radius: 12.0
+                fn get_color(self) -> vec4 {
+                    return mix((SLATE_50), (PANEL_BG_DARK), self.dark_mode);
                 }
             }
+            flow: Down
+            spacing: 6
 
-            <View> {
-                width: Fill
-                height: Fill
-                flow: Down
-                align: {x: 0.0, y: 0.0}
-                margin: {top: -6}
+            status_title = <SectionTitle> { text: "Connection" }
+            status_row = <View> {
+                width: Fill, height: Fit
+                flow: Right
+                spacing: 8
+                align: {x: 0.0, y: 0.5}
 
-                dataflow_btn = <DataflowButton> {}
+                status_dot = <RoundedView> {
+                    width: 12, height: 12
+                    draw_bg: {
+                        color: (ACCENT_GREEN)
+                        border_radius: 6.0
+                    }
+                }
+                status_badge = <StatusBadge> {}
             }
+            status_hint = <HintText> { text: "等待启动" }
         }
 
-        // Audio Buffer section
-        buffer_section = <StatusSection> {
-            <View> {
-                width: Fill, height: Fit
-                flow: Right
-                spacing: 6
-                align: {x: 0.0, y: 0.5}
-
-                buffer_dot = <StatusDot> {}
-                buffer_label = <StatusLabel> {
-                    text: "Audio Buffer"
+        guidance_section = <RoundedView> {
+            width: Fill, height: Fill
+            padding: { left: 14, right: 14, top: 10, bottom: 10 }
+            draw_bg: {
+                instance dark_mode: 0.0
+                border_radius: 12.0
+                fn get_color(self) -> vec4 {
+                    return mix((WHITE), (PANEL_BG_DARK), self.dark_mode);
                 }
             }
+            flow: Down
+            spacing: 4
 
-            buffer_gauge = <LedGauge> {}
-
-            buffer_pct = <PctLabel> {
-                text: "0%"
-            }
+            guidance_title = <SectionTitle> { text: "小贴士" }
+            guidance_body = <HintText> { text: "和 AI 教练对话时，随时让它帮你润色或改口。" }
         }
     }
 }
@@ -368,13 +225,7 @@ pub struct MofaHero {
     is_running: bool,
 
     #[rust]
-    buffer_level: f64,
-
-    #[rust]
     connection_status: ConnectionStatus,
-
-    #[rust]
-    blink_phase: f64, // For blinking animation
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -412,24 +263,6 @@ impl Widget for MofaHero {
     }
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
-        // Update blink animation for connected state (60Hz blinking)
-        let time = Cx::time_now();
-        self.blink_phase = time * 6.0; // Scaled for smooth blinking
-
-        // Apply blink value to button when connected
-        if self.connection_status == ConnectionStatus::Connected {
-            self.view
-                .button(ids!(connection_section.dataflow_btn))
-                .apply_over(
-                    cx,
-                    live! {
-                        draw_bg: { blink: (self.blink_phase) }
-                    },
-                );
-            // Request next frame for continuous animation
-            cx.new_next_frame();
-        }
-
         self.view.draw_walk(cx, scope, walk)
     }
 }
@@ -447,73 +280,37 @@ impl MofaHero {
         self.view.redraw(cx);
     }
 
-    /// Set the buffer level (0.0 - 1.0)
-    pub fn set_buffer_level(&mut self, cx: &mut Cx, level: f64) {
-        self.buffer_level = level.clamp(0.0, 1.0);
-
-        self.view
-            .view(ids!(buffer_section.buffer_gauge))
-            .apply_over(
-                cx,
-                live! {
-                    draw_bg: { fill_pct: (self.buffer_level) }
-                },
-            );
-
-        let pct_text = format!("{}%", (self.buffer_level * 100.0) as u32);
-        self.view
-            .label(ids!(buffer_section.buffer_pct))
-            .set_text(cx, &pct_text);
-
-        let status = if self.buffer_level < 0.8 {
-            1.0
-        } else if self.buffer_level < 0.95 {
-            2.0
-        } else {
-            3.0
-        };
-        self.view.view(ids!(buffer_section.buffer_dot)).apply_over(
-            cx,
-            live! {
-                draw_bg: { status: (status) }
-            },
-        );
-
-        self.view.redraw(cx);
-    }
-
     /// Set connection status
     pub fn set_connection_status(&mut self, cx: &mut Cx, status: ConnectionStatus) {
         self.connection_status = status.clone();
 
-        let (status_val, text, dot_color) = match status {
-            ConnectionStatus::Ready => (0.0, "Ready", (0.13, 0.77, 0.37)), // Green
-            ConnectionStatus::Connecting => (0.5, "Connecting", (0.8, 0.8, 0.0)), // Yellow
-            ConnectionStatus::Connected => (1.0, "Connected", (0.0, 1.0, 0.5)), // Neon green
-            ConnectionStatus::Stopping => (0.5, "Stopping", (0.8, 0.6, 0.0)), // Orange
-            ConnectionStatus::Stopped => (0.0, "Stopped", (0.5, 0.5, 0.5)), // Gray
-            ConnectionStatus::Failed => (2.0, "Failed", (0.95, 0.25, 0.25)), // Red
+        let (text, color, hint) = match status {
+            ConnectionStatus::Ready => ("Ready", vec4(0.133, 0.773, 0.373, 1.0), "等待启动"),
+            ConnectionStatus::Connecting => ("Connecting", vec4(0.933, 0.702, 0.067, 1.0), "正在连接数据流"),
+            ConnectionStatus::Connected => ("Connected", vec4(0.365, 0.384, 0.953, 1.0), "已联通，对话准备就绪"),
+            ConnectionStatus::Stopping => ("Stopping", vec4(0.922, 0.533, 0.196, 1.0), "正在停止会话"),
+            ConnectionStatus::Stopped => ("Stopped", vec4(0.514, 0.553, 0.620, 1.0), "已停止"),
+            ConnectionStatus::Failed => ("Failed", vec4(0.937, 0.267, 0.267, 1.0), "连接异常，请重试"),
         };
 
         self.view
-            .button(ids!(connection_section.dataflow_btn))
+            .label(ids!(status_section.status_badge.status_label))
             .set_text(cx, text);
+        self.view.view(ids!(status_section.status_badge)).apply_over(
+            cx,
+            live! {
+                draw_bg: { color: (color) }
+            },
+        );
+        self.view.view(ids!(status_section.status_dot)).apply_over(
+            cx,
+            live! {
+                draw_bg: { color: (color) }
+            },
+        );
         self.view
-            .button(ids!(connection_section.dataflow_btn))
-            .apply_over(
-                cx,
-                live! {
-                    draw_bg: { status: (status_val) }
-                },
-            );
-        self.view
-            .view(ids!(connection_section.connection_dot))
-            .apply_over(
-                cx,
-                live! {
-                    draw_bg: { color: (vec4(dot_color.0, dot_color.1, dot_color.2, 1.0)) }
-                },
-            );
+            .label(ids!(status_section.status_hint))
+            .set_text(cx, hint);
 
         self.view.redraw(cx);
     }
@@ -528,12 +325,6 @@ impl MofaHeroRef {
     pub fn set_running(&self, cx: &mut Cx, running: bool) {
         if let Some(mut inner) = self.borrow_mut() {
             inner.set_running(cx, running);
-        }
-    }
-
-    pub fn set_buffer_level(&self, cx: &mut Cx, level: f64) {
-        if let Some(mut inner) = self.borrow_mut() {
-            inner.set_buffer_level(cx, level);
         }
     }
 
@@ -555,7 +346,7 @@ impl MofaHeroRef {
             );
             inner
                 .view
-                .label(ids!(action_section.start_view.action_start_label))
+                .label(ids!(action_section.start_view.start_text.start_label))
                 .apply_over(
                     cx,
                     live! {
@@ -564,24 +355,7 @@ impl MofaHeroRef {
                 );
             inner
                 .view
-                .label(ids!(action_section.stop_view.action_stop_label))
-                .apply_over(
-                    cx,
-                    live! {
-                        draw_text: { dark_mode: (dark_mode) }
-                    },
-                );
-
-            // Connection section
-            inner.view.view(ids!(connection_section)).apply_over(
-                cx,
-                live! {
-                    draw_bg: { dark_mode: (dark_mode) }
-                },
-            );
-            inner
-                .view
-                .label(ids!(connection_section.dataflow_label))
+                .label(ids!(action_section.stop_view.stop_text.stop_label))
                 .apply_over(
                     cx,
                     live! {
@@ -589,8 +363,44 @@ impl MofaHeroRef {
                     },
                 );
 
-            // Buffer section
-            inner.view.view(ids!(buffer_section)).apply_over(
+            // Status section
+            inner.view.view(ids!(status_section)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                },
+            );
+            let status_title_color = if dark_mode > 0.5 {
+                vec4(0.929, 0.957, 0.988, 1.0) // TEXT_PRIMARY_DARK
+            } else {
+                vec4(0.043, 0.063, 0.102, 1.0) // TEXT_PRIMARY
+            };
+            inner
+                .view
+                .label(ids!(status_section.status_title))
+                .apply_over(
+                    cx,
+                    live! {
+                        draw_text: { color: (status_title_color) }
+                    },
+                );
+            let status_hint_color = if dark_mode > 0.5 {
+                vec4(0.710, 0.757, 0.831, 1.0) // TEXT_SECONDARY_DARK
+            } else {
+                vec4(0.294, 0.333, 0.388, 1.0) // TEXT_SECONDARY
+            };
+            inner
+                .view
+                .label(ids!(status_section.status_hint))
+                .apply_over(
+                    cx,
+                    live! {
+                        draw_text: { color: (status_hint_color) }
+                    },
+                );
+
+            // Guidance section
+            inner.view.view(ids!(guidance_section)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
@@ -598,20 +408,20 @@ impl MofaHeroRef {
             );
             inner
                 .view
-                .label(ids!(buffer_section.buffer_label))
+                .label(ids!(guidance_section.guidance_title))
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { dark_mode: (dark_mode) }
+                        draw_text: { color: (status_title_color) }
                     },
                 );
             inner
                 .view
-                .label(ids!(buffer_section.buffer_pct))
+                .label(ids!(guidance_section.guidance_body))
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { dark_mode: (dark_mode) }
+                        draw_text: { color: (status_hint_color) }
                     },
                 );
 

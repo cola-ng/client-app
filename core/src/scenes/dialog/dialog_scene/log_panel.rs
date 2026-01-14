@@ -8,65 +8,19 @@ use super::DialogScene;
 use crate::log_bridge;
 
 impl DialogScene {
-    /// Toggle log panel visibility
-    pub(super) fn toggle_log_panel(&mut self, cx: &mut Cx) {
-        self.log_panel_collapsed = !self.log_panel_collapsed;
-
-        if self.log_panel_width == 0.0 {
-            self.log_panel_width = 320.0;
-        }
-
-        if self.log_panel_collapsed {
-            // Collapse: hide log content, show only toggle button
-            self.view
-                .view(ids!(log_section))
-                .apply_over(cx, live! { width: Fit });
-            self.view
-                .view(ids!(log_section.log_content_column))
-                .set_visible(cx, false);
-            self.view
-                .button(ids!(log_section.toggle_column.toggle_log_btn))
-                .set_text(cx, "<");
-            self.view
-                .view(ids!(splitter))
-                .apply_over(cx, live! { width: 0 });
-        } else {
-            // Expand: show log content at saved width
-            let width = self.log_panel_width;
-            self.view
-                .view(ids!(log_section))
-                .apply_over(cx, live! { width: (width) });
-            self.view
-                .view(ids!(log_section.log_content_column))
-                .set_visible(cx, true);
-            self.view
-                .button(ids!(log_section.toggle_column.toggle_log_btn))
-                .set_text(cx, ">");
-            self.view
-                .view(ids!(splitter))
-                .apply_over(cx, live! { width: 16 });
-        }
-
+    /// Toggle log overlay visibility
+    pub(super) fn toggle_log_overlay(&mut self, cx: &mut Cx) {
+        self.log_overlay_visible = !self.log_overlay_visible;
+        self.view
+            .view(ids!(log_overlay))
+            .set_visible(cx, self.log_overlay_visible);
         self.view.redraw(cx);
     }
 
-    /// Resize log panel via splitter drag
-    pub(super) fn resize_log_panel(&mut self, cx: &mut Cx, abs_x: f64) {
-        let container_rect = self.view.area().rect(cx);
-        let padding = 16.0; // Match screen padding
-        let new_log_width = (container_rect.pos.x + container_rect.size.x - abs_x - padding)
-            .max(150.0) // Minimum log panel width
-            .min(container_rect.size.x - 400.0); // Leave space for main content
-
-        self.log_panel_width = new_log_width;
-
-        self.view.view(ids!(log_section)).apply_over(
-            cx,
-            live! {
-                width: (new_log_width)
-            },
-        );
-
+    /// Hide log overlay
+    pub(super) fn hide_log_overlay(&mut self, cx: &mut Cx) {
+        self.log_overlay_visible = false;
+        self.view.view(ids!(log_overlay)).set_visible(cx, false);
         self.view.redraw(cx);
     }
 
@@ -75,9 +29,9 @@ impl DialogScene {
         let search_text = self
             .view
             .text_input(ids!(
-                log_section
-                    .log_content_column
-                    .log_header
+                log_overlay
+                    .log_modal
+                    .log_section
                     .log_filter_row
                     .log_search
             ))
@@ -135,7 +89,9 @@ impl DialogScene {
         // Update markdown display
         self.view
             .markdown(ids!(
-                log_section
+                log_overlay
+                    .log_modal
+                    .log_section
                     .log_content_column
                     .log_scroll
                     .log_content_wrapper
@@ -150,9 +106,9 @@ impl DialogScene {
         let search_text = self
             .view
             .text_input(ids!(
-                log_section
-                    .log_content_column
-                    .log_header
+                log_overlay
+                    .log_modal
+                    .log_section
                     .log_filter_row
                     .log_search
             ))

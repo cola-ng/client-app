@@ -88,10 +88,15 @@ live_design! {
     use crate::theme::PANEL_BG_DARK;
     use crate::theme::TEXT_PRIMARY;
     use crate::theme::TEXT_PRIMARY_DARK;
+    use crate::theme::TEXT_SECONDARY;
+    use crate::theme::TEXT_SECONDARY_DARK;
     use crate::theme::ACCENT_BLUE;
+    use crate::theme::ACCENT_INDIGO;
     use crate::theme::GREEN_500;
     use crate::theme::ACCENT_RED;
     use crate::theme::GRAY_200;
+    use crate::theme::INDIGO_100;
+    use crate::theme::SLATE_200;
     use crate::theme::SLATE_600;
 
     // Status indicator with 3 states: 0=idle(blue), 1=speaking(green), 2=error(red)
@@ -284,23 +289,38 @@ live_design! {
 
     pub ParticipantPanel = {{ParticipantPanel}} <RoundedView> {
         width: Fill, height: Fit
-        padding: 6
+        padding: 10
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 2.0
+            border_radius: 10.0
             fn get_color(self) -> vec4 {
                 return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);
             }
         }
         flow: Down
-        spacing: 4
+        spacing: 6
 
-        // Top row: indicator + name + control buttons
+        // Top row: avatar + name + status
         header = <View> {
             width: Fill, height: Fit
             flow: Right
-            spacing: 6
+            spacing: 10
             align: {y: 0.5}
+
+            avatar = <RoundedView> {
+                width: 28, height: 28
+                draw_bg: {
+                    color: (INDIGO_100)
+                    border_radius: 14.0
+                }
+                <Icon> {
+                    draw_icon: {
+                        svg_file: dep("crate://self/resources/icons/user.svg")
+                        fn get_color(self) -> vec4 { return (ACCENT_BLUE); }
+                    }
+                    icon_walk: {width: 16, height: 16}
+                }
+            }
 
             indicator = <StatusIndicator> {}
 
@@ -308,7 +328,7 @@ live_design! {
                 text: "Participant"
                 draw_text: {
                     instance dark_mode: 0.0
-                    text_style: { font_size: 11.0 }
+                    text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
                     fn get_color(self) -> vec4 {
                         return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                     }
@@ -317,60 +337,30 @@ live_design! {
 
             <View> { width: Fill, height: 1 }
 
-            // Checkbox for showing Chinese
-            show_chinese = <CheckBox> {
+            role_badge = <RoundedView> {
                 width: Fit, height: Fit
-                text: "中文"
-                padding: { top: 2, bottom: 2, left: 2, right: 2 }
-                label_walk: {
-                    margin: { left: 15 }
-                    width: Fit
-                    height: Fit
-                }
+                padding: { left: 10, right: 10, top: 4, bottom: 4 }
                 draw_bg: {
-                    size: 12.0
+                    color: (INDIGO_100)
+                    border_radius: 12.0
                 }
-                draw_text: {
-                    text_style: { font_size: 12.0 }
-                }
-            }
-
-            // Checkbox for showing English
-            show_english = <CheckBox> {
-                width: Fit, height: Fit
-                text: "EN"
-                padding: { top: 2, bottom: 2, left: 2, right: 2 }
-                label_walk: {
-                    margin: { left: 15 }
-                    width: Fit
-                    height: Fit
-                }
-                draw_bg: {
-                    size: 12.0
-                }
-                draw_text: {
-                    text_style: { font_size: 12.0 }
-                }
-            }
-
-            // Button to replay last voice
-            replay_btn = <Button> {
-                width: Fit, height: Fit
-                padding: { top: 4, bottom: 4, left: 8, right: 8 }
-                text: "🔁"
-                draw_text: {
-                    instance dark_mode: 0.0
-                    text_style: { font_size: 12.0 }
-                    fn get_color(self) -> vec4 {
-                        return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                role_badge_label = <Label> {
+                    text: "活跃"
+                    draw_text: {
+                        color: (ACCENT_INDIGO)
+                        text_style: <FONT_MEDIUM>{ font_size: 11.0 }
                     }
                 }
-                draw_bg: {
-                    instance dark_mode: 0.0
-                    border_radius: 3.0
-                    fn get_color(self) -> vec4 {
-                        return mix(vec4(0.9, 0.9, 0.9, 1.0), vec4(0.3, 0.3, 0.35, 1.0), self.dark_mode);
-                    }
+            }
+        }
+
+        subtext = <Label> {
+            text: "语音、文本均可交流"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
                 }
             }
         }
@@ -416,14 +406,40 @@ impl ParticipantPanelRef {
                 },
             );
 
-            // Replay button
-            inner.view.button(ids!(header.replay_btn)).apply_over(
+            // Subtitle
+            inner.view.label(ids!(subtext)).apply_over(
                 cx,
                 live! {
-                    draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
                 },
             );
+
+            // Role badge
+            let badge_bg = if dark_mode > 0.5 {
+                vec4(0.259, 0.302, 0.376, 1.0) // SLATE_600
+            } else {
+                vec4(0.878, 0.886, 0.945, 1.0) // INDIGO_100
+            };
+            inner.view.view(ids!(header.role_badge)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { color: (badge_bg) }
+                },
+            );
+            let badge_text_color = if dark_mode > 0.5 {
+                vec4(0.796, 0.835, 0.882, 1.0) // SLATE_200
+            } else {
+                vec4(0.384, 0.408, 0.741, 1.0) // ACCENT_INDIGO
+            };
+            inner
+                .view
+                .label(ids!(header.role_badge.role_badge_label))
+                .apply_over(
+                    cx,
+                    live! {
+                        draw_text: { color: (badge_text_color) }
+                    },
+                );
 
             // Waveform background
             inner.view.view(ids!(waveform)).apply_over(
