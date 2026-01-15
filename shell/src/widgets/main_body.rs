@@ -48,6 +48,7 @@ live_design! {
     use colang_core::screens::classic_dialogues::classic_dialogues_screen::ClassicDialoguesScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
+    use widgets::debug_panel::DebugPanel;
 
     // Logo image
     COLANG_LOGO = dep("crate://self/resources/colang-logo.png")
@@ -345,6 +346,32 @@ live_design! {
                             visible: false
                         }
                     }
+                }
+
+                debug_splitter = <View> {
+                    width: 6, height: Fill
+                    visible: false
+                    cursor: EwResize
+                    show_bg: true
+                    draw_bg: {
+                        instance hover: 0.0
+                        instance dark_mode: 0.0
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            let light = (SLATE_200);
+                            let dark = (SLATE_700);
+                            let base = mix(light, dark, self.dark_mode);
+                            let fill = mix((TRANSPARENT), base, self.hover);
+                            sdf.box(2.0, 0.0, 2.0, self.rect_size.y, 1.0);
+                            sdf.fill(fill);
+                            return sdf.result;
+                        }
+                    }
+                }
+
+                debug_panel = <DebugPanel> {
+                    width: 400, height: Fill
+                    visible: false
                 }
             }
         }

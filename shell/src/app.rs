@@ -24,6 +24,7 @@ use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use widgets::StateChangeListener;
+use widgets::debug_panel::DebugPanelWidgetRefExt;
 
 use crate::config::Config;
 
@@ -86,7 +87,6 @@ live_design! {
 
     use colang_shell::widgets::sidebar::Sidebar;
     use colang_shell::widgets::main_body::MainBody;
-    use widgets::debug_window::DebugWindow;
 
     // Dark theme colors (imported for shader use)
     use widgets::theme::DARK_BG_DARK;
@@ -250,8 +250,6 @@ live_design! {
 pub struct App {
     #[live]
     ui: WidgetRef,
-    #[live]
-    debug_window: WidgetRef,
     #[rust]
     user_menu_open: bool,
     #[rust]
@@ -298,6 +296,14 @@ pub struct App {
     desktop_auth_rx: Option<mpsc::Receiver<DesktopAuthResult>>,
     #[rust]
     website_url: String,
+    #[rust]
+    debug_panel_width: f64,
+    #[rust]
+    debug_panel_dragging: bool,
+    #[rust]
+    debug_panel_drag_start_x: f64,
+    #[rust]
+    debug_panel_drag_start_width: f64,
 }
 
 impl LiveHook for App {
@@ -320,6 +326,10 @@ impl LiveHook for App {
         self.desktop_auth_state = None;
         self.desktop_auth_redirect_uri = None;
         self.desktop_auth_rx = None;
+        self.debug_panel_width = 400.0;
+        self.debug_panel_dragging = false;
+        self.debug_panel_drag_start_x = 0.0;
+        self.debug_panel_drag_start_width = 400.0;
     }
 }
 
@@ -345,8 +355,6 @@ impl LiveRegister for App {
 impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         self.ui.handle_event(cx, event, &mut Scope::empty());
-        self.debug_window
-            .handle_event(cx, event, &mut Scope::empty());
 
         // Initialize theme on first draw (widgets are ready)
         if !self.theme_initialized {
@@ -392,6 +400,7 @@ impl AppMain for App {
         self.handle_sidebar_hover(cx, event);
         self.handle_theme_toggle(cx, event);
         self.handle_debug_button(cx, event);
+        self.handle_debug_panel_resize(cx, event);
 
         // Handle click events
         self.handle_sidebar_clicks(cx, &actions);
@@ -777,9 +786,100 @@ impl App {
                 self.ui.redraw(cx);
             }
             Hit::FingerUp(_) => {
-                // Show the debug window
+                let panel_path = ids!(body.base.content_area.debug_panel);
+                let splitter_path = ids!(body.base.content_area.debug_splitter);
+                let is_visible = self.ui.view(panel_path).visible();
+
+                self.ui
+                    .debug_panel(panel_path)
+                    .update_dark_mode(cx, self.dark_mode_anim);
+
+                // Resize window when toggling debug panel
+                let splitter_width = 6.0;
+                let panel_width = self.debug_panel_width + splitter_width;
+                let current_size = self.last_window_size;
+
+                if is_visible {
+                    // Closing: shrink window
+                    let new_width = (current_size.x - panel_width).max(800.0);
+                    self.ui.as_window().resize(cx, dvec2(new_width, current_size.y));
+                } else {
+                    // Opening: expand window
+                    let new_width = current_size.x + panel_width;
+                    self.ui.as_window().resize(cx, dvec2(new_width, current_size.y));
+                }
+
+                self.ui.view(panel_path).set_visible(cx, !is_visible);
+                self.ui.view(splitter_path).set_visible(cx, !is_visible);
+                self.ui.redraw(cx);
             }
             _ => {}
+        }
+    }
+
+    fn handle_debug_panel_resize(&mut self, cx: &mut Cx, event: &Event) {
+        let panel_path = ids!(body.base.content_area.debug_panel);
+        let splitter_path = ids!(body.base.content_area.debug_splitter);
+
+        if !self.ui.view(panel_path).visible() {
+            self.debug_panel_dragging = false;
+            self.ui.view(splitter_path).apply_over(
+                cx,
+                live! {
+                    draw_bg: { hover: 0.0 }
+                },
+            );
+            return;
+        }
+
+        let splitter = self.ui.view(splitter_path);
+        match event.hits(cx, splitter.area()) {
+            Hit::FingerHoverIn(_) => {
+                self.ui.view(splitter_path).apply_over(
+                    cx,
+                    live! {
+                        draw_bg: { hover: 1.0 }
+                    },
+                );
+                self.ui.redraw(cx);
+            }
+            Hit::FingerHoverOut(_) => {
+                if !self.debug_panel_dragging {
+                    self.ui.view(splitter_path).apply_over(
+                        cx,
+                        live! {
+                            draw_bg: { hover: 0.0 }
+                        },
+                    );
+                    self.ui.redraw(cx);
+                }
+            }
+            Hit::FingerDown(fe) => {
+                self.debug_panel_dragging = true;
+                self.debug_panel_drag_start_x = fe.abs.x;
+                self.debug_panel_drag_start_width = self.debug_panel_width;
+            }
+            Hit::FingerUp(_) => {
+                self.debug_panel_dragging = false;
+            }
+            _ => {}
+        }
+
+        if self.debug_panel_dragging {
+            if let Event::MouseMove(mm) = event {
+                let delta = self.debug_panel_drag_start_x - mm.abs.x;
+                let next = (self.debug_panel_drag_start_width + delta).clamp(240.0, 720.0);
+                if (next - self.debug_panel_width).abs() > 0.5 {
+                    self.debug_panel_width = next;
+                    self.ui.view(panel_path).apply_over(
+                        cx,
+                        live! {
+                            width: (next)
+                        },
+                    );
+                    self.ui.redraw(cx);
+                }
+            }
         }
     }
 }
