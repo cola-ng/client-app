@@ -4,6 +4,7 @@ use makepad_widgets::*;
 
 use super::provider_view::ProviderViewWidgetExt;
 use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
+use super::release_notes_modal::ReleaseNotesModalWidgetExt;
 use crate::models::{Preferences, Provider, ProviderId};
 
 live_design! {
@@ -16,6 +17,7 @@ live_design! {
     use crate::screens::settings::providers_panel::ProvidersPanel;
     use crate::screens::settings::provider_view::ProviderView;
     use crate::screens::settings::add_provider_modal::AddProviderModal;
+    use crate::screens::settings::release_notes_modal::ReleaseNotesModal;
     use crate::screens::settings::general_panel::GeneralTab;
     use crate::screens::settings::*;
     use crate::screens::settings::audio_panel::AudioTab;
@@ -198,6 +200,7 @@ live_design! {
 
         // Modal overlay (hidden by default)
         add_provider_modal = <AddProviderModal> {}
+        release_notes_modal = <ReleaseNotesModal> {}
     }
 }
 
@@ -222,6 +225,7 @@ pub enum ThemeMode {
 pub enum SettingsScreenAction {
     None,
     ThemeModeChanged(ThemeMode),
+    OpenUrl(String),
 }
 
 #[derive(Live, LiveHook, Widget)]
@@ -252,6 +256,9 @@ pub struct SettingsScreen {
 
     #[rust]
     audio_initialized: bool,
+
+    #[rust]
+    website_url: String,
 }
 
 impl Widget for SettingsScreen {
@@ -530,6 +537,66 @@ impl Widget for SettingsScreen {
                 self.widget_uid(),
                 &scope.path,
                 SettingsScreenAction::ThemeModeChanged(theme_mode),
+            );
+        }
+
+        // Handle Release Notes button click
+        if self
+            .view
+            .button(ids!(content.pages.about_page.release_notes_btn))
+            .clicked(actions)
+        {
+            self.view.release_notes_modal(ids!(release_notes_modal)).show(cx);
+        }
+
+        // Handle Release Notes modal close button
+        if self
+            .view
+            .button(ids!(release_notes_modal.dialog_container.dialog.header.close_button))
+            .clicked(actions)
+        {
+            self.view.release_notes_modal(ids!(release_notes_modal)).hide(cx);
+        }
+
+        // Handle Service Agreement link click
+        if self
+            .view
+            .link_label(ids!(content.pages.about_page.footer.links_row.terms_link))
+            .clicked(actions)
+        {
+            let url = format!("{}/terms", self.website_url.trim_end_matches('/'));
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::OpenUrl(url),
+            );
+        }
+
+        // Handle Privacy Policy link click
+        if self
+            .view
+            .link_label(ids!(content.pages.about_page.footer.links_row.privacy_link))
+            .clicked(actions)
+        {
+            let url = format!("{}/privacy", self.website_url.trim_end_matches('/'));
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::OpenUrl(url),
+            );
+        }
+
+        // Handle Send Feedback button click
+        if self
+            .view
+            .button(ids!(content.pages.about_page.feedback_btn))
+            .clicked(actions)
+        {
+            let url = format!("{}/feedback", self.website_url.trim_end_matches('/'));
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::OpenUrl(url),
             );
         }
     }
@@ -1017,7 +1084,17 @@ impl SettingsScreenRef {
             // Update tab selection with new dark mode
             inner.update_tab_selection(cx);
 
+            // Update release notes modal dark mode
+            inner.view.release_notes_modal(ids!(release_notes_modal)).update_dark_mode(cx, dark_mode);
+
             inner.view.redraw(cx);
+        }
+    }
+
+    /// Set the website URL for links
+    pub fn set_website_url(&self, website_url: String) {
+        if let Some(mut inner) = self.borrow_mut() {
+            inner.website_url = website_url;
         }
     }
 }

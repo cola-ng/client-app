@@ -4,6 +4,7 @@ pub mod audio_panel;
 pub mod general_panel;
 pub mod provider_view;
 pub mod providers_panel;
+pub mod release_notes_modal;
 pub mod settings_screen;
 
 pub use audio_panel::AudioDevices;
@@ -17,6 +18,7 @@ pub(super) fn live_design(cx: &mut Cx) {
     general_panel::live_design(cx);
     provider_view::live_design(cx);
     providers_panel::live_design(cx);
+    release_notes_modal::live_design(cx);
     settings_screen::live_design(cx);
 }
 

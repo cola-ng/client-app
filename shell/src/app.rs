@@ -23,7 +23,7 @@ use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use widgets::debug_screen::DebugScreenWidgetRefExt;
+use widgets::debug_window::DebugWindowWidgetRefExt;
 use widgets::StateChangeListener;
 
 use crate::config::Config;
@@ -87,7 +87,7 @@ live_design! {
 
     use colang_shell::widgets::sidebar::Sidebar;
     use colang_shell::widgets::main_body::MainBody;
-    use widgets::debug_screen::DebugScreen;
+    use widgets::debug_window::DebugWindow;
 
     // Dark theme colors (imported for shader use)
     use widgets::theme::DARK_BG_DARK;
@@ -243,10 +243,10 @@ live_design! {
                     }
                 }
             }
-
-            // Debug screen overlay (global, above all content)
-            debug_screen = <DebugScreen> {}
         }
+
+        // Debug window (separate window, not inside main window)
+        debug_window = <DebugWindow> {}
     }
 }
 
@@ -254,6 +254,8 @@ live_design! {
 pub struct App {
     #[live]
     ui: WidgetRef,
+    #[live]
+    debug_window: WidgetRef,
     #[rust]
     user_menu_open: bool,
     #[rust]
@@ -298,13 +300,16 @@ pub struct App {
     desktop_auth_redirect_uri: Option<String>,
     #[rust]
     desktop_auth_rx: Option<mpsc::Receiver<DesktopAuthResult>>,
+    #[rust]
+    website_url: String,
 }
 
 impl LiveHook for App {
     fn after_new_from_doc(&mut self, _cx: &mut Cx) {
         // Initialize configuration directory and load config
         // This ensures ~/.colang directory exists on first run
-        let _ = Config::load().unwrap_or_default();
+        let config = Config::load().unwrap_or_default();
+        self.website_url = config.website_url;
 
         // Initialize the app registry with all installed apps
         // self.app_registry.register(DialogScreen::info());
@@ -344,6 +349,7 @@ impl LiveRegister for App {
 impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         self.ui.handle_event(cx, event, &mut Scope::empty());
+        self.debug_window.handle_event(cx, event, &mut Scope::empty());
 
         // Initialize theme on first draw (widgets are ready)
         if !self.theme_initialized {
@@ -355,6 +361,12 @@ impl AppMain for App {
                 // Update header theme toggle icon
                 self.update_theme_toggle_icon(cx);
                 self.update_login_button_label(cx);
+                // Set website URL for settings screen links
+                self.ui
+                    .settings_screen(ids!(
+                        body.base.content_area.main_content.content.settings_screen
+                    ))
+                    .set_website_url(self.website_url.clone());
             }
         }
 
@@ -772,8 +784,8 @@ impl App {
                 self.ui.redraw(cx);
             }
             Hit::FingerUp(_) => {
-                // Show the debug screen
-                self.ui.debug_screen(ids!(debug_screen)).show(cx);
+                // Show the debug window
+                self.debug_window.debug_window(ids!(debug_window)).show(cx);
             }
             _ => {}
         }
@@ -1246,20 +1258,26 @@ impl App {
     /// Handle settings screen actions
     fn handle_settings_actions(&mut self, cx: &mut Cx, actions: &[Action]) {
         for action in actions {
-            if let SettingsScreenAction::ThemeModeChanged(mode) = action.as_widget_action().cast() {
-                match mode {
-                    ThemeMode::Light => {
-                        self.set_dark_mode(cx, false);
-                    }
-                    ThemeMode::Dark => {
-                        self.set_dark_mode(cx, true);
-                    }
-                    ThemeMode::System => {
-                        // For now, default to light mode when "Follow System" is selected
-                        // TODO: Implement actual system theme detection
-                        self.set_dark_mode(cx, false);
+            match action.as_widget_action().cast() {
+                SettingsScreenAction::ThemeModeChanged(mode) => {
+                    match mode {
+                        ThemeMode::Light => {
+                            self.set_dark_mode(cx, false);
+                        }
+                        ThemeMode::Dark => {
+                            self.set_dark_mode(cx, true);
+                        }
+                        ThemeMode::System => {
+                            // For now, default to light mode when "Follow System" is selected
+                            // TODO: Implement actual system theme detection
+                            self.set_dark_mode(cx, false);
+                        }
                     }
                 }
+                SettingsScreenAction::OpenUrl(url) => {
+                    let _ = webbrowser::open(&url);
+                }
+                _ => {}
             }
         }
     }
