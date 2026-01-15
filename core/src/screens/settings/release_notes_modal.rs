@@ -15,18 +15,20 @@ live_design! {
         icon_walk: {width: 16, height: 16}
         draw_icon: {
             svg_file: dep("crate://self/resources/icons/close.svg")
+            instance dark_mode: 0.0
             fn get_color(self) -> vec4 {
-                return (GRAY_500);
+                return mix((GRAY_500), (GRAY_400), self.dark_mode);
             }
         }
         draw_bg: {
             instance hover: 0.0
             instance pressed: 0.0
+            instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let color = mix(
-                    mix(vec4(0.0, 0.0, 0.0, 0.0), (GRAY_100), self.hover),
-                    (GRAY_200),
+                    mix(vec4(0.0, 0.0, 0.0, 0.0), mix((GRAY_100), (SLATE_700), self.dark_mode), self.hover),
+                    mix((GRAY_200), (SLATE_600), self.dark_mode),
                     self.pressed
                 );
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
@@ -541,6 +543,17 @@ impl ReleaseNotesModal {
         self.view
             .view(ids!(dialog_container.dialog))
             .apply_over(cx, live! { draw_bg: { dark_mode: (dark_mode) } });
+
+        // Update close button
+        self.view
+            .button(ids!(dialog_container.dialog.header.close_button))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
+                },
+            );
 
         self.view.redraw(cx);
     }
