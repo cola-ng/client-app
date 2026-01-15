@@ -48,41 +48,63 @@ live_design! {
         width: Fill, height: Fill
         visible: false
         flow: Overlay
+        align: {x: 0.5, y: 0.5}
 
-        // Semi-transparent background scrim
-        scrim = <View> {
-            width: Fill, height: Fill
-            show_bg: true
-            draw_bg: { color: vec4(0.0, 0.0, 0.0, 0.5) }
+        // Window container with shadow
+        modal = <View> {
+            width: 900, height: 680
+            flow: Down
+
+            // Drop shadow layer
+            shadow = <RoundedView> {
+                width: Fill, height: Fill
+                margin: {left: 4, top: 4, right: -4, bottom: -4}
+                draw_bg: {
+                    border_radius: 10.0
+                    color: vec4(0.0, 0.0, 0.0, 0.15)
+                }
+            }
         }
 
-        // Modal container
-        modal = <RoundedView> {
+        // Main window
+        window = <RoundedView> {
             width: 900, height: 680
-            margin: { left: 100, top: 60 }
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 12.0
+                border_radius: 10.0
                 fn get_color(self) -> vec4 {
                     return mix((WHITE), (SLATE_800), self.dark_mode);
                 }
             }
             flow: Down
-            padding: 16
-            spacing: 12
 
-            // Header with title and close button
-            header = <View> {
-                width: Fill, height: Fit
+            // Title bar (window header)
+            title_bar = <View> {
+                width: Fill, height: 44
                 flow: Right
                 align: {y: 0.5}
-                spacing: 12
+                padding: {left: 16, right: 8, top: 0, bottom: 0}
+                show_bg: true
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    fn pixel(self) -> vec4 {
+                        let light = (SLATE_100);
+                        let dark = (SLATE_700);
+                        return mix(light, dark, self.dark_mode);
+                    }
+                }
+
+                window_icon = <Label> {
+                    text: "🔧"
+                    draw_text: { text_style: <FONT_REGULAR>{ font_size: 14.0 } color: (TEXT_PRIMARY) }
+                }
 
                 title = <Label> {
-                    text: "🔧 Debug Console"
+                    margin: {left: 8}
+                    text: "Debug Console"
                     draw_text: {
                         instance dark_mode: 0.0
-                        text_style: <FONT_BOLD>{ font_size: 16.0 }
+                        text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
                         fn get_color(self) -> vec4 {
                             return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                         }
@@ -91,192 +113,234 @@ live_design! {
 
                 <View> { width: Fill, height: 1 }
 
-                close_btn = <Button> {
-                    width: 32, height: 32
-                    text: "✕"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_BOLD>{ font_size: 14.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                        }
-                    }
+                // Window control buttons
+                minimize_btn = <View> {
+                    width: 36, height: 28
+                    align: {x: 0.5, y: 0.5}
+                    cursor: Hand
                     draw_bg: {
                         instance hover: 0.0
                         instance dark_mode: 0.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             let light = mix((TRANSPARENT), (SLATE_200), self.hover);
-                            let dark = mix((TRANSPARENT), (SLATE_700), self.hover);
-                            let color = mix(light, dark, self.dark_mode);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                            sdf.fill(color);
+                            let dark = mix((TRANSPARENT), (SLATE_600), self.hover);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                            sdf.fill(mix(light, dark, self.dark_mode));
                             return sdf.result;
                         }
                     }
-                }
-            }
-
-            // Filter row
-            filter_row = <View> {
-                width: Fill, height: 36
-                flow: Right
-                align: {y: 0.5}
-                spacing: 8
-
-                level_filter = <DropDown> {
-                    width: 90, height: 28
-                    labels: ["ALL", "DEBUG", "INFO", "WARN", "ERROR"]
-                    values: [ALL, DEBUG, INFO, WARN, ERROR]
-                }
-
-                node_filter = <DropDown> {
-                    width: 130, height: 28
-                    labels: ["All Nodes", "ASR", "TTS", "LLM", "Bridge", "Monitor", "App"]
-                    values: [ALL, ASR, TTS, LLM, BRIDGE, MONITOR, APP]
-                }
-
-                search_input = <TextInput> {
-                    width: Fill, height: 28
-                    padding: {left: 10, right: 10}
-                    empty_text: "Search logs..."
-                    draw_bg: {
-                        instance dark_mode: 0.0
-                        border_radius: 6.0
-                        fn pixel(self) -> vec4 {
-                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
-                            sdf.fill(bg);
-                            return sdf.result;
-                        }
-                    }
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    <Label> {
+                        text: "−"
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_BOLD>{ font_size: 16.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                            }
                         }
                     }
                 }
 
-                copy_btn = <Button> {
+                close_btn = <View> {
                     width: 36, height: 28
-                    text: "📋"
+                    align: {x: 0.5, y: 0.5}
+                    cursor: Hand
                     draw_bg: {
                         instance hover: 0.0
-                        instance copied: 0.0
-                        instance dark_mode: 0.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            let light = mix((INDIGO_100), (INDIGO_200), self.hover);
-                            let dark = mix((SLATE_700), (SLATE_600), self.hover);
-                            let color = mix(light, dark, self.dark_mode);
-                            let color = mix(color, #22c55e, self.copied);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                            sdf.fill(color);
+                            let normal = (TRANSPARENT);
+                            let hovered = #e81123;
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                            sdf.fill(mix(normal, hovered, self.hover));
                             return sdf.result;
                         }
                     }
-                    draw_text: {
-                        text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                        color: (TEXT_PRIMARY)
-                    }
-                }
-
-                clear_btn = <Button> {
-                    width: Fit, height: 28
-                    padding: {left: 10, right: 10}
-                    text: "Clear"
-                    draw_bg: {
-                        instance hover: 0.0
-                        instance dark_mode: 0.0
-                        fn pixel(self) -> vec4 {
-                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            let light = mix((SLATE_200), (SLATE_300), self.hover);
-                            let dark = mix((SLATE_700), (SLATE_600), self.hover);
-                            let color = mix(light, dark, self.dark_mode);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                            sdf.fill(color);
-                            return sdf.result;
-                        }
-                    }
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    close_icon = <Label> {
+                        text: "✕"
+                        draw_text: {
+                            instance hover: 0.0
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            fn get_color(self) -> vec4 {
+                                let light = mix((TEXT_SECONDARY), (WHITE), self.hover);
+                                let dark = mix((TEXT_SECONDARY_DARK), (WHITE), self.hover);
+                                return mix(light, dark, self.dark_mode);
+                            }
                         }
                     }
                 }
             }
 
-            // Log content area
-            log_container = <RoundedView> {
+            // Content area
+            content = <View> {
                 width: Fill, height: Fill
-                draw_bg: {
-                    instance dark_mode: 0.0
-                    border_radius: 8.0
-                    fn get_color(self) -> vec4 {
-                        return mix((SLATE_50), (SLATE_900), self.dark_mode);
-                    }
-                }
                 flow: Down
+                padding: 16
+                spacing: 12
 
-                log_scroll = <ScrollYView> {
+                // Filter row
+                filter_row = <View> {
+                    width: Fill, height: 36
+                    flow: Right
+                    align: {y: 0.5}
+                    spacing: 8
+
+                    level_filter = <DropDown> {
+                        width: 90, height: 28
+                        labels: ["ALL", "DEBUG", "INFO", "WARN", "ERROR"]
+                        values: [ALL, DEBUG, INFO, WARN, ERROR]
+                    }
+
+                    node_filter = <DropDown> {
+                        width: 130, height: 28
+                        labels: ["All Nodes", "ASR", "TTS", "LLM", "Bridge", "Monitor", "App"]
+                        values: [ALL, ASR, TTS, LLM, BRIDGE, MONITOR, APP]
+                    }
+
+                    search_input = <TextInput> {
+                        width: Fill, height: 28
+                        padding: {left: 10, right: 10}
+                        empty_text: "Search logs..."
+                        draw_bg: {
+                            instance dark_mode: 0.0
+                            border_radius: 6.0
+                            fn pixel(self) -> vec4 {
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
+                                sdf.fill(bg);
+                                return sdf.result;
+                            }
+                        }
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            }
+                        }
+                    }
+
+                    copy_btn = <Button> {
+                        width: 36, height: 28
+                        text: "📋"
+                        draw_bg: {
+                            instance hover: 0.0
+                            instance copied: 0.0
+                            instance dark_mode: 0.0
+                            fn pixel(self) -> vec4 {
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let light = mix((INDIGO_100), (INDIGO_200), self.hover);
+                                let dark = mix((SLATE_700), (SLATE_600), self.hover);
+                                let color = mix(light, dark, self.dark_mode);
+                                let color = mix(color, #22c55e, self.copied);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                                sdf.fill(color);
+                                return sdf.result;
+                            }
+                        }
+                        draw_text: {
+                            text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                            color: (TEXT_PRIMARY)
+                        }
+                    }
+
+                    clear_btn = <Button> {
+                        width: Fit, height: 28
+                        padding: {left: 10, right: 10}
+                        text: "Clear"
+                        draw_bg: {
+                            instance hover: 0.0
+                            instance dark_mode: 0.0
+                            fn pixel(self) -> vec4 {
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let light = mix((SLATE_200), (SLATE_300), self.hover);
+                                let dark = mix((SLATE_700), (SLATE_600), self.hover);
+                                let color = mix(light, dark, self.dark_mode);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                                sdf.fill(color);
+                                return sdf.result;
+                            }
+                        }
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_MEDIUM>{ font_size: 11.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            }
+                        }
+                    }
+                }
+
+                // Log content area
+                log_container = <RoundedView> {
                     width: Fill, height: Fill
+                    draw_bg: {
+                        instance dark_mode: 0.0
+                        border_radius: 8.0
+                        fn get_color(self) -> vec4 {
+                            return mix((SLATE_50), (SLATE_900), self.dark_mode);
+                        }
+                    }
                     flow: Down
-                    scroll_bars: <ScrollBars> {
-                        show_scroll_x: false
-                        show_scroll_y: true
-                    }
 
-                    log_content_wrapper = <View> {
-                        width: Fill, height: Fit
-                        padding: 12
+                    log_scroll = <ScrollYView> {
+                        width: Fill, height: Fill
                         flow: Down
+                        scroll_bars: <ScrollBars> {
+                            show_scroll_x: false
+                            show_scroll_y: true
+                        }
 
-                        log_content = <Markdown> {
+                        log_content_wrapper = <View> {
                             width: Fill, height: Fit
-                            font_size: 11.0
-                            font_color: (GRAY_600)
-                            paragraph_spacing: 4
+                            padding: 12
+                            flow: Down
 
-                            draw_normal: { text_style: <FONT_REGULAR>{ font_size: 11.0 } }
-                            draw_bold: { text_style: <FONT_SEMIBOLD>{ font_size: 11.0 } }
-                            draw_fixed: { text_style: <FONT_REGULAR>{ font_size: 10.0 } }
-                        }
-                    }
-                }
-            }
+                            log_content = <Markdown> {
+                                width: Fill, height: Fit
+                                font_size: 11.0
+                                font_color: (GRAY_600)
+                                paragraph_spacing: 4
 
-            // Footer with stats
-            footer = <View> {
-                width: Fill, height: Fit
-                flow: Right
-                align: {y: 0.5}
-                spacing: 16
-
-                log_count = <Label> {
-                    text: "0 entries"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                draw_normal: { text_style: <FONT_REGULAR>{ font_size: 11.0 } }
+                                draw_bold: { text_style: <FONT_SEMIBOLD>{ font_size: 11.0 } }
+                                draw_fixed: { text_style: <FONT_REGULAR>{ font_size: 10.0 } }
+                            }
                         }
                     }
                 }
 
-                <View> { width: Fill, height: 1 }
+                // Footer with stats
+                footer = <View> {
+                    width: Fill, height: Fit
+                    flow: Right
+                    align: {y: 0.5}
+                    spacing: 16
 
-                auto_scroll_label = <Label> {
-                    text: "Auto-scroll: On"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                    log_count = <Label> {
+                        text: "0 entries"
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                            }
+                        }
+                    }
+
+                    <View> { width: Fill, height: 1 }
+
+                    auto_scroll_label = <Label> {
+                        text: "Auto-scroll: On"
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                            }
                         }
                     }
                 }
@@ -316,7 +380,7 @@ impl Widget for DebugScreen {
         // Handle copy feedback timer
         if self.copy_feedback_timer.is_event(event).is_some() {
             self.view
-                .button(ids!(modal.filter_row.copy_btn))
+                .button(ids!(window.content.filter_row.copy_btn))
                 .apply_over(cx, live! { draw_bg: { copied: 0.0 } });
             self.view.redraw(cx);
         }
@@ -327,20 +391,41 @@ impl Widget for DebugScreen {
             _ => return,
         };
 
-        // Close button
-        if self.view.button(ids!(modal.header.close_btn)).clicked(actions) {
-            self.hide(cx);
-        }
-
-        // Scrim click to close
-        if let Event::Actions(_) = event {
-            // Check if scrim was clicked (handled via Hit in a real impl)
+        // Close button - handle hover and click via Hit events
+        let close_btn = self.view.view(ids!(window.title_bar.close_btn));
+        match event.hits(cx, close_btn.area()) {
+            Hit::FingerHoverIn(_) => {
+                self.view.view(ids!(window.title_bar.close_btn)).apply_over(
+                    cx,
+                    live! { draw_bg: { hover: 1.0 } },
+                );
+                self.view.label(ids!(window.title_bar.close_btn.close_icon)).apply_over(
+                    cx,
+                    live! { draw_text: { hover: 1.0 } },
+                );
+                self.view.redraw(cx);
+            }
+            Hit::FingerHoverOut(_) => {
+                self.view.view(ids!(window.title_bar.close_btn)).apply_over(
+                    cx,
+                    live! { draw_bg: { hover: 0.0 } },
+                );
+                self.view.label(ids!(window.title_bar.close_btn.close_icon)).apply_over(
+                    cx,
+                    live! { draw_text: { hover: 0.0 } },
+                );
+                self.view.redraw(cx);
+            }
+            Hit::FingerUp(_) => {
+                self.hide(cx);
+            }
+            _ => {}
         }
 
         // Level filter
         if let Some(selected) = self
             .view
-            .drop_down(ids!(modal.filter_row.level_filter))
+            .drop_down(ids!(window.content.filter_row.level_filter))
             .selected(actions)
         {
             self.log_level_filter = selected;
@@ -350,7 +435,7 @@ impl Widget for DebugScreen {
         // Node filter
         if let Some(selected) = self
             .view
-            .drop_down(ids!(modal.filter_row.node_filter))
+            .drop_down(ids!(window.content.filter_row.node_filter))
             .selected(actions)
         {
             self.log_node_filter = selected;
@@ -360,7 +445,7 @@ impl Widget for DebugScreen {
         // Search text changed
         if self
             .view
-            .text_input(ids!(modal.filter_row.search_input))
+            .text_input(ids!(window.content.filter_row.search_input))
             .changed(actions)
             .is_some()
         {
@@ -368,17 +453,17 @@ impl Widget for DebugScreen {
         }
 
         // Copy button
-        if self.view.button(ids!(modal.filter_row.copy_btn)).clicked(actions) {
+        if self.view.button(ids!(window.content.filter_row.copy_btn)).clicked(actions) {
             self.copy_to_clipboard(cx);
             self.view
-                .button(ids!(modal.filter_row.copy_btn))
+                .button(ids!(window.content.filter_row.copy_btn))
                 .apply_over(cx, live! { draw_bg: { copied: 1.0 } });
             self.view.redraw(cx);
             self.copy_feedback_timer = cx.start_timeout(1.0);
         }
 
         // Clear button
-        if self.view.button(ids!(modal.filter_row.clear_btn)).clicked(actions) {
+        if self.view.button(ids!(window.content.filter_row.clear_btn)).clicked(actions) {
             self.log_entries.clear();
             self.update_display(cx);
         }
@@ -415,7 +500,7 @@ impl DebugScreen {
     fn update_display(&mut self, cx: &mut Cx) {
         let search_text = self
             .view
-            .text_input(ids!(modal.filter_row.search_input))
+            .text_input(ids!(window.content.filter_row.search_input))
             .text()
             .to_lowercase();
 
@@ -465,13 +550,13 @@ impl DebugScreen {
         };
 
         self.view
-            .markdown(ids!(modal.log_container.log_scroll.log_content_wrapper.log_content))
+            .markdown(ids!(window.content.log_container.log_scroll.log_content_wrapper.log_content))
             .set_text(cx, &content);
 
         // Update count label
         let count_text = format!("{} entries", filtered.len());
         self.view
-            .label(ids!(modal.footer.log_count))
+            .label(ids!(window.content.footer.log_count))
             .set_text(cx, &count_text);
 
         self.view.redraw(cx);
@@ -481,7 +566,7 @@ impl DebugScreen {
     fn copy_to_clipboard(&self, cx: &mut Cx) {
         let search_text = self
             .view
-            .text_input(ids!(modal.filter_row.search_input))
+            .text_input(ids!(window.content.filter_row.search_input))
             .text()
             .to_lowercase();
 
@@ -524,25 +609,35 @@ impl DebugScreen {
     pub fn update_dark_mode(&mut self, cx: &mut Cx, dark_mode: f64) {
         self.dark_mode = dark_mode;
 
-        self.view.view(ids!(modal)).apply_over(
+        // Update window background
+        self.view.view(ids!(window)).apply_over(
             cx,
             live! { draw_bg: { dark_mode: (dark_mode) } },
         );
 
-        self.view.label(ids!(modal.header.title)).apply_over(
+        // Update title bar
+        self.view.view(ids!(window.title_bar)).apply_over(
+            cx,
+            live! { draw_bg: { dark_mode: (dark_mode) } },
+        );
+
+        self.view.label(ids!(window.title_bar.title)).apply_over(
             cx,
             live! { draw_text: { dark_mode: (dark_mode) } },
         );
 
-        self.view.button(ids!(modal.header.close_btn)).apply_over(
+        self.view.view(ids!(window.title_bar.close_btn)).apply_over(
             cx,
-            live! {
-                draw_bg: { dark_mode: (dark_mode) }
-                draw_text: { dark_mode: (dark_mode) }
-            },
+            live! { draw_bg: { dark_mode: (dark_mode) } },
         );
 
-        self.view.view(ids!(modal.log_container)).apply_over(
+        self.view.label(ids!(window.title_bar.close_btn.close_icon)).apply_over(
+            cx,
+            live! { draw_text: { dark_mode: (dark_mode) } },
+        );
+
+        // Update log container
+        self.view.view(ids!(window.content.log_container)).apply_over(
             cx,
             live! { draw_bg: { dark_mode: (dark_mode) } },
         );
