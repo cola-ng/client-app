@@ -76,6 +76,7 @@
 
 pub mod app_trait;
 pub mod audio_player;
+pub mod debug_screen;
 pub mod led_gauge;
 pub mod log_panel;
 pub mod participant_panel;
@@ -121,6 +122,7 @@ pub fn live_design(cx: &mut Cx) {
     participant_panel::live_design(cx);
     log_panel::live_design(cx);
     led_gauge::live_design(cx);
+    debug_screen::live_design(cx);
 }
 
 // Re-export commonly used types

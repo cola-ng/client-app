@@ -120,6 +120,43 @@ live_design! {
 
                 <View> { width: Fill, height: 1 }
 
+                // Debug button - opens debug console
+                debug_btn = <View> {
+                    width: 36, height: 36
+                    align: {x: 0.5, y: 0.5}
+                    cursor: Hand
+                    show_bg: true
+                    draw_bg: {
+                        instance hover: 0.0
+                        instance dark_mode: 0.0
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            let cx = self.rect_size.x * 0.5;
+                            let cy = self.rect_size.y * 0.5;
+                            // Hover circle background
+                            sdf.circle(cx, cy, 16.0);
+                            let light_hover = (HOVER_BG);
+                            let dark_hover = (SLATE_700);
+                            let hover_color = mix(light_hover, dark_hover, self.dark_mode);
+                            sdf.fill(mix((TRANSPARENT), hover_color, self.hover));
+                            // Bug/terminal icon
+                            let icon_color = mix((SLATE_500), (SLATE_400), self.dark_mode);
+                            // Terminal box
+                            sdf.box(cx - 7.0, cy - 5.0, 14.0, 10.0, 2.0);
+                            sdf.stroke(icon_color, 1.2);
+                            // Prompt symbol >_
+                            sdf.move_to(cx - 4.0, cy - 1.0);
+                            sdf.line_to(cx - 1.0, cy + 1.0);
+                            sdf.line_to(cx - 4.0, cy + 3.0);
+                            sdf.stroke(icon_color, 1.2);
+                            sdf.move_to(cx + 1.0, cy + 3.0);
+                            sdf.line_to(cx + 5.0, cy + 3.0);
+                            sdf.stroke(icon_color, 1.2);
+                            return sdf.result;
+                        }
+                    }
+                }
+
                 // Theme toggle button
                 theme_toggle = <View> {
                     width: 36, height: 36

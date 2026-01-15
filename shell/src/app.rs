@@ -23,6 +23,7 @@ use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
+use widgets::debug_screen::DebugScreenWidgetRefExt;
 use widgets::StateChangeListener;
 
 use crate::config::Config;
@@ -86,6 +87,7 @@ live_design! {
 
     use colang_shell::widgets::sidebar::Sidebar;
     use colang_shell::widgets::main_body::MainBody;
+    use widgets::debug_screen::DebugScreen;
 
     // Dark theme colors (imported for shader use)
     use widgets::theme::DARK_BG_DARK;
@@ -241,6 +243,9 @@ live_design! {
                     }
                 }
             }
+
+            // Debug screen overlay (global, above all content)
+            debug_screen = <DebugScreen> {}
         }
     }
 }
@@ -377,6 +382,7 @@ impl AppMain for App {
         // Handle hover events
         self.handle_sidebar_hover(cx, event);
         self.handle_theme_toggle(cx, event);
+        self.handle_debug_button(cx, event);
 
         // Handle click events
         self.handle_sidebar_clicks(cx, &actions);
@@ -736,6 +742,41 @@ impl App {
             .view(ids!(body.base.header.theme_toggle.moon_icon))
             .set_visible(cx, is_dark);
         self.ui.redraw(cx);
+    }
+
+    /// Handle header debug button
+    fn handle_debug_button(&mut self, cx: &mut Cx, event: &Event) {
+        let debug_btn = self.ui.view(ids!(body.base.header.debug_btn));
+
+        match event.hits(cx, debug_btn.area()) {
+            Hit::FingerHoverIn(_) => {
+                self.ui
+                    .view(ids!(body.base.header.debug_btn))
+                    .apply_over(
+                        cx,
+                        live! {
+                            draw_bg: { hover: 1.0 }
+                        },
+                    );
+                self.ui.redraw(cx);
+            }
+            Hit::FingerHoverOut(_) => {
+                self.ui
+                    .view(ids!(body.base.header.debug_btn))
+                    .apply_over(
+                        cx,
+                        live! {
+                            draw_bg: { hover: 0.0 }
+                        },
+                    );
+                self.ui.redraw(cx);
+            }
+            Hit::FingerUp(_) => {
+                // Show the debug screen
+                self.ui.debug_screen(ids!(debug_screen)).show(cx);
+            }
+            _ => {}
+        }
     }
 }
 
