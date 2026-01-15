@@ -15,6 +15,7 @@ use std::sync::mpsc;
 use std::time::{Duration, Instant};
 use std::{io, thread};
 
+use colang_core::learning_api::{init_learning_api, set_learning_api_token};
 use colang_core::models::Preferences;
 use colang_core::screens::dialog::dialog_screen::DialogScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
@@ -321,7 +322,7 @@ impl LiveHook for App {
         let prefs = Preferences::load();
         self.dark_mode = prefs.dark_mode;
         self.dark_mode_anim = if prefs.dark_mode { 1.0 } else { 0.0 };
-        self.auth_token = prefs.auth_token;
+        self.auth_token = prefs.auth_token.clone();
         self.desktop_auth_in_progress = false;
         self.desktop_auth_state = None;
         self.desktop_auth_redirect_uri = None;
@@ -330,6 +331,9 @@ impl LiveHook for App {
         self.debug_panel_dragging = false;
         self.debug_panel_drag_start_x = 0.0;
         self.debug_panel_drag_start_width = 400.0;
+
+        // Initialize learning API client with backend URL and auth token
+        init_learning_api(&config.api_url, prefs.auth_token);
     }
 }
 
@@ -570,6 +574,8 @@ impl App {
             DesktopAuthResult::Success(token) => {
                 self.auth_token = Some(token.clone());
                 println!("Desktop login succeeded, token: {}", token);
+                // Update learning API client with new token
+                set_learning_api_token(Some(token.clone()));
                 let mut prefs = Preferences::load();
                 prefs.auth_token = Some(token);
                 let _ = prefs.save();
