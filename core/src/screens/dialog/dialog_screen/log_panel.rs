@@ -29,11 +29,7 @@ impl DialogScreen {
         let search_text = self
             .view
             .text_input(ids!(
-                log_overlay
-                    .log_modal
-                    .log_section
-                    .log_filter_row
-                    .log_search
+                log_overlay.log_modal.log_section.log_filter_row.log_search
             ))
             .text()
             .to_lowercase();
@@ -106,11 +102,7 @@ impl DialogScreen {
         let search_text = self
             .view
             .text_input(ids!(
-                log_overlay
-                    .log_modal
-                    .log_section
-                    .log_filter_row
-                    .log_search
+                log_overlay.log_modal.log_section.log_filter_row.log_search
             ))
             .text()
             .to_lowercase();

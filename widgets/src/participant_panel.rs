@@ -357,17 +357,6 @@ live_design! {
             }
         }
 
-        subtext = <Label> {
-            text: "语音、文本均可交流"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                }
-            }
-        }
-
         // Waveform with level bar background
         waveform = <ParticipantWaveform> {}
     }
@@ -403,14 +392,6 @@ impl ParticipantPanelRef {
 
             // Name label
             inner.view.label(ids!(header.name_label)).apply_over(
-                cx,
-                live! {
-                    draw_text: { dark_mode: (dark_mode) }
-                },
-            );
-
-            // Subtitle
-            inner.view.label(ids!(subtext)).apply_over(
                 cx,
                 live! {
                     draw_text: { dark_mode: (dark_mode) }

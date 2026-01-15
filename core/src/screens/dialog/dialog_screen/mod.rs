@@ -343,34 +343,6 @@ live_design! {
                             }
                         }
                     }
-
-                    quick_replies = <View> {
-                        width: Fill, height: Fit
-                        flow: Right
-                        spacing: 10
-
-                        quick_reply_one = <Button> {
-                            width: Fit, height: 32
-                            padding: { left: 12, right: 12, top: 6, bottom: 6 }
-                            text: "Two nights"
-                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) }
-                            draw_bg: { color: (INDIGO_100) border_radius: 14.0 }
-                        }
-                        quick_reply_two = <Button> {
-                            width: Fit, height: 32
-                            padding: { left: 12, right: 12, top: 6, bottom: 6 }
-                            text: "Just one night"
-                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) }
-                            draw_bg: { color: (INDIGO_100) border_radius: 14.0 }
-                        }
-                        quick_reply_ai = <Button> {
-                            width: Fit, height: 32
-                            padding: { left: 12, right: 12, top: 6, bottom: 6 }
-                            text: "帮我说 🤖"
-                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (ACCENT_INDIGO) }
-                            draw_bg: { color: (SLATE_100) border_radius: 14.0 }
-                        }
-                    }
                 }
 
                 // Prompt input area container
@@ -592,7 +564,7 @@ live_design! {
                     spacing: 8
 
                     error_title = <Label> {
-                        text: "⚠️ 本次易错点"
+                        text: "⚠️ 易错点提醒"
                         draw_text: { text_style: <FONT_SEMIBOLD>{ font_size: 13.0 } color: (TEXT_PRIMARY) }
                     }
                     error_item = <RoundedView> {
@@ -602,14 +574,6 @@ live_design! {
                         align: {x: 0.0, y: 0.5}
                         <Label> { text: "want to + 动词原形" draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) } }
                         <View> { width: Fill, height: 1 }
-                        <Label> { text: "已纠正 ✓" draw_text: { text_style: <FONT_REGULAR>{ font_size: 11.0 } color: (TEXT_SECONDARY) } }
-                    }
-                    error_hint = <RoundedView> {
-                        width: Fill, height: 30
-                        draw_bg: { color: (SLATE_100) border_radius: 8.0 }
-                        padding: { left: 10, right: 10 }
-                        align: {x: 0.0, y: 0.5}
-                        <Label> { text: "暂无更多错误，继续加油！" draw_text: { text_style: <FONT_REGULAR>{ font_size: 11.0 } color: (TEXT_SECONDARY) } }
                     }
                 }
 
@@ -631,13 +595,6 @@ live_design! {
                         accent_au = <Button> { width: 50, height: 24 text: "澳式" draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (INDIGO_100) border_radius: 10.0 } }
                     }
                     speed_row = <Label> { text: "语速：0.8x ━━━●━━━ 1.5x" draw_text: { text_style: <FONT_REGULAR>{ font_size: 11.0 } color: (TEXT_SECONDARY) } }
-                }
-
-                takeover_btn = <Button> {
-                    width: Fill, height: 50
-                    text: "🤖 让 AI 帮我说这句"
-                    draw_text: { color: (ACCENT_INDIGO) text_style: <FONT_SEMIBOLD>{ font_size: 13.0 } }
-                    draw_bg: { color: (INDIGO_100) border_radius: 12.0 }
                 }
             }
         }
@@ -913,11 +870,7 @@ impl Widget for DialogScreen {
         if let Some(selected) = self
             .view
             .drop_down(ids!(
-                log_overlay
-                    .log_modal
-                    .log_section
-                    .log_filter_row
-                    .node_filter
+                log_overlay.log_modal.log_section.log_filter_row.node_filter
             ))
             .selected(actions)
         {
@@ -993,11 +946,7 @@ impl Widget for DialogScreen {
         if self
             .view
             .text_input(ids!(
-                log_overlay
-                    .log_modal
-                    .log_section
-                    .log_filter_row
-                    .log_search
+                log_overlay.log_modal.log_section.log_filter_row.log_search
             ))
             .changed(actions)
             .is_some()
@@ -1091,7 +1040,13 @@ impl StateChangeListener for DialogScreenRef {
             // Apply dark mode to chat header and title
             inner
                 .view
-                .view(ids!(main_layout.left_column.chat_container.chat_section.chat_header))
+                .view(ids!(
+                    main_layout
+                        .left_column
+                        .chat_container
+                        .chat_section
+                        .chat_header
+                ))
                 .apply_over(
                     cx,
                     live! {
@@ -1146,7 +1101,9 @@ impl StateChangeListener for DialogScreenRef {
             // Apply dark mode to prompt section
             inner
                 .view
-                .view(ids!(main_layout.left_column.prompt_container.prompt_section))
+                .view(ids!(
+                    main_layout.left_column.prompt_container.prompt_section
+                ))
                 .apply_over(
                     cx,
                     live! {

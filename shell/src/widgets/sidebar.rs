@@ -160,6 +160,13 @@ live_design! {
             }
         }
 
+        reading_tab = <SidebarMenuButton> {
+            text: "跟读练习"
+            draw_icon: {
+                svg_file: dep("crate://self/resources/icons/mic.svg")
+            }
+        }
+
         // Divider before settings
         <View> {
             width: Fill, height: 1
@@ -183,6 +190,7 @@ pub enum SidebarSelection {
     Colang,
     MofaFM,
     SceneCenter,
+    Reading,
     Settings,
 }
 
@@ -225,6 +233,10 @@ impl Widget for Sidebar {
 
         if self.view.button(ids!(scene_center_tab)).clicked(actions) {
             self.handle_selection(cx, SidebarSelection::SceneCenter);
+        }
+
+        if self.view.button(ids!(reading_tab)).clicked(actions) {
+            self.handle_selection(cx, SidebarSelection::Reading);
         }
 
         // Handle Settings tab click
@@ -271,6 +283,11 @@ impl Sidebar {
                     .button(ids!(scene_center_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
+            SidebarSelection::Reading => {
+                self.view
+                    .button(ids!(reading_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+            }
             SidebarSelection::Settings => {
                 self.view
                     .button(ids!(settings_tab))
@@ -297,6 +314,7 @@ impl Sidebar {
             ids!(dialog_tab),
             ids!(review_tab),
             ids!(scene_center_tab),
+            ids!(reading_tab),
             ids!(settings_tab)
         );
     }
@@ -336,6 +354,12 @@ impl SidebarRef {
                             .button(ids!(scene_center_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
+                    SidebarSelection::Reading => {
+                        inner
+                            .view
+                            .button(ids!(reading_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    }
                     SidebarSelection::Settings => {
                         inner
                             .view
@@ -369,6 +393,14 @@ impl SidebarRef {
             );
 
             inner.view.button(ids!(review_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
+
+            inner.view.button(ids!(reading_tab)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }

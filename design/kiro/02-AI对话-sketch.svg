@@ -146,7 +146,7 @@
 
   <!-- Error Log -->
   <rect x="1000" y="460" width="320" height="120" class="panel"/>
-  <text x="1020" y="485" class="t h3">⚠️ 本次易错点</text>
+  <text x="1020" y="485" class="t h3">⚠️ 易错点提醒</text>
   <rect x="1020" y="500" width="280" height="30" fill="#fef3c7" rx="6"/>
   <text x="1040" y="520" class="t small">want to + 动词原形</text>
   <text x="1260" y="520" class="t small muted">已纠正 ✓</text>

@@ -32,11 +32,19 @@ impl Default for Config {
 }
 
 fn default_website_url() -> String {
-    "http://127.0.0.1:6108".to_string()
+    if cfg!(debug_assertions) {
+        "http://127.0.0.1:6108".to_string()
+    } else {
+        "https://cola.ng".to_string()
+    }
 }
 
 fn default_api_url() -> String {
-    "http://127.0.0.1:6108/api".to_string()
+    if cfg!(debug_assertions) {
+        "http://127.0.0.1:6108/api".to_string()
+    } else {
+        "https://api.cola.ng".to_string()
+    }
 }
 
 impl Config {

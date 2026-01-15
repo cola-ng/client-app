@@ -1,3 +1,1 @@
-添加"场景中心", 根据 design/kiro/03-场景中心-sketch.svg 的设计.
-
-当前场景右侧添加 "选择场景" 按钮, 点击后跳转到场景页面.
+是否 makepad 有 deeplink 或者  router 之类的东西?

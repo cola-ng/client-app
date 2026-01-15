@@ -286,22 +286,36 @@ impl MofaHero {
 
         let (text, color, hint) = match status {
             ConnectionStatus::Ready => ("Ready", vec4(0.133, 0.773, 0.373, 1.0), "等待启动"),
-            ConnectionStatus::Connecting => ("Connecting", vec4(0.933, 0.702, 0.067, 1.0), "正在连接数据流"),
-            ConnectionStatus::Connected => ("Connected", vec4(0.365, 0.384, 0.953, 1.0), "已联通，对话准备就绪"),
-            ConnectionStatus::Stopping => ("Stopping", vec4(0.922, 0.533, 0.196, 1.0), "正在停止会话"),
+            ConnectionStatus::Connecting => (
+                "Connecting",
+                vec4(0.933, 0.702, 0.067, 1.0),
+                "正在连接数据流",
+            ),
+            ConnectionStatus::Connected => (
+                "Connected",
+                vec4(0.365, 0.384, 0.953, 1.0),
+                "已联通，对话准备就绪",
+            ),
+            ConnectionStatus::Stopping => {
+                ("Stopping", vec4(0.922, 0.533, 0.196, 1.0), "正在停止会话")
+            }
             ConnectionStatus::Stopped => ("Stopped", vec4(0.514, 0.553, 0.620, 1.0), "已停止"),
-            ConnectionStatus::Failed => ("Failed", vec4(0.937, 0.267, 0.267, 1.0), "连接异常，请重试"),
+            ConnectionStatus::Failed => {
+                ("Failed", vec4(0.937, 0.267, 0.267, 1.0), "连接异常，请重试")
+            }
         };
 
         self.view
             .label(ids!(status_section.status_badge.status_label))
             .set_text(cx, text);
-        self.view.view(ids!(status_section.status_badge)).apply_over(
-            cx,
-            live! {
-                draw_bg: { color: (color) }
-            },
-        );
+        self.view
+            .view(ids!(status_section.status_badge))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { color: (color) }
+                },
+            );
         self.view.view(ids!(status_section.status_dot)).apply_over(
             cx,
             live! {

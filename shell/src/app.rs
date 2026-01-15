@@ -1029,6 +1029,16 @@ impl App {
             self.ui.redraw(cx);
         }
 
+        if self
+            .ui
+            .button(ids!(sidebar_menu_overlay.sidebar_content.reading_tab))
+            .clicked(actions)
+        {
+            self.sidebar_menu_open = false;
+            self.start_sidebar_slide_out(cx);
+            self.navigate_to_reading_practice(cx);
+        }
+
         // Settings tab
         if self
             .ui
