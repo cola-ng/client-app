@@ -187,8 +187,8 @@ live_design! {
 #[derive(Clone, PartialEq)]
 pub enum SidebarSelection {
     Home,
-    Colang,
-    MofaFM,
+    Dialog,
+    Review,
     SceneCenter,
     Reading,
     Settings,
@@ -224,11 +224,11 @@ impl Widget for Sidebar {
         }
 
         if self.view.button(ids!(dialog_tab)).clicked(actions) {
-            self.handle_selection(cx, SidebarSelection::Colang);
+            self.handle_selection(cx, SidebarSelection::Dialog);
         }
 
         if self.view.button(ids!(review_tab)).clicked(actions) {
-            self.handle_selection(cx, SidebarSelection::MofaFM);
+            self.handle_selection(cx, SidebarSelection::Review);
         }
 
         if self.view.button(ids!(scene_center_tab)).clicked(actions) {
@@ -265,14 +265,12 @@ impl Sidebar {
                     .button(ids!(home_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
-            SidebarSelection::Colang => {
-                println!("Colang selected");
+            SidebarSelection::Dialog => {
                 self.view
                     .button(ids!(dialog_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
-            SidebarSelection::MofaFM => {
-                println!("MofaFM selected");
+            SidebarSelection::Review => {
                 self.view
                     .button(ids!(review_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
@@ -336,13 +334,13 @@ impl SidebarRef {
                             .button(ids!(home_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
-                    SidebarSelection::Colang => {
+                    SidebarSelection::Dialog => {
                         inner
                             .view
                             .button(ids!(dialog_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
-                    SidebarSelection::MofaFM => {
+                    SidebarSelection::Review => {
                         inner
                             .view
                             .button(ids!(review_tab))
