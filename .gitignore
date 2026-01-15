@@ -48,3 +48,5 @@ build/
 setup.py
 
 **/*.mp3
+
+check_output.txt

@@ -22,9 +22,9 @@ live_design! {
 
     CardBase = <RoundedView> {
         show_bg: true
-        border_radius: 16.0
         draw_bg: {
             instance dark_mode: 0.0
+            border_radius: 16.0
             fn pixel(self) -> vec4 {
                 return mix((WHITE), (SLATE_800), self.dark_mode);
             }
@@ -33,9 +33,9 @@ live_design! {
 
     PanelBase = <RoundedView> {
         show_bg: true
-        border_radius: 8.0
         draw_bg: {
             instance dark_mode: 0.0
+            border_radius: 8.0
             fn pixel(self) -> vec4 {
                 return mix((SLATE_50), (SLATE_700), self.dark_mode);
             }
@@ -326,11 +326,11 @@ live_design! {
                             width: Fill, height: 85
                             show_bg: true
                             draw_bg: {
+                                border_radius: 12.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.396, 0.416, 0.961, 0.2);  // Indigo with transparency
                                 }
                             }
-                            border_radius: 12.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -346,11 +346,11 @@ live_design! {
                             width: 45, height: 18
                             show_bg: true
                             draw_bg: {
+                                border_radius: 10.0
                                 fn get_color(self) -> vec4 {
                                     return vec4(0.553, 0.314, 0.996, 1.0);  // Purple
                                 }
                             }
-                            border_radius: 10.0
                             align: {x: 0.5, y: 0.5}
 
                             badge_text = <Label> {
@@ -431,11 +431,11 @@ live_design! {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
+                                border_radius: 12.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.063, 0.725, 0.502, 0.2);  // Green
                                 }
                             }
-                            border_radius: 12.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -480,11 +480,11 @@ live_design! {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
+                                border_radius: 12.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.961, 0.624, 0.043, 0.2);  // Amber
                                 }
                             }
-                            border_radius: 12.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -529,11 +529,11 @@ live_design! {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
+                                border_radius: 12.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.396, 0.416, 0.961, 0.2);  // Indigo
                                 }
                             }
-                            border_radius: 12.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -578,11 +578,11 @@ live_design! {
                             width: Fill, height: 75
                             show_bg: true
                             draw_bg: {
+                                border_radius: 12.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.063, 0.725, 0.502, 0.2);  // Green
                                 }
                             }
-                            border_radius: 12.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -662,11 +662,11 @@ live_design! {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
+                                border_radius: 8.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.1, 0.1, 0.18, 1.0);  // Dark
                                 }
                             }
-                            border_radius: 8.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -715,11 +715,11 @@ live_design! {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
+                                border_radius: 8.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.1, 0.1, 0.18, 1.0);
                                 }
                             }
-                            border_radius: 8.0
 
                             align: {x: 0.5, y: 0.5}
 
@@ -768,11 +768,11 @@ live_design! {
                             width: 60, height: 60
                             show_bg: true
                             draw_bg: {
+                                border_radius: 8.0
                                 fn pixel(self) -> vec4 {
                                     return vec4(0.1, 0.1, 0.18, 1.0);
                                 }
                             }
-                            border_radius: 8.0
 
                             align: {x: 0.5, y: 0.5}
 
