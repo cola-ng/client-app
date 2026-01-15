@@ -40,7 +40,7 @@ live_design! {
 
     pub DebugPanel = {{DebugPanel}} {
         // Inline panel, not a separate window
-        height: Fill
+        width: 400, height: Fill
         visible: false
         show_bg: true
         draw_bg: {
@@ -545,6 +545,13 @@ impl DebugPanelRef {
             inner.view.visible()
         } else {
             false
+        }
+    }
+
+    /// Set panel visibility
+    pub fn set_visible(&self, cx: &mut Cx, visible: bool) {
+        if let Some(mut inner) = self.borrow_mut() {
+            inner.view.set_visible(cx, visible);
         }
     }
 }

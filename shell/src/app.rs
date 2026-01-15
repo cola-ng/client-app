@@ -788,17 +788,27 @@ impl App {
             Hit::FingerUp(_) => {
                 let panel_path = ids!(body.base.content_area.debug_panel);
                 let splitter_path = ids!(body.base.content_area.debug_splitter);
-                let is_visible = self.ui.view(panel_path).visible();
+                let debug_panel = self.ui.debug_panel(panel_path);
+                let is_visible = debug_panel.is_visible();
+                let new_visible = !is_visible;
 
-                self.ui
-                    .debug_panel(panel_path)
-                    .update_dark_mode(cx, self.dark_mode_anim);
-
-                // Resize window when toggling debug panel
+                // Set visible first, then resize window
                 let splitter_width = 6.0;
                 let panel_width = self.debug_panel_width + splitter_width;
-                let current_size = self.last_window_size;
 
+                // Apply visibility and width
+                debug_panel.apply_over(
+                    cx,
+                    live! {
+                        visible: (new_visible),
+                        width: (self.debug_panel_width)
+                    },
+                );
+                debug_panel.update_dark_mode(cx, self.dark_mode_anim);
+                self.ui.view(splitter_path).apply_over(cx, live! { visible: (new_visible) });
+
+                // Resize window after visibility is set
+                let current_size = self.last_window_size;
                 if is_visible {
                     // Closing: shrink window
                     let new_width = (current_size.x - panel_width).max(800.0);
@@ -809,8 +819,8 @@ impl App {
                     self.ui.as_window().resize(cx, dvec2(new_width, current_size.y));
                 }
 
-                self.ui.view(panel_path).set_visible(cx, !is_visible);
-                self.ui.view(splitter_path).set_visible(cx, !is_visible);
+                // Force content_area to recalculate layout
+                self.ui.view(ids!(body.base.content_area)).redraw(cx);
                 self.ui.redraw(cx);
             }
             _ => {}
@@ -821,7 +831,7 @@ impl App {
         let panel_path = ids!(body.base.content_area.debug_panel);
         let splitter_path = ids!(body.base.content_area.debug_splitter);
 
-        if !self.ui.view(panel_path).visible() {
+        if !self.ui.debug_panel(panel_path).is_visible() {
             self.debug_panel_dragging = false;
             self.ui.view(splitter_path).apply_over(
                 cx,
@@ -871,7 +881,7 @@ impl App {
                 let next = (self.debug_panel_drag_start_width + delta).clamp(240.0, 720.0);
                 if (next - self.debug_panel_width).abs() > 0.5 {
                     self.debug_panel_width = next;
-                    self.ui.view(panel_path).apply_over(
+                    self.ui.debug_panel(panel_path).apply_over(
                         cx,
                         live! {
                             width: (next)
