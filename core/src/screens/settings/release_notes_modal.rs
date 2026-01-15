@@ -163,13 +163,17 @@ live_design! {
         flow: Overlay
         visible: false
 
-        // Overlay background
+        // Overlay background - darker and more opaque
         overlay = <View> {
             width: Fill, height: Fill
             show_bg: true
             draw_bg: {
+                instance dark_mode: 0.0
                 fn pixel(self) -> vec4 {
-                    return vec4(0.0, 0.0, 0.0, 0.5);
+                    // Darker overlay for better contrast
+                    let light_overlay = vec4(0.0, 0.0, 0.0, 0.6);
+                    let dark_overlay = vec4(0.0, 0.0, 0.0, 0.75);
+                    return mix(light_overlay, dark_overlay, self.dark_mode);
                 }
             }
         }
@@ -179,7 +183,7 @@ live_design! {
             width: Fill, height: Fill
             align: {x: 0.5, y: 0.5}
 
-            // Modal dialog
+            // Modal dialog with shadow effect
             dialog = <RoundedView> {
                 width: 560, height: 520
                 flow: Down
@@ -187,8 +191,38 @@ live_design! {
                 draw_bg: {
                     instance dark_mode: 0.0
                     border_radius: 12.0
-                    fn get_color(self) -> vec4 {
-                        return mix((WHITE), (SLATE_800), self.dark_mode);
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+
+                        // Shadow (draw slightly larger and offset)
+                        let shadow_offset = 4.0;
+                        let shadow_blur = 20.0;
+                        let shadow_color = vec4(0.0, 0.0, 0.0, 0.25);
+                        sdf.box(
+                            shadow_offset,
+                            shadow_offset,
+                            self.rect_size.x - shadow_offset,
+                            self.rect_size.y - shadow_offset,
+                            12.0
+                        );
+                        sdf.blur = shadow_blur;
+                        sdf.fill(shadow_color);
+
+                        // Main dialog background - fully opaque
+                        let light_bg = vec4(1.0, 1.0, 1.0, 1.0);  // Pure white
+                        let dark_bg = vec4(0.129, 0.145, 0.180, 1.0);  // SLATE_800 fully opaque
+                        let bg_color = mix(light_bg, dark_bg, self.dark_mode);
+
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                        sdf.fill(bg_color);
+
+                        // Subtle border
+                        let light_border = vec4(0.898, 0.902, 0.918, 1.0);  // GRAY_200
+                        let dark_border = vec4(0.255, 0.294, 0.369, 1.0);   // SLATE_700
+                        let border_color = mix(light_border, dark_border, self.dark_mode);
+                        sdf.stroke(border_color, 1.0);
+
+                        return sdf.result;
                     }
                 }
 
@@ -538,6 +572,11 @@ impl ReleaseNotesModal {
 
     pub fn update_dark_mode(&mut self, cx: &mut Cx, dark_mode: f64) {
         self.dark_mode = dark_mode;
+
+        // Update overlay background
+        self.view
+            .view(ids!(overlay))
+            .apply_over(cx, live! { draw_bg: { dark_mode: (dark_mode) } });
 
         // Update dialog background
         self.view
