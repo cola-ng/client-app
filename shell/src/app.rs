@@ -792,11 +792,7 @@ impl App {
                 let is_visible = debug_panel.is_visible();
                 let new_visible = !is_visible;
 
-                // Set visible first, then resize window
-                let splitter_width = 6.0;
-                let panel_width = self.debug_panel_width + splitter_width;
-
-                // Apply visibility and width
+                // Toggle visibility
                 debug_panel.apply_over(
                     cx,
                     live! {
@@ -806,21 +802,6 @@ impl App {
                 );
                 debug_panel.update_dark_mode(cx, self.dark_mode_anim);
                 self.ui.view(splitter_path).apply_over(cx, live! { visible: (new_visible) });
-
-                // Resize window after visibility is set
-                let current_size = self.last_window_size;
-                if is_visible {
-                    // Closing: shrink window
-                    let new_width = (current_size.x - panel_width).max(800.0);
-                    self.ui.as_window().resize(cx, dvec2(new_width, current_size.y));
-                } else {
-                    // Opening: expand window
-                    let new_width = current_size.x + panel_width;
-                    self.ui.as_window().resize(cx, dvec2(new_width, current_size.y));
-                }
-
-                // Force content_area to recalculate layout
-                self.ui.view(ids!(body.base.content_area)).redraw(cx);
                 self.ui.redraw(cx);
             }
             _ => {}
