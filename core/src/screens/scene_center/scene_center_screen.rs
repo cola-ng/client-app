@@ -99,6 +99,7 @@ live_design! {
                 width: Fill, height: Fit
                 flow: Down
                 spacing: 8
+                visible: false
 
                 title = <Label> {
                     text: "🎭 场景中心"

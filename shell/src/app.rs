@@ -984,6 +984,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
+            self.set_header_page_title(cx, "🏠", "首页");
             self.ui.redraw(cx);
         }
 
@@ -1047,6 +1048,7 @@ impl App {
                     body.base.content_area.main_content.content.dialog_screen
                 ))
                 .start_timers(cx);
+            self.set_header_page_title(cx, "💬", "交流对话");
             self.ui.redraw(cx);
         }
         if self
@@ -1103,6 +1105,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
+            self.set_header_page_title(cx, "📚", "复习中心");
             self.ui.redraw(cx);
         }
 
@@ -1166,6 +1169,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
+            self.set_header_page_title(cx, "🎭", "场景中心");
             self.ui.redraw(cx);
         }
 
@@ -1239,6 +1243,7 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: true });
+            self.set_header_page_title(cx, "⚙️", "设置");
             self.ui.redraw(cx);
         }
     }
@@ -1249,6 +1254,15 @@ impl App {
 // ============================================================================
 
 impl App {
+    fn set_header_page_title(&mut self, cx: &mut Cx, icon: &str, title: &str) {
+        self.ui
+            .label(ids!(body.base.header.page_title_container.page_icon))
+            .set_text(cx, icon);
+        self.ui
+            .label(ids!(body.base.header.page_title_container.page_title))
+            .set_text(cx, title);
+    }
+
     /// Update sidebar slide animation
     fn update_sidebar_animation(&mut self, cx: &mut Cx) {
         const ANIMATION_DURATION: f64 = 0.2;
@@ -2447,6 +2461,7 @@ impl App {
                 body.base.content_area.main_content.content.dialog_screen
             ))
             .start_timers(cx);
+        self.set_header_page_title(cx, "💬", "交流对话");
         self.ui.redraw(cx);
     }
 
@@ -2457,6 +2472,7 @@ impl App {
                 body.base.content_area.main_content.content.scene_center
             ))
             .apply_over(cx, live! { visible: true });
+        self.set_header_page_title(cx, "🎭", "场景中心");
         self.ui.redraw(cx);
     }
 
@@ -2467,6 +2483,7 @@ impl App {
                 body.base.content_area.main_content.content.assistant_screen
             ))
             .apply_over(cx, live! { visible: true });
+        self.set_header_page_title(cx, "🧠", "AI 助手");
         self.ui.redraw(cx);
     }
 
@@ -2477,6 +2494,7 @@ impl App {
                 body.base.content_area.main_content.content.reading_screen
             ))
             .apply_over(cx, live! { visible: true });
+        self.set_header_page_title(cx, "🎤", "跟读练习");
         self.ui.redraw(cx);
     }
 
@@ -2491,6 +2509,7 @@ impl App {
                     .classic_dialogues_screen
             ))
             .apply_over(cx, live! { visible: true });
+        self.set_header_page_title(cx, "🎬", "经典对白");
         self.ui.redraw(cx);
     }
 

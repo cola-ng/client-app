@@ -435,6 +435,7 @@ live_design! {
                     width: Fill, height: Fit
                     flow: Down
                     spacing: 8
+                    visible: false
 
                     <Label> {
                         text: "🎤 跟读练习"

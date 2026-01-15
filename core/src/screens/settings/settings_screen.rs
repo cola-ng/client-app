@@ -163,18 +163,6 @@ live_design! {
                     }
                 }
 
-                <Label> {
-                    text: "Settings"
-                    margin: {left: 8, bottom: 16}
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_BOLD>{ font_size: 16.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                        }
-                    }
-                }
-
                 general_tab_btn = <TabButton> { text: "General" }
                 audio_tab_btn = <TabButton> { text: "Audio" }
                 providers_tab_btn = <TabButton> { text: "AI Providers" }

@@ -121,6 +121,31 @@ live_design! {
 
                 <View> { width: Fill, height: 1 }
 
+                page_title_container = <View> {
+                    width: Fit, height: Fit
+                    flow: Right
+                    align: {y: 0.5}
+                    spacing: 8
+
+                    page_icon = <Label> {
+                        text: "🏠"
+                        draw_text: {
+                            text_style: <FONT_MEDIUM>{ font_size: 16.0 }
+                            color: (SLATE_500)
+                        }
+                    }
+
+                    page_title = <Label> {
+                        text: "首页"
+                        draw_text: {
+                            text_style: <FONT_SEMIBOLD>{ font_size: 16.0 }
+                            color: (TEXT_SECONDARY)
+                        }
+                    }
+                }
+
+                <View> { width: Fill, height: 1 }
+
                 // Debug button - opens debug console
                 debug_btn = <View> {
                     width: 36, height: 36

@@ -286,18 +286,6 @@ live_design! {
                         width: Fill, height: Fit
                         flow: Right
                         align: {y: 0.5}
-
-                        <Label> {
-                            text: "🎬 经典对白"
-                            draw_text: {
-                                instance dark_mode: 0.0
-                                text_style: <FONT_BOLD>{ font_size: 24.0 }
-                                fn get_color(self) -> vec4 {
-                                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                                }
-                            }
-                        }
-
                         <View> { width: Fill }
 
                         search_input = <TextInput> {
@@ -308,16 +296,6 @@ live_design! {
                         }
                     }
 
-                    <Label> {
-                        text: "从电影、美剧、TED 学地道表达"
-                        draw_text: {
-                            instance dark_mode: 0.0
-                            text_style: <FONT_REGULAR>{ font_size: 13.0 }
-                            fn get_color(self) -> vec4 {
-                                return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                            }
-                        }
-                    }
                 }
 
                 // Category tabs
