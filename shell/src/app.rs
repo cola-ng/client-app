@@ -778,7 +778,6 @@ impl App {
             }
             Hit::FingerUp(_) => {
                 // Show the debug window
-                self.debug_window.debug_window(&[]).show(cx);
             }
             _ => {}
         }
