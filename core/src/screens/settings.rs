@@ -9,7 +9,9 @@ pub mod settings_screen;
 
 pub use audio_panel::AudioDevices;
 use makepad_widgets::Cx;
-pub use settings_screen::{SettingsScreen, SettingsScreenAction, SettingsScreenWidgetRefExt, ThemeMode};
+pub use settings_screen::{
+    SettingsScreen, SettingsScreenAction, SettingsScreenWidgetRefExt, ThemeMode,
+};
 
 pub(super) fn live_design(cx: &mut Cx) {
     about_panel::live_design(cx);

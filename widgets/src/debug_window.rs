@@ -349,7 +349,11 @@ impl Widget for DebugWindow {
         }
 
         // Copy button
-        if self.window.button(ids!(debug_window.body.content.filter_row.copy_btn)).clicked(actions) {
+        if self
+            .window
+            .button(ids!(debug_window.body.content.filter_row.copy_btn))
+            .clicked(actions)
+        {
             self.copy_to_clipboard(cx);
             self.window
                 .button(ids!(debug_window.body.content.filter_row.copy_btn))
@@ -359,7 +363,11 @@ impl Widget for DebugWindow {
         }
 
         // Clear button
-        if self.window.button(ids!(debug_window.body.content.filter_row.clear_btn)).clicked(actions) {
+        if self
+            .window
+            .button(ids!(debug_window.body.content.filter_row.clear_btn))
+            .clicked(actions)
+        {
             self.log_entries.clear();
             self.update_display(cx);
         }
@@ -427,8 +435,8 @@ impl DebugWindow {
                 };
 
                 // Search filter
-                let search_ok = search_text.is_empty()
-                    || entry.to_lowercase().contains(&search_text);
+                let search_ok =
+                    search_text.is_empty() || entry.to_lowercase().contains(&search_text);
 
                 level_ok && node_ok && search_ok
             })
@@ -446,7 +454,15 @@ impl DebugWindow {
         };
 
         self.window
-            .markdown(ids!(debug_window.body.content.log_container.log_scroll.log_content_wrapper.log_content))
+            .markdown(ids!(
+                debug_window
+                    .body
+                    .content
+                    .log_container
+                    .log_scroll
+                    .log_content_wrapper
+                    .log_content
+            ))
             .set_text(cx, &content);
 
         // Update count label
@@ -512,21 +528,18 @@ impl DebugWindow {
         );
 
         // Update title bar
-        self.window.view(ids!(debug_window.body.title_bar)).apply_over(
-            cx,
-            live! { draw_bg: { dark_mode: (dark_mode) } },
-        );
+        self.window
+            .view(ids!(debug_window.body.title_bar))
+            .apply_over(cx, live! { draw_bg: { dark_mode: (dark_mode) } });
 
-        self.window.label(ids!(debug_window.body.title_bar.title)).apply_over(
-            cx,
-            live! { draw_text: { dark_mode: (dark_mode) } },
-        );
+        self.window
+            .label(ids!(debug_window.body.title_bar.title))
+            .apply_over(cx, live! { draw_text: { dark_mode: (dark_mode) } });
 
         // Update log container
-        self.window.view(ids!(debug_window.body.content.log_container)).apply_over(
-            cx,
-            live! { draw_bg: { dark_mode: (dark_mode) } },
-        );
+        self.window
+            .view(ids!(debug_window.body.content.log_container))
+            .apply_over(cx, live! { draw_bg: { dark_mode: (dark_mode) } });
 
         self.window.redraw(cx);
     }

@@ -23,8 +23,8 @@ use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use widgets::debug_window::DebugWindowWidgetRefExt;
 use widgets::StateChangeListener;
+use widgets::debug_window::DebugWindowWidgetRefExt;
 
 use crate::config::Config;
 
@@ -349,7 +349,8 @@ impl LiveRegister for App {
 impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
         self.ui.handle_event(cx, event, &mut Scope::empty());
-        self.debug_window.handle_event(cx, event, &mut Scope::empty());
+        self.debug_window
+            .handle_event(cx, event, &mut Scope::empty());
 
         // Initialize theme on first draw (widgets are ready)
         if !self.theme_initialized {
@@ -762,25 +763,21 @@ impl App {
 
         match event.hits(cx, debug_btn.area()) {
             Hit::FingerHoverIn(_) => {
-                self.ui
-                    .view(ids!(body.base.header.debug_btn))
-                    .apply_over(
-                        cx,
-                        live! {
-                            draw_bg: { hover: 1.0 }
-                        },
-                    );
+                self.ui.view(ids!(body.base.header.debug_btn)).apply_over(
+                    cx,
+                    live! {
+                        draw_bg: { hover: 1.0 }
+                    },
+                );
                 self.ui.redraw(cx);
             }
             Hit::FingerHoverOut(_) => {
-                self.ui
-                    .view(ids!(body.base.header.debug_btn))
-                    .apply_over(
-                        cx,
-                        live! {
-                            draw_bg: { hover: 0.0 }
-                        },
-                    );
+                self.ui.view(ids!(body.base.header.debug_btn)).apply_over(
+                    cx,
+                    live! {
+                        draw_bg: { hover: 0.0 }
+                    },
+                );
                 self.ui.redraw(cx);
             }
             Hit::FingerUp(_) => {

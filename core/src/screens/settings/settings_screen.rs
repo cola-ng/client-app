@@ -546,16 +546,26 @@ impl Widget for SettingsScreen {
             .button(ids!(content.pages.about_page.release_notes_btn))
             .clicked(actions)
         {
-            self.view.release_notes_modal(ids!(release_notes_modal)).show(cx);
+            self.view
+                .release_notes_modal(ids!(release_notes_modal))
+                .show(cx);
         }
 
         // Handle Release Notes modal close button
         if self
             .view
-            .button(ids!(release_notes_modal.dialog_container.dialog.header.close_button))
+            .button(ids!(
+                release_notes_modal
+                    .dialog_container
+                    .dialog
+                    .header
+                    .close_button
+            ))
             .clicked(actions)
         {
-            self.view.release_notes_modal(ids!(release_notes_modal)).hide(cx);
+            self.view
+                .release_notes_modal(ids!(release_notes_modal))
+                .hide(cx);
         }
 
         // Handle Service Agreement link click
@@ -1085,7 +1095,10 @@ impl SettingsScreenRef {
             inner.update_tab_selection(cx);
 
             // Update release notes modal dark mode
-            inner.view.release_notes_modal(ids!(release_notes_modal)).update_dark_mode(cx, dark_mode);
+            inner
+                .view
+                .release_notes_modal(ids!(release_notes_modal))
+                .update_dark_mode(cx, dark_mode);
 
             inner.view.redraw(cx);
         }
