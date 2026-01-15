@@ -15,7 +15,9 @@ dora-bridge = { path = "dora-bridge" }
 widgets = { path = "widgets" }
 
 # Makepad UI framework
-makepad-widgets = { git = "https://github.com/wyeworks/makepad", rev = "b8b65f4fa" }
+makepad-widgets = { git = "https://github.com/makepad/makepad", rev = "b8b65f4" }
+makepad-charts = { git = "https://github.com/mofa-org/makepad-chart", branch = "main" }
+makepad-component = { git = "https://github.com/ZhangHanDong/makepad-component.git", branch = "main" }
 
 # Audio
 cpal = "0.15"

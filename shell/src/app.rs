@@ -801,7 +801,9 @@ impl App {
                     },
                 );
                 debug_panel.update_dark_mode(cx, self.dark_mode_anim);
-                self.ui.view(splitter_path).apply_over(cx, live! { visible: (new_visible) });
+                self.ui
+                    .view(splitter_path)
+                    .apply_over(cx, live! { visible: (new_visible) });
                 self.ui.redraw(cx);
             }
             _ => {}
