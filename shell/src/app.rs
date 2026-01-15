@@ -24,7 +24,6 @@ use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use widgets::StateChangeListener;
-use widgets::debug_window::DebugWindowWidgetRefExt;
 
 use crate::config::Config;
 
@@ -244,9 +243,6 @@ live_design! {
                 }
             }
         }
-
-        // Debug window (separate window, not inside main window)
-        debug_window = <DebugWindow> {}
     }
 }
 

@@ -41,7 +41,7 @@ live_design! {
     pub DebugPanel = {{DebugPanel}} {
         // Inline panel, not a separate window
         width: 300, height: Fill
-        visible: false
+        visible: true
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
