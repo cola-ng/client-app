@@ -209,6 +209,21 @@ enum SettingsTab {
     About,
 }
 
+/// Theme mode for appearance settings
+#[derive(Clone, Debug, PartialEq)]
+pub enum ThemeMode {
+    Light,
+    Dark,
+    System,
+}
+
+/// Actions emitted by the SettingsScreen
+#[derive(Clone, Debug, DefaultNone)]
+pub enum SettingsScreenAction {
+    None,
+    ThemeModeChanged(ThemeMode),
+}
+
 #[derive(Live, LiveHook, Widget)]
 pub struct SettingsScreen {
     #[deref]
@@ -480,7 +495,9 @@ impl Widget for SettingsScreen {
         }
 
         // Handle appearance radio buttons
-        self.view
+        // Order in ids_array: auto_radio=0, light_radio=1, dark_radio=2
+        if let Some(selected_idx) = self
+            .view
             .radio_button_set(ids_array!(
                 content
                     .pages
@@ -501,7 +518,20 @@ impl Widget for SettingsScreen {
                     .appearance_radios
                     .dark_radio
             ))
-            .selected(cx, actions);
+            .selected(cx, actions)
+        {
+            let theme_mode = match selected_idx {
+                0 => ThemeMode::System,
+                1 => ThemeMode::Light,
+                2 => ThemeMode::Dark,
+                _ => ThemeMode::System,
+            };
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::ThemeModeChanged(theme_mode),
+            );
+        }
     }
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {

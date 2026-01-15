@@ -18,6 +18,7 @@ use std::{io, thread};
 use colang_core::models::Preferences;
 use colang_core::screens::dialog::dialog_screen::DialogScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
+use colang_core::screens::settings::{SettingsScreenAction, ThemeMode};
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
@@ -386,6 +387,7 @@ impl AppMain for App {
         self.handle_home_screen_buttons(cx, &actions);
         self.handle_tab_clicks(cx, &actions);
         self.handle_tab_close_clicks(cx, event);
+        self.handle_settings_actions(cx, &actions);
     }
 }
 
@@ -1183,6 +1185,42 @@ impl App {
         self.apply_dark_mode_screens_with_value(cx, target);
 
         self.ui.redraw(cx);
+    }
+
+    /// Set dark mode to a specific value with animation
+    fn set_dark_mode(&mut self, cx: &mut Cx, is_dark: bool) {
+        if self.dark_mode != is_dark {
+            self.toggle_dark_mode(cx);
+            self.update_theme_toggle_icon(cx);
+
+            // Save preference to disk
+            let mut prefs = Preferences::load();
+            prefs.dark_mode = self.dark_mode;
+            if let Err(e) = prefs.save() {
+                eprintln!("Failed to save dark mode preference: {}", e);
+            }
+        }
+    }
+
+    /// Handle settings screen actions
+    fn handle_settings_actions(&mut self, cx: &mut Cx, actions: &[Action]) {
+        for action in actions {
+            if let SettingsScreenAction::ThemeModeChanged(mode) = action.as_widget_action().cast() {
+                match mode {
+                    ThemeMode::Light => {
+                        self.set_dark_mode(cx, false);
+                    }
+                    ThemeMode::Dark => {
+                        self.set_dark_mode(cx, true);
+                    }
+                    ThemeMode::System => {
+                        // For now, default to light mode when "Follow System" is selected
+                        // TODO: Implement actual system theme detection
+                        self.set_dark_mode(cx, false);
+                    }
+                }
+            }
+        }
     }
 
     /// Update dark mode animation
