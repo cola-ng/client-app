@@ -9,7 +9,7 @@
 use makepad_widgets::*;
 use std::sync::mpsc;
 
-use crate::learning_api::{get_learning_api, ClassicDialogueSource, Scenes};
+use crate::asset_api::{get_asset_api, ClassicDialogueSource, Scene};
 
 live_design! {
     use link::theme::*;
@@ -479,7 +479,7 @@ live_design! {
 
 /// Data fetch result types
 enum FetchResult {
-    Scenes(Result<Vec<Scenes>, String>),
+    Scenes(Result<Vec<Scene>, String>),
     ClassicSources(Result<Vec<ClassicDialogueSource>, String>),
 }
 
@@ -489,7 +489,7 @@ pub struct Scenes {
     view: View,
 
     #[rust]
-    scenes: Vec<Scenes>,
+    scenes: Vec<Scene>,
 
     #[rust]
     classic_sources: Vec<ClassicDialogueSource>,
@@ -656,7 +656,7 @@ impl Scenes {
         std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
             rt.block_on(async {
-                if let Some(api) = get_learning_api() {
+                if let Some(api) = get_asset_api() {
                     if let Ok(client) = api.read() {
                         // Fetch scenes
                         let scenes_result = client.list_scenes(None, None, Some(10)).await;
