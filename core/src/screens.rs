@@ -1,6 +1,7 @@
 //! Screen modules for Colang Desktop
 
 pub mod conversation;
+pub mod dictionary;
 pub mod home;
 pub mod reading;
 pub mod review;
@@ -17,6 +18,7 @@ pub fn live_design(cx: &mut Cx) {
     println!("==============screens live design");
     home::live_design(cx);
     conversation::live_design(cx);
+    dictionary::live_design(cx);
     review::live_design(cx);
     scenes::live_design(cx);
     settings::live_design(cx);

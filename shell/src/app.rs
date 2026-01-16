@@ -1163,6 +1163,16 @@ impl App {
             self.navigate_to_reading_practice(cx);
         }
 
+        if self
+            .ui
+            .button(ids!(sidebar_menu_overlay.sidebar_content.dictionary_tab))
+            .clicked(actions)
+        {
+            self.sidebar_menu_open = false;
+            self.start_sidebar_slide_out(cx);
+            self.navigate_to_dictionary(cx);
+        }
+
         // Settings tab
         if self
             .ui
@@ -2478,6 +2488,17 @@ impl App {
         self.ui.redraw(cx);
     }
 
+    fn navigate_to_dictionary(&mut self, cx: &mut Cx) {
+        self.hide_all_screens(cx);
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.dictionary_screen
+            ))
+            .apply_over(cx, live! { visible: true });
+        self.set_header_page_title(cx, "📖", "词典查询");
+        self.ui.redraw(cx);
+    }
+
     fn hide_all_screens(&mut self, cx: &mut Cx) {
         self.sidebar_menu_open = false;
         self.open_tabs.clear();
@@ -2523,6 +2544,11 @@ impl App {
         self.ui
             .view(ids!(
                 body.base.content_area.main_content.content.reading_screen
+            ))
+            .apply_over(cx, live! { visible: false });
+        self.ui
+            .view(ids!(
+                body.base.content_area.main_content.content.dictionary_screen
             ))
             .apply_over(cx, live! { visible: false });
         self.ui

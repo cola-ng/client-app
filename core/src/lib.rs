@@ -2,6 +2,7 @@ pub mod asset_api;
 pub mod audio;
 pub mod audio_player;
 pub mod db;
+pub mod dict_api;
 pub mod dora_integration;
 pub mod doubao_api;
 pub mod learn_api;

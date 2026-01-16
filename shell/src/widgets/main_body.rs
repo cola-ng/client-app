@@ -39,6 +39,7 @@ live_design! {
     use widgets::theme::TEXT_SECONDARY_DARK;
 
     use colang_core::screens::conversation::conversation_screen::ConversationScreen;
+    use colang_core::screens::dictionary::dictionary_screen::DictionaryScreen;
     use colang_core::screens::home::home_screen::HomeScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
     use colang_core::screens::review::review_screen::ReviewScreen;
@@ -350,6 +351,11 @@ live_design! {
                         }
 
                         reading_screen = <ReadingScreen> {
+                            width: Fill, height: Fill
+                            visible: false
+                        }
+
+                        dictionary_screen = <DictionaryScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }

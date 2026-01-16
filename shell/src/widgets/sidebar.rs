@@ -167,6 +167,13 @@ live_design! {
             }
         }
 
+        dictionary_tab = <SidebarMenuButton> {
+            text: "词典查询"
+            draw_icon: {
+                svg_file: dep("crate://self/resources/icons/search.svg")
+            }
+        }
+
         // Divider before settings
         <View> {
             width: Fill, height: 1
@@ -191,6 +198,7 @@ pub enum SidebarSelection {
     Review,
     Scenes,
     Reading,
+    Dictionary,
     Settings,
 }
 
@@ -237,6 +245,10 @@ impl Widget for Sidebar {
 
         if self.view.button(ids!(reading_tab)).clicked(actions) {
             self.handle_selection(cx, SidebarSelection::Reading);
+        }
+
+        if self.view.button(ids!(dictionary_tab)).clicked(actions) {
+            self.handle_selection(cx, SidebarSelection::Dictionary);
         }
 
         // Handle Settings tab click
@@ -286,6 +298,11 @@ impl Sidebar {
                     .button(ids!(reading_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
+            SidebarSelection::Dictionary => {
+                self.view
+                    .button(ids!(dictionary_tab))
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+            }
             SidebarSelection::Settings => {
                 self.view
                     .button(ids!(settings_tab))
@@ -313,6 +330,7 @@ impl Sidebar {
             ids!(review_tab),
             ids!(scenes_tab),
             ids!(reading_tab),
+            ids!(dictionary_tab),
             ids!(settings_tab)
         );
     }
@@ -358,6 +376,12 @@ impl SidebarRef {
                             .button(ids!(reading_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
+                    SidebarSelection::Dictionary => {
+                        inner
+                            .view
+                            .button(ids!(dictionary_tab))
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    }
                     SidebarSelection::Settings => {
                         inner
                             .view
@@ -399,6 +423,14 @@ impl SidebarRef {
             );
 
             inner.view.button(ids!(reading_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                },
+            );
+
+            inner.view.button(ids!(dictionary_tab)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
