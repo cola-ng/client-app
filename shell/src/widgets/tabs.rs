@@ -12,7 +12,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use makepad_component::*;
 
     // Import fonts and colors from shared theme
     use colang_widgets::theme::FONT_MEDIUM;

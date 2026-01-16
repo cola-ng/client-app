@@ -83,7 +83,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use makepad_component::*;
 
     // Shared theme fonts/colors
     use colang_widgets::theme::*;

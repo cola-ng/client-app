@@ -27,7 +27,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use makepad_component::*;
 
     use colang_widgets::theme::*;
     use colang_widgets::participant_panel::ParticipantPanel;
