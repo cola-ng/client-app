@@ -9,9 +9,9 @@
 use std::path::PathBuf;
 
 use makepad_widgets::*;
+use ::widgets::StateChangeListener;
+use ::widgets::participant_panel::ParticipantPanelWidgetExt;
 use makepad_component::*;
-use widgets::StateChangeListener;
-use widgets::participant_panel::ParticipantPanelWidgetExt;
 
 use super::ChatMessageEntry;
 use super::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
