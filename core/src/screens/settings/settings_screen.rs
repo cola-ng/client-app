@@ -27,7 +27,7 @@ live_design! {
     use makepad_component::widgets::badge::*;
     use makepad_component::widgets::tooltip::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     use crate::screens::settings::providers_panel::ProvidersPanel;
     use crate::screens::settings::provider_view::ProviderView;

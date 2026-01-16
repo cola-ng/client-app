@@ -7,7 +7,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     pub CardBase = <RoundedView> {
         show_bg: true

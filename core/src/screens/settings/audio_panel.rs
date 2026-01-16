@@ -9,7 +9,7 @@ live_design! {
     use makepad_component::*;
     use link::shaders::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
     use makepad_component::widgets::*;
     use makepad_component::theme::colors::*;
 

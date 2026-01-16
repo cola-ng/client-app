@@ -86,7 +86,7 @@ live_design! {
     use makepad_component::*;
 
     // Shared theme fonts/colors
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     // Import colors from theme (single source of truth)
     use crate::theme::PANEL_BG;

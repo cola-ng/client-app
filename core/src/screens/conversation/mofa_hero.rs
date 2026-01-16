@@ -2,13 +2,28 @@
 
 use makepad_widgets::*;
 use makepad_component::*;
+use makepad_component::widgets::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
+    
     use makepad_component::*;
-    use widgets::theme::*;
+    use makepad_component::theme::colors::*;
+    use makepad_component::widgets::button::*;
+    use makepad_component::widgets::checkbox::*;
+    use makepad_component::widgets::switch::*;
+    use makepad_component::widgets::divider::*;
+    use makepad_component::widgets::radio::*;
+    use makepad_component::widgets::progress::*;
+    use makepad_component::widgets::slider::*;
+    use makepad_component::widgets::input::*;
+    use makepad_component::widgets::badge::*;
+    use makepad_component::widgets::tooltip::*;
+
+
+    use ::widgets::theme::*;
 
     // Icons
     ICO_START = dep("crate://self/resources/icons/start.svg")

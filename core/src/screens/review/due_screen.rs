@@ -7,7 +7,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     use crate::screens::review::components::CalendarCell;
     use crate::screens::review::components::CardBase;

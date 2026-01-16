@@ -14,7 +14,7 @@ live_design! {
     use link::shaders::*;
     use link::widgets::*;
     use makepad_component::*;
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     // ========================================================================
     // Reading Practice Components

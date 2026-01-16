@@ -29,7 +29,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
     use widgets::participant_panel::ParticipantPanel;
     use widgets::log_panel::LogPanel;
     use crate::screens::conversation::mofa_hero::MofaHero;

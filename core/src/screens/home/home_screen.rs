@@ -18,7 +18,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use widgets::theme::*;
+    use ::widgets::theme::*;
 
     // ========================================================================
     // Design Tokens from kiro/01-首页-sketch.svg
