@@ -102,14 +102,25 @@ live_design! {
     // Simple checkbox style for settings
     pub SettingsCheckBox = <CheckBox> {
         width: Fit, height: Fit
-        text: ""
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
     }
 
     // Simple radio button style for settings
-    pub SettingsRadioButton = <CheckBox> {
+    pub SettingsRadioButton = <RadioButton> {
         width: Fit, height: Fit
-        text: ""
-        value: ""
+        draw_text: {
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+            }
+        }
     }
 
     // Language dropdown
