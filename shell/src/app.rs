@@ -944,7 +944,11 @@ impl App {
             // Stop any running timers
             self.ui
                 .conversation_screen(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .stop_timers(cx);
             // Show home, hide others
@@ -955,7 +959,11 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -964,9 +972,7 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1009,7 +1015,11 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
@@ -1023,9 +1033,7 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1053,7 +1061,11 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .conversation_screen(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .start_timers(cx);
             self.set_header_page_title(cx, "💬", "交流对话");
@@ -1100,13 +1112,15 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1117,7 +1131,7 @@ impl App {
             self.ui.redraw(cx);
         }
 
-            // Scene Center tab
+        // Scene Center tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.scenes_tab))
@@ -1130,7 +1144,11 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .conversation_screen(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1159,13 +1177,15 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
@@ -1204,7 +1224,11 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .conversation_screen(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1233,7 +1257,11 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1242,9 +1270,7 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1667,7 +1693,11 @@ impl App {
         // Apply to Colang screen (main content)
         self.ui
             .conversation_screen(ids!(
-                body.base.content_area.main_content.content.conversation_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .conversation_screen
             ))
             .on_dark_mode_change(cx, dm);
 
@@ -2110,20 +2140,26 @@ impl App {
             // Stop dialog scene timers
             self.ui
                 .conversation_screen(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .stop_timers(cx);
 
             // Hide dialog scene, show scene center
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: true });
 
             // Hide other scenes
@@ -2177,9 +2213,7 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: true });
 
             // Hide other scenes
@@ -2190,7 +2224,11 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -2234,15 +2272,17 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenario
-                ))
+                .view(ids!(body.base.content_area.main_content.content.scenario))
                 .apply_over(cx, live! { visible: true });
 
             // Hide other scenes
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.conversation_screen
+                    body.base
+                        .content_area
+                        .main_content
+                        .content
+                        .conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -2461,12 +2501,20 @@ impl App {
         self.hide_all_screens(cx);
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.conversation_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .conversation_screen
             ))
             .apply_over(cx, live! { visible: true });
         self.ui
             .conversation_screen(ids!(
-                body.base.content_area.main_content.content.conversation_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .conversation_screen
             ))
             .start_timers(cx);
         self.set_header_page_title(cx, "💬", "交流对话");
@@ -2476,9 +2524,7 @@ impl App {
     fn navigate_to_scenario(&mut self, cx: &mut Cx) {
         self.hide_all_screens(cx);
         self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.scenario
-            ))
+            .view(ids!(body.base.content_area.main_content.content.scenario))
             .apply_over(cx, live! { visible: true });
         self.set_header_page_title(cx, "🎭", "场景中心");
         self.ui.redraw(cx);
@@ -2530,7 +2576,11 @@ impl App {
         // Stop dialog timers if running
         self.ui
             .conversation_screen(ids!(
-                body.base.content_area.main_content.content.conversation_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .conversation_screen
             ))
             .stop_timers(cx);
 
@@ -2542,7 +2592,11 @@ impl App {
             .apply_over(cx, live! { visible: false });
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.conversation_screen
+                body.base
+                    .content_area
+                    .main_content
+                    .content
+                    .conversation_screen
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
@@ -2551,9 +2605,7 @@ impl App {
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.scenario
-            ))
+            .view(ids!(body.base.content_area.main_content.content.scenario))
             .apply_over(cx, live! { visible: false });
         self.ui
             .view(ids!(

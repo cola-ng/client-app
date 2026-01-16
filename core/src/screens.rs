@@ -1,4 +1,5 @@
 //! Screen modules for Colang Desktop
+
 pub mod conversation;
 pub mod home;
 pub mod reading;
@@ -6,7 +7,7 @@ pub mod review;
 pub mod scenes;
 pub mod settings;
 
-// pub use dialog::{ConversationScreen, ConversationScreenWidgetRefExt};
+// pub use dialog::{DialogScreen, DialogScreenWidgetRefExt};
 // pub use home::{HomeScreen, HomeScreenWidgetRefExt};
 // pub use settings::{SettingsScreen, SettingsScreenWidgetRefExt};
 

@@ -197,10 +197,10 @@ live_design! {
     }
 
     // ========================================================================
-    // Scenes Card Component
+    // Scene Card Component
     // ========================================================================
 
-    ScenesCard = <PanelBase> {
+    SceneCard = <PanelBase> {
         width: Fill, height: Fit
         padding: 12
         flow: Down
@@ -576,19 +576,19 @@ live_design! {
             flow: Right
             spacing: 12
 
-            scenehotel = <ScenesCard> {
+            scenehotel = <SceneCard> {
                 sceneicon = { text: "🏨" }
                 scenetitle = { text: "酒店入住" }
                 scenesubtitle = { text: "继续上次" }
             }
 
-            scenerestaurant = <ScenesCard> {
+            scenerestaurant = <SceneCard> {
                 sceneicon = { text: "🍽️" }
                 scenetitle = { text: "餐厅点餐" }
                 scenesubtitle = { text: "新场景" }
             }
 
-            sceneinterview = <ScenesCard> {
+            sceneinterview = <SceneCard> {
                 sceneicon = { text: "💼" }
                 scenetitle = { text: "工作面试" }
                 scenesubtitle = { text: "挑战" }

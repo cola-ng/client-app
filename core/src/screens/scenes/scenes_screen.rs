@@ -6,10 +6,11 @@
 //! - Today's featured scenes (dynamic from API)
 //! - Classic dialogues section (dynamic from API)
 
-use makepad_widgets::*;
 use std::sync::mpsc;
 
-use crate::asset_api::{get_asset_api, ClassicDialogueSource, Scene};
+use makepad_widgets::*;
+
+use crate::asset_api::{ClassicDialogueSource, Scene, get_asset_api};
 
 live_design! {
     use link::theme::*;

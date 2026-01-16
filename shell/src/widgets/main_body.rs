@@ -38,12 +38,12 @@ live_design! {
     use widgets::theme::TEXT_PRIMARY_DARK;
     use widgets::theme::TEXT_SECONDARY_DARK;
 
+    use colang_core::screens::conversation::ConversationScreen;
     use colang_core::screens::home::home_screen::HomeScreen;
-    use colang_core::screens::dialog::conversation_screen::ConversationScreen;
-    use colang_core::screens::review::review_screen::ReviewScreen;
-    use colang_core::screens::scenario::scenes_screen::ScenesScreen;
-    use colang_core::screens::settings::settings_screen::SettingsScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
+    use colang_core::screens::review::review_screen::ReviewScreen;
+    use colang_core::screens::scenes::scenes_screen::Scenes;
+    use colang_core::screens::settings::settings_screen::SettingsScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
     use widgets::debug_panel::DebugPanel;
@@ -339,7 +339,7 @@ live_design! {
                             visible: false
                         }
 
-                        scenes_screen = <ScenesScreen> {
+                        scenes_screen = <Scenes> {
                             width: Fill, height: Fill
                             visible: false
                         }
@@ -363,7 +363,7 @@ live_design! {
 
                 debug_splitter = <View> {
                     width: 6, height: Fill
-                    visible: false
+                    visible: true
                     cursor: EwResize
                     show_bg: true
                     draw_bg: {
@@ -382,10 +382,7 @@ live_design! {
                     }
                 }
 
-                debug_panel = <DebugPanel> {
-                    width: 400, height: Fill
-                    visible: false
-                }
+                debug_panel = <DebugPanel> {}
             }
         }
 
