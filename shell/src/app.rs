@@ -113,8 +113,9 @@ live_design! {
             body = <MainBody> {}
 
             sidebar_trigger_overlay = <View> {
-                width: 28, height: 28
+                width: 32, height: 32
                 abs_pos: vec2(18.0, 16.0)
+                cursor: Hand
             }
 
             sidebar_menu_overlay = <View> {
