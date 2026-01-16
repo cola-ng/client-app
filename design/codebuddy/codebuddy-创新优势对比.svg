@@ -36,7 +36,7 @@
   <text x="1020" y="240" font-family="Arial" font-size="13" font-weight="bold" fill="#F57C00" text-anchor="middle">+45%</text>
   <text x="1020" y="255" font-family="Arial" font-size="10" fill="#666" text-anchor="middle">参与度提升</text>
   
-  <!-- Row 2: Scenario Immersion -->
+  <!-- Row 2: Scenes Immersion -->
   <rect x="70" y="280" width="260" height="50" rx="4" fill="#E3F2FD"/>
   <text x="200" y="310" font-family="Arial" font-size="13" font-weight="bold" fill="#1976D2" text-anchor="middle">场景化沉浸</text>
   <rect x="350" y="280" width="300" height="50" rx="4" fill="#E8F5E9"/>

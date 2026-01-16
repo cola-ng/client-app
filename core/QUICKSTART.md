@@ -130,7 +130,7 @@ FROM learning_sessions;
 1. **Practice regularly** - Daily 15-30 minute sessions
 2. **Speak naturally** - Don't worry about mistakes
 3. **Review patterns** - Check database to see your common issues
-4. **Vary topics** - Edit `english_teacher_config.toml` for different scenarios
+4. **Vary topics** - Edit `english_teacher_config.toml` for different scenes
 5. **Be patient** - Spaced repetition takes time but is very effective
 
 ## Configuration Tips

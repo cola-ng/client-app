@@ -39,9 +39,9 @@ live_design! {
     use widgets::theme::TEXT_SECONDARY_DARK;
 
     use colang_core::screens::home::home_screen::HomeScreen;
-    use colang_core::screens::dialog::dialog_screen::DialogScreen;
+    use colang_core::screens::dialog::conversation_screen::DialogScreen;
     use colang_core::screens::review::review_screen::ReviewScreen;
-    use colang_core::screens::scene_center::scene_center_screen::SceneCenter;
+    use colang_core::screens::scenario::scenes_screen::Scenes;
     use colang_core::screens::settings::settings_screen::SettingsScreen;
     use colang_core::screens::assistant::assistant_screen::AssistantScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
@@ -336,12 +336,12 @@ live_design! {
                             visible: true
                         }
 
-                        dialog_screen = <DialogScreen> {
+                        conversation_screen = <DialogScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        scene_center = <SceneCenter> {
+                        scenario = <Scenes> {
                             width: Fill, height: Fill
                             visible: false
                         }

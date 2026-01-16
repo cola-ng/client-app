@@ -43,10 +43,10 @@
 **Solution**: Immersive scenario-based learning
 
 #### Key Components:
-- **Real-Life Scenarios**: Hotel check-in, job interviews, casual chats
+- **Real-Life Scenes**: Hotel check-in, job interviews, casual chats
 - **Movie Dialog Integration**: Learn from authentic movie conversations
 - **Cultural Context**: Learn idioms and expressions in proper context
-- **Role-Play Mode**: Interactive scenarios with branching paths
+- **Role-Play Mode**: Interactive scenes with branching paths
 
 ### 5. Practice Tools Suite
 **Problem**: Passive learning doesn't build skills
@@ -75,7 +75,7 @@
 ┌─────────────────┐
 │ 🏠 Dashboard    │
 │ 💬 AI Tutor     │
-│ 🎭 Scenarios    │
+│ 🎭 Scenes    │
 │ 📚 My Library   │
 │ 🔄 Review       │
 │ 👥 Social       │
@@ -120,11 +120,11 @@
 4. Occasional gentle corrections ("By the way...")
 5. Auto-generated review cards appear in side panel
 
-### 3. Scenarios
+### 3. Scenes
 **Purpose**: Immersive situation-based practice
 
 **Layout**:
-- Scenario cards grid (Restaurant, Airport, Job Interview, etc.)
+- Scenes cards grid (Restaurant, Airport, Job Interview, etc.)
 - Each card shows: difficulty, duration, key phrases
 - Inside scenario: Character avatars, scene background, dialog options
 - Progress bar shows completion
@@ -283,7 +283,7 @@ Visual roadmap showing:
 - Exam preparation mode (TOEFL, IELTS)
 
 ### Phase 3
-- VR/AR scenarios
+- VR/AR scenes
 - Professional certification
 - Corporate team accounts
 - Language exchange marketplace

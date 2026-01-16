@@ -72,7 +72,7 @@ pub struct AudioData {
     pub sample_rate: u32,
     /// Number of channels (1 = mono, 2 = stereo)
     pub channels: u16,
-    /// Optional participant ID for multi-speaker scenarios
+    /// Optional participant ID for multi-speaker scenes
     pub participant_id: Option<String>,
     /// Optional question ID for smart reset (discard stale audio)
     pub question_id: Option<String>,

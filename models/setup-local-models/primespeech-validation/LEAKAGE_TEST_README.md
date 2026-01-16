@@ -4,12 +4,12 @@ This test suite is designed to identify and investigate prompt leakage issues in
 
 ## Problem Description
 
-Prompt leakage occurs when text from previous segments appears in the audio output of current segments, or when there's contamination between different language inputs. This is particularly problematic in mixed Chinese-English scenarios.
+Prompt leakage occurs when text from previous segments appears in the audio output of current segments, or when there's contamination between different language inputs. This is particularly problematic in mixed Chinese-English scenes.
 
 ## Test Files
 
 ### Core Test Scripts
-- `test_prompt_leakage_detection.py` - Comprehensive test with multiple scenarios
+- `test_prompt_leakage_detection.py` - Comprehensive test with multiple scenes
 - `test_mixed_language_segments.py` - Simple mixed language test
 - `run_leakage_test.sh` - Automated test runner
 
@@ -17,7 +17,7 @@ Prompt leakage occurs when text from previous segments appears in the audio outp
 - `dataflow-leakage-test.yml` - Dataflow configured for leakage detection
 - Enhanced logging and monitoring for debugging
 
-## Test Scenarios
+## Test Scenes
 
 ### 1. Short Alternating Segments
 Very short segments alternating between English and Chinese:
@@ -197,8 +197,8 @@ After implementing fixes:
 
 ## Contributing
 
-When adding new test scenarios:
-1. Follow the existing pattern in `create_leakage_test_scenarios()`
+When adding new test scenes:
+1. Follow the existing pattern in `create_leakage_test_scenes()`
 2. Add descriptive names and documentation
-3. Update this README with new scenarios
+3. Update this README with new scenes
 4. Test with both clean and leaky configurations

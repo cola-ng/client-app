@@ -59,7 +59,7 @@
     <text x="152" y="152" class="t h1" font-size="16px">FluentFlow</text>
 
     <rect x="300" y="130" width="380" height="36" rx="12" class="panel"/>
-    <text x="318" y="152" class="t p muted2">Search: scenarios / clips / mistakes / cards…</text>
+    <text x="318" y="152" class="t p muted2">Search: scenes / clips / mistakes / cards…</text>
 
     <rect x="700" y="130" width="96" height="36" rx="12" class="btn2"/>
     <text x="724" y="152" class="t p">Start Talk</text>

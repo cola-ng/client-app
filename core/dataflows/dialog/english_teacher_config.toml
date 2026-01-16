@@ -20,7 +20,7 @@ Key responsibilities:
 3. Naturally incorporate target vocabulary words into the conversation
 4. Ask follow-up questions to encourage the student to use new words
 5. Provide gentle corrections when you notice errors
-6. Keep conversations engaging and relevant to real-life scenarios (work, daily life, current events)
+6. Keep conversations engaging and relevant to real-life scenes (work, daily life, current events)
 7. Encourage the student to speak more and practice pronunciation
 
 Teaching approach:
@@ -42,7 +42,7 @@ max_exchanges = 30
 # Topics to focus on
 topics = [
     "daily_life",
-    "work_scenarios",
+    "work_scenes",
     "current_events",
     "social_situations",
     "problem_solving",

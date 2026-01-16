@@ -1,15 +1,15 @@
 -- SQLite Migration: Enhanced English Learning Schema
 -- Version: 002
 -- Date: 2026-01-14
--- Description: Adds tables for scenarios, scenes, classic dialogues, reading practice, and learning sessions
+-- Description: Adds tables for scenes, scenes, classic dialogues, reading practice, and learning sessions
 
 -- ============================================================================
 -- SCENARIOS & SCENES
 -- ============================================================================
 
--- Table: scenarios
+-- Table: scenes
 -- Main scenario categories (e.g., Airport, Hotel, Restaurant, Interview)
-CREATE TABLE IF NOT EXISTS scenarios (
+CREATE TABLE IF NOT EXISTS scenes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name_en TEXT NOT NULL,
     name_zh TEXT NOT NULL,
@@ -25,14 +25,14 @@ CREATE TABLE IF NOT EXISTS scenarios (
     UNIQUE(name_en)
 );
 
-CREATE INDEX IF NOT EXISTS idx_scenarios_active 
-ON scenarios(is_active, display_order);
+CREATE INDEX IF NOT EXISTS idx_scenes_active 
+ON scenes(is_active, display_order);
 
 -- Table: scene_dialogues
--- Specific dialogue scripts within scenarios
+-- Specific dialogue scripts within scenes
 CREATE TABLE IF NOT EXISTS scene_dialogues (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    scenario_id INTEGER NOT NULL,
+    sceneid INTEGER NOT NULL,
     title_en TEXT NOT NULL,
     title_zh TEXT NOT NULL,
     description_en TEXT,
@@ -42,11 +42,11 @@ CREATE TABLE IF NOT EXISTS scene_dialogues (
     difficulty_level TEXT CHECK(difficulty_level IN ('beginner', 'intermediate', 'advanced')),
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
     
-    FOREIGN KEY (scenario_id) REFERENCES scenarios(id) ON DELETE CASCADE
+    FOREIGN KEY (sceneid) REFERENCES scenes(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_scene_dialogues_scenario 
-ON scene_dialogues(scenario_id);
+ON scene_dialogues(sceneid);
 
 -- Table: dialogue_turns
 -- Individual lines in a dialogue
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS learning_sessions (
     session_id TEXT PRIMARY KEY, -- UUID
     user_id INTEGER DEFAULT 1,
     session_type TEXT CHECK(session_type IN ('free_talk', 'scenario', 'classic_dialogue', 'reading', 'review', 'assistant')),
-    scenario_id INTEGER,
+    sceneid INTEGER,
     scene_dialogue_id INTEGER,
     classic_clip_id INTEGER,
     started_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS learning_sessions (
     ai_summary_en TEXT,
     ai_summary_zh TEXT,
     
-    FOREIGN KEY (scenario_id) REFERENCES scenarios(id) ON DELETE SET NULL,
+    FOREIGN KEY (sceneid) REFERENCES scenes(id) ON DELETE SET NULL,
     FOREIGN KEY (scene_dialogue_id) REFERENCES scene_dialogues(id) ON DELETE SET NULL,
     FOREIGN KEY (classic_clip_id) REFERENCES classic_dialogue_clips(id) ON DELETE SET NULL
 );

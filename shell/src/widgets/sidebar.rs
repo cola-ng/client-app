@@ -153,7 +153,7 @@ live_design! {
             }
         }
 
-        scene_center_tab = <SidebarMenuButton> {
+        scenes_tab = <SidebarMenuButton> {
             text: "场景中心"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/colang.svg")
@@ -189,7 +189,7 @@ pub enum SidebarSelection {
     Home,
     Dialog,
     Review,
-    SceneCenter,
+    Scenes,
     Reading,
     Settings,
 }
@@ -231,8 +231,8 @@ impl Widget for Sidebar {
             self.handle_selection(cx, SidebarSelection::Review);
         }
 
-        if self.view.button(ids!(scene_center_tab)).clicked(actions) {
-            self.handle_selection(cx, SidebarSelection::SceneCenter);
+        if self.view.button(ids!(scenes_tab)).clicked(actions) {
+            self.handle_selection(cx, SidebarSelection::Scenes);
         }
 
         if self.view.button(ids!(reading_tab)).clicked(actions) {
@@ -275,10 +275,10 @@ impl Sidebar {
                     .button(ids!(review_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
-            SidebarSelection::SceneCenter => {
-                println!("SceneCenter selected");
+            SidebarSelection::Scenes => {
+                println!("Scenes selected");
                 self.view
-                    .button(ids!(scene_center_tab))
+                    .button(ids!(scenes_tab))
                     .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
             }
             SidebarSelection::Reading => {
@@ -311,7 +311,7 @@ impl Sidebar {
             ids!(home_tab),
             ids!(dialog_tab),
             ids!(review_tab),
-            ids!(scene_center_tab),
+            ids!(scenes_tab),
             ids!(reading_tab),
             ids!(settings_tab)
         );
@@ -346,10 +346,10 @@ impl SidebarRef {
                             .button(ids!(review_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
-                    SidebarSelection::SceneCenter => {
+                    SidebarSelection::Scenes => {
                         inner
                             .view
-                            .button(ids!(scene_center_tab))
+                            .button(ids!(scenes_tab))
                             .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
                     }
                     SidebarSelection::Reading => {

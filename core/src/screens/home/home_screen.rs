@@ -7,7 +7,7 @@
 //! - Quick actions grid
 //! - Stats panel (学习数据)
 //! - AI insights section
-//! - Recommended scenarios
+//! - Recommended scenes
 
 use makepad_widgets::*;
 
@@ -197,10 +197,10 @@ live_design! {
     }
 
     // ========================================================================
-    // Scenario Card Component
+    // Scenes Card Component
     // ========================================================================
 
-    ScenarioCard = <PanelBase> {
+    ScenesCard = <PanelBase> {
         width: Fill, height: Fit
         padding: 12
         flow: Down
@@ -208,14 +208,14 @@ live_design! {
         align: {x: 0.5}
         cursor: Hand
 
-        scenario_icon = <Label> {
+        sceneicon = <Label> {
             draw_text: {
                 text_style: <FONT_REGULAR>{ font_size: 24.0 }
                 color: (TEXT_PRIMARY)
             }
         }
 
-        scenario_title = <Label> {
+        scenetitle = <Label> {
             draw_text: {
                 instance dark_mode: 0.0
                 text_style: <FONT_MEDIUM>{ font_size: 12.0 }
@@ -225,7 +225,7 @@ live_design! {
             }
         }
 
-        scenario_subtitle = <MutedText> {}
+        scenesubtitle = <MutedText> {}
     }
 
     // ========================================================================
@@ -560,10 +560,10 @@ live_design! {
     }
 
     // ========================================================================
-    // Recommended Scenarios Section
+    // Recommended Scenes Section
     // ========================================================================
 
-    ScenariosCard = <CardBase> {
+    ScenesCard = <CardBase> {
         width: Fill, height: Fit
         padding: 16
         flow: Down
@@ -571,27 +571,27 @@ live_design! {
 
         <SectionTitle> { text: "🎯 推荐场景" }
 
-        scenarios_row = <View> {
+        scenes_row = <View> {
             width: Fill, height: Fit
             flow: Right
             spacing: 12
 
-            scenario_hotel = <ScenarioCard> {
-                scenario_icon = { text: "🏨" }
-                scenario_title = { text: "酒店入住" }
-                scenario_subtitle = { text: "继续上次" }
+            scenehotel = <ScenesCard> {
+                sceneicon = { text: "🏨" }
+                scenetitle = { text: "酒店入住" }
+                scenesubtitle = { text: "继续上次" }
             }
 
-            scenario_restaurant = <ScenarioCard> {
-                scenario_icon = { text: "🍽️" }
-                scenario_title = { text: "餐厅点餐" }
-                scenario_subtitle = { text: "新场景" }
+            scenerestaurant = <ScenesCard> {
+                sceneicon = { text: "🍽️" }
+                scenetitle = { text: "餐厅点餐" }
+                scenesubtitle = { text: "新场景" }
             }
 
-            scenario_interview = <ScenarioCard> {
-                scenario_icon = { text: "💼" }
-                scenario_title = { text: "工作面试" }
-                scenario_subtitle = { text: "挑战" }
+            sceneinterview = <ScenesCard> {
+                sceneicon = { text: "💼" }
+                scenetitle = { text: "工作面试" }
+                scenesubtitle = { text: "挑战" }
             }
         }
     }
@@ -639,7 +639,7 @@ live_design! {
 
                     stats_card = <StatsCard> {}
                     insights_card = <InsightsCard> {}
-                    scenarios_card = <ScenariosCard> {}
+                    scenes_card = <ScenesCard> {}
                 }
             }
         }
@@ -706,21 +706,21 @@ impl WidgetMatchEvent for HomeScreen {
 
         // Handle scenario card clicks
         if self
-            .view(ids!(scenarios_card.scenarios_row.scenario_hotel))
+            .view(ids!(scenes_card.scenes_row.scenehotel))
             .finger_up(actions)
             .is_some()
         {
             // TODO: Navigate to hotel scenario
         }
         if self
-            .view(ids!(scenarios_card.scenarios_row.scenario_restaurant))
+            .view(ids!(scenes_card.scenes_row.scenerestaurant))
             .finger_up(actions)
             .is_some()
         {
             // TODO: Navigate to restaurant scenario
         }
         if self
-            .view(ids!(scenarios_card.scenarios_row.scenario_interview))
+            .view(ids!(scenes_card.scenes_row.sceneinterview))
             .finger_up(actions)
             .is_some()
         {
@@ -761,7 +761,7 @@ impl HomeScreen {
             .apply_over(cx, dark_mode_update);
         self.view(ids!(content_scroll.content.right_column.insights_card))
             .apply_over(cx, dark_mode_update);
-        self.view(ids!(content_scroll.content.right_column.scenarios_card))
+        self.view(ids!(content_scroll.content.right_column.scenes_card))
             .apply_over(cx, dark_mode_update);
     }
 }

@@ -109,10 +109,10 @@ import json
 with open('tts_output/prompt_leakage_test_results.json', 'r') as f:
     data = json.load(f)
 print(f'Test type: {data.get(\"test_type\", \"unknown\")}')
-print(f'Total scenarios: {data.get(\"total_scenarios\", 0)}')
+print(f'Total scenes: {data.get(\"total_scenes\", 0)}')
 print(f'Total segments: {data.get(\"total_segments\", 0)}')
 print(f'Test time: {data.get(\"total_test_time\", 0):.2f}s')
-print(f'Scenarios: {\", \".join(data.get(\"scenarios_tested\", []))}')
+print(f'Scenes: {\", \".join(data.get(\"scenes_tested\", []))}')
 "
 fi
 

@@ -9,7 +9,7 @@ BEGIN TRANSACTION;
 -- SCENARIOS DATA
 -- ============================================================================
 
-INSERT INTO scenarios (name_en, name_zh, description_en, description_zh, icon_emoji, difficulty_level, category, display_order) VALUES
+INSERT INTO scenes (name_en, name_zh, description_en, description_zh, icon_emoji, difficulty_level, category, display_order) VALUES
 ('Airport Check-in', '机场办理登机', 'Practice conversations at airport check-in counters', '练习机场值机柜台对话', '✈️', 'intermediate', 'travel', 1),
 ('Hotel Reservation', '酒店预订', 'Learn how to book and manage hotel reservations', '学习如何预订和管理酒店', '🏨', 'beginner', 'travel', 2),
 ('Restaurant Ordering', '餐厅点餐', 'Practice ordering food and drinks in restaurants', '练习在餐厅点餐', '🍽️', 'beginner', 'daily', 3),
@@ -23,7 +23,7 @@ INSERT INTO scenarios (name_en, name_zh, description_en, description_zh, icon_em
 -- SCENE DIALOGUES
 -- ============================================================================
 
-INSERT INTO scene_dialogues (scenario_id, title_en, title_zh, description_en, description_zh, total_turns, estimated_duration_seconds, difficulty_level) VALUES
+INSERT INTO scene_dialogues (sceneid, title_en, title_zh, description_en, description_zh, total_turns, estimated_duration_seconds, difficulty_level) VALUES
 (1, 'Checking in at the Counter', '在柜台办理登机', 'Basic airport check-in procedure', '基本的机场值机流程', 10, 120, 'intermediate'),
 (2, 'Making a Reservation', '预订房间', 'Call hotel to make a reservation', '致电酒店预订房间', 8, 90, 'beginner'),
 (3, 'Ordering Dinner', '晚餐点餐', 'Order a meal at a restaurant', '在餐厅点餐', 12, 150, 'beginner'),
@@ -129,7 +129,7 @@ INSERT INTO conversations (session_id, speaker, use_lang, content_en, content_zh
 -- LEARNING SESSIONS (Recent sessions)
 -- ============================================================================
 
-INSERT INTO learning_sessions (session_id, session_type, scenario_id, started_at, ended_at, duration_seconds, total_words_spoken, average_wpm, error_count, correction_count) VALUES
+INSERT INTO learning_sessions (session_id, session_type, sceneid, started_at, ended_at, duration_seconds, total_words_spoken, average_wpm, error_count, correction_count) VALUES
 ('550e8400-e29b-41d4-a716-446655440001', 'free_talk', NULL, strftime('%s', 'now', '-2 days'), strftime('%s', 'now', '-2 days', '+25 minutes'), 1500, 450, 120, 8, 6),
 ('550e8400-e29b-41d4-a716-446655440002', 'scenario', 3, strftime('%s', 'now', '-1 day'), strftime('%s', 'now', '-1 day', '+15 minutes'), 900, 280, 125, 5, 4),
 ('550e8400-e29b-41d4-a716-446655440003', 'reading', NULL, strftime('%s', 'now', '-3 hours'), strftime('%s', 'now', '-3 hours', '+10 minutes'), 600, 150, 90, 3, 3);
@@ -155,7 +155,7 @@ INSERT INTO user_achievements (achievement_type, achievement_name, description_e
 ('milestone', 'First Conversation', 'Completed your first AI conversation', '完成第一次AI对话'),
 ('milestone', '7 Day Streak', 'Practiced for 7 consecutive days', '连续练习7天'),
 ('milestone', '100 Words Mastered', 'Successfully mastered 100 vocabulary words', '成功掌握100个词汇'),
-('skill', 'Restaurant Expert', 'Completed all restaurant scenarios', '完成所有餐厅场景'),
+('skill', 'Restaurant Expert', 'Completed all restaurant scenes', '完成所有餐厅场景'),
 ('challenge', 'Tongue Twister Master', 'Successfully completed 10 tongue twisters', '成功完成10个绕口令');
 
 -- ============================================================================

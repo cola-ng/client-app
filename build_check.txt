@@ -100,7 +100,7 @@ warning: unused variable: `cx`
     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
 
 warning: methods `select_input_device` and `select_output_device` are never used
-  --> core\src\screens\dialog\dialog_screen\audio_controls.rs:62:19
+  --> core\src\screens\dialog\conversation_screen\audio_controls.rs:62:19
    |
  9 | impl DialogScreen {
    | ----------------- methods in this implementation
@@ -114,7 +114,7 @@ warning: methods `select_input_device` and `select_output_device` are never used
    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
 
 warning: method `toggle_log_overlay` is never used
-  --> core\src\screens\dialog\dialog_screen\log_panel.rs:12:19
+  --> core\src\screens\dialog\conversation_screen\log_panel.rs:12:19
    |
 10 | impl DialogScreen {
    | ----------------- method in this implementation

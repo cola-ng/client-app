@@ -440,7 +440,7 @@ impl DoubaoClient {
         let mut messages = vec![
             ChatMessage {
                 role: "system".to_string(),
-                content: "You are a professional English teacher. Your task is to help users speak authentic English. You should primarily speak in English, and only switch to Chinese to explain when the user indicates they cannot understand what you're saying. Generate authentic English conversation topics that naturally incorporate the target vocabulary words. Topics should be relevant to current events, work scenarios, or daily life.".to_string(),
+                content: "You are a professional English teacher. Your task is to help users speak authentic English. You should primarily speak in English, and only switch to Chinese to explain when the user indicates they cannot understand what you're saying. Generate authentic English conversation topics that naturally incorporate the target vocabulary words. Topics should be relevant to current events, work scenes, or daily life.".to_string(),
             }
         ];
 

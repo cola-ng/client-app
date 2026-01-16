@@ -1,8 +1,8 @@
-pub mod scene_center_screen;
+pub mod scenes_screen;
 
 use makepad_widgets::Cx;
 
 pub(super) fn live_design(cx: &mut Cx) {
     println!("==============screen center screen live design");
-    scene_center_screen::live_design(cx);
+    scenes_screen::live_design(cx);
 }

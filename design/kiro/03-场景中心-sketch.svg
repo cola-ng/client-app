@@ -82,7 +82,7 @@
   <rect x="330" y="315" width="80" height="30" class="btn-primary"/>
   <text x="370" y="335" class="t small white" text-anchor="middle">继续 →</text>
 
-  <!-- Section: Daily Scenarios -->
+  <!-- Section: Daily Scenes -->
   <text x="70" y="400" class="t h2">🌟 今日推荐场景</text>
   
   <!-- Scene Card 1 -->

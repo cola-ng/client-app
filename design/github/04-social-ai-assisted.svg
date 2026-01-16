@@ -10,7 +10,7 @@
   <!-- Nav items (Social active) -->
   <text x="60" y="147" font-size="15" fill="#94a3b8" font-weight="400">🏠 Dashboard</text>
   <text x="60" y="191" font-size="15" fill="#94a3b8" font-weight="400">💬 AI Tutor</text>
-  <text x="60" y="235" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenarios</text>
+  <text x="60" y="235" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenes</text>
   <rect x="16" y="336" width="208" height="44" rx="8" fill="#3b82f6"/>
   <text x="60" y="363" font-size="15" fill="#ffffff" font-weight="500">👥 Social</text>
   

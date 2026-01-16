@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Prompt leakage detection test for PrimeSpeech TTS.
-Tests specific scenarios that might cause prompt leakage between segments.
+Tests specific scenes that might cause prompt leakage between segments.
 """
 
 import time
@@ -10,11 +10,11 @@ import pyarrow as pa
 from dora import Node
 from pathlib import Path
 
-def create_leakage_test_scenarios():
-    """Create test scenarios designed to trigger prompt leakage"""
+def create_leakage_test_scenes():
+    """Create test scenes designed to trigger prompt leakage"""
     
-    scenarios = [
-        # Scenario 1: Very short alternating segments
+    scenes = [
+        # Scenes 1: Very short alternating segments
         {
             "name": "short_alternating",
             "description": "Very short alternating segments",
@@ -28,7 +28,7 @@ def create_leakage_test_scenarios():
             ]
         },
         
-        # Scenario 2: Similar sounding words
+        # Scenes 2: Similar sounding words
         {
             "name": "similar_sounds",
             "description": "Words with similar sounds in both languages",
@@ -42,7 +42,7 @@ def create_leakage_test_scenarios():
             ]
         },
         
-        # Scenario 3: Repeated patterns
+        # Scenes 3: Repeated patterns
         {
             "name": "repeated_patterns",
             "description": "Repeated patterns to test state clearing",
@@ -56,7 +56,7 @@ def create_leakage_test_scenarios():
             ]
         },
         
-        # Scenario 4: Mixed within single segment
+        # Scenes 4: Mixed within single segment
         {
             "name": "mixed_single_segment",
             "description": "Mixed Chinese and English in single segments",
@@ -68,7 +68,7 @@ def create_leakage_test_scenarios():
             ]
         },
         
-        # Scenario 5: Rapid succession
+        # Scenes 5: Rapid succession
         {
             "name": "rapid_succession",
             "description": "Segments sent in rapid succession",
@@ -83,20 +83,20 @@ def create_leakage_test_scenarios():
         }
     ]
     
-    return scenarios
+    return scenes
 
-def run_scenario(node, scenario, scenario_index):
+def run_scenario(node, scenario, sceneindex):
     """Run a single test scenario"""
     
     print(f"\n{'='*60}")
-    print(f"Scenario {scenario_index + 1}: {scenario['name']}")
+    print(f"Scenes {sceneindex + 1}: {scenario['name']}")
     print(f"Description: {scenario['description']}")
     print(f"{'='*60}")
     
     segments = scenario['segments']
     results = []
     
-    scenario_start = time.time()
+    scenestart = time.time()
     
     for i, segment in enumerate(segments):
         segment_start = time.time()
@@ -110,7 +110,7 @@ def run_scenario(node, scenario, scenario_index):
             metadata={
                 "session_id": f"leakage_test_{scenario['name']}",
                 "scenario": scenario['name'],
-                "scenario_index": scenario_index,
+                "sceneindex": sceneindex,
                 "segment_id": segment["id"],
                 "text": segment["text"],
                 "language": segment["language"],
@@ -140,8 +140,8 @@ def run_scenario(node, scenario, scenario_index):
         
         print(f"  ✓ Sent in {segment_time:.3f}s")
     
-    scenario_time = time.time() - scenario_start
-    print(f"\nScenario completed in {scenario_time:.3f}s")
+    scenetime = time.time() - scenestart
+    print(f"\nScenes completed in {scenetime:.3f}s")
     
     return results
 
@@ -150,37 +150,37 @@ def main():
     
     print("=" * 80)
     print("Prompt Leakage Detection Test - PrimeSpeech TTS")
-    print("Testing scenarios that might cause prompt leakage")
+    print("Testing scenes that might cause prompt leakage")
     print("=" * 80)
     
     node = Node()
-    scenarios = create_leakage_test_scenarios()
+    scenes = create_leakage_test_scenes()
     
     print(f"\nTest Configuration:")
-    print(f"  Total scenarios: {len(scenarios)}")
-    print(f"  Total segments: {sum(len(s['segments']) for s in scenarios)}")
+    print(f"  Total scenes: {len(scenes)}")
+    print(f"  Total segments: {sum(len(s['segments']) for s in scenes)}")
     
-    scenario_names = [s['name'] for s in scenarios]
-    print(f"  Scenarios: {', '.join(scenario_names)}")
+    scenenames = [s['name'] for s in scenes]
+    print(f"  Scenes: {', '.join(scenenames)}")
     
     # Wait for system initialization
     print("\nWaiting 5 seconds for all nodes to initialize...")
     time.sleep(5)
     
-    # Run all scenarios
+    # Run all scenes
     all_results = {}
     test_start = time.time()
     
-    for i, scenario in enumerate(scenarios):
+    for i, scenario in enumerate(scenes):
         results = run_scenario(node, scenario, i)
         all_results[scenario['name']] = {
             "scenario": scenario,
             "results": results,
-            "scenario_index": i
+            "sceneindex": i
         }
         
-        # Brief pause between scenarios
-        if i < len(scenarios) - 1:
+        # Brief pause between scenes
+        if i < len(scenes) - 1:
             print("\nPausing 3 seconds before next scenario...")
             time.sleep(3)
     
@@ -191,9 +191,9 @@ def main():
         "test_type": "prompt_leakage_detection_comprehensive",
         "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
         "total_test_time": total_test_time,
-        "total_scenarios": len(scenarios),
-        "total_segments": sum(len(s['segments']) for s in scenarios),
-        "scenarios_tested": scenario_names,
+        "total_scenes": len(scenes),
+        "total_segments": sum(len(s['segments']) for s in scenes),
+        "scenes_tested": scenenames,
         "detailed_results": all_results,
         "analysis_instructions": {
             "check_for": [
@@ -215,7 +215,7 @@ def main():
         json.dump(test_results, f, indent=2, ensure_ascii=False)
     
     print(f"\n{'='*80}")
-    print("All scenarios completed!")
+    print("All scenes completed!")
     print(f"Total test time: {total_test_time:.3f}s")
     print(f"Results saved to: {results_path}")
     print("\nNext steps:")

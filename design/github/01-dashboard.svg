@@ -18,8 +18,8 @@
     <!-- AI Tutor -->
     <text x="60" y="191" font-size="15" fill="#94a3b8" font-weight="400">💬 AI Tutor</text>
     
-    <!-- Scenarios -->
-    <text x="60" y="235" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenarios</text>
+    <!-- Scenes -->
+    <text x="60" y="235" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenes</text>
     
     <!-- My Library -->
     <text x="60" y="279" font-size="15" fill="#94a3b8" font-weight="400">📚 My Library</text>

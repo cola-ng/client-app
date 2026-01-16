@@ -130,7 +130,7 @@ Write-Host "Database Statistics:" -ForegroundColor Cyan
 $stats = @"
 SELECT 
     (SELECT COUNT(*) FROM sqlite_master WHERE type='table') as total_tables,
-    (SELECT COUNT(*) FROM scenarios) as scenarios,
+    (SELECT COUNT(*) FROM scenes) as scenes,
     (SELECT COUNT(*) FROM scene_dialogues) as dialogues,
     (SELECT COUNT(*) FROM classic_dialogue_sources) as classic_sources,
     (SELECT COUNT(*) FROM classic_dialogue_clips) as classic_clips,

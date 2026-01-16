@@ -18,7 +18,7 @@ pub struct LearningApiClient {
 // ============================================================================
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Scenario {
+pub struct Scenes {
     pub id: i64,
     pub name_en: String,
     pub name_zh: String,
@@ -35,7 +35,7 @@ pub struct Scenario {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SceneDialogue {
     pub id: i64,
-    pub scenario_id: i64,
+    pub sceneid: i64,
     pub title_en: String,
     pub title_zh: String,
     pub description_en: Option<String>,
@@ -164,7 +164,7 @@ pub struct LearningSession {
     pub session_id: String,
     pub user_id: i64,
     pub session_type: Option<String>,
-    pub scenario_id: Option<i64>,
+    pub sceneid: Option<i64>,
     pub scene_dialogue_id: Option<i64>,
     pub classic_clip_id: Option<i64>,
     pub started_at: String,
@@ -235,7 +235,7 @@ pub struct CreateIssueWordRequest {
 pub struct CreateSessionRequest {
     pub session_id: String,
     pub session_type: Option<String>,
-    pub scenario_id: Option<i64>,
+    pub sceneid: Option<i64>,
     pub scene_dialogue_id: Option<i64>,
     pub classic_clip_id: Option<i64>,
 }
@@ -282,13 +282,13 @@ impl LearningApiClient {
     // Shared Content APIs (no auth required)
     // ========================================================================
 
-    pub async fn list_scenarios(
+    pub async fn list_scenes(
         &self,
         category: Option<&str>,
         difficulty: Option<&str>,
         limit: Option<i64>,
-    ) -> Result<Vec<Scenario>, String> {
-        let mut url = format!("{}/scenarios", self.base_url);
+    ) -> Result<Vec<Scenes>, String> {
+        let mut url = format!("{}/scenes", self.base_url);
         let mut params = vec![];
 
         if let Some(cat) = category {
@@ -323,8 +323,8 @@ impl LearningApiClient {
             .map_err(|e| format!("Parse error: {}", e))
     }
 
-    pub async fn get_scenario(&self, id: i64) -> Result<Scenario, String> {
-        let url = format!("{}/scenarios/{}", self.base_url, id);
+    pub async fn get_scenario(&self, id: i64) -> Result<Scenes, String> {
+        let url = format!("{}/scenes/{}", self.base_url, id);
 
         let response = self
             .client
@@ -344,8 +344,8 @@ impl LearningApiClient {
             .map_err(|e| format!("Parse error: {}", e))
     }
 
-    pub async fn get_scenario_dialogues(&self, scenario_id: i64) -> Result<Vec<SceneDialogue>, String> {
-        let url = format!("{}/scenarios/{}/dialogues", self.base_url, scenario_id);
+    pub async fn get_scenedialogues(&self, sceneid: i64) -> Result<Vec<SceneDialogue>, String> {
+        let url = format!("{}/scenes/{}/dialogues", self.base_url, sceneid);
 
         let response = self
             .client

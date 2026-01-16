@@ -17,7 +17,7 @@ use std::{io, thread};
 
 use colang_core::learning_api::{init_learning_api, set_learning_api_token};
 use colang_core::models::Preferences;
-use colang_core::screens::dialog::dialog_screen::DialogScreenWidgetRefExt;
+use colang_core::screens::conversation::conversation_screen::DialogScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
 use colang_core::screens::settings::{SettingsScreenAction, ThemeMode};
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
@@ -410,7 +410,7 @@ impl AppMain for App {
         self.handle_sidebar_clicks(cx, &actions);
         self.handle_login_clicks(cx, &actions);
         self.handle_mofa_hero_buttons(cx, event);
-        self.handle_dialog_screen_buttons(cx, &actions);
+        self.handle_conversation_screen_buttons(cx, &actions);
         self.handle_review_screen_buttons(cx, &actions);
         self.handle_home_screen_buttons(cx, &actions);
         self.handle_tab_clicks(cx, &actions);
@@ -941,8 +941,8 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             // Stop any running timers
             self.ui
-                .dialog_screen(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                .conversation_screen(ids!(
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .stop_timers(cx);
             // Show home, hide others
@@ -953,7 +953,7 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -963,7 +963,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1007,7 +1007,7 @@ impl App {
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
@@ -1022,7 +1022,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1050,8 +1050,8 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .dialog_screen(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                .conversation_screen(ids!(
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .start_timers(cx);
             self.set_header_page_title(cx, "💬", "交流对话");
@@ -1098,12 +1098,12 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1118,7 +1118,7 @@ impl App {
         // Scene Center tab
         if self
             .ui
-            .button(ids!(sidebar_menu_overlay.sidebar_content.scene_center_tab))
+            .button(ids!(sidebar_menu_overlay.sidebar_content.scenes_tab))
             .clicked(actions)
         {
             self.sidebar_menu_open = false;
@@ -1127,8 +1127,8 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
-                .dialog_screen(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                .conversation_screen(ids!(
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1157,12 +1157,12 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: true });
             self.ui
@@ -1201,8 +1201,8 @@ impl App {
             self.active_tab = None;
             self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
             self.ui
-                .dialog_screen(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                .conversation_screen(ids!(
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .stop_timers(cx);
             self.ui
@@ -1231,7 +1231,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1241,7 +1241,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1664,8 +1664,8 @@ impl App {
     fn apply_dark_mode_screens_with_value(&mut self, cx: &mut Cx, dm: f64) {
         // Apply to Colang screen (main content)
         self.ui
-            .dialog_screen(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+            .conversation_screen(ids!(
+                body.base.content_area.main_content.content.conversation_screen
             ))
             .on_dark_mode_change(cx, dm);
 
@@ -1879,7 +1879,7 @@ impl App {
                 .content_area
                 .main_content
                 .content
-                .dialog_screen
+                .conversation_screen
                 .mofa_hero
                 .action_section
                 .start_view
@@ -1892,7 +1892,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .dialog_screen
+                            .conversation_screen
                             .mofa_hero
                             .action_section
                             .start_view
@@ -1904,7 +1904,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .dialog_screen
+                            .conversation_screen
                             .mofa_hero
                             .action_section
                             .stop_view
@@ -1919,7 +1919,7 @@ impl App {
                 .content_area
                 .main_content
                 .content
-                .dialog_screen
+                .conversation_screen
                 .mofa_hero
                 .action_section
                 .stop_view
@@ -1932,7 +1932,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .dialog_screen
+                            .conversation_screen
                             .mofa_hero
                             .action_section
                             .start_view
@@ -1944,7 +1944,7 @@ impl App {
                             .content_area
                             .main_content
                             .content
-                            .dialog_screen
+                            .conversation_screen
                             .mofa_hero
                             .action_section
                             .stop_view
@@ -2080,7 +2080,7 @@ fn exchange_desktop_code(api_url: &str, code: &str, redirect_uri: &str) -> Resul
 // ============================================================================
 
 impl App {
-    fn handle_dialog_screen_buttons(&mut self, cx: &mut Cx, actions: &[Action]) {
+    fn handle_conversation_screen_buttons(&mut self, cx: &mut Cx, actions: &[Action]) {
         // Handle "选择场景" button click
         if self
             .ui
@@ -2089,7 +2089,7 @@ impl App {
                     .content_area
                     .main_content
                     .content
-                    .dialog_screen
+                    .conversation_screen
                     .main_layout
                     .left_column
                     .chat_container
@@ -2107,20 +2107,20 @@ impl App {
 
             // Stop dialog scene timers
             self.ui
-                .dialog_screen(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                .conversation_screen(ids!(
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .stop_timers(cx);
 
             // Hide dialog scene, show scene center
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: true });
 
@@ -2176,7 +2176,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: true });
 
@@ -2188,7 +2188,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -2233,14 +2233,14 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.scene_center
+                    body.base.content_area.main_content.content.scenario
                 ))
                 .apply_over(cx, live! { visible: true });
 
             // Hide other scenes
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.dialog_screen
+                    body.base.content_area.main_content.content.conversation_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -2294,7 +2294,7 @@ impl App {
             ))
             .clicked(actions)
         {
-            self.navigate_to_dialog_screen(cx);
+            self.navigate_to_conversation_screen(cx);
         }
 
         // Handle quick action: 场景模拟 - navigate to scene center
@@ -2317,7 +2317,7 @@ impl App {
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_scene_center(cx);
+            self.navigate_to_scenario(cx);
         }
 
         // Handle quick action: 经典对白 - navigate to classic dialogues
@@ -2401,14 +2401,14 @@ impl App {
                     .content_scroll
                     .content
                     .right_column
-                    .scenarios_card
-                    .scenarios_row
-                    .scenario_hotel
+                    .scenes_card
+                    .scenes_row
+                    .scenehotel
             ))
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_scene_center(cx);
+            self.navigate_to_scenario(cx);
         }
 
         if self
@@ -2422,14 +2422,14 @@ impl App {
                     .content_scroll
                     .content
                     .right_column
-                    .scenarios_card
-                    .scenarios_row
-                    .scenario_restaurant
+                    .scenes_card
+                    .scenes_row
+                    .scenerestaurant
             ))
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_scene_center(cx);
+            self.navigate_to_scenario(cx);
         }
 
         if self
@@ -2443,39 +2443,39 @@ impl App {
                     .content_scroll
                     .content
                     .right_column
-                    .scenarios_card
-                    .scenarios_row
-                    .scenario_interview
+                    .scenes_card
+                    .scenes_row
+                    .sceneinterview
             ))
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_scene_center(cx);
+            self.navigate_to_scenario(cx);
         }
     }
 
     // Helper navigation methods
-    fn navigate_to_dialog_screen(&mut self, cx: &mut Cx) {
+    fn navigate_to_conversation_screen(&mut self, cx: &mut Cx) {
         self.hide_all_screens(cx);
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+                body.base.content_area.main_content.content.conversation_screen
             ))
             .apply_over(cx, live! { visible: true });
         self.ui
-            .dialog_screen(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+            .conversation_screen(ids!(
+                body.base.content_area.main_content.content.conversation_screen
             ))
             .start_timers(cx);
         self.set_header_page_title(cx, "💬", "交流对话");
         self.ui.redraw(cx);
     }
 
-    fn navigate_to_scene_center(&mut self, cx: &mut Cx) {
+    fn navigate_to_scenario(&mut self, cx: &mut Cx) {
         self.hide_all_screens(cx);
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.scene_center
+                body.base.content_area.main_content.content.scenario
             ))
             .apply_over(cx, live! { visible: true });
         self.set_header_page_title(cx, "🎭", "场景中心");
@@ -2527,8 +2527,8 @@ impl App {
 
         // Stop dialog timers if running
         self.ui
-            .dialog_screen(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+            .conversation_screen(ids!(
+                body.base.content_area.main_content.content.conversation_screen
             ))
             .stop_timers(cx);
 
@@ -2540,7 +2540,7 @@ impl App {
             .apply_over(cx, live! { visible: false });
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.dialog_screen
+                body.base.content_area.main_content.content.conversation_screen
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
@@ -2550,7 +2550,7 @@ impl App {
             .apply_over(cx, live! { visible: false });
         self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.scene_center
+                body.base.content_area.main_content.content.scenario
             ))
             .apply_over(cx, live! { visible: false });
         self.ui

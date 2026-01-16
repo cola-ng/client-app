@@ -11,7 +11,7 @@
   <text x="60" y="147" font-size="15" fill="#94a3b8" font-weight="400">🏠 Dashboard</text>
   <rect x="16" y="160" width="208" height="44" rx="8" fill="#3b82f6"/>
   <text x="60" y="187" font-size="15" fill="#ffffff" font-weight="500">💬 AI Tutor</text>
-  <text x="60" y="231" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenarios</text>
+  <text x="60" y="231" font-size="15" fill="#94a3b8" font-weight="400">🎭 Scenes</text>
   
   <!-- Main Chat Area -->
   <rect x="240" y="0" width="920" height="900" fill="#ffffff"/>
@@ -163,7 +163,7 @@
   <text x="1280" y="578" font-size="13" fill="#3b82f6" text-anchor="middle" font-weight="500">🔁 Change Accent</text>
   
   <rect x="1180" y="601" width="200" height="36" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
-  <text x="1280" y="624" font-size="13" fill="#3b82f6" text-anchor="middle" font-weight="500">🎭 New Scenario</text>
+  <text x="1280" y="624" font-size="13" fill="#3b82f6" text-anchor="middle" font-weight="500">🎭 New Scenes</text>
   
   <rect x="1180" y="647" width="200" height="36" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
   <text x="1280" y="670" font-size="13" fill="#3b82f6" text-anchor="middle" font-weight="500">💾 Save Chat</text>

@@ -85,7 +85,7 @@ python validate_gpu_switching.py
 
 ### YAML Dataflow Configuration
 
-Example configurations for different scenarios:
+Example configurations for different scenes:
 
 #### GPU-Enabled Chinese ASR
 ```yaml

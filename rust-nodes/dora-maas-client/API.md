@@ -740,7 +740,7 @@ Timeouts trigger `status="timeout"` and `session_status="ended"`.
 ### 1. Session Management
 
 ```python
-# Use meaningful session IDs for multi-user scenarios
+# Use meaningful session IDs for multi-user scenes
 session_id = f"user_{user_id}_session_{timestamp}"
 metadata = {"session_id": session_id}
 node.send_output("text", user_message, metadata)
@@ -852,6 +852,6 @@ if event["metadata"].get("session_status") == "cancelled":
 
 ## See Also
 
-- [Dora Conference Bridge API](dora-conference-bridge/API.md) - For multi-participant scenarios
+- [Dora Conference Bridge API](dora-conference-bridge/API.md) - For multi-participant scenes
 - [Dora ASR Integration](dora-asr/README.md) - Speech recognition integration
 - [Dora TTS Integration](dora-primespeech/README.md) - Text-to-speech integration
