@@ -87,9 +87,12 @@ live_design! {
             width: Fill, height: 75
             show_bg: true
             draw_bg: {
+                instance dark_mode: 0.0
                 border_radius: 12.0
                 fn pixel(self) -> vec4 {
-                    return vec4(0.063, 0.725, 0.502, 0.2);
+                    let light_color = vec4(0.063, 0.725, 0.502, 0.2);
+                    let dark_color = vec4(0.125, 0.65, 0.475, 0.3);
+                    return mix(light_color, dark_color, self.dark_mode);
                 }
             }
             align: {x: 0.5, y: 0.5}
@@ -137,9 +140,12 @@ live_design! {
             width: 60, height: 60
             show_bg: true
             draw_bg: {
+                instance dark_mode: 0.0
                 border_radius: 8.0
                 fn pixel(self) -> vec4 {
-                    return vec4(0.1, 0.1, 0.18, 1.0);
+                    let light_color = vec4(0.1, 0.1, 0.18, 1.0);
+                    let dark_color = vec4(0.2, 0.2, 0.3, 1.0);
+                    return mix(light_color, dark_color, self.dark_mode);
                 }
             }
             align: {x: 0.5, y: 0.5}
@@ -172,8 +178,11 @@ live_design! {
             description = <Label> {
                 text: "场景描述"
                 draw_text: {
+                    instance dark_mode: 0.0
                     text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                    color: (ACCENT_INDIGO)
+                    fn get_color(self) -> vec4 {
+                        return mix((ACCENT_INDIGO), (INDIGO_400), self.dark_mode);
+                    }
                 }
             }
         }

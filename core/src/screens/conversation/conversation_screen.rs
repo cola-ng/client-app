@@ -608,7 +608,14 @@ live_design! {
             log_scrim = <View> {
                 width: Fill, height: Fill
                 show_bg: true
-                draw_bg: { color: vec4(0.0, 0.0, 0.0, 0.35) }
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    fn pixel(self) -> vec4 {
+                        let light_color = vec4(0.0, 0.0, 0.0, 0.35);
+                        let dark_color = vec4(0.0, 0.0, 0.0, 0.5);
+                        return mix(light_color, dark_color, self.dark_mode);
+                    }
+                }
             }
 
             log_modal = <RoundedView> {

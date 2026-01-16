@@ -486,12 +486,23 @@ live_design! {
                                     width: Fit, height: Fit
                                     padding: {left: 8, right: 8, top: 2, bottom: 2}
                                     show_bg: true
-                                    draw_bg: { color: #fff7ed, border_radius: 4.0 }
+                                    draw_bg: {
+                                        instance dark_mode: 0.0
+                                        fn pixel(self) -> vec4 {
+                                            let light_color = vec4(1.0, 0.97, 0.93, 1.0);
+                                            let dark_color = (AMBER_500);
+                                            return mix(light_color, dark_color, self.dark_mode);
+                                        }
+                                        border_radius: 4.0
+                                    }
                                     <Label> {
                                         text: "Alpha"
                                         draw_text: {
+                                            instance dark_mode: 0.0
                                             text_style: <FONT_MEDIUM>{ font_size: 10.0 }
-                                            color: #c2410c
+                                            fn get_color(self) -> vec4 {
+                                                return mix((RED_600), (RED_400), self.dark_mode);
+                                            }
                                         }
                                     }
                                 }

@@ -266,8 +266,13 @@ live_design! {
                         width: 40
                         text: "80%"
                         draw_text: {
+                            instance dark_mode: 0.0
                             text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                            color: vec4(0.984, 0.749, 0.141, 1.0)
+                            fn get_color(self) -> vec4 {
+                                let light_color = vec4(0.984, 0.749, 0.141, 1.0);
+                                let dark_color = (YELLOW_500);
+                                return mix(light_color, dark_color, self.dark_mode);
+                            }
                         }
                     }
                 }

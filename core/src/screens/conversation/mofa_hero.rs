@@ -17,7 +17,10 @@ live_design! {
         width: Fit, height: Fit
         padding: { left: 12, right: 12, top: 6, bottom: 6 }
         draw_bg: {
-            color: (ACCENT_GREEN)
+            instance dark_mode: 0.0
+            fn pixel(self) -> vec4 {
+                return mix((ACCENT_GREEN), (GREEN_400), self.dark_mode);
+            }
             border_radius: 12.0
         }
         status_label = <Label> {
@@ -76,17 +79,25 @@ live_design! {
                     width: 32, height: 32
                     show_bg: true
                     draw_bg: {
+                        instance dark_mode: 0.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             sdf.circle(self.rect_size.x * 0.5, self.rect_size.y * 0.5, 14.0);
-                            sdf.fill(vec4(0.133, 0.773, 0.373, 0.15));
+                            let light_color = vec4(0.133, 0.773, 0.373, 0.15);
+                            let dark_color = vec4(0.2, 0.85, 0.45, 0.25);
+                            sdf.fill(mix(light_color, dark_color, self.dark_mode));
                             return sdf.result;
                         }
                     }
                     <Icon> {
                         draw_icon: {
+                            instance dark_mode: 0.0
                             svg_file: (ICO_START)
-                            fn get_color(self) -> vec4 { return vec4(0.133, 0.773, 0.373, 1.0); }
+                            fn get_color(self) -> vec4 {
+                                let light_color = vec4(0.133, 0.773, 0.373, 1.0);
+                                let dark_color = vec4(0.3, 0.9, 0.5, 1.0);
+                                return mix(light_color, dark_color, self.dark_mode);
+                            }
                         }
                         icon_walk: {width: 20, height: 20}
                     }
@@ -122,17 +133,25 @@ live_design! {
                     width: 32, height: 32
                     show_bg: true
                     draw_bg: {
+                        instance dark_mode: 0.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             sdf.circle(self.rect_size.x * 0.5, self.rect_size.y * 0.5, 14.0);
-                            sdf.fill(vec4(0.937, 0.267, 0.267, 0.15));
+                            let light_color = vec4(0.937, 0.267, 0.267, 0.15);
+                            let dark_color = vec4(1.0, 0.4, 0.4, 0.25);
+                            sdf.fill(mix(light_color, dark_color, self.dark_mode));
                             return sdf.result;
                         }
                     }
                     <Icon> {
                         draw_icon: {
+                            instance dark_mode: 0.0
                             svg_file: (ICO_STOP)
-                            fn get_color(self) -> vec4 { return vec4(0.937, 0.267, 0.267, 1.0); }
+                            fn get_color(self) -> vec4 {
+                                let light_color = vec4(0.937, 0.267, 0.267, 1.0);
+                                let dark_color = vec4(1.0, 0.45, 0.45, 1.0);
+                                return mix(light_color, dark_color, self.dark_mode);
+                            }
                         }
                         icon_walk: {width: 20, height: 20}
                     }
@@ -180,7 +199,10 @@ live_design! {
                 status_dot = <RoundedView> {
                     width: 12, height: 12
                     draw_bg: {
-                        color: (ACCENT_GREEN)
+                        instance dark_mode: 0.0
+                        fn pixel(self) -> vec4 {
+                            return mix((ACCENT_GREEN), (GREEN_400), self.dark_mode);
+                        }
                         border_radius: 6.0
                     }
                 }

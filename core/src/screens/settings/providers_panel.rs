@@ -231,7 +231,7 @@ impl Widget for ProvidersPanel {
                             self.view.view(item_id.clone()).apply_over(
                                 cx,
                                 live! {
-                                    draw_bg: { color: (vec4(0.2, 0.25, 0.33, 1.0)) }
+                                    draw_bg: { color: (vec4(0.2, 0.255, 0.333, 1.0)) }
                                 },
                             );
                         } else {
@@ -239,7 +239,7 @@ impl Widget for ProvidersPanel {
                             self.view.view(item_id.clone()).apply_over(
                                 cx,
                                 live! {
-                                    draw_bg: { color: (vec4(0.95, 0.96, 0.98, 1.0)) }
+                                    draw_bg: { color: (vec4(0.945, 0.960, 0.976, 1.0)) }
                                 },
                             );
                         }
@@ -261,7 +261,7 @@ impl Widget for ProvidersPanel {
                             self.view.view(item_id.clone()).apply_over(
                                 cx,
                                 live! {
-                                    draw_bg: { color: (vec4(0.12, 0.16, 0.23, 1.0)) }
+                                    draw_bg: { color: (vec4(0.122, 0.157, 0.231, 1.0)) }
                                 },
                             );
                         } else {
@@ -325,7 +325,7 @@ impl Widget for ProvidersPanel {
                         self.view.view(item_id.clone()).apply_over(
                             cx,
                             live! {
-                                draw_bg: { color: (vec4(0.12, 0.16, 0.23, 1.0)) }
+                                draw_bg: { color: (vec4(0.122, 0.157, 0.231, 1.0)) }
                             },
                         );
                     } else {
@@ -346,7 +346,7 @@ impl Widget for ProvidersPanel {
                             self.view.view(ids!(list_container.openai_item)).apply_over(
                                 cx,
                                 live! {
-                                    draw_bg: { color: (vec4(0.12, 0.23, 0.37, 1.0)) }
+                                    draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
                                 },
                             );
                         } else {
@@ -354,7 +354,7 @@ impl Widget for ProvidersPanel {
                             self.view.view(ids!(list_container.openai_item)).apply_over(
                                 cx,
                                 live! {
-                                    draw_bg: { color: (vec4(0.86, 0.92, 1.0, 1.0)) }
+                                    draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
                                 },
                             );
                         }
@@ -366,7 +366,7 @@ impl Widget for ProvidersPanel {
                                 .apply_over(
                                     cx,
                                     live! {
-                                        draw_bg: { color: (vec4(0.12, 0.23, 0.37, 1.0)) }
+                                        draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
                                     },
                                 );
                         } else {
@@ -375,7 +375,7 @@ impl Widget for ProvidersPanel {
                                 .apply_over(
                                     cx,
                                     live! {
-                                        draw_bg: { color: (vec4(0.86, 0.92, 1.0, 1.0)) }
+                                        draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
                                     },
                                 );
                         }
@@ -387,7 +387,7 @@ impl Widget for ProvidersPanel {
                                 .apply_over(
                                     cx,
                                     live! {
-                                        draw_bg: { color: (vec4(0.12, 0.23, 0.37, 1.0)) }
+                                        draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
                                     },
                                 );
                         } else {
@@ -396,7 +396,7 @@ impl Widget for ProvidersPanel {
                                 .apply_over(
                                     cx,
                                     live! {
-                                        draw_bg: { color: (vec4(0.86, 0.92, 1.0, 1.0)) }
+                                        draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
                                     },
                                 );
                         }
