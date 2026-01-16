@@ -8,6 +8,7 @@ live_design! {
     use link::shaders::*;
 
     use widgets::theme::*;
+    use makepad_component::*;
 
     // Reusable components for settings panels
     pub SectionTitle = <Label> {
@@ -98,27 +99,16 @@ live_design! {
     }
 
     // Simple checkbox style for settings
-    pub SettingsCheckBox = <CheckBox> {
+    pub SettingsCheckBox = <MpCheckbox> {
         width: Fit, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
+        text: ""
     }
 
     // Simple radio button style for settings
-    pub SettingsRadioButton = <RadioButton> {
+    pub SettingsRadioButton = <MpRadio> {
         width: Fit, height: Fit
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-            }
-        }
+        text: ""
+        value: ""
     }
 
     // Language dropdown

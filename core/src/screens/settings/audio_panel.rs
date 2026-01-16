@@ -8,6 +8,7 @@ live_design! {
     use link::shaders::*;
 
     use widgets::theme::*;
+    use makepad_component::*;
 
     use crate::screens::settings::general_panel::SectionTitle;
     use crate::screens::settings::general_panel::SettingsRow;
@@ -117,11 +118,10 @@ live_design! {
 
             <SettingsRow> {
                 <SettingsLabel> { text: "Volume" width: 120 }
-                speaker_volume = <Slider> {
+                speaker_volume = <MpSlider> {
                     width: Fill, height: Fit
                     min: 0.0, max: 100.0
                     step: 1.0
-                    text: ""
                 }
                 speaker_volume_label = <Label> {
                     width: 40
@@ -154,11 +154,10 @@ live_design! {
 
             <SettingsRow> {
                 <SettingsLabel> { text: "Input Volume" width: 120 }
-                mic_volume = <Slider> {
+                mic_volume = <MpSlider> {
                     width: Fill, height: Fit
                     min: 0.0, max: 100.0
                     step: 1.0
-                    text: ""
                 }
                 mic_volume_label = <Label> {
                     width: 40
