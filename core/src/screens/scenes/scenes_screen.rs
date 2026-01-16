@@ -566,12 +566,13 @@ impl Widget for Scenes {
     }
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
+        let today_list_id = self.view.portal_list(ids!(today_cards)).widget_uid();
+        let classic_list_id = self.view.portal_list(ids!(classic_cards)).widget_uid();
+
         while let Some(item) = self.view.draw_walk(cx, scope, walk).step() {
             if let Some(mut list) = item.as_portal_list().borrow_mut() {
                 // Check which list this is by its live_id
                 let list_id = list.widget_uid();
-                let today_list_id = self.view.portal_list(ids!(today_cards)).widget_uid();
-                let classic_list_id = self.view.portal_list(ids!(classic_cards)).widget_uid();
 
                 if list_id == today_list_id {
                     // Render scenes
