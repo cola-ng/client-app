@@ -347,6 +347,7 @@ impl LiveHook for App {
 impl LiveRegister for App {
     fn live_register(cx: &mut Cx) {
         makepad_widgets::live_design(cx);
+        makepad_component::live_design(cx);
         colang_widgets::live_design(cx);
         colang_core::screens::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);

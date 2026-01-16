@@ -9,6 +9,7 @@ live_design! {
     use link::shaders::*;
 
     use colang_widgets::theme::*;
+    use makepad_component::widgets::slider::*;
 
     use crate::screens::settings::general_panel::SectionTitle;
     use crate::screens::settings::general_panel::SettingsRow;

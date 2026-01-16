@@ -83,7 +83,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-
     // Font definitions with Chinese and Emoji support
     pub FONT_REGULAR = {
         font_family: {
