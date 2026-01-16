@@ -11,7 +11,8 @@ use makepad_component::*;
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     // Import fonts and colors from shared theme
     use widgets::theme::FONT_REGULAR;

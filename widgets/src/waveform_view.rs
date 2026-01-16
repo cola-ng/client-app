@@ -80,7 +80,8 @@ use makepad_component::*;
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     // Import colors from theme
     use crate::theme::SLATE_950;

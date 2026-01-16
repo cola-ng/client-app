@@ -11,7 +11,8 @@ use crate::models::{Preferences, Provider, ProviderId};
 
 live_design! {
     use link::theme::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
     use link::shaders::*;
 
     use widgets::theme::*;

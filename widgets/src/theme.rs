@@ -82,7 +82,8 @@ use makepad_component::*;
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     // Font definitions with Chinese and Emoji support
     pub FONT_REGULAR = {

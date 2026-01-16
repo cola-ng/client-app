@@ -8,7 +8,8 @@ use crate::models::{Provider, ProviderConnectionStatus, ProviderId};
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     use widgets::theme::*;
 

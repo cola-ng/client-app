@@ -26,7 +26,8 @@ mod log_panel;
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     use widgets::theme::*;
     use widgets::participant_panel::ParticipantPanel;

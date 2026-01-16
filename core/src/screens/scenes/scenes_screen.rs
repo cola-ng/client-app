@@ -16,7 +16,8 @@ use crate::asset_api::{ClassicDialogueSource, Scene, get_asset_api};
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;use makepad_component::*;
+    use link::widgets::*;
+    use makepad_component::*;
 
     use widgets::theme::*;
 
