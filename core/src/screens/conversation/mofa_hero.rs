@@ -8,8 +8,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    
-    use makepad_component::*;
 
 
     use colang_widgets::theme::*;
@@ -79,7 +77,6 @@ live_design! {
                 flow: Right
                 spacing: 10
                 align: {x: 0.0, y: 0.5}
-                cursor: Hand
 
                 start_icon = <View> {
                     width: 32, height: 32
@@ -133,7 +130,6 @@ live_design! {
                 flow: Right
                 spacing: 10
                 align: {x: 0.0, y: 0.5}
-                cursor: Hand
 
                 stop_icon = <View> {
                     width: 32, height: 32

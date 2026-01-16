@@ -9,7 +9,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use makepad_component::*;
 
     use colang_widgets::theme::*;
 
@@ -26,7 +25,6 @@ live_design! {
         draw_bg: {
             border_radius: 0
         }
-        cursor: Hand
         flow: Right
         align: {x: 0.0, y: 0.5}
     }
@@ -84,7 +82,6 @@ live_design! {
             border_radius: 0
             color: (WHITE)
         }
-        cursor: Hand
         flow: Right
         align: {x: 0.0, y: 0.5}
     }

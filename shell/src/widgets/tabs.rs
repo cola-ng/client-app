@@ -31,7 +31,6 @@ live_design! {
         flow: Right
         align: {y: 0.5}
         padding: {left: 12, right: 4, top: 0, bottom: 0}
-        cursor: Hand
         show_bg: true
         draw_bg: {
             instance active: 0.0
@@ -72,7 +71,6 @@ live_design! {
 
         close_btn = <View> {
             width: 18, height: 18
-            cursor: Hand
             show_bg: true
             draw_bg: {
                 instance hover: 0.0
@@ -102,7 +100,6 @@ live_design! {
         flow: Right
         align: {y: 0.5}
         padding: {left: 12, right: 12, top: 0, bottom: 0}
-        cursor: Hand
         show_bg: true
         draw_bg: {
             instance active: 0.0

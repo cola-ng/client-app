@@ -211,7 +211,6 @@ live_design! {
                 flow: Down
                 spacing: 4
                 align: {x: 0.5, y: 0.0}
-                cursor: Hand
 
                 action_start_label = <Label> {
                     text: "Start MoFA"
@@ -243,7 +242,6 @@ live_design! {
                 flow: Down
                 spacing: 4
                 align: {x: 0.5, y: 0.0}
-                cursor: Hand
 
                 action_stop_label = <Label> {
                     text: "Stop MoFA"

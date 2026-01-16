@@ -150,7 +150,6 @@ live_design! {
                 debug_btn = <View> {
                     width: 36, height: 36
                     align: {x: 0.5, y: 0.5}
-                    cursor: Hand
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0
@@ -187,7 +186,6 @@ live_design! {
                 theme_toggle = <View> {
                     width: 36, height: 36
                     align: {x: 0.5, y: 0.5}
-                    cursor: Hand
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0
@@ -259,7 +257,6 @@ live_design! {
                     flow: Right
                     align: {x: 0.5, y: 0.5}
                     spacing: 4
-                    cursor: Hand
 
                     login_btn = <Button> {
                         width: Fit, height: 32
@@ -321,7 +318,6 @@ live_design! {
                     margin: {left: 8}
                     padding: 0
                     align: {x: 0.5, y: 0.5}
-                    cursor: Hand
 
                     draw_text: {
                         text_style: <FONT_BOLD>{ font_size: 18.0 }
@@ -421,7 +417,6 @@ live_design! {
                 debug_splitter = <View> {
                     width: 6, height: Fill
                     visible: true
-                    cursor: EwResize
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0

@@ -108,7 +108,6 @@ live_design! {
         // Text input
         search_input = <TextInput> {
             width: Fill, height: Fit
-            empty_message: "Search for a word..."
 
             draw_bg: {
                 color: #0000
@@ -340,7 +339,6 @@ live_design! {
         padding: {left: 16, right: 16, top: 12, bottom: 12}
         flow: Down
         spacing: 4
-        cursor: Hand
 
         show_bg: true
         draw_bg: {
@@ -523,7 +521,6 @@ live_design! {
     CategoryTag = <View> {
         width: Fit, height: Fit
         padding: {left: 14, right: 14, top: 8, bottom: 8}
-        cursor: Hand
 
         show_bg: true
         draw_bg: {
@@ -618,7 +615,6 @@ live_design! {
         flow: Right
         spacing: 10
         align: {y: 0.5}
-        cursor: Hand
 
         show_bg: true
         draw_bg: {

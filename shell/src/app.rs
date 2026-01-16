@@ -115,7 +115,6 @@ live_design! {
             sidebar_trigger_overlay = <View> {
                 width: 28, height: 28
                 abs_pos: vec2(18.0, 16.0)
-                cursor: Hand
             }
 
             sidebar_menu_overlay = <View> {
@@ -348,7 +347,7 @@ impl LiveHook for App {
 impl LiveRegister for App {
     fn live_register(cx: &mut Cx) {
         makepad_widgets::live_design(cx);
-        widgets::live_design(cx);
+        colang_widgets::live_design(cx);
         colang_core::screens::live_design(cx);
         colang_shell::widgets::sidebar::live_design(cx);
         colang_shell::widgets::tabs::live_design(cx);

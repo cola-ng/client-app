@@ -9,7 +9,6 @@ live_design! {
     use link::theme::*;
     use link::shaders::*;
     use link::widgets::*;
-    use makepad_component::*;
 
     use colang_widgets::theme::*;
 
@@ -196,7 +195,6 @@ live_design! {
         spacing: 8
         padding: {top: 6, bottom: 6}
         align: {y: 0.5}
-        cursor: Hand
 
         radio_circle = <View> {
             width: 16, height: 16

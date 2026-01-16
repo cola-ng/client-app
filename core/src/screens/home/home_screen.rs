@@ -158,7 +158,6 @@ live_design! {
         flow: Down
         spacing: 6
         align: {x: 0.5}
-        cursor: Hand
 
         action_panel = <PanelBase> {
             width: Fill, height: 60
@@ -207,7 +206,6 @@ live_design! {
         flow: Down
         spacing: 6
         align: {x: 0.5}
-        cursor: Hand
 
         sceneicon = <Label> {
             draw_text: {

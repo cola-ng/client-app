@@ -9,8 +9,6 @@ live_design! {
 
     use colang_widgets::theme::*;
 
-    use makepad_component::*;
-
     // Reusable components for settings panels
     pub SectionTitle = <Label> {
         margin: {top: 16, bottom: 8}

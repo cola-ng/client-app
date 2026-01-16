@@ -5,8 +5,6 @@ live_design! {
     use link::shaders::*;
     use link::widgets::*;
 
-    use makepad_component::*;
-
     use colang_widgets::theme::*;
 
     pub CardBase = <RoundedView> {

@@ -82,7 +82,6 @@ live_design! {
         padding: 12
         flow: Down
         spacing: 8
-        cursor: Hand
 
         icon_area = <RoundedView> {
             width: Fill, height: 75
@@ -135,7 +134,6 @@ live_design! {
         padding: 12
         flow: Right
         spacing: 12
-        cursor: Hand
 
         icon_area = <RoundedView> {
             width: 60, height: 60
