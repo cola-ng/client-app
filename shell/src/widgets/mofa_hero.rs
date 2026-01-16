@@ -1,11 +1,12 @@
 //! MofaHero Widget - System status bar with Dataflow, Audio Buffer, CPU, and Memory panels
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Import from shared theme (single source of truth)
     use mofa_widgets::theme::*;

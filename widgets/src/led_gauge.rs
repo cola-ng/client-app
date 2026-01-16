@@ -69,11 +69,12 @@
 //! | `fill_pct` | 0.0-1.0 | Fill percentage (0=empty, 1=full) |
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Import colors from theme
     use crate::theme::ACCENT_RED;

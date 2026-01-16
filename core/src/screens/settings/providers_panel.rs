@@ -1,13 +1,14 @@
 //! Providers Panel - List of AI providers
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use crate::models::ProviderId;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     use widgets::theme::*;
 

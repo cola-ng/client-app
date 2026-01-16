@@ -1,11 +1,12 @@
 //! MofaHero Widget - Session control strip for the AI dialog screen
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
     use widgets::theme::*;
 
     // Icons

@@ -3,6 +3,7 @@
 //! Handles chat display, prompt input, and message formatting.
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use super::{ChatMessageEntry, ConversationScreen};
 

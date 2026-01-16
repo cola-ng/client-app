@@ -3,6 +3,7 @@
 //! Handles audio device selection, mic monitoring, and level visualization.
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use super::ConversationScreen;
 

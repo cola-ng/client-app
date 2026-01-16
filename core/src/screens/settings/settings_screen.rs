@@ -1,7 +1,8 @@
 //! Settings screen - main entry point with tab navigation
 
 use makepad_widgets::*;
-use makepad_component::widgets::MpRadioWidgetExt;
+use makepad_component::*;
+use makepad_component::widgets::MpRadioWidgetRefExt;
 
 use super::provider_view::ProviderViewWidgetExt;
 use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
@@ -10,7 +11,7 @@ use crate::models::{Preferences, Provider, ProviderId};
 
 live_design! {
     use link::theme::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
     use link::shaders::*;
 
     use widgets::theme::*;
@@ -491,19 +492,39 @@ impl Widget for SettingsScreen {
         }
 
         // Handle appearance radio buttons using MpRadio
-        let light_radio = self.view.mp_radio(ids!(
-            content.pages.general_page.appearance_section.appearance_radios.light_radio
-        ));
-        let dark_radio = self.view.mp_radio(ids!(
-            content.pages.general_page.appearance_section.appearance_radios.dark_radio
-        ));
-        let auto_radio = self.view.mp_radio(ids!(
-            content.pages.general_page.appearance_section.appearance_radios.auto_radio
-        ));
-
-        if light_radio.changed(actions).is_some() {
-            dark_radio.set_checked(cx, false);
-            auto_radio.set_checked(cx, false);
+        if self
+            .view
+            .mp_radio(ids!(
+                content
+                    .pages
+                    .general_page
+                    .appearance_section
+                    .appearance_radios
+                    .light_radio
+            ))
+            .changed(actions)
+            .is_some()
+        {
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .dark_radio
+                ))
+                .set_checked(cx, false);
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .auto_radio
+                ))
+                .set_checked(cx, false);
             cx.widget_action(
                 self.widget_uid(),
                 &scope.path,
@@ -511,9 +532,39 @@ impl Widget for SettingsScreen {
             );
         }
 
-        if dark_radio.changed(actions).is_some() {
-            light_radio.set_checked(cx, false);
-            auto_radio.set_checked(cx, false);
+        if self
+            .view
+            .mp_radio(ids!(
+                content
+                    .pages
+                    .general_page
+                    .appearance_section
+                    .appearance_radios
+                    .dark_radio
+            ))
+            .changed(actions)
+            .is_some()
+        {
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .light_radio
+                ))
+                .set_checked(cx, false);
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .auto_radio
+                ))
+                .set_checked(cx, false);
             cx.widget_action(
                 self.widget_uid(),
                 &scope.path,
@@ -521,9 +572,39 @@ impl Widget for SettingsScreen {
             );
         }
 
-        if auto_radio.changed(actions).is_some() {
-            light_radio.set_checked(cx, false);
-            dark_radio.set_checked(cx, false);
+        if self
+            .view
+            .mp_radio(ids!(
+                content
+                    .pages
+                    .general_page
+                    .appearance_section
+                    .appearance_radios
+                    .auto_radio
+            ))
+            .changed(actions)
+            .is_some()
+        {
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .light_radio
+                ))
+                .set_checked(cx, false);
+            self.view
+                .mp_radio(ids!(
+                    content
+                        .pages
+                        .general_page
+                        .appearance_section
+                        .appearance_radios
+                        .dark_radio
+                ))
+                .set_checked(cx, false);
             cx.widget_action(
                 self.widget_uid(),
                 &scope.path,

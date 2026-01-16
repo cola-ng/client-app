@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use super::{ChatMessageEntry, ConversationScreen};
 use crate::dora_integration::{DoraEvent, DoraIntegration};

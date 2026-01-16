@@ -1,13 +1,14 @@
 //! Provider View - Right panel for provider configuration
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use crate::models::{Provider, ProviderConnectionStatus, ProviderId};
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     use widgets::theme::*;
 

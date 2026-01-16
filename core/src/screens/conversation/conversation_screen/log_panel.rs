@@ -3,6 +3,7 @@
 //! Handles log display, filtering, and clipboard operations.
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use super::ConversationScreen;
 use crate::log_bridge;

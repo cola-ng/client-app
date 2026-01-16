@@ -75,11 +75,12 @@
 //! Attack is faster (0.3) than decay (0.1) for natural audio response.
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Import colors from theme
     use crate::theme::SLATE_950;

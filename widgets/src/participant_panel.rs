@@ -77,11 +77,12 @@
 //! | `band0`-`band7` | ParticipantWaveform | 0.0-1.0 | Frequency band levels |
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Shared theme fonts/colors
     use widgets::theme::*;

@@ -1,4 +1,5 @@
 use makepad_widgets::*;
+use makepad_component::*;
 
 fn view_ref_from_view(view: &View, path: &[LiveId]) -> ViewRef {
     let mut current = makepad_widgets::View::view(view, path[0]);

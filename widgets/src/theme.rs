@@ -77,11 +77,12 @@
 //!   → `#1f293b` because `1e` looks like scientific notation).
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Font definitions with Chinese and Emoji support
     pub FONT_REGULAR = {

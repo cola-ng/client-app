@@ -10,11 +10,12 @@
 //! - Recommended scenes
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     use widgets::theme::*;
 

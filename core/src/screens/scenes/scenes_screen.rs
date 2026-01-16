@@ -9,13 +9,14 @@
 use std::sync::mpsc;
 
 use makepad_widgets::*;
+use makepad_component::*;
 
 use crate::asset_api::{ClassicDialogueSource, Scene, get_asset_api};
 
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     use widgets::theme::*;
 

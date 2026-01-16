@@ -23,6 +23,7 @@ use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
 use colang_core::screens::settings::{SettingsScreenAction, ThemeMode};
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
 use makepad_widgets::*;
+use makepad_component::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 use widgets::StateChangeListener;
@@ -53,7 +54,7 @@ enum DesktopAuthResult {
 live_design! {
     use link::theme::*;
     use link::shaders::*;
-    use link::widgets::*;
+    use link::widgets::*;use makepad_component::*;
 
     // Import fonts and colors from shared theme (single source of truth)
     use widgets::theme::FONT_REGULAR;
