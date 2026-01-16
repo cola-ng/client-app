@@ -18,7 +18,7 @@ use std::{io, thread};
 use colang_core::asset_api::init_asset_api;
 use colang_core::learn_api::{init_learn_api, set_learn_api_token};
 use colang_core::models::Preferences;
-use colang_core::screens::conversation::conversation_screen::DialogScreenWidgetRefExt;
+use colang_core::screens::conversation::conversation_screen::ConversationScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
 use colang_core::screens::settings::{SettingsScreenAction, ThemeMode};
 use colang_shell::widgets::sidebar::SidebarWidgetRefExt;
@@ -316,7 +316,7 @@ impl LiveHook for App {
         self.website_url = config.website_url;
 
         // Initialize the app registry with all installed apps
-        // self.app_registry.register(DialogScreen::info());
+        // self.app_registry.register(ConversationScreen::info());
         // self.app_registry.register(SettingsScreen::info());
 
         // Load user preferences and restore dark mode

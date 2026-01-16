@@ -39,13 +39,11 @@ live_design! {
     use widgets::theme::TEXT_SECONDARY_DARK;
 
     use colang_core::screens::home::home_screen::HomeScreen;
-    use colang_core::screens::dialog::conversation_screen::DialogScreen;
+    use colang_core::screens::dialog::conversation_screen::ConversationScreen;
     use colang_core::screens::review::review_screen::ReviewScreen;
-    use colang_core::screens::scenario::scenes_screen::Scenes;
+    use colang_core::screens::scenario::scenes_screen::ScenesScreen;
     use colang_core::screens::settings::settings_screen::SettingsScreen;
-    use colang_core::screens::assistant::assistant_screen::AssistantScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
-    use colang_core::screens::classic_dialogues::classic_dialogues_screen::ClassicDialoguesScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
     use widgets::debug_panel::DebugPanel;
@@ -336,12 +334,12 @@ live_design! {
                             visible: true
                         }
 
-                        conversation_screen = <DialogScreen> {
+                        conversation_screen = <ConversationScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
 
-                        scenario = <Scenes> {
+                        scenes_screen = <ScenesScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }
@@ -351,17 +349,7 @@ live_design! {
                             visible: false
                         }
 
-                        assistant_screen = <AssistantScreen> {
-                            width: Fill, height: Fill
-                            visible: false
-                        }
-
                         reading_screen = <ReadingScreen> {
-                            width: Fill, height: Fill
-                            visible: false
-                        }
-
-                        classic_dialogues_screen = <ClassicDialoguesScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }

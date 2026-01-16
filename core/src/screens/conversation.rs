@@ -1,7 +1,7 @@
 pub mod conversation_screen;
 pub mod mofa_hero;
 
-pub use conversation_screen::{DialogScreen, DialogScreenWidgetRefExt};
+pub use conversation_screen::{ConversationScreen, ConversationScreenWidgetRefExt};
 use makepad_widgets::Cx;
 
 pub(super) fn live_design(cx: &mut Cx) {

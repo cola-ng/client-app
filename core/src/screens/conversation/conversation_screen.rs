@@ -65,7 +65,7 @@ live_design! {
     }
 
     // Colang Screen - refreshed layout inspired by the sketch
-    pub DialogScreen = {{DialogScreen}} {
+    pub ConversationScreen = {{ConversationScreen}} {
         width: Fill, height: Fill
         flow: Overlay
         padding: { left: 16, right: 16, top: 16, bottom: 16 }
@@ -707,7 +707,7 @@ live_design! {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct DialogScreen {
+pub struct ConversationScreen {
     #[deref]
     view: View,
     #[rust]
@@ -752,7 +752,7 @@ pub struct DialogScreen {
     participant_levels: [f64; 2], // 0=myself, 1=teacher
 }
 
-impl Widget for DialogScreen {
+impl Widget for ConversationScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -992,7 +992,7 @@ impl Widget for DialogScreen {
     }
 }
 
-impl DialogScreenRef {
+impl ConversationScreenRef {
     /// Stop audio and dora timers - call this before hiding/removing the widget
     /// to prevent timer callbacks on inactive state
     /// Note: AEC blink animation is shader-driven and doesn't need stopping
@@ -1000,7 +1000,7 @@ impl DialogScreenRef {
         if let Some(inner) = self.borrow_mut() {
             cx.stop_timer(inner.audio_timer);
             cx.stop_timer(inner.dora_timer);
-            ::log::debug!("DialogScreen timers stopped");
+            ::log::debug!("ConversationScreen timers stopped");
         }
     }
 
@@ -1010,12 +1010,12 @@ impl DialogScreenRef {
         if let Some(mut inner) = self.borrow_mut() {
             inner.audio_timer = cx.start_interval(0.05); // 50ms for mic level
             inner.dora_timer = cx.start_interval(0.1); // 100ms for dora events
-            ::log::debug!("DialogScreen timers started");
+            ::log::debug!("ConversationScreen timers started");
         }
     }
 }
 
-impl StateChangeListener for DialogScreenRef {
+impl StateChangeListener for ConversationScreenRef {
     fn on_dark_mode_change(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Apply dark mode to screen background
