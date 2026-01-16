@@ -1,6 +1,7 @@
 //! Settings screen - main entry point with tab navigation
 
 use makepad_widgets::*;
+use makepad_component::widgets::MpRadioWidgetExt;
 
 use super::provider_view::ProviderViewWidgetExt;
 use super::providers_panel::{ProvidersPanelAction, ProvidersPanelWidgetExt};
@@ -489,42 +490,44 @@ impl Widget for SettingsScreen {
             self.clear_cache(cx);
         }
 
-        // Handle appearance radio buttons
-        // Order in ids_array: auto_radio=0, light_radio=1, dark_radio=2
-        if let Some(selected_idx) = self
-            .view
-            .radio_button_set(ids_array!(
-                content
-                    .pages
-                    .general_page
-                    .appearance_section
-                    .appearance_radios
-                    .auto_radio,
-                content
-                    .pages
-                    .general_page
-                    .appearance_section
-                    .appearance_radios
-                    .light_radio,
-                content
-                    .pages
-                    .general_page
-                    .appearance_section
-                    .appearance_radios
-                    .dark_radio
-            ))
-            .selected(cx, actions)
-        {
-            let theme_mode = match selected_idx {
-                0 => ThemeMode::System,
-                1 => ThemeMode::Light,
-                2 => ThemeMode::Dark,
-                _ => ThemeMode::System,
-            };
+        // Handle appearance radio buttons using MpRadio
+        let light_radio = self.view.mp_radio(ids!(
+            content.pages.general_page.appearance_section.appearance_radios.light_radio
+        ));
+        let dark_radio = self.view.mp_radio(ids!(
+            content.pages.general_page.appearance_section.appearance_radios.dark_radio
+        ));
+        let auto_radio = self.view.mp_radio(ids!(
+            content.pages.general_page.appearance_section.appearance_radios.auto_radio
+        ));
+
+        if light_radio.changed(actions).is_some() {
+            dark_radio.set_checked(cx, false);
+            auto_radio.set_checked(cx, false);
             cx.widget_action(
                 self.widget_uid(),
                 &scope.path,
-                SettingsScreenAction::ThemeModeChanged(theme_mode),
+                SettingsScreenAction::ThemeModeChanged(ThemeMode::Light),
+            );
+        }
+
+        if dark_radio.changed(actions).is_some() {
+            light_radio.set_checked(cx, false);
+            auto_radio.set_checked(cx, false);
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::ThemeModeChanged(ThemeMode::Dark),
+            );
+        }
+
+        if auto_radio.changed(actions).is_some() {
+            light_radio.set_checked(cx, false);
+            dark_radio.set_checked(cx, false);
+            cx.widget_action(
+                self.widget_uid(),
+                &scope.path,
+                SettingsScreenAction::ThemeModeChanged(ThemeMode::System),
             );
         }
 
@@ -559,7 +562,7 @@ impl Widget for SettingsScreen {
         // Handle Service Agreement link click
         if self
             .view
-            .link_label(ids!(content.pages.about_page.footer.links_row.terms_link))
+            .button(ids!(content.pages.about_page.footer.links_row.terms_link))
             .clicked(actions)
         {
             let url = format!("{}/terms", self.website_url.trim_end_matches('/'));
@@ -573,7 +576,7 @@ impl Widget for SettingsScreen {
         // Handle Privacy Policy link click
         if self
             .view
-            .link_label(ids!(content.pages.about_page.footer.links_row.privacy_link))
+            .button(ids!(content.pages.about_page.footer.links_row.privacy_link))
             .clicked(actions)
         {
             let url = format!("{}/privacy", self.website_url.trim_end_matches('/'));

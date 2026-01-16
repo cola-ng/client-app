@@ -11,6 +11,38 @@ live_design! {
 
     use crate::screens::settings::general_panel::SettingsButton;
 
+    // Link-style clickable label
+    pub LinkLabel = <Button> {
+        width: Fit, height: Fit
+        padding: 0
+
+        draw_bg: {
+            fn pixel(self) -> vec4 {
+                return vec4(0.0, 0.0, 0.0, 0.0);
+            }
+        }
+
+        draw_text: {
+            instance hover: 0.0
+            instance dark_mode: 0.0
+            text_style: <FONT_REGULAR>{ font_size: 11.0 }
+
+            fn get_color(self) -> vec4 {
+                let normal = mix((ACCENT_BLUE), (ACCENT_BLUE_DARK), self.dark_mode);
+                let hover_color = mix((BLUE_600), (BLUE_400), self.dark_mode);
+                return mix(normal, hover_color, self.hover);
+            }
+        }
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_text: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_text: {hover: 1.0}} }
+            }
+        }
+    }
+
     // Primary action button
     pub PrimaryButton = <Button> {
         width: Fit, height: Fit

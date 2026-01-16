@@ -8,7 +8,8 @@ live_design! {
     use link::shaders::*;
 
     use widgets::theme::*;
-    use makepad_component::*;
+    use makepad_component::widgets::*;
+    use makepad_component::theme::colors::*;
 
     // Reusable components for settings panels
     pub SectionTitle = <Label> {
@@ -99,13 +100,13 @@ live_design! {
     }
 
     // Simple checkbox style for settings
-    pub SettingsCheckBox = <MpCheckbox> {
+    pub SettingsCheckBox = <CheckBox> {
         width: Fit, height: Fit
         text: ""
     }
 
     // Simple radio button style for settings
-    pub SettingsRadioButton = <MpRadio> {
+    pub SettingsRadioButton = <CheckBox> {
         width: Fit, height: Fit
         text: ""
         value: ""
