@@ -35,7 +35,7 @@ parking_lot.workspace = true
 uuid.workspace = true
 
 # Arrow for data extraction (use same version as dora workspace)
-arrow = { version = "54.2.1", default-features = false }
+arrow.workspace = true
 
 [dev-dependencies]
-tokio-test = "0.4"
+tokio-test.workspace = true

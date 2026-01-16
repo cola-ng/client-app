@@ -27,9 +27,9 @@ dirs.workspace = true
 uuid.workspace = true
 reqwest = { workspace = true, features = ["blocking"] }
 webbrowser.workspace = true
-sysinfo = "0.32"
-ctrlc = "3.4"
-figment = { version = "0.10", features = ["toml", "yaml", "json", "env"] }
+sysinfo.workspace = true
+ctrlc.workspace = true
+figment.workspace = true
 
 [[bin]]
 name = "colang"

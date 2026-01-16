@@ -52,3 +52,4 @@ setup.py
 check_output.txt
 build_*.log
 build_*.txt
+nul
