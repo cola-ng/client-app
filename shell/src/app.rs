@@ -1117,7 +1117,7 @@ impl App {
             self.ui.redraw(cx);
         }
 
-        // Scene Center tab
+            // Scene Center tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.scenes_tab))

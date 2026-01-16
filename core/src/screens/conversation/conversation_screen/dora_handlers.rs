@@ -10,7 +10,7 @@ use makepad_widgets::*;
 use super::{ChatMessageEntry, DialogScreen};
 use crate::dora_integration::{DoraEvent, DoraIntegration};
 use crate::models::Preferences;
-use crate::screens::dialog::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
+use crate::screens::conversation::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
 
 impl DialogScreen {
     // =====================================================
