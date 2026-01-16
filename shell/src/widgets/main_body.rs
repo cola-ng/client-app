@@ -314,6 +314,56 @@ live_design! {
                         }
                     }
                 }
+
+                close_app_btn = <Button> {
+                    width: 32, height: 32
+                    margin: {left: 8}
+                    padding: 0
+                    align: {x: 0.5, y: 0.5}
+                    cursor: Hand
+
+                    draw_text: {
+                        text_style: <FONT_BOLD>{ font_size: 18.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((SLATE_500), (SLATE_400), self.hover);
+                        }
+                    }
+                    text: "×"
+
+                    draw_bg: {
+                        instance hover: 0.0
+                        instance pressed: 0.0
+                        instance dark_mode: 0.0
+
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            let r = 6.0;
+                            let bg_light = (TRANSPARENT);
+                            let bg_dark = (TRANSPARENT);
+                            let hover_light = (SLATE_200);
+                            let hover_dark = (SLATE_700);
+                            let base = mix(bg_light, bg_dark, self.dark_mode);
+                            let hover = mix(hover_light, hover_dark, self.dark_mode);
+                            let fill = mix(base, hover, self.hover);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
+                            sdf.fill(fill);
+                            return sdf.result;
+                        }
+                    }
+
+                    animator: {
+                        hover = {
+                            default: off
+                            off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                            on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+                        }
+                        pressed = {
+                            default: off
+                            off = { from: {all: Forward {duration: 0.05}} apply: {draw_bg: {pressed: 0.0}} }
+                            on = { from: {all: Forward {duration: 0.02}} apply: {draw_bg: {pressed: 1.0}} }
+                        }
+                    }
+                }
             }
 
             // Content area

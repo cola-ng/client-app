@@ -411,6 +411,7 @@ impl AppMain for App {
         // Handle click events
         self.handle_sidebar_clicks(cx, &actions);
         self.handle_login_clicks(cx, &actions);
+        self.handle_close_app_clicks(cx, &actions);
         self.handle_mofa_hero_buttons(cx, event);
         self.handle_conversation_screen_buttons(cx, &actions);
         self.handle_review_screen_buttons(cx, &actions);
@@ -547,6 +548,16 @@ impl App {
                 // Start desktop login flow when not logged in
                 self.start_desktop_login(cx);
             }
+        }
+    }
+
+    fn handle_close_app_clicks(&mut self, cx: &mut Cx, actions: &[Action]) {
+        if self
+            .ui
+            .button(ids!(body.base.header.close_app_btn))
+            .clicked(actions)
+        {
+            cx.quit();
         }
     }
 
