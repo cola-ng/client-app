@@ -6,12 +6,10 @@ use makepad_component::*;
 live_design! {
     use link::theme::*;
     use link::widgets::*;
-    use makepad_component::*;
     use link::shaders::*;
 
     use ::widgets::theme::*;
-    use makepad_component::widgets::*;
-    use makepad_component::theme::colors::*;
+    use makepad_component::*;
 
     use crate::screens::settings::general_panel::SectionTitle;
     use crate::screens::settings::general_panel::SettingsRow;

@@ -1,17 +1,15 @@
 //! General settings panel - startup, appearance, and storage options
 
 use makepad_widgets::*;
-use makepad_component::*;
 
 live_design! {
     use link::theme::*;
     use link::widgets::*;
-    use makepad_component::*;
     use link::shaders::*;
 
     use ::widgets::theme::*;
-    use makepad_component::widgets::*;
-    use makepad_component::theme::colors::*;
+
+    use makepad_component::*;
 
     // Reusable components for settings panels
     pub SectionTitle = <Label> {

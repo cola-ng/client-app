@@ -15,17 +15,7 @@ live_design! {
     use makepad_component::*;
     use link::shaders::*;
 
-    use makepad_component::theme::colors::*;
-    use makepad_component::widgets::button::*;
-    use makepad_component::widgets::checkbox::*;
-    use makepad_component::widgets::switch::*;
-    use makepad_component::widgets::divider::*;
-    use makepad_component::widgets::radio::*;
-    use makepad_component::widgets::progress::*;
-    use makepad_component::widgets::slider::*;
-    use makepad_component::widgets::input::*;
-    use makepad_component::widgets::badge::*;
-    use makepad_component::widgets::tooltip::*;
+    use makepad_component::*;
 
     use ::widgets::theme::*;
 
