@@ -15,30 +15,30 @@ live_design! {
     use makepad_component::*;
 
     // Import fonts and colors from shared theme
-    use widgets::theme::FONT_REGULAR;
-    use widgets::theme::FONT_MEDIUM;
-    use widgets::theme::FONT_SEMIBOLD;
-    use widgets::theme::FONT_BOLD;
-    use widgets::theme::DARK_BG;
-    use widgets::theme::PANEL_BG;
-    use widgets::theme::ACCENT_INDIGO;
-    use widgets::theme::TEXT_PRIMARY;
-    use widgets::theme::TEXT_SECONDARY;
-    use widgets::theme::HOVER_BG;
-    use widgets::theme::TRANSPARENT;
-    use widgets::theme::SLATE_50;
-    use widgets::theme::SLATE_200;
-    use widgets::theme::SLATE_400;
-    use widgets::theme::SLATE_500;
-    use widgets::theme::SLATE_700;
-    use widgets::theme::SLATE_800;
-    use widgets::theme::GRAY_300;
-    use widgets::theme::GRAY_600;
-    use widgets::theme::INDIGO_100;
-    use widgets::theme::DARK_BG_DARK;
-    use widgets::theme::PANEL_BG_DARK;
-    use widgets::theme::TEXT_PRIMARY_DARK;
-    use widgets::theme::TEXT_SECONDARY_DARK;
+    use colang_widgets::theme::FONT_REGULAR;
+    use colang_widgets::theme::FONT_MEDIUM;
+    use colang_widgets::theme::FONT_SEMIBOLD;
+    use colang_widgets::theme::FONT_BOLD;
+    use colang_widgets::theme::DARK_BG;
+    use colang_widgets::theme::PANEL_BG;
+    use colang_widgets::theme::ACCENT_INDIGO;
+    use colang_widgets::theme::TEXT_PRIMARY;
+    use colang_widgets::theme::TEXT_SECONDARY;
+    use colang_widgets::theme::HOVER_BG;
+    use colang_widgets::theme::TRANSPARENT;
+    use colang_widgets::theme::SLATE_50;
+    use colang_widgets::theme::SLATE_200;
+    use colang_widgets::theme::SLATE_400;
+    use colang_widgets::theme::SLATE_500;
+    use colang_widgets::theme::SLATE_700;
+    use colang_widgets::theme::SLATE_800;
+    use colang_widgets::theme::GRAY_300;
+    use colang_widgets::theme::GRAY_600;
+    use colang_widgets::theme::INDIGO_100;
+    use colang_widgets::theme::DARK_BG_DARK;
+    use colang_widgets::theme::PANEL_BG_DARK;
+    use colang_widgets::theme::TEXT_PRIMARY_DARK;
+    use colang_widgets::theme::TEXT_SECONDARY_DARK;
 
     use colang_core::screens::conversation::conversation_screen::ConversationScreen;
     use colang_core::screens::dictionary::dictionary_screen::DictionaryScreen;
@@ -49,7 +49,7 @@ live_design! {
     use colang_core::screens::settings::settings_screen::SettingsScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
-    use widgets::debug_panel::DebugPanel;
+    use colang_widgets::debug_panel::DebugPanel;
 
     // Logo image
     COLANG_LOGO = dep("crate://self/resources/colang-logo.png")

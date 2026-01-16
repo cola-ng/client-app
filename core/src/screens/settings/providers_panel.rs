@@ -11,7 +11,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     ICO_OPENAI = dep("crate://self/resources/icons/openai.svg")
     ICO_DEEPSEEK = dep("crate://self/resources/icons/deepseek.svg")

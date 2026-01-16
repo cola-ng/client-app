@@ -7,7 +7,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     use crate::screens::review::components::CardBase;
     use crate::screens::review::components::MutedText;

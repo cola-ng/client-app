@@ -9,7 +9,7 @@ default = []
 [dependencies]
 makepad-widgets.workspace = true
 makepad-component.workspace = true
-widgets.workspace = true
+colang-widgets.workspace = true
 colang-core.workspace = true
 
 # Audio

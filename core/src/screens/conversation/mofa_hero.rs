@@ -12,7 +12,7 @@ live_design! {
     use makepad_component::*;
 
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     // Icons
     ICO_START = dep("crate://self/resources/icons/start.svg")

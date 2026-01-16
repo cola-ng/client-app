@@ -14,7 +14,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use widgets::debug_panel::DebugPanel;
+//!     use colang_widgets::debug_panel::DebugPanel;
 //!
 //!     App = {{App}} {
 //!         debug_panel = <DebugPanel> {}

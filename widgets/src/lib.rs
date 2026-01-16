@@ -35,11 +35,11 @@
 //! The theme module provides a centralized color system with dark mode support:
 //!
 //! ```rust,ignore
-//! use ::widgets::theme::*;
+//! use colang_widgets::theme::*;
 //!
 //! // In live_design! macro - use theme constants
 //! live_design! {
-//!     use ::widgets::theme::*;
+//!     use colang_widgets::theme::*;
 //!
 //!     MyWidget = <View> {
 //!         draw_bg: { color: (PANEL_BG) }
@@ -55,7 +55,7 @@
 //! Apps implement the [`AppScene`] trait for standardized registration:
 //!
 //! ```rust,ignore
-//! use widgets::{AppScene, AppInfo};
+//! use colang_widgets::{AppScene, AppInfo};
 //!
 //! pub struct MyApp;
 //!

@@ -12,7 +12,7 @@ rust-version = "1.92.0"
 [workspace.dependencies]
 colang-core = { path = "core" }
 dora-bridge = { path = "dora-bridge" }
-widgets = { path = "widgets" }
+colang-widgets = { path = "widgets" }
 
 # Makepad UI framework
 makepad-widgets = { git = "https://github.com/makepad/makepad", branch = "dev" }

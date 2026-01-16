@@ -17,7 +17,7 @@ live_design! {
 
     use makepad_component::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     use crate::screens::settings::providers_panel::ProvidersPanel;
     use crate::screens::settings::provider_view::ProviderView;

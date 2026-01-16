@@ -15,16 +15,16 @@ live_design! {
     use makepad_component::*;
 
     // Import fonts and colors from shared theme
-    use widgets::theme::FONT_MEDIUM;
-    use widgets::theme::SLATE_200;
-    use widgets::theme::SLATE_400;
-    use widgets::theme::SLATE_500;
-    use widgets::theme::SLATE_600;
-    use widgets::theme::SLATE_700;
-    use widgets::theme::SLATE_800;
-    use widgets::theme::WHITE;
-    use widgets::theme::TRANSPARENT;
-    use widgets::theme::ACCENT_BLUE;
+    use colang_widgets::theme::FONT_MEDIUM;
+    use colang_widgets::theme::SLATE_200;
+    use colang_widgets::theme::SLATE_400;
+    use colang_widgets::theme::SLATE_500;
+    use colang_widgets::theme::SLATE_600;
+    use colang_widgets::theme::SLATE_700;
+    use colang_widgets::theme::SLATE_800;
+    use colang_widgets::theme::WHITE;
+    use colang_widgets::theme::TRANSPARENT;
+    use colang_widgets::theme::ACCENT_BLUE;
 
     // Tab widget - individual tab in tab bar
     pub TabWidget = <View> {

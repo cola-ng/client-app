@@ -27,8 +27,8 @@ use makepad_component::*;
 use makepad_component::widgets::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use ::widgets::StateChangeListener;
-use ::widgets::debug_panel::DebugPanelWidgetRefExt;
+use colang_widgets::StateChangeListener;
+use colang_widgets::debug_panel::DebugPanelWidgetRefExt;
 
 use crate::config::Config;
 
@@ -60,48 +60,48 @@ live_design! {
     use makepad_component::*;
 
     // Import fonts and colors from shared theme (single source of truth)
-    use widgets::theme::FONT_REGULAR;
-    use widgets::theme::FONT_MEDIUM;
-    use widgets::theme::FONT_SEMIBOLD;
-    use widgets::theme::FONT_BOLD;
+    use colang_widgets::theme::FONT_REGULAR;
+    use colang_widgets::theme::FONT_MEDIUM;
+    use colang_widgets::theme::FONT_SEMIBOLD;
+    use colang_widgets::theme::FONT_BOLD;
     // Semantic colors
-    use widgets::theme::DARK_BG;
-    use widgets::theme::PANEL_BG;
-    use widgets::theme::ACCENT_BLUE;
-    use widgets::theme::ACCENT_GREEN;
-    use widgets::theme::ACCENT_INDIGO;
-    use widgets::theme::TEXT_PRIMARY;
-    use widgets::theme::TEXT_SECONDARY;
-    use widgets::theme::TEXT_MUTED;
-    use widgets::theme::DIVIDER;
-    use widgets::theme::BORDER;
-    use widgets::theme::HOVER_BG;
-    use widgets::theme::WHITE;
-    use widgets::theme::TRANSPARENT;
+    use colang_widgets::theme::DARK_BG;
+    use colang_widgets::theme::PANEL_BG;
+    use colang_widgets::theme::ACCENT_BLUE;
+    use colang_widgets::theme::ACCENT_GREEN;
+    use colang_widgets::theme::ACCENT_INDIGO;
+    use colang_widgets::theme::TEXT_PRIMARY;
+    use colang_widgets::theme::TEXT_SECONDARY;
+    use colang_widgets::theme::TEXT_MUTED;
+    use colang_widgets::theme::DIVIDER;
+    use colang_widgets::theme::BORDER;
+    use colang_widgets::theme::HOVER_BG;
+    use colang_widgets::theme::WHITE;
+    use colang_widgets::theme::TRANSPARENT;
     // Palette colors
-    use widgets::theme::SLATE_50;
-    use widgets::theme::SLATE_200;
-    use widgets::theme::SLATE_400;
-    use widgets::theme::SLATE_500;
-    use widgets::theme::SLATE_600;
-    use widgets::theme::SLATE_700;
-    use widgets::theme::SLATE_800;
-    use widgets::theme::GRAY_300;
-    use widgets::theme::GRAY_600;
-    use widgets::theme::GRAY_700;
-    use widgets::theme::INDIGO_100;
+    use colang_widgets::theme::SLATE_50;
+    use colang_widgets::theme::SLATE_200;
+    use colang_widgets::theme::SLATE_400;
+    use colang_widgets::theme::SLATE_500;
+    use colang_widgets::theme::SLATE_600;
+    use colang_widgets::theme::SLATE_700;
+    use colang_widgets::theme::SLATE_800;
+    use colang_widgets::theme::GRAY_300;
+    use colang_widgets::theme::GRAY_600;
+    use colang_widgets::theme::GRAY_700;
+    use colang_widgets::theme::INDIGO_100;
 
     use colang_shell::widgets::sidebar::Sidebar;
     use colang_shell::widgets::main_body::MainBody;
 
     // Dark theme colors (imported for shader use)
-    use widgets::theme::DARK_BG_DARK;
-    use widgets::theme::PANEL_BG_DARK;
-    use widgets::theme::TEXT_PRIMARY_DARK;
-    use widgets::theme::TEXT_SECONDARY_DARK;
-    use widgets::theme::BORDER_DARK;
-    use widgets::theme::HOVER_BG_DARK;
-    use widgets::theme::DIVIDER_DARK;
+    use colang_widgets::theme::DARK_BG_DARK;
+    use colang_widgets::theme::PANEL_BG_DARK;
+    use colang_widgets::theme::TEXT_PRIMARY_DARK;
+    use colang_widgets::theme::TEXT_SECONDARY_DARK;
+    use colang_widgets::theme::BORDER_DARK;
+    use colang_widgets::theme::HOVER_BG_DARK;
+    use colang_widgets::theme::DIVIDER_DARK;
 
     // ------------------------------------------------------------------------
     // App Window

@@ -8,7 +8,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use ::widgets::theme::*;
+//!     use colang_widgets::theme::*;
 //!
 //!     MyWidget = <View> {
 //!         draw_bg: { color: (PANEL_BG) }

@@ -7,7 +7,7 @@ live_design! {
     use link::widgets::*;
     use link::shaders::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     use makepad_component::*;
 

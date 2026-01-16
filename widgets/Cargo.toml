@@ -1,5 +1,5 @@
 [package]
-name = "widgets"
+name = "colang-widgets"
 version.workspace = true
 edition.workspace = true
 

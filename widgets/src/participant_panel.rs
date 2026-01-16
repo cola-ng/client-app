@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use widgets::participant_panel::ParticipantPanel;
+//!     use colang_widgets::participant_panel::ParticipantPanel;
 //!
 //!     MyScreen = <View> {
 //!         participant = <ParticipantPanel> {
@@ -86,7 +86,7 @@ live_design! {
     use makepad_component::*;
 
     // Shared theme fonts/colors
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     // Import colors from theme (single source of truth)
     use crate::theme::PANEL_BG;

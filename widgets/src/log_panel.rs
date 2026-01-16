@@ -13,7 +13,7 @@
 //!
 //! ```rust,ignore
 //! live_design! {
-//!     use widgets::log_panel::LogPanel;
+//!     use colang_widgets::log_panel::LogPanel;
 //!
 //!     MyScreen = <View> {
 //!         log = <LogPanel> {

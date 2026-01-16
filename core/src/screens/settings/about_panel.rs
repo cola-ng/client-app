@@ -9,7 +9,7 @@ live_design! {
     use makepad_component::*;
     use link::shaders::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     use crate::screens::settings::general_panel::SettingsButton;
 

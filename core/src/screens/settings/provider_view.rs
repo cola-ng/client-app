@@ -11,7 +11,7 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use ::widgets::theme::*;
+    use colang_widgets::theme::*;
 
     // Custom text input style
     SettingsTextInput = <TextInput> {

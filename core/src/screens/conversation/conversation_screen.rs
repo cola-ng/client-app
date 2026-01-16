@@ -9,8 +9,8 @@
 use std::path::PathBuf;
 
 use makepad_widgets::*;
-use ::widgets::StateChangeListener;
-use ::widgets::participant_panel::ParticipantPanelWidgetExt;
+use colang_widgets::StateChangeListener;
+use colang_widgets::participant_panel::ParticipantPanelWidgetExt;
 use makepad_component::*;
 
 use super::ChatMessageEntry;
@@ -29,9 +29,9 @@ live_design! {
     use link::widgets::*;
     use makepad_component::*;
 
-    use ::widgets::theme::*;
-    use widgets::participant_panel::ParticipantPanel;
-    use widgets::log_panel::LogPanel;
+    use colang_widgets::theme::*;
+    use colang_widgets::participant_panel::ParticipantPanel;
+    use colang_widgets::log_panel::LogPanel;
     use crate::screens::conversation::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)
