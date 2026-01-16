@@ -38,7 +38,7 @@ live_design! {
     use widgets::theme::TEXT_PRIMARY_DARK;
     use widgets::theme::TEXT_SECONDARY_DARK;
 
-    use colang_core::screens::conversation::ConversationScreen;
+    use colang_core::screens::conversation::conversation_screen::ConversationScreen;
     use colang_core::screens::home::home_screen::HomeScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
     use colang_core::screens::review::review_screen::ReviewScreen;

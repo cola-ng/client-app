@@ -30,7 +30,7 @@ live_design! {
     use widgets::theme::*;
     use widgets::participant_panel::ParticipantPanel;
     use widgets::log_panel::LogPanel;
-    use crate::screens::dialog::mofa_hero::MofaHero;
+    use crate::screens::conversation::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)
     SECTION_SPACING = 12.0

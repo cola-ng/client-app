@@ -402,14 +402,17 @@ live_design! {
                 }
 
                 // Loading state
-                loading_label = <Label> {
-                    text: "加载中..."
+                loading_label = <View> {
+                    width: Fit, height: Fit
                     visible: false
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                    label = <Label> {
+                        text: "加载中..."
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                            }
                         }
                     }
                 }
@@ -453,14 +456,17 @@ live_design! {
                 }
 
                 // Loading state
-                classic_loading_label = <Label> {
-                    text: "加载中..."
+                classic_loading_label = <View> {
+                    width: Fit, height: Fit
                     visible: false
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                    label = <Label> {
+                        text: "加载中..."
+                        draw_text: {
+                            instance dark_mode: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                            }
                         }
                     }
                 }
@@ -520,7 +526,7 @@ impl Widget for Scenes {
                         self.scenes = scenes;
                         self.scenes_loading = false;
                         self.view
-                            .label(ids!(today_section.loading_label))
+                            .view(ids!(today_section.loading_label))
                             .set_visible(cx, false);
                         self.view.redraw(cx);
                     }
@@ -528,14 +534,14 @@ impl Widget for Scenes {
                         eprintln!("Failed to fetch scenes: {}", e);
                         self.scenes_loading = false;
                         self.view
-                            .label(ids!(today_section.loading_label))
+                            .label(ids!(today_section.loading_label.label))
                             .set_text(cx, &format!("加载失败: {}", e));
                     }
                     FetchResult::ClassicSources(Ok(sources)) => {
                         self.classic_sources = sources;
                         self.classic_loading = false;
                         self.view
-                            .label(ids!(classic_section.classic_loading_label))
+                            .view(ids!(classic_section.classic_loading_label))
                             .set_visible(cx, false);
                         self.view.redraw(cx);
                     }
@@ -543,7 +549,7 @@ impl Widget for Scenes {
                         eprintln!("Failed to fetch classic sources: {}", e);
                         self.classic_loading = false;
                         self.view
-                            .label(ids!(classic_section.classic_loading_label))
+                            .label(ids!(classic_section.classic_loading_label.label))
                             .set_text(cx, &format!("加载失败: {}", e));
                     }
                 }
@@ -641,10 +647,10 @@ impl Scenes {
 
         // Show loading labels
         self.view
-            .label(ids!(today_section.loading_label))
+            .view(ids!(today_section.loading_label))
             .set_visible(cx, true);
         self.view
-            .label(ids!(classic_section.classic_loading_label))
+            .view(ids!(classic_section.classic_loading_label))
             .set_visible(cx, true);
 
         let (tx, rx) = mpsc::channel();

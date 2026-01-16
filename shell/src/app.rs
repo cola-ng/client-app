@@ -972,25 +972,13 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
-                .apply_over(cx, live! { visible: false });
-            self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
+                    body.base.content_area.main_content.content.scenes_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1033,25 +1021,13 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
-                .apply_over(cx, live! { visible: false });
-            self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
+                    body.base.content_area.main_content.content.scenes_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1088,21 +1064,7 @@ impl App {
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1120,7 +1082,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -1158,21 +1122,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1185,7 +1135,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: true });
             self.ui
                 .view(ids!(
@@ -1238,21 +1190,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -1270,7 +1208,9 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
@@ -2159,8 +2099,11 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: true });
+            self.set_header_page_title(cx, "🎭", "场景中心");
 
             // Hide other scenes
             self.ui
@@ -2213,8 +2156,11 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: true });
+            self.set_header_page_title(cx, "🎭", "场景中心");
 
             // Hide other scenes
             self.ui
@@ -2272,8 +2218,11 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
-                .view(ids!(body.base.content_area.main_content.content.scenario))
+                .view(ids!(
+                    body.base.content_area.main_content.content.scenes_screen
+                ))
                 .apply_over(cx, live! { visible: true });
+            self.set_header_page_title(cx, "🎭", "场景中心");
 
             // Hide other scenes
             self.ui
@@ -2292,21 +2241,7 @@ impl App {
                 .apply_over(cx, live! { visible: false });
             self.ui
                 .view(ids!(
-                    body.base.content_area.main_content.content.assistant_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
                     body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .classic_dialogues_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
@@ -2382,7 +2317,7 @@ impl App {
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_classic_dialogues(cx);
+            self.navigate_to_scenario(cx);
         }
 
         // Handle quick action: 跟读练习 - navigate to reading practice
@@ -2428,7 +2363,7 @@ impl App {
             .finger_up(actions)
             .is_some()
         {
-            self.navigate_to_assistant(cx);
+            self.navigate_to_conversation_screen(cx);
         }
 
         // Handle scenario cards
@@ -2524,20 +2459,11 @@ impl App {
     fn navigate_to_scenario(&mut self, cx: &mut Cx) {
         self.hide_all_screens(cx);
         self.ui
-            .view(ids!(body.base.content_area.main_content.content.scenario))
-            .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🎭", "场景中心");
-        self.ui.redraw(cx);
-    }
-
-    fn navigate_to_assistant(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.assistant_screen
+                body.base.content_area.main_content.content.scenes_screen
             ))
             .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🧠", "AI 助手");
+        self.set_header_page_title(cx, "🎭", "场景中心");
         self.ui.redraw(cx);
     }
 
@@ -2549,21 +2475,6 @@ impl App {
             ))
             .apply_over(cx, live! { visible: true });
         self.set_header_page_title(cx, "🎤", "跟读练习");
-        self.ui.redraw(cx);
-    }
-
-    fn navigate_to_classic_dialogues(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
-            .view(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .classic_dialogues_screen
-            ))
-            .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🎬", "经典对白");
         self.ui.redraw(cx);
     }
 
@@ -2605,25 +2516,13 @@ impl App {
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
-            .view(ids!(body.base.content_area.main_content.content.scenario))
-            .apply_over(cx, live! { visible: false });
-        self.ui
             .view(ids!(
-                body.base.content_area.main_content.content.assistant_screen
+                body.base.content_area.main_content.content.scenes_screen
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
             .view(ids!(
                 body.base.content_area.main_content.content.reading_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .classic_dialogues_screen
             ))
             .apply_over(cx, live! { visible: false });
         self.ui
