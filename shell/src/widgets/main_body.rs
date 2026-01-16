@@ -150,6 +150,7 @@ live_design! {
                 debug_btn = <View> {
                     width: 36, height: 36
                     align: {x: 0.5, y: 0.5}
+                    cursor: Hand
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0
@@ -186,6 +187,7 @@ live_design! {
                 theme_toggle = <View> {
                     width: 36, height: 36
                     align: {x: 0.5, y: 0.5}
+                    cursor: Hand
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0
