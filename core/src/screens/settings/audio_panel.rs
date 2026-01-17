@@ -123,7 +123,7 @@ live_design! {
                     width: Fill, height: 24
                     min: 0.0, max: 100.0
                     step: 1.0
-                    default: 80.0
+                    value: 80.0
                 }
                 speaker_volume_label = <Label> {
                     width: 40
@@ -160,7 +160,7 @@ live_design! {
                     width: Fill, height: 24
                     min: 0.0, max: 100.0
                     step: 1.0
-                    default: 75.0
+                    value: 75.0
                 }
                 mic_volume_label = <Label> {
                     width: 40

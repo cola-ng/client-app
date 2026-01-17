@@ -241,15 +241,15 @@ live_design! {
                 spacing: 24
 
                 light_radio = <MpRadio> {
-                    label: "Light Mode"
+                    text: "Light Mode"
                 }
 
                 dark_radio = <MpRadio> {
-                    label: "Dark Mode"
+                    text: "Dark Mode"
                 }
 
                 auto_radio = <MpRadio> {
-                    label: "Follow System"
+                    text: "Follow System"
                     checked: true
                 }
             }
