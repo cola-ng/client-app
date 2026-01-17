@@ -33,7 +33,7 @@ impl Default for Config {
 
 fn default_website_url() -> String {
     if cfg!(debug_assertions) {
-        "http://127.0.0.1:6108".to_string()
+        "http://127.0.0.1:8118".to_string()
     } else {
         "https://cola.ng".to_string()
     }
@@ -41,7 +41,7 @@ fn default_website_url() -> String {
 
 fn default_api_url() -> String {
     if cfg!(debug_assertions) {
-        "http://127.0.0.1:6108/api".to_string()
+        "http://127.0.0.1:8118/api".to_string()
     } else {
         "https://api.cola.ng".to_string()
     }
@@ -89,10 +89,10 @@ impl Config {
             if !default_config_path.exists() {
                 let default_content = r#"# Colang Configuration
 # Website URL for desktop authentication
-# website_url = "http://127.0.0.1:6108"
+# website_url = "http://127.0.0.1:8118"
 
 # API URL for backend services
-# api_url = "http://127.0.0.1:5800"
+# api_url = "http://127.0.0.1:8118/api"
 "#;
                 std::fs::write(&default_config_path, default_content).map_err(|e| {
                     figment::Error::from(format!("Failed to create default config file: {}", e))
