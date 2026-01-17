@@ -120,9 +120,10 @@ live_design! {
             <SettingsRow> {
                 <SettingsLabel> { text: "Volume" width: 120 }
                 speaker_volume = <MpSlider> {
-                    width: Fill, height: Fit
+                    width: Fill, height: 24
                     min: 0.0, max: 100.0
                     step: 1.0
+                    default: 80.0
                 }
                 speaker_volume_label = <Label> {
                     width: 40
@@ -156,9 +157,10 @@ live_design! {
             <SettingsRow> {
                 <SettingsLabel> { text: "Input Volume" width: 120 }
                 mic_volume = <MpSlider> {
-                    width: Fill, height: Fit
+                    width: Fill, height: 24
                     min: 0.0, max: 100.0
                     step: 1.0
+                    default: 75.0
                 }
                 mic_volume_label = <Label> {
                     width: 40

@@ -16,6 +16,7 @@ use std::time::{Duration, Instant};
 use std::{io, thread};
 
 use colang_core::asset_api::init_asset_api;
+use colang_core::dict_api::init_dict_api;
 use colang_core::learn_api::{init_learn_api, set_learn_api_token};
 use colang_core::models::Preferences;
 use colang_core::screens::conversation::conversation_screen::ConversationScreenWidgetRefExt;
@@ -337,6 +338,7 @@ impl LiveHook for App {
 
         // Initialize API clients with backend URL
         init_asset_api(&config.api_url);
+        init_dict_api(&config.api_url);
         init_learn_api(&config.api_url, prefs.auth_token);
     }
 }

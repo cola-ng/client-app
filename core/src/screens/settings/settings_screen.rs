@@ -491,6 +491,66 @@ impl Widget for SettingsScreen {
             self.clear_cache(cx);
         }
 
+        // Handle speaker test button
+        if self
+            .view
+            .button(ids!(
+                content.pages.audio_page.speaker_section.speaker_test_btn
+            ))
+            .clicked(actions)
+        {
+            super::play_test_tone();
+        }
+
+        // Handle microphone test button
+        if self
+            .view
+            .button(ids!(content.pages.audio_page.mic_section.mic_test_btn))
+            .clicked(actions)
+        {
+            super::test_microphone();
+        }
+
+        // Handle speaker volume slider changes
+        if let Some(value) = self
+            .view
+            .mp_slider(ids!(
+                content.pages.audio_page.speaker_section.speaker_volume
+            ))
+            .changed(actions)
+        {
+            let volume_pct = match value {
+                makepad_component::widgets::slider::SliderValue::Single(v) => v as i32,
+                _ => 0,
+            };
+            let volume_text = format!("{}%", volume_pct);
+            self.view
+                .label(ids!(
+                    content.pages.audio_page.speaker_section.speaker_volume_label
+                ))
+                .set_text(cx, &volume_text);
+            self.view.redraw(cx);
+        }
+
+        // Handle microphone volume slider changes
+        if let Some(value) = self
+            .view
+            .mp_slider(ids!(content.pages.audio_page.mic_section.mic_volume))
+            .changed(actions)
+        {
+            let volume_pct = match value {
+                makepad_component::widgets::slider::SliderValue::Single(v) => v as i32,
+                _ => 0,
+            };
+            let volume_text = format!("{}%", volume_pct);
+            self.view
+                .label(ids!(
+                    content.pages.audio_page.mic_section.mic_volume_label
+                ))
+                .set_text(cx, &volume_text);
+            self.view.redraw(cx);
+        }
+
         // Handle appearance radio buttons using MpRadio
         if self
             .view

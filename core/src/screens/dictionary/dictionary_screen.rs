@@ -753,6 +753,8 @@ live_design! {
     }
 }
 
+use crate::dict_api::{get_dict_api, Word, WordQueryResponse};
+
 /// DictionaryScreen widget
 #[derive(Live, LiveHook, Widget)]
 pub struct DictionaryScreen {
@@ -761,6 +763,15 @@ pub struct DictionaryScreen {
 
     #[rust]
     search_query: String,
+
+    #[rust]
+    search_results: Vec<Word>,
+
+    #[rust]
+    selected_word: Option<WordQueryResponse>,
+
+    #[rust]
+    is_searching: bool,
 }
 
 impl Widget for DictionaryScreen {
@@ -781,9 +792,16 @@ impl WidgetMatchEvent for DictionaryScreen {
             .text_input(ids!(search_bar.search_input))
             .changed(actions)
         {
-            self.search_query = text;
-            // TODO: Trigger search API call
-            println!("Search query: {}", self.search_query);
+            self.search_query = text.clone();
+            ::log::info!("Search query: {}", self.search_query);
+
+            // Trigger search API call
+            if !text.trim().is_empty() {
+                self.perform_search(cx, text);
+            } else {
+                self.search_results.clear();
+                self.update_results_display(cx);
+            }
         }
 
         // Handle word of day refresh
@@ -791,8 +809,7 @@ impl WidgetMatchEvent for DictionaryScreen {
             .button(ids!(word_of_day.wod_header.wod_refresh_btn))
             .clicked(actions)
         {
-            // TODO: Fetch new random word
-            println!("Refresh word of day");
+            ::log::info!("Refresh word of day");
         }
 
         // Handle audio play
@@ -800,8 +817,7 @@ impl WidgetMatchEvent for DictionaryScreen {
             .button(ids!(word_of_day.wod_phonetic.play_audio_btn))
             .clicked(actions)
         {
-            // TODO: Play pronunciation audio
-            println!("Play audio");
+            ::log::info!("Play audio");
         }
 
         // Handle clear history
@@ -809,8 +825,7 @@ impl WidgetMatchEvent for DictionaryScreen {
             .button(ids!(recent_searches.clear_history_btn))
             .clicked(actions)
         {
-            // TODO: Clear search history
-            println!("Clear history");
+            ::log::info!("Clear history");
         }
     }
 }
@@ -824,5 +839,71 @@ impl DictionaryScreen {
                 draw_bg: { dark_mode: (dark_mode) }
             },
         );
+    }
+
+    /// Perform a dictionary search
+    fn perform_search(&mut self, cx: &mut Cx, query: String) {
+        if self.is_searching {
+            return;
+        }
+        self.is_searching = true;
+
+        // Get the API client
+        let api = match get_dict_api() {
+            Some(api) => api.read().unwrap().clone(),
+            None => {
+                ::log::error!("Dictionary API not initialized");
+                self.is_searching = false;
+                return;
+            }
+        };
+
+        // Spawn async search task
+        let query_clone = query.clone();
+        std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async {
+                match api.search(&query_clone, Some(10)).await {
+                    Ok(results) => {
+                        ::log::info!("Search results: {} words found", results.len());
+                        for word in &results {
+                            ::log::info!("  - {}", word.word);
+                        }
+                    }
+                    Err(e) => {
+                        ::log::error!("Search error: {}", e);
+                    }
+                }
+            });
+        });
+
+        self.is_searching = false;
+
+        // Update UI to show searching state
+        self.view
+            .label(ids!(
+                search_results.results_header.results_count
+            ))
+            .set_text(cx, "Searching...");
+        self.view.redraw(cx);
+    }
+
+    /// Update the results display
+    fn update_results_display(&mut self, cx: &mut Cx) {
+        let count = self.search_results.len();
+        let count_text = if count == 0 {
+            "No results".to_string()
+        } else if count == 1 {
+            "1 result".to_string()
+        } else {
+            format!("{} results", count)
+        };
+
+        self.view
+            .label(ids!(
+                search_results.results_header.results_count
+            ))
+            .set_text(cx, &count_text);
+        self.view.redraw(cx);
     }
 }

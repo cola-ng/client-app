@@ -8,6 +8,7 @@ live_design! {
     use link::shaders::*;
 
     use colang_widgets::theme::*;
+    use makepad_component::widgets::radio::*;
 
     // Reusable components for settings panels
     pub SectionTitle = <Label> {
@@ -239,17 +240,17 @@ live_design! {
                 flow: Right
                 spacing: 24
 
-                light_radio = <SettingsRadioButton> {
-                    text: "Light Mode"
+                light_radio = <MpRadio> {
+                    label: "Light Mode"
                 }
 
-                dark_radio = <SettingsRadioButton> {
-                    text: "Dark Mode"
+                dark_radio = <MpRadio> {
+                    label: "Dark Mode"
                 }
 
-                auto_radio = <SettingsRadioButton> {
-                    text: "Follow System"
-                    animator: { selected = { default: on } }
+                auto_radio = <MpRadio> {
+                    label: "Follow System"
+                    checked: true
                 }
             }
         }

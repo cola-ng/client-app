@@ -170,3 +170,125 @@ pub fn init_audio_devices() -> AudioDevices {
         output_labels,
     }
 }
+
+/// Play a test tone on the speaker
+pub fn play_test_tone() {
+    use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+    use std::f32::consts::PI;
+
+    std::thread::spawn(move || {
+        let host = cpal::default_host();
+        let device = match host.default_output_device() {
+            Some(d) => d,
+            None => {
+                eprintln!("No output device available");
+                return;
+            }
+        };
+
+        let config = match device.default_output_config() {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("Failed to get default config: {}", e);
+                return;
+            }
+        };
+
+        let sample_rate = config.sample_rate().0 as f32;
+        let channels = config.channels() as usize;
+
+        // Generate a 440Hz tone for 1 second
+        let frequency = 440.0;
+        let duration_samples = (sample_rate * 1.0) as usize;
+        let mut sample_clock = 0f32;
+
+        let stream = match device.build_output_stream(
+            &config.into(),
+            move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
+                for frame in data.chunks_mut(channels) {
+                    let sample = (sample_clock * frequency * 2.0 * PI / sample_rate).sin() * 0.3;
+                    sample_clock += 1.0;
+                    if sample_clock as usize > duration_samples {
+                        // Silence after duration
+                        for s in frame.iter_mut() {
+                            *s = 0.0;
+                        }
+                    } else {
+                        for s in frame.iter_mut() {
+                            *s = sample;
+                        }
+                    }
+                }
+            },
+            |err| eprintln!("Audio error: {}", err),
+            None,
+        ) {
+            Ok(s) => s,
+            Err(e) => {
+                eprintln!("Failed to build stream: {}", e);
+                return;
+            }
+        };
+
+        if let Err(e) = stream.play() {
+            eprintln!("Failed to play stream: {}", e);
+            return;
+        }
+
+        // Keep stream alive for 1.5 seconds
+        std::thread::sleep(std::time::Duration::from_millis(1500));
+    });
+}
+
+/// Start microphone test (captures audio and returns input level)
+pub fn test_microphone() {
+    use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+
+    std::thread::spawn(move || {
+        let host = cpal::default_host();
+        let device = match host.default_input_device() {
+            Some(d) => d,
+            None => {
+                eprintln!("No input device available");
+                return;
+            }
+        };
+
+        let config = match device.default_input_config() {
+            Ok(c) => c,
+            Err(e) => {
+                eprintln!("Failed to get default config: {}", e);
+                return;
+            }
+        };
+
+        let stream = match device.build_input_stream(
+            &config.into(),
+            move |data: &[f32], _: &cpal::InputCallbackInfo| {
+                // Calculate RMS level
+                let sum: f32 = data.iter().map(|s| s * s).sum();
+                let rms = (sum / data.len() as f32).sqrt();
+                let db = 20.0 * rms.log10();
+                // Convert to 0-1 scale (assuming -60dB to 0dB range)
+                let level = ((db + 60.0) / 60.0).clamp(0.0, 1.0);
+                ::log::debug!("Mic level: {:.2}", level);
+            },
+            |err| eprintln!("Audio error: {}", err),
+            None,
+        ) {
+            Ok(s) => s,
+            Err(e) => {
+                eprintln!("Failed to build stream: {}", e);
+                return;
+            }
+        };
+
+        if let Err(e) = stream.play() {
+            eprintln!("Failed to play stream: {}", e);
+            return;
+        }
+
+        // Record for 3 seconds
+        std::thread::sleep(std::time::Duration::from_secs(3));
+    });
+}

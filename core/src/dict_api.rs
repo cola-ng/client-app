@@ -7,34 +7,203 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 // ============================================================================
-// API Response Types
+// API Response Types (matching colang-website models)
 // ============================================================================
 
-/// Full dictionary entry with all details
+/// Word record from the dictionary
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DictEntry {
+pub struct Word {
     pub id: i64,
     pub word: String,
-    pub phonetic: Option<String>,
-    pub phonetic_us: Option<String>,
-    pub phonetic_uk: Option<String>,
+    pub word_lower: String,
+    pub word_type: Option<String>,
+    pub language: Option<String>,
+    pub frequency: Option<i16>,
+    pub difficulty: Option<i16>,
+    pub syllable_count: Option<i16>,
+    pub is_lemma: Option<bool>,
+    pub word_count: Option<i32>,
+    pub is_active: Option<bool>,
+    pub created_at: String,
+    pub updated_at: String,
+}
+
+/// Word definition
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordDefinition {
+    pub id: i64,
+    pub word_id: i64,
     pub part_of_speech: Option<String>,
     pub definition_en: Option<String>,
     pub definition_zh: String,
-    pub example_en: Option<String>,
+    pub definition_order: Option<i16>,
+    pub register: Option<String>,
+    pub domain: Option<String>,
+    pub region: Option<String>,
+    pub source: Option<String>,
+}
+
+/// Word example sentence
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordExample {
+    pub id: i64,
+    pub word_id: i64,
+    pub example_en: String,
     pub example_zh: Option<String>,
-    pub synonyms: Option<Vec<String>>,
-    pub antonyms: Option<Vec<String>>,
-    pub related_words: Option<Vec<String>>,
-    pub difficulty_level: Option<String>,
-    pub category: Option<String>,
-    pub tags: Option<Vec<String>>,
+    pub example_order: Option<i16>,
+    pub source: Option<String>,
+    pub audio_path: Option<String>,
+}
+
+/// Word form (conjugation, plural, etc.)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordForm {
+    pub id: i64,
+    pub word_id: i64,
+    pub form_type: String,
+    pub form_value: String,
+    pub phonetic_us: Option<String>,
+    pub phonetic_uk: Option<String>,
     pub audio_us_path: Option<String>,
     pub audio_uk_path: Option<String>,
-    pub frequency_rank: Option<i32>,
+}
+
+/// Reference to a related word
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordRef {
+    pub id: i64,
+    pub word: String,
+}
+
+/// Synonym link with reference
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordSynonymView {
+    pub link: WordSynonymLink,
+    pub synonym: WordRef,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordSynonymLink {
+    pub id: i64,
+    pub word_id: i64,
+    pub synonym_word_id: i64,
+    pub similarity_score: Option<f32>,
+    pub context: Option<String>,
+}
+
+/// Antonym link with reference
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordAntonymView {
+    pub link: WordAntonymLink,
+    pub antonym: WordRef,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordAntonymLink {
+    pub id: i64,
+    pub word_id: i64,
+    pub antonym_word_id: i64,
+    pub antonym_type: Option<String>,
+}
+
+/// Word family link with reference
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordFamilyView {
+    pub link: WordFamilyLink,
+    pub related: WordRef,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordFamilyLink {
+    pub id: i64,
+    pub root_word_id: i64,
+    pub related_word_id: i64,
+    pub relationship_type: Option<String>,
+    pub morpheme: Option<String>,
+}
+
+/// Word collocation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordCollocation {
+    pub id: i64,
+    pub word_id: i64,
+    pub collocation: String,
+    pub collocation_type: Option<String>,
+    pub frequency: Option<i16>,
+    pub example_en: Option<String>,
+    pub example_zh: Option<String>,
+}
+
+/// Phrase (idiom or common phrase)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Phrase {
+    pub id: i64,
+    pub phrase: String,
+    pub phrase_type: Option<String>,
+    pub definition_en: Option<String>,
+    pub definition_zh: Option<String>,
+    pub example_en: Option<String>,
+    pub example_zh: Option<String>,
+    pub origin: Option<String>,
     pub usage_notes: Option<String>,
-    pub created_at: String,
-    pub updated_at: String,
+}
+
+/// Category
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Category {
+    pub id: i64,
+    pub name: String,
+    pub description: Option<String>,
+    pub parent_id: Option<i64>,
+}
+
+/// Etymology entry
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordEtymology {
+    pub id: i64,
+    pub word_id: i64,
+    pub origin_language: Option<String>,
+    pub origin_word: Option<String>,
+    pub etymology_description: Option<String>,
+    pub first_known_use: Option<String>,
+}
+
+/// Usage note
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordUsageNote {
+    pub id: i64,
+    pub word_id: i64,
+    pub note_type: Option<String>,
+    pub note_content: String,
+}
+
+/// Word image
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordImage {
+    pub id: i64,
+    pub word_id: i64,
+    pub image_url: String,
+    pub image_type: Option<String>,
+    pub caption: Option<String>,
+}
+
+/// Full word lookup response
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordQueryResponse {
+    pub word: Word,
+    pub definitions: Vec<WordDefinition>,
+    pub examples: Vec<WordExample>,
+    pub synonyms: Vec<WordSynonymView>,
+    pub antonyms: Vec<WordAntonymView>,
+    pub forms: Vec<WordForm>,
+    pub collocations: Vec<WordCollocation>,
+    pub word_family: Vec<WordFamilyView>,
+    pub phrases: Vec<Phrase>,
+    pub idioms: Vec<Phrase>,
+    pub categories: Vec<Category>,
+    pub etymology: Vec<WordEtymology>,
+    pub usage_notes: Vec<WordUsageNote>,
+    pub images: Vec<WordImage>,
 }
 
 /// Brief dictionary entry for search results
@@ -45,7 +214,6 @@ pub struct DictEntryBrief {
     pub phonetic: Option<String>,
     pub part_of_speech: Option<String>,
     pub definition_zh: String,
-    pub difficulty_level: Option<String>,
 }
 
 // ============================================================================
@@ -69,27 +237,18 @@ impl DictApiClient {
     /// Search dictionary entries by word prefix
     ///
     /// # Arguments
-    /// * `query` - The search query (word prefix)
-    /// * `exact` - If true, performs exact match; otherwise prefix match
+    /// * `query` - The search query (word or prefix)
     /// * `limit` - Maximum number of results
-    pub async fn search(
-        &self,
-        query: &str,
-        exact: bool,
-        limit: Option<i64>,
-    ) -> Result<Vec<DictEntryBrief>, String> {
-        let mut url = format!(
-            "{}/dict/search?q={}",
+    pub async fn search(&self, query: &str, limit: Option<i64>) -> Result<Vec<Word>, String> {
+        let limit = limit.unwrap_or(20);
+        let url = format!(
+            "{}/dict/words?search={}&limit={}",
             self.base_url,
-            urlencoding::encode(query)
+            urlencoding::encode(query),
+            limit
         );
 
-        if exact {
-            url.push_str("&exact=true");
-        }
-        if let Some(lim) = limit {
-            url.push_str(&format!("&limit={}", lim));
-        }
+        log::info!("Dictionary search: {}", url);
 
         let response = self
             .client
@@ -109,9 +268,18 @@ impl DictApiClient {
             .map_err(|e| format!("Parse error: {}", e))
     }
 
-    /// Get full details of a dictionary entry
-    pub async fn get_entry(&self, id: i64) -> Result<DictEntry, String> {
-        let url = format!("{}/dict/entries/{}", self.base_url, id);
+    /// Lookup a word by exact match
+    ///
+    /// # Arguments
+    /// * `word` - The word to lookup
+    pub async fn lookup(&self, word: &str) -> Result<WordQueryResponse, String> {
+        let url = format!(
+            "{}/dict/lookup?word={}",
+            self.base_url,
+            urlencoding::encode(word)
+        );
+
+        log::info!("Dictionary lookup: {}", url);
 
         let response = self
             .client
@@ -122,7 +290,7 @@ impl DictApiClient {
             .map_err(|e| format!("Request failed: {}", e))?;
 
         if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+            return Err(format!("API error: {} - word not found", response.status()));
         }
 
         response
@@ -132,21 +300,21 @@ impl DictApiClient {
     }
 
     /// List dictionary entries with optional filters
-    pub async fn list_entries(
+    pub async fn list_words(
         &self,
-        difficulty: Option<&str>,
-        category: Option<&str>,
+        min_difficulty: Option<i16>,
+        max_difficulty: Option<i16>,
         limit: Option<i64>,
         offset: Option<i64>,
-    ) -> Result<Vec<DictEntryBrief>, String> {
-        let mut url = format!("{}/dict/entries", self.base_url);
+    ) -> Result<Vec<Word>, String> {
+        let mut url = format!("{}/dict/words", self.base_url);
         let mut params = vec![];
 
-        if let Some(diff) = difficulty {
-            params.push(format!("difficulty={}", diff));
+        if let Some(min_d) = min_difficulty {
+            params.push(format!("min_difficulty={}", min_d));
         }
-        if let Some(cat) = category {
-            params.push(format!("category={}", cat));
+        if let Some(max_d) = max_difficulty {
+            params.push(format!("max_difficulty={}", max_d));
         }
         if let Some(lim) = limit {
             params.push(format!("limit={}", lim));
@@ -158,54 +326,6 @@ impl DictApiClient {
         if !params.is_empty() {
             url = format!("{}?{}", url, params.join("&"));
         }
-
-        let response = self
-            .client
-            .get(&url)
-            .header("Accept", "application/json")
-            .send()
-            .await
-            .map_err(|e| format!("Request failed: {}", e))?;
-
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
-        }
-
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
-    }
-
-    /// Get a random dictionary entry (for "word of the day" feature)
-    pub async fn get_random(&self, difficulty: Option<&str>) -> Result<DictEntry, String> {
-        let mut url = format!("{}/dict/random", self.base_url);
-
-        if let Some(diff) = difficulty {
-            url = format!("{}?difficulty={}", url, diff);
-        }
-
-        let response = self
-            .client
-            .get(&url)
-            .header("Accept", "application/json")
-            .send()
-            .await
-            .map_err(|e| format!("Request failed: {}", e))?;
-
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
-        }
-
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
-    }
-
-    /// Get list of available categories
-    pub async fn list_categories(&self) -> Result<Vec<String>, String> {
-        let url = format!("{}/dict/categories", self.base_url);
 
         let response = self
             .client

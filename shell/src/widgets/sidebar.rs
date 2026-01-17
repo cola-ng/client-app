@@ -95,8 +95,9 @@ live_design! {
         }
 
         draw_icon: {
+            instance dark_mode: 0.0
             fn get_color(self) -> vec4 {
-                return (SLATE_500);
+                return mix((SLATE_500), (SLATE_400), self.dark_mode);
             }
         }
     }
@@ -406,12 +407,23 @@ impl SidebarRef {
                 },
             );
 
-            // Colang
+            // Home tab
+            inner.view.button(ids!(home_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
+                },
+            );
+
+            // Dialog tab
             inner.view.button(ids!(dialog_tab)).apply_over(
                 cx,
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
                 },
             );
 
@@ -420,6 +432,17 @@ impl SidebarRef {
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
+                },
+            );
+
+            // Scenes tab
+            inner.view.button(ids!(scenes_tab)).apply_over(
+                cx,
+                live! {
+                    draw_bg: { dark_mode: (dark_mode) }
+                    draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
                 },
             );
 
@@ -428,6 +451,7 @@ impl SidebarRef {
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
                 },
             );
 
@@ -436,6 +460,7 @@ impl SidebarRef {
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
                 },
             );
 
@@ -445,6 +470,7 @@ impl SidebarRef {
                 live! {
                     draw_bg: { dark_mode: (dark_mode) }
                     draw_text: { dark_mode: (dark_mode) }
+                    draw_icon: { dark_mode: (dark_mode) }
                 },
             );
 
