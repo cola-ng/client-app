@@ -19,6 +19,12 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme accent colors
+    ACCENT_ORANGE = #f97316
+    ACCENT_ORANGE_HOVER = #ea580c
+    ACCENT_ORANGE_LIGHT = #fff7ed
+    ACCENT_ORANGE_100 = #ffedd5
+
     // ========================================================================
     // Design Tokens from kiro/01-首页-sketch.svg
     // ========================================================================
@@ -96,7 +102,7 @@ live_design! {
                 instance dark_mode: 0.0
                 text_style: <FONT_BOLD>{ font_size: 20.0 }
                 fn get_color(self) -> vec4 {
-                    return mix((ACCENT_INDIGO), (INDIGO_400), self.dark_mode);
+                    return mix((ACCENT_ORANGE), (ORANGE_400), self.dark_mode);
                 }
             }
         }
@@ -247,7 +253,7 @@ live_design! {
 
                 // Progress fill
                 sdf.box(0., 0., self.rect_size.x * self.progress, self.rect_size.y, 3.0);
-                sdf.fill((ACCENT_INDIGO));
+                sdf.fill((ACCENT_ORANGE));
 
                 return sdf.result;
             }
@@ -304,7 +310,7 @@ live_design! {
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-                        sdf.fill((ACCENT_INDIGO));
+                        sdf.fill((ACCENT_ORANGE));
                         return sdf.result;
                     }
                 }
@@ -326,7 +332,7 @@ live_design! {
                 instance dark_mode: 0.0
                 text_style: <FONT_MEDIUM>{ font_size: 11.0 }
                 fn get_color(self) -> vec4 {
-                    return mix((ACCENT_INDIGO), (INDIGO_300), self.dark_mode);
+                    return mix((ACCENT_ORANGE), (ORANGE_300), self.dark_mode);
                 }
             }
             draw_bg: {
@@ -335,8 +341,8 @@ live_design! {
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     let r = 12.0;
-                    let light = mix((INDIGO_100), (SLATE_200), self.hover);
-                    let dark = mix((INDIGO_900), (SLATE_700), self.hover);
+                    let light = mix((ACCENT_ORANGE_100), (SLATE_200), self.hover);
+                    let dark = mix((ORANGE_900), (SLATE_700), self.hover);
                     let color = mix(light, dark, self.dark_mode);
                     sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
                     sdf.fill(color);
@@ -356,7 +362,7 @@ live_design! {
                 text: "💡 AI 建议"
                 draw_text: {
                     text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                    color: (ACCENT_INDIGO)
+                    color: (ACCENT_ORANGE)
                 }
             }
 

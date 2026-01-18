@@ -7,6 +7,10 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme accent colors
+    ACCENT_ORANGE = #f97316
+    ACCENT_ORANGE_HOVER = #ea580c
+
     pub CardBase = <RoundedView> {
         show_bg: true
         draw_bg: {
@@ -60,7 +64,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 16.0);
                 let normal = mix((SLATE_200), (SLATE_700), self.dark_mode);
-                let active = mix((ACCENT_INDIGO), (ACCENT_INDIGO), self.dark_mode);
+                let active = mix((ACCENT_ORANGE), (ACCENT_ORANGE), self.dark_mode);
                 sdf.fill(mix(normal, active, self.selected));
                 return sdf.result;
             }
@@ -128,7 +132,7 @@ live_design! {
             fn get_color(self) -> vec4 {
                 let normal = mix((SLATE_200), (SLATE_700), self.dark_mode);
                 let done = mix((ACCENT_GREEN), (ACCENT_GREEN), self.dark_mode);
-                let active = mix((ACCENT_INDIGO), (ACCENT_INDIGO), self.dark_mode);
+                let active = mix((ACCENT_ORANGE), (ACCENT_ORANGE), self.dark_mode);
                 return mix(mix(normal, done, self.done), active, self.active);
             }
         }
@@ -148,7 +152,7 @@ live_design! {
                 sdf.fill(bg);
                 let fill_w = self.rect_size.x * self.progress;
                 sdf.box(0., 0., fill_w, self.rect_size.y, 4.0);
-                let fill = mix((ACCENT_GREEN), (ACCENT_INDIGO), self.dark_mode);
+                let fill = mix((ACCENT_GREEN), (ACCENT_ORANGE), self.dark_mode);
                 sdf.fill(fill);
                 return sdf.result;
             }
@@ -213,7 +217,7 @@ live_design! {
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
-                sdf.fill((ACCENT_INDIGO));
+                sdf.fill((ACCENT_ORANGE));
                 return sdf.result;
             }
         }

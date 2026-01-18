@@ -20,6 +20,13 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme accent colors
+    ACCENT_ORANGE = #f97316
+    ACCENT_ORANGE_HOVER = #ea580c
+    ACCENT_ORANGE_LIGHT = #fff7ed
+    ORANGE_400 = #fb923c
+    ORANGE_500 = #f97316
+
     // ========================================================================
     // Design Tokens
     // ========================================================================
@@ -180,7 +187,7 @@ live_design! {
                     instance dark_mode: 0.0
                     text_style: <FONT_REGULAR>{ font_size: 11.0 }
                     fn get_color(self) -> vec4 {
-                        return mix((ACCENT_INDIGO), (INDIGO_400), self.dark_mode);
+                        return mix((ACCENT_ORANGE), (ORANGE_400), self.dark_mode);
                     }
                 }
             }
@@ -281,7 +288,7 @@ live_design! {
                         draw_bg: {
                             instance dark_mode: 0.0
                             fn get_color(self) -> vec4 {
-                                return mix((ACCENT_INDIGO), (INDIGO_500), self.dark_mode);
+                                return mix((ACCENT_ORANGE), (ORANGE_500), self.dark_mode);
                             }
                         }
                         align: {x: 0.5, y: 0.5}
@@ -386,7 +393,7 @@ live_design! {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let r = 8.0;
                                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
-                                let color = mix((ACCENT_INDIGO), (INDIGO_500), self.dark_mode);
+                                let color = mix((ACCENT_ORANGE), (ORANGE_500), self.dark_mode);
                                 sdf.fill(color);
                                 return sdf.result;
                             }

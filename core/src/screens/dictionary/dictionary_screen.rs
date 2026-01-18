@@ -16,6 +16,12 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme colors for dictionary
+    DICT_ACCENT = #f97316         // Orange-500
+    DICT_ACCENT_HOVER = #ea580c   // Orange-600
+    DICT_ACCENT_LIGHT = #fff7ed   // Orange-50
+    DICT_ACCENT_BORDER = #fdba74  // Orange-300
+
     // ========================================================================
     // Design Tokens
     // ========================================================================
@@ -81,52 +87,55 @@ live_design! {
     // Search Bar Component
     // ========================================================================
 
-    SearchBar = <DictCardBase> {
+    SearchBar = <View> {
         width: Fill, height: Fit
-        padding: 16
+        padding: 0
         flow: Right
         spacing: 12
         align: {y: 0.5}
 
-        draw_bg: {
-            border_radius: 24.0
-            fn get_color(self) -> vec4 {
-                return mix((WHITE), (SLATE_800), self.dark_mode);
-            }
-        }
-
-        // Search icon
-        search_icon = <Label> {
-            text: ""
-            draw_text: {
-                text_style: <FONT_REGULAR>{ font_size: 18.0 }
-                color: (SLATE_400)
-            }
-        }
-
-        // Text input
-        search_input = <TextInput> {
-            width: Fill, height: Fit
-            text: "Your text here"
+        // Search input container with border
+        search_input_container = <RoundedView> {
+            width: Fill, height: 48
+            flow: Right
+            spacing: 8
+            align: {y: 0.5}
+            padding: {left: 16, right: 16}
 
             draw_bg: {
-                color: #0000
-            }
-
-            draw_text: {
                 instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 15.0 }
+                border_radius: 8.0
+                border_width: 1.0
+                border_color: (SLATE_300)
                 fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    return mix((WHITE), (SLATE_800), self.dark_mode);
                 }
             }
 
-            draw_cursor: {
-                color: (ACCENT_INDIGO)
-            }
+            // Text input
+            search_input = <TextInput> {
+                width: Fill, height: Fit
+                empty_text: "输入要查询的单词..."
 
-            draw_selection: {
-                color: (INDIGO_100)
+                draw_bg: {
+                    color: #0000
+                }
+
+                draw_text: {
+                    instance dark_mode: 0.0
+                    text_style: <FONT_REGULAR>{ font_size: 15.0 }
+                    fn get_color(self) -> vec4 {
+                        return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    }
+                }
+
+                draw_cursor: {
+                    color: (DICT_ACCENT)
+                }
+
+                draw_selection: {
+                    color: (ORANGE_100)
+                }
             }
         }
 
@@ -153,20 +162,21 @@ live_design! {
             }
         }
 
-        // Search button
+        // Search button - orange accent
         search_btn = <Button> {
-            width: Fit, height: 32
-            text: "Search"
-            padding: {left: 16, right: 16}
+            width: Fit, height: 40
+            text: "🔍 查询"
+            padding: {left: 20, right: 20}
 
             draw_bg: {
                 instance dark_mode: 0.0
                 instance hover: 0.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    let base_color = (ACCENT_INDIGO);
-                    let color = mix(base_color, (INDIGO_600), self.hover);
-                    sdf.rounded_box(0., 0., self.rect_size.x, self.rect_size.y, 16.0);
+                    let base_color = (DICT_ACCENT);
+                    let hover_color = (DICT_ACCENT_HOVER);
+                    let color = mix(base_color, hover_color, self.hover);
+                    sdf.rounded_box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
                     sdf.fill(color);
                     return sdf.result;
                 }
@@ -301,7 +311,7 @@ live_design! {
 
     NavAnchorItem = <View> {
         width: Fill, height: Fit
-        padding: {left: 8, right: 8, top: 6, bottom: 6}
+        padding: {left: 12, right: 12, top: 10, bottom: 10}
         flow: Right
         align: {y: 0.5}
 
@@ -309,14 +319,21 @@ live_design! {
         draw_bg: {
             instance hover: 0.0
             instance active: 0.0
+            instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let bg = mix((SLATE_50), (SLATE_700), self.dark_mode);
-                let active_bg = mix((INDIGO_50), (SLATE_600), self.dark_mode);
+                // Orange accent for active/hover states
+                let bg = mix((WHITE), (SLATE_700), self.dark_mode);
+                let active_bg = mix((DICT_ACCENT_LIGHT), (SLATE_600), self.dark_mode);
                 let hover_bg = mix(bg, active_bg, self.active);
                 let final_bg = mix(hover_bg, active_bg, self.hover * 0.5);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
                 sdf.fill(final_bg);
+                // Left border indicator when active
+                if self.active > 0.5 {
+                    sdf.box(0., 4.0, 3.0, self.rect_size.y - 8.0, 1.5);
+                    sdf.fill((DICT_ACCENT));
+                }
                 return sdf.result;
             }
         }
@@ -325,9 +342,9 @@ live_design! {
             text: "词典释义"
             draw_text: {
                 instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 13.0 }
+                text_style: <FONT_MEDIUM>{ font_size: 14.0 }
                 fn get_color(self) -> vec4 {
-                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                 }
             }
         }
@@ -440,7 +457,7 @@ live_design! {
                 text: "excl."
                 draw_text: {
                     text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                    color: (ACCENT_INDIGO)
+                    color: (DICT_ACCENT)
                 }
             }
         }
@@ -525,6 +542,37 @@ live_design! {
     // Main Dictionary Screen
     // ========================================================================
 
+    // Page header with title
+    DictPageHeader = <View> {
+        width: Fill, height: Fit
+        flow: Down
+        spacing: 8
+        align: {x: 0.5}
+        padding: {bottom: 20}
+
+        title = <Label> {
+            text: "词典查询"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_BOLD>{ font_size: 28.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((DICT_ACCENT), (ORANGE_400), self.dark_mode);
+                }
+            }
+        }
+
+        subtitle = <Label> {
+            text: "查询单词，探索英语世界"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 14.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                }
+            }
+        }
+    }
+
     pub DictionaryScreen = {{DictionaryScreen}} {
         width: Fill, height: Fill
 
@@ -532,7 +580,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                return mix((DARK_BG), (DARK_BG_DARK), self.dark_mode);
+                return mix((DICT_ACCENT_LIGHT), (DARK_BG_DARK), self.dark_mode);
             }
         }
 
@@ -547,11 +595,26 @@ live_design! {
             // Center column - Search and Results
             center_column = <View> {
                 width: Fill, height: Fill
-                padding: {top: 20, bottom: 20, left: 20, right: 20}
+                padding: {top: 24, bottom: 24, left: 32, right: 32}
                 flow: Down
-                spacing: 16
+                spacing: 20
 
-                search_bar = <SearchBar> {}
+                // Page header
+                page_header = <DictPageHeader> {}
+
+                // Search bar row
+                search_row = <View> {
+                    width: Fill, height: Fit
+                    flow: Right
+                    spacing: 12
+                    align: {x: 0.5}
+
+                    search_bar = <SearchBar> {
+                        width: 600
+                    }
+                }
+
+                // Results area
                 search_results = <SearchResultsPanel> {
                     height: Fill
                 }
@@ -559,8 +622,8 @@ live_design! {
 
             // Right column - Search History
             right_column = <View> {
-                width: 200, height: Fill
-                padding: {top: 20, bottom: 20, left: 16, right: 16}
+                width: 220, height: Fill
+                padding: {top: 24, bottom: 24, left: 16, right: 16}
                 flow: Down
 
                 search_history = <SearchHistoryCard> {}
@@ -591,10 +654,19 @@ pub struct DictionaryScreen {
     is_searching: bool,
 
     #[rust]
+    is_prefix_searching: bool,
+
+    #[rust]
     lookup_result_receiver: Option<Receiver<Result<WordQueryResponse, String>>>,
 
     #[rust]
     lookup_result_sender: Option<Sender<Result<WordQueryResponse, String>>>,
+
+    #[rust]
+    search_result_receiver: Option<Receiver<Result<Vec<Word>, String>>>,
+
+    #[rust]
+    search_result_sender: Option<Sender<Result<Vec<Word>, String>>>,
 }
 
 impl Widget for DictionaryScreen {
@@ -612,15 +684,19 @@ impl WidgetMatchEvent for DictionaryScreen {
     fn handle_actions(&mut self, cx: &mut Cx, actions: &Actions, _scope: &mut Scope) {
         // Handle search input changes
         if let Some(text) = self
-            .text_input(ids!(search_bar.search_input))
+            .text_input(ids!(main_content.center_column.search_row.search_bar.search_input_container.search_input))
             .changed(actions)
         {
             self.search_query = text.clone();
             ::log::info!("Search query: {}", self.search_query);
+            // Trigger search as user types (for autocomplete)
+            if !self.search_query.trim().is_empty() && self.search_query.len() >= 2 {
+                self.perform_search(cx, self.search_query.clone());
+            }
         }
 
         // Handle search button click
-        if self.button(ids!(search_bar.search_btn)).clicked(actions) {
+        if self.button(ids!(main_content.center_column.search_row.search_bar.search_btn)).clicked(actions) {
             if !self.search_query.trim().is_empty() {
                 self.perform_lookup(cx, self.search_query.clone());
             }
@@ -628,7 +704,7 @@ impl WidgetMatchEvent for DictionaryScreen {
 
         // Handle clear history
         if self
-            .button(ids!(search_history.clear_history_btn))
+            .button(ids!(main_content.right_column.search_history.clear_history_btn))
             .clicked(actions)
         {
             self.clear_search_history(cx);
@@ -650,6 +726,23 @@ impl WidgetMatchEvent for DictionaryScreen {
                 }
             }
         }
+
+        // Check for prefix search results from channel
+        if let Some(ref receiver) = self.search_result_receiver {
+            if let Ok(result) = receiver.try_recv() {
+                self.is_prefix_searching = false;
+                match result {
+                    Ok(words) => {
+                        ::log::info!("Search found {} results", words.len());
+                        self.search_results = words.clone();
+                        self.update_search_results_display(cx, &words);
+                    }
+                    Err(e) => {
+                        ::log::error!("Search error: {}", e);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -661,6 +754,103 @@ impl DictionaryScreen {
             live! {
                 draw_bg: { dark_mode: (dark_mode) }
             },
+        );
+    }
+
+    /// Perform prefix search (for autocomplete as user types)
+    fn perform_search(&mut self, _cx: &mut Cx, query: String) {
+        if self.is_prefix_searching {
+            return;
+        }
+        self.is_prefix_searching = true;
+
+        // Create a channel for communication
+        let (sender, receiver) = bounded(1);
+        self.search_result_sender = Some(sender.clone());
+        self.search_result_receiver = Some(receiver);
+
+        // Get the API client
+        let api = match get_dict_api() {
+            Some(api) => api.read().unwrap().clone(),
+            None => {
+                ::log::error!("Dictionary API not initialized");
+                self.is_prefix_searching = false;
+                return;
+            }
+        };
+
+        // Spawn async search task
+        let query_clone = query.clone();
+        let sender_clone = sender.clone();
+        let api_clone = api.clone();
+        std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async {
+                match api_clone.search(&query_clone, Some(10)).await {
+                    Ok(results) => {
+                        let _ = sender_clone.send(Ok(results));
+                    }
+                    Err(e) => {
+                        let _ = sender_clone.send(Err(e));
+                    }
+                }
+            });
+        });
+    }
+
+    /// Update the UI with search results (multiple word matches)
+    fn update_search_results_display(&mut self, cx: &mut Cx, results: &[Word]) {
+        if results.is_empty() {
+            // Show empty state
+            self.view.apply_over(
+                cx,
+                live! {
+                    main_content = {
+                        center_column = {
+                            search_results = {
+                                empty_state = { visible: true }
+                                results_scroll = {
+                                    results_list = {
+                                        result_item_1 = { visible: false }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+            return;
+        }
+
+        // For now, display the first result
+        // TODO: Generate dynamic list of result items
+        let word = &results[0];
+        let pos_text = word.word_type.clone().unwrap_or_default();
+
+        self.view.apply_over(
+            cx,
+            live! {
+                main_content = {
+                    center_column = {
+                        search_results = {
+                            empty_state = { visible: false }
+                            results_scroll = {
+                                results_list = {
+                                    result_item_1 = {
+                                        visible: true,
+                                        word_row = {
+                                            result_word = { text: (word.word.clone()) }
+                                            result_phonetic = { text: "" }
+                                            result_pos = { text: (pos_text) }
+                                        }
+                                        result_definition = { text: "点击查看详细释义" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         );
     }
 
@@ -738,18 +928,22 @@ impl DictionaryScreen {
         self.view.apply_over(
             cx,
             live! {
-                search_results = {
-                    empty_state = { visible: false }
-                    results_scroll = {
-                        results_list = {
-                            result_item_1 = {
-                                visible: true,
-                                word_row = {
-                                    result_word = { text: (word.word.clone()) }
-                                    result_phonetic = { text: (phonetic_text) }
-                                    result_pos = { text: (pos_text) }
+                main_content = {
+                    center_column = {
+                        search_results = {
+                            empty_state = { visible: false }
+                            results_scroll = {
+                                results_list = {
+                                    result_item_1 = {
+                                        visible: true,
+                                        word_row = {
+                                            result_word = { text: (word.word.clone()) }
+                                            result_phonetic = { text: (phonetic_text) }
+                                            result_pos = { text: (pos_text) }
+                                        }
+                                        result_definition = { text: (definition_text) }
+                                    }
                                 }
-                                result_definition = { text: (definition_text) }
                             }
                         }
                     }

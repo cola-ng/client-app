@@ -8,6 +8,12 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme accent colors
+    ACCENT_ORANGE = #f97316
+    ORANGE_100 = #ffedd5
+    ORANGE_300 = #fdba74
+    ORANGE_900 = #7c2d12
+
     use crate::screens::review::components::ReviewTabButton;
     use crate::screens::review::components::SectionTitle;
     use crate::screens::review::due_screen::DueScreen;
@@ -60,7 +66,7 @@ live_design! {
                             instance dark_mode: 0.0
                             text_style: <FONT_MEDIUM>{ font_size: 11.0 }
                             fn get_color(self) -> vec4 {
-                                return mix((ACCENT_INDIGO), (INDIGO_300), self.dark_mode);
+                                return mix((ACCENT_ORANGE), (ORANGE_300), self.dark_mode);
                             }
                         }
                         draw_bg: {
@@ -69,8 +75,8 @@ live_design! {
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let r = 12.0;
-                                let light = mix((INDIGO_100), (SLATE_200), self.hover);
-                                let dark = mix((INDIGO_900), (SLATE_700), self.hover);
+                                let light = mix((ORANGE_100), (SLATE_200), self.hover);
+                                let dark = mix((ORANGE_900), (SLATE_700), self.hover);
                                 let color = mix(light, dark, self.dark_mode);
                                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
                                 sdf.fill(color);

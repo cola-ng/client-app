@@ -16,6 +16,11 @@ live_design! {
 
     use colang_widgets::theme::*;
 
+    // Orange theme accent colors (used instead of blue for light mode)
+    ACCENT_ORANGE = #f97316
+    ACCENT_ORANGE_DARK = #fb923c
+    ORANGE_50 = #fff7ed
+
     use crate::screens::settings::providers_panel::ProvidersPanel;
     use crate::screens::settings::provider_view::ProviderView;
     use crate::screens::settings::add_provider_modal::AddProviderModal;
@@ -55,7 +60,7 @@ live_design! {
                 // Background colors
                 let light_normal = (WHITE);
                 let light_hover = (SLATE_100);
-                let light_selected = (BLUE_50);
+                let light_selected = (ORANGE_50);
 
                 let dark_normal = (SLATE_800);
                 let dark_hover = (SLATE_700);
@@ -73,7 +78,7 @@ live_design! {
 
                 // Left indicator when selected
                 if self.selected > 0.5 {
-                    let indicator_color = mix((ACCENT_BLUE), (ACCENT_BLUE_DARK), self.dark_mode);
+                    let indicator_color = mix((ACCENT_ORANGE), (ACCENT_ORANGE_DARK), self.dark_mode);
                     sdf.box(0., 4., 3., self.rect_size.y - 8., 1.5);
                     sdf.fill(indicator_color);
                 }
@@ -89,9 +94,9 @@ live_design! {
 
             fn get_color(self) -> vec4 {
                 let light_normal = (TEXT_SECONDARY);
-                let light_selected = (ACCENT_BLUE);
+                let light_selected = (ACCENT_ORANGE);
                 let dark_normal = (TEXT_SECONDARY_DARK);
-                let dark_selected = (ACCENT_BLUE_DARK);
+                let dark_selected = (ACCENT_ORANGE_DARK);
 
                 let normal = mix(light_normal, dark_normal, self.dark_mode);
                 let selected_color = mix(light_selected, dark_selected, self.dark_mode);

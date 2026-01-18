@@ -17,12 +17,12 @@ live_design! {
     use colang_widgets::theme::SLATE_700;
     use colang_widgets::theme::SLATE_800;
     use colang_widgets::theme::SLATE_900;
-    use colang_widgets::theme::BLUE_100;
-    use colang_widgets::theme::BLUE_900;
+    // Orange colors for selected state and icons
+    ORANGE_100 = #ffedd5
+    ORANGE_500 = #f97316
+    ORANGE_900 = #7c2d12
     use colang_widgets::theme::DIVIDER;
     use colang_widgets::theme::DIVIDER_DARK;
-    use colang_widgets::theme::AMBER_500;
-    use colang_widgets::theme::INDIGO_500;
     use colang_widgets::theme::TEXT_PRIMARY_DARK;
     use colang_widgets::theme::TEXT_SECONDARY_DARK;
 
@@ -63,14 +63,14 @@ live_design! {
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                // Light mode: SLATE_50 -> SLATE_200 (hover) -> BLUE_100 (selected)
-                // Dark mode: SLATE_800 -> SLATE_700 (hover) -> BLUE_900 (selected)
+                // Light mode: SLATE_50 -> SLATE_200 (hover) -> ORANGE_100 (selected)
+                // Dark mode: SLATE_800 -> SLATE_700 (hover) -> ORANGE_900 (selected)
                 let light_normal = (SLATE_50);
                 let light_hover = (SLATE_200);
-                let light_selected = (BLUE_100);
+                let light_selected = (ORANGE_100);
                 let dark_normal = (SLATE_800);
                 let dark_hover = (SLATE_700);
-                let dark_selected = (BLUE_900);
+                let dark_selected = (ORANGE_900);
                 let normal = mix(light_normal, dark_normal, self.dark_mode);
                 let hover_color = mix(light_hover, dark_hover, self.dark_mode);
                 let selected_color = mix(light_selected, dark_selected, self.dark_mode);
@@ -96,8 +96,12 @@ live_design! {
 
         draw_icon: {
             instance dark_mode: 0.0
+            instance selected: 0.0
             fn get_color(self) -> vec4 {
-                return mix((SLATE_500), (SLATE_400), self.dark_mode);
+                // Use orange for icons, brighter when selected
+                let light_color = mix((ORANGE_500), (ORANGE_500), self.selected);
+                let dark_color = mix((SLATE_400), (ORANGE_500), self.selected);
+                return mix(light_color, dark_color, self.dark_mode);
             }
         }
     }
@@ -142,28 +146,28 @@ live_design! {
         }
 
         dialog_tab = <SidebarMenuButton> {
-            text: "交流对话"
+            text: "日常唠嗑"
             draw_icon: {
-                svg_file: dep("crate://self/resources/icons/colang.svg")
+                svg_file: dep("crate://self/resources/icons/chat.svg")
             }
         }
 
         review_tab = <SidebarMenuButton> {
             text: "复习巩固"
             draw_icon: {
-                svg_file: dep("crate://self/resources/icons/fm.svg")
+                svg_file: dep("crate://self/resources/icons/reset.svg")
             }
         }
 
         scenes_tab = <SidebarMenuButton> {
             text: "场景中心"
             draw_icon: {
-                svg_file: dep("crate://self/resources/icons/colang.svg")
+                svg_file: dep("crate://self/resources/icons/radio.svg")
             }
         }
 
         reading_tab = <SidebarMenuButton> {
-            text: "跟读练习"
+            text: "大声跟读"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/mic.svg")
             }
@@ -172,7 +176,7 @@ live_design! {
         dictionary_tab = <SidebarMenuButton> {
             text: "词典查询"
             draw_icon: {
-                svg_file: dep("crate://self/resources/icons/search.svg")
+                svg_file: dep("crate://self/resources/icons/book.svg")
             }
         }
 
@@ -185,7 +189,7 @@ live_design! {
         }
 
         settings_tab = <SidebarMenuButton> {
-            text: "Settings"
+            text: "设置"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/settings.svg")
             }
@@ -271,44 +275,44 @@ impl Sidebar {
         // Clear all selections first
         self.clear_all_selections(cx);
 
-        // Apply selected state based on what was clicked
+        // Apply selected state based on what was clicked (both bg and icon)
         match &selection {
             SidebarSelection::Home => {
                 println!("Home selected");
                 self.view
                     .button(ids!(home_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Dialog => {
                 self.view
                     .button(ids!(dialog_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Review => {
                 self.view
                     .button(ids!(review_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Scenes => {
                 println!("Scenes selected");
                 self.view
                     .button(ids!(scenes_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Reading => {
                 self.view
                     .button(ids!(reading_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Dictionary => {
                 self.view
                     .button(ids!(dictionary_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
             SidebarSelection::Settings => {
                 self.view
                     .button(ids!(settings_tab))
-                    .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                    .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
             }
         }
 
@@ -316,10 +320,10 @@ impl Sidebar {
     }
 
     fn clear_all_selections(&mut self, cx: &mut Cx) {
-        // Macro to clear selection on multiple buttons
+        // Macro to clear selection on multiple buttons (both bg and icon)
         macro_rules! clear_selection {
             ($self:expr, $cx:expr, $($path:expr),+ $(,)?) => {
-                $( $self.view.button($path).apply_over($cx, live!{ draw_bg: { selected: 0.0 } }); )+
+                $( $self.view.button($path).apply_over($cx, live!{ draw_bg: { selected: 0.0 }, draw_icon: { selected: 0.0 } }); )+
             };
         }
 
@@ -352,43 +356,43 @@ impl SidebarRef {
                         inner
                             .view
                             .button(ids!(home_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Dialog => {
                         inner
                             .view
                             .button(ids!(dialog_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Review => {
                         inner
                             .view
                             .button(ids!(review_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Scenes => {
                         inner
                             .view
                             .button(ids!(scenes_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Reading => {
                         inner
                             .view
                             .button(ids!(reading_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Dictionary => {
                         inner
                             .view
                             .button(ids!(dictionary_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                     SidebarSelection::Settings => {
                         inner
                             .view
                             .button(ids!(settings_tab))
-                            .apply_over(cx, live! { draw_bg: { selected: 1.0 } });
+                            .apply_over(cx, live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } });
                     }
                 }
             }

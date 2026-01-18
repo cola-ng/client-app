@@ -20,7 +20,11 @@ live_design! {
     use colang_widgets::theme::FONT_BOLD;
     use colang_widgets::theme::DARK_BG;
     use colang_widgets::theme::PANEL_BG;
-    use colang_widgets::theme::ACCENT_INDIGO;
+    use colang_widgets::theme::ACCENT_PRIMARY;
+
+    // Orange accent color alias
+    ACCENT_ORANGE = #f97316
+    ORANGE_100 = #ffedd5
     use colang_widgets::theme::TEXT_PRIMARY;
     use colang_widgets::theme::TEXT_SECONDARY;
     use colang_widgets::theme::HOVER_BG;
@@ -33,7 +37,6 @@ live_design! {
     use colang_widgets::theme::SLATE_800;
     use colang_widgets::theme::GRAY_300;
     use colang_widgets::theme::GRAY_600;
-    use colang_widgets::theme::INDIGO_100;
     use colang_widgets::theme::DARK_BG_DARK;
     use colang_widgets::theme::PANEL_BG_DARK;
     use colang_widgets::theme::TEXT_PRIMARY_DARK;
@@ -418,7 +421,7 @@ live_design! {
 
                 debug_splitter = <View> {
                     width: 6, height: Fill
-                    visible: true
+                    visible: false
                     show_bg: true
                     draw_bg: {
                         instance hover: 0.0
@@ -523,7 +526,7 @@ live_design! {
                                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                     let c = self.rect_size * 0.5;
                                     sdf.circle(c.x, c.y, 30.0);
-                                    let bg = mix((INDIGO_100), (SLATE_700), self.dark_mode);
+                                    let bg = mix((ORANGE_100), (SLATE_700), self.dark_mode);
                                     sdf.fill(bg);
                                     return sdf.result;
                                 }
@@ -532,7 +535,7 @@ live_design! {
                             <Icon> {
                                 draw_icon: {
                                     svg_file: dep("crate://self/resources/icons/user.svg")
-                                    fn get_color(self) -> vec4 { return (ACCENT_INDIGO); }
+                                    fn get_color(self) -> vec4 { return (ACCENT_ORANGE); }
                                 }
                                 icon_walk: {width: 32, height: 32}
                             }

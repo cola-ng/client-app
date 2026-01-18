@@ -218,8 +218,22 @@ live_design! {
     pub YELLOW_500 = #eab308
     pub AMBER_500 = #f59f0b        // Adjusted from #f59e0b (lexer issue with 9e)
 
-    // --- Orange ---
+    // --- Orange (Primary accent for dictionary app) ---
+    pub ORANGE_50 = #fff7ed
+    pub ORANGE_100 = #ffedd5
+    pub ORANGE_200 = #fed7aa
+    pub ORANGE_300 = #fdba74
+    pub ORANGE_400 = #fb923c
     pub ORANGE_500 = #f97316
+    pub ORANGE_600 = #ea580c
+    pub ORANGE_700 = #c2410c
+    pub ORANGE_800 = #9a3412
+    pub ORANGE_900 = #7c2d12
+
+    // Primary accent (orange for this app)
+    pub ACCENT_PRIMARY = #f97316       // Orange-500
+    pub ACCENT_PRIMARY_HOVER = #ea580c // Orange-600
+    pub ACCENT_PRIMARY_LIGHT = #fff7ed // Orange-50
 
     // --- Transparent ---
     pub TRANSPARENT = #00000000

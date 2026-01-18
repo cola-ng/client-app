@@ -29,6 +29,10 @@ live_design! {
     use link::widgets::*;
 
     use colang_widgets::theme::*;
+
+    // Orange accent colors
+    ACCENT_ORANGE = #f97316
+    ORANGE_100 = #ffedd5
     use colang_widgets::participant_panel::ParticipantPanel;
     use colang_widgets::log_panel::LogPanel;
     use crate::screens::conversation::mofa_hero::MofaHero;
@@ -131,7 +135,7 @@ live_design! {
                         chat_avatar = <RoundedView> {
                             width: 40, height: 40
                             draw_bg: {
-                                color: (INDIGO_100)
+                                color: (ORANGE_100)
                                 border_radius: 20.0
                             }
                             <Label> {
@@ -172,14 +176,14 @@ live_design! {
                                 width: Fit, height: Fit
                                 padding: { left: 10, right: 10, top: 4, bottom: 4 }
                                 draw_bg: {
-                                    color: (INDIGO_100)
+                                    color: (ORANGE_100)
                                     border_radius: 12.0
                                 }
                                 <Label> {
                                     text: "🔊"
                                     draw_text: {
                                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (ACCENT_INDIGO)
+                                        color: (ACCENT_ORANGE)
                                     }
                                 }
                             }
@@ -222,7 +226,7 @@ live_design! {
                                     instance dark_mode: 0.0
                                     text_style: <FONT_MEDIUM>{ font_size: 11.0 }
                                     fn get_color(self) -> vec4 {
-                                        return mix((ACCENT_INDIGO), (INDIGO_300), self.dark_mode);
+                                        return mix((ACCENT_ORANGE), (INDIGO_300), self.dark_mode);
                                     }
                                 }
                                 draw_bg: {
@@ -231,7 +235,7 @@ live_design! {
                                     fn pixel(self) -> vec4 {
                                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                         let r = 12.0;
-                                        let light = mix((INDIGO_100), (SLATE_200), self.hover);
+                                        let light = mix((ORANGE_100), (SLATE_200), self.hover);
                                         let dark = mix((INDIGO_900), (SLATE_700), self.hover);
                                         let color = mix(light, dark, self.dark_mode);
                                         sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
@@ -419,7 +423,7 @@ live_design! {
                                     text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
                                 }
                                 draw_bg: {
-                                    instance color: (ACCENT_INDIGO)
+                                    instance color: (ACCENT_ORANGE)
                                     instance color_hover: (BLUE_700)
                                     border_radius: 14.0
                                     fn get_color(self) -> vec4 { return mix(self.color, self.color_hover, self.hover); }
@@ -498,7 +502,7 @@ live_design! {
                                 // Progress fill
                                 let progress_width = self.rect_size.x * self.progress;
                                 sdf.rect(0., 0., progress_width, self.rect_size.y);
-                                sdf.fill(#6366f1); // ACCENT_INDIGO
+                                sdf.fill(#6366f1); // ACCENT_ORANGE
                                 return sdf.result;
                             }
                         }
@@ -514,7 +518,7 @@ live_design! {
 
                     word_title = <Label> {
                         text: "📝 即时词卡"
-                        draw_text: { text_style: <FONT_SEMIBOLD>{ font_size: 13.0 } color: (ACCENT_INDIGO) }
+                        draw_text: { text_style: <FONT_SEMIBOLD>{ font_size: 13.0 } color: (ACCENT_ORANGE) }
                     }
                     word_heading = <Label> {
                         text: "book (v.)"
@@ -538,21 +542,21 @@ live_design! {
                             padding: {left: 10, right: 10, top: 4, bottom: 4}
                             text: "+ 收藏"
                             draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) }
-                            draw_bg: { color: (INDIGO_100) border_radius: 12.0 }
+                            draw_bg: { color: (ORANGE_100) border_radius: 12.0 }
                         }
                         shadow_btn = <Button> {
                             width: Fit, height: 28
                             padding: {left: 10, right: 10, top: 4, bottom: 4}
                             text: "跟读"
                             draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) }
-                            draw_bg: { color: (INDIGO_100) border_radius: 12.0 }
+                            draw_bg: { color: (ORANGE_100) border_radius: 12.0 }
                         }
                         more_examples_btn = <Button> {
                             width: Fit, height: 28
                             padding: {left: 10, right: 10, top: 4, bottom: 4}
                             text: "更多例句"
                             draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) }
-                            draw_bg: { color: (INDIGO_100) border_radius: 12.0 }
+                            draw_bg: { color: (ORANGE_100) border_radius: 12.0 }
                         }
                     }
                 }
@@ -570,7 +574,7 @@ live_design! {
                     }
                     error_item = <RoundedView> {
                         width: Fill, height: 30
-                        draw_bg: { color: (INDIGO_100) border_radius: 8.0 }
+                        draw_bg: { color: (ORANGE_100) border_radius: 8.0 }
                         padding: { left: 10, right: 10 }
                         align: {x: 0.0, y: 0.5}
                         <Label> { text: "want to + 动词原形" draw_text: { text_style: <FONT_MEDIUM>{ font_size: 11.0 } color: (TEXT_PRIMARY) } }
@@ -591,9 +595,9 @@ live_design! {
                         flow: Right
                         spacing: 8
                         <Label> { text: "口音：" draw_text: { text_style: <FONT_REGULAR>{ font_size: 11.0 } color: (TEXT_PRIMARY) } }
-                        accent_us = <Button> { width: 50, height: 24 text: "美式" draw_text: { color: (WHITE) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (ACCENT_INDIGO) border_radius: 10.0 } }
-                        accent_uk = <Button> { width: 50, height: 24 text: "英式" draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (INDIGO_100) border_radius: 10.0 } }
-                        accent_au = <Button> { width: 50, height: 24 text: "澳式" draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (INDIGO_100) border_radius: 10.0 } }
+                        accent_us = <Button> { width: 50, height: 24 text: "美式" draw_text: { color: (WHITE) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (ACCENT_ORANGE) border_radius: 10.0 } }
+                        accent_uk = <Button> { width: 50, height: 24 text: "英式" draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (ORANGE_100) border_radius: 10.0 } }
+                        accent_au = <Button> { width: 50, height: 24 text: "澳式" draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 11.0 } } draw_bg: { color: (ORANGE_100) border_radius: 10.0 } }
                     }
                     speed_row = <Label> { text: "语速：0.8x ━━━●━━━ 1.5x" draw_text: { text_style: <FONT_REGULAR>{ font_size: 11.0 } color: (TEXT_SECONDARY) } }
                 }
@@ -675,7 +679,7 @@ live_design! {
                         copy_log_btn = <Button> {
                             width: 32, height: 26
                             text: "📋"
-                            draw_bg: { color: (INDIGO_100) border_radius: 6.0 }
+                            draw_bg: { color: (ORANGE_100) border_radius: 6.0 }
                             draw_text: { color: (TEXT_PRIMARY) text_style: <FONT_MEDIUM>{ font_size: 12.0 } }
                         }
                     }

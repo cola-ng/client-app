@@ -1002,6 +1002,11 @@ impl App {
                     body.base.content_area.main_content.content.settings_screen
                 ))
                 .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dictionary_screen
+                ))
+                .apply_over(cx, live! { visible: false });
             self.set_header_page_title(cx, "🏠", "首页");
             self.ui.redraw(cx);
         }
@@ -1052,6 +1057,11 @@ impl App {
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dictionary_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
                 .conversation_screen(ids!(
                     body.base
                         .content_area
@@ -1060,7 +1070,7 @@ impl App {
                         .conversation_screen
                 ))
                 .start_timers(cx);
-            self.set_header_page_title(cx, "💬", "交流对话");
+            self.set_header_page_title(cx, "💬", "日常唠嗑");
             self.ui.redraw(cx);
         }
         if self
@@ -1105,6 +1115,11 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.settings_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dictionary_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.set_header_page_title(cx, "📚", "复习中心");
@@ -1163,6 +1178,11 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.settings_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dictionary_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.set_header_page_title(cx, "🎭", "场景中心");
@@ -1236,6 +1256,11 @@ impl App {
             self.ui
                 .view(ids!(
                     body.base.content_area.main_content.content.scenes_screen
+                ))
+                .apply_over(cx, live! { visible: false });
+            self.ui
+                .view(ids!(
+                    body.base.content_area.main_content.content.dictionary_screen
                 ))
                 .apply_over(cx, live! { visible: false });
             self.ui
