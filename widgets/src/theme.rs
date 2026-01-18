@@ -241,18 +241,34 @@ live_design! {
     // ========================================================================
     // DARK THEME VARIANTS
     // Use with mix(LIGHT_COLOR, DARK_COLOR, dark_mode) in shaders
+    // Designed for high contrast and readability
     // ========================================================================
 
-    // --- Dark Theme Semantic Colors ---
-    pub DARK_BG_DARK = #0f172a         // Main background (dark)
-    pub PANEL_BG_DARK = #1f293b        // Card/panel background (dark) - adjusted from #1e293b
-    pub TEXT_PRIMARY_DARK = #f1f5f9    // Main text (dark)
-    pub TEXT_SECONDARY_DARK = #94a3b8  // Secondary text (dark)
-    pub TEXT_MUTED_DARK = #64748b      // Muted text (dark)
-    pub DIVIDER_DARK = #475569         // Divider lines (dark)
-    pub BORDER_DARK = #334155          // Border color (dark)
-    pub HOVER_BG_DARK = #334155        // Hover background (dark)
-    pub ACCENT_BLUE_DARK = #60a5fa     // Primary action (brighter for dark mode)
+    // --- Dark Theme Backgrounds ---
+    // Using a warm dark palette inspired by modern apps (Discord, VSCode, Notion)
+    pub DARK_BG_DARK = #111827         // Main background - slightly warmer than pure black (gray-900)
+    pub PANEL_BG_DARK = #1f2937        // Card/panel background - subtle elevation (gray-800)
+    pub PANEL_BG_ELEVATED_DARK = #374151  // Elevated panels/modals (gray-700)
+
+    // --- Dark Theme Text Colors (High Contrast) ---
+    // Primary text should be clearly visible - near white
+    pub TEXT_PRIMARY_DARK = #f9fafb    // Main text - almost white (gray-50)
+    // Secondary text should still be easily readable
+    pub TEXT_SECONDARY_DARK = #d1d5db  // Secondary text - light gray (gray-300)
+    // Muted text for less important info - still readable
+    pub TEXT_MUTED_DARK = #9ca3af      // Muted text (gray-400)
+
+    // --- Dark Theme UI Elements ---
+    pub DIVIDER_DARK = #374151         // Divider lines - subtle but visible (gray-700)
+    pub BORDER_DARK = #4b5563          // Border color - slightly more visible (gray-600)
+    pub HOVER_BG_DARK = #374151        // Hover background (gray-700)
+    pub INPUT_BG_DARK = #1f2937        // Input fields background (gray-800)
+
+    // --- Dark Theme Accent Colors (Brighter for visibility) ---
+    pub ACCENT_BLUE_DARK = #60a5fa     // Primary action (blue-400)
+    pub ACCENT_ORANGE_DARK = #fb923c   // Orange accent (orange-400)
+    pub ACCENT_GREEN_DARK = #4adf80    // Success color (green-400)
+    pub ACCENT_RED_DARK = #f87171      // Error color (red-400)
 
     // ========================================================================
     // THEMEABLE WIDGET BASE

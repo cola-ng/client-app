@@ -19,8 +19,13 @@ live_design! {
     use colang_widgets::theme::SLATE_900;
     // Orange colors for selected state and icons
     ORANGE_100 = #ffedd5
+    ORANGE_400 = #fb923c
     ORANGE_500 = #f97316
     ORANGE_900 = #7c2d12
+
+    // Additional slate colors for dark mode readability
+    SLATE_200 = #e2e8f0
+    SLATE_300 = #cbd5e1
     use colang_widgets::theme::DIVIDER;
     use colang_widgets::theme::DIVIDER_DARK;
     use colang_widgets::theme::TEXT_PRIMARY_DARK;
@@ -90,7 +95,8 @@ live_design! {
             text_style: <FONT_REGULAR>{ font_size: 12.0 }
 
             fn get_color(self) -> vec4 {
-                return mix((SLATE_500), (SLATE_400), self.dark_mode);
+                // Light mode: dark gray text, Dark mode: light gray for readability
+                return mix((SLATE_600), (SLATE_200), self.dark_mode);
             }
         }
 
@@ -98,9 +104,9 @@ live_design! {
             instance dark_mode: 0.0
             instance selected: 0.0
             fn get_color(self) -> vec4 {
-                // Use orange for icons, brighter when selected
+                // Orange icons in both modes, brighter in dark mode for visibility
                 let light_color = mix((ORANGE_500), (ORANGE_500), self.selected);
-                let dark_color = mix((SLATE_400), (ORANGE_500), self.selected);
+                let dark_color = mix((SLATE_300), (ORANGE_400), self.selected);
                 return mix(light_color, dark_color, self.dark_mode);
             }
         }

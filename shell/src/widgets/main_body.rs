@@ -35,8 +35,10 @@ live_design! {
     use colang_widgets::theme::SLATE_500;
     use colang_widgets::theme::SLATE_700;
     use colang_widgets::theme::SLATE_800;
+    use colang_widgets::theme::GRAY_50;
     use colang_widgets::theme::GRAY_300;
     use colang_widgets::theme::GRAY_600;
+    use colang_widgets::theme::SLATE_300;
     use colang_widgets::theme::DARK_BG_DARK;
     use colang_widgets::theme::PANEL_BG_DARK;
     use colang_widgets::theme::TEXT_PRIMARY_DARK;
@@ -117,8 +119,11 @@ live_design! {
                 title = <Label> {
                     text: "开朗英语"
                     draw_text: {
-                        color: (TEXT_PRIMARY)
+                        instance dark_mode: 0.0
                         text_style: <FONT_BOLD>{ font_size: 24.0 }
+                        fn get_color(self) -> vec4 {
+                            return mix((TEXT_PRIMARY), (GRAY_50), self.dark_mode);
+                        }
                     }
                 }
 
@@ -133,16 +138,22 @@ live_design! {
                     page_icon = <Label> {
                         text: "🏠"
                         draw_text: {
+                            instance dark_mode: 0.0
                             text_style: <FONT_MEDIUM>{ font_size: 16.0 }
-                            color: (SLATE_500)
+                            fn get_color(self) -> vec4 {
+                                return mix((SLATE_500), (SLATE_300), self.dark_mode);
+                            }
                         }
                     }
 
                     page_title = <Label> {
                         text: "首页"
                         draw_text: {
+                            instance dark_mode: 0.0
                             text_style: <FONT_SEMIBOLD>{ font_size: 16.0 }
-                            color: (TEXT_SECONDARY)
+                            fn get_color(self) -> vec4 {
+                                return mix((TEXT_SECONDARY), (GRAY_300), self.dark_mode);
+                            }
                         }
                     }
                 }
