@@ -107,6 +107,7 @@ live_design! {
         // Text input
         search_input = <TextInput> {
             width: Fill, height: Fit
+            text: "Your text here"
 
             draw_bg: {
                 color: #0000
@@ -481,32 +482,9 @@ live_design! {
                 width: Fill, height: Fit
                 flow: Down
 
-                // Placeholder items (will be generated dynamically)
+                // Dynamic result item (hidden until search results arrive)
                 result_item_1 = <SearchResultItem> {
-                    word_row = {
-                        result_word = { text: "hello" }
-                        result_phonetic = { text: "/həˈloʊ/" }
-                        result_pos = { text: "excl." }
-                    }
-                    result_definition = { text: "你好；喂" }
-                }
-
-                result_item_2 = <SearchResultItem> {
-                    word_row = {
-                        result_word = { text: "help" }
-                        result_phonetic = { text: "/help/" }
-                        result_pos = { text: "v." }
-                    }
-                    result_definition = { text: "帮助；援助；有助于" }
-                }
-
-                result_item_3 = <SearchResultItem> {
-                    word_row = {
-                        result_word = { text: "helicopter" }
-                        result_phonetic = { text: "/ˈhelɪkɑːptər/" }
-                        result_pos = { text: "n." }
-                    }
-                    result_definition = { text: "直升机" }
+                    visible: false
                 }
             }
         }
@@ -514,7 +492,7 @@ live_design! {
         // Empty state
         empty_state = <View> {
             width: Fill, height: Fill
-            visible: false
+            visible: true
             align: {x: 0.5, y: 0.5}
 
             content = <View> {
@@ -591,7 +569,8 @@ live_design! {
     }
 }
 
-use crate::dict_api::{get_dict_api, Word, WordQueryResponse};
+use crate::dict_api::{get_dict_api, Word, WordQueryResponse, SearchHistoryEntry};
+use crossbeam_channel::{Receiver, Sender, bounded};
 
 /// DictionaryScreen widget
 #[derive(Live, LiveHook, Widget)]
@@ -610,6 +589,12 @@ pub struct DictionaryScreen {
 
     #[rust]
     is_searching: bool,
+
+    #[rust]
+    lookup_result_receiver: Option<Receiver<Result<WordQueryResponse, String>>>,
+
+    #[rust]
+    lookup_result_sender: Option<Sender<Result<WordQueryResponse, String>>>,
 }
 
 impl Widget for DictionaryScreen {
@@ -632,12 +617,12 @@ impl WidgetMatchEvent for DictionaryScreen {
         {
             self.search_query = text.clone();
             ::log::info!("Search query: {}", self.search_query);
+        }
 
-            // Trigger search API call
-            if !text.trim().is_empty() {
-                self.perform_search(cx, text);
-            } else {
-                self.search_results.clear();
+        // Handle search button click
+        if self.button(ids!(search_bar.search_btn)).clicked(actions) {
+            if !self.search_query.trim().is_empty() {
+                self.perform_lookup(cx, self.search_query.clone());
             }
         }
 
@@ -646,7 +631,24 @@ impl WidgetMatchEvent for DictionaryScreen {
             .button(ids!(search_history.clear_history_btn))
             .clicked(actions)
         {
-            ::log::info!("Clear history");
+            self.clear_search_history(cx);
+        }
+
+        // Check for lookup results from channel
+        if let Some(ref receiver) = self.lookup_result_receiver {
+            if let Ok(result) = receiver.try_recv() {
+                self.is_searching = false;
+                match result {
+                    Ok(word_response) => {
+                        ::log::info!("Lookup success for: {}", word_response.word.word);
+                        self.selected_word = Some(word_response.clone());
+                        self.update_result_display(cx, &word_response);
+                    }
+                    Err(e) => {
+                        ::log::error!("Lookup error: {}", e);
+                    }
+                }
+            }
         }
     }
 }
@@ -662,12 +664,17 @@ impl DictionaryScreen {
         );
     }
 
-    /// Perform a dictionary search
-    fn perform_search(&mut self, cx: &mut Cx, query: String) {
+    /// Perform a dictionary lookup (search for exact word and display details)
+    fn perform_lookup(&mut self, _cx: &mut Cx, query: String) {
         if self.is_searching {
             return;
         }
         self.is_searching = true;
+
+        // Create a channel for communication
+        let (sender, receiver) = bounded(1);
+        self.lookup_result_sender = Some(sender.clone());
+        self.lookup_result_receiver = Some(receiver);
 
         // Get the API client
         let api = match get_dict_api() {
@@ -679,25 +686,101 @@ impl DictionaryScreen {
             }
         };
 
-        // Spawn async search task
+        // Spawn async lookup task
         let query_clone = query.clone();
+        let sender_clone = sender.clone();
+        let api_clone = api.clone();
         std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
             rt.block_on(async {
-                match api.search(&query_clone, Some(10)).await {
-                    Ok(results) => {
-                        ::log::info!("Search results: {} words found", results.len());
-                        for word in &results {
-                            ::log::info!("  - {}", word.word);
-                        }
+                match api_clone.lookup(&query_clone).await {
+                    Ok(result) => {
+                        // Save to search history in background
+                        let _ = api_clone.save_search_history(&query_clone).await;
+                        // Send result back to main thread via channel
+                        let _ = sender_clone.send(Ok(result));
                     }
                     Err(e) => {
-                        ::log::error!("Search error: {}", e);
+                        // Send error back to main thread
+                        let _ = sender_clone.send(Err(e));
                     }
                 }
             });
         });
+    }
 
-        self.is_searching = false;
+    /// Update the UI with lookup result
+    fn update_result_display(&mut self, cx: &mut Cx, result: &WordQueryResponse) {
+        let word = &result.word;
+
+        // Get phonetic info from forms (if available)
+        let phonetic_text = result.forms.first().and_then(|form| {
+            if let Some(uk) = &form.phonetic_uk {
+                Some(format!("英 /{}/", uk))
+            } else if let Some(us) = &form.phonetic_us {
+                Some(format!("美 /{}/", us))
+            } else {
+                None
+            }
+        }).unwrap_or_default();
+
+        // Get part of speech and definition from first definition
+        let primary_definition = result.definitions.first();
+        let pos_text = primary_definition
+            .and_then(|d| d.part_of_speech.clone())
+            .unwrap_or_else(|| word.word_type.clone().unwrap_or_default());
+
+        let definition_text = primary_definition
+            .map(|d| d.definition_zh.clone())
+            .unwrap_or_default();
+
+        // Update the UI with the fetched data
+        self.view.apply_over(
+            cx,
+            live! {
+                search_results = {
+                    empty_state = { visible: false }
+                    results_scroll = {
+                        results_list = {
+                            result_item_1 = {
+                                visible: true,
+                                word_row = {
+                                    result_word = { text: (word.word.clone()) }
+                                    result_phonetic = { text: (phonetic_text) }
+                                    result_pos = { text: (pos_text) }
+                                }
+                                result_definition = { text: (definition_text) }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    /// Clear search history
+    fn clear_search_history(&mut self, cx: &mut Cx) {
+        let api = match get_dict_api() {
+            Some(api) => api.read().unwrap().clone(),
+            None => {
+                ::log::error!("Dictionary API not initialized");
+                return;
+            }
+        };
+
+        let api_clone = api.clone();
+        std::thread::spawn(move || {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            rt.block_on(async {
+                match api_clone.clear_search_history().await {
+                    Ok(_) => {
+                        ::log::info!("Search history cleared");
+                    }
+                    Err(e) => {
+                        ::log::error!("Failed to clear search history: {}", e);
+                    }
+                }
+            });
+        });
     }
 }

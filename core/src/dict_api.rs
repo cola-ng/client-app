@@ -216,6 +216,21 @@ pub struct DictEntryBrief {
     pub definition_zh: String,
 }
 
+/// Search history entry
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchHistoryEntry {
+    pub id: i64,
+    pub user_id: i64,
+    pub word: String,
+    pub searched_at: String,
+}
+
+/// New search history entry for insertion
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NewSearchHistoryEntry {
+    pub word: String,
+}
+
 // ============================================================================
 // Dictionary API Client
 // ============================================================================
@@ -343,6 +358,85 @@ impl DictApiClient {
             .json()
             .await
             .map_err(|e| format!("Parse error: {}", e))
+    }
+
+    /// Save search history
+    ///
+    /// # Arguments
+    /// * `word` - The word that was searched
+    pub async fn save_search_history(&self, word: &str) -> Result<SearchHistoryEntry, String> {
+        let url = format!("{}/dict/history", self.base_url);
+
+        let payload = serde_json::json!({ "word": word });
+
+        log::info!("Saving search history: {}", url);
+
+        let response = self
+            .client
+            .post(&url)
+            .header("Accept", "application/json")
+            .header("Content-Type", "application/json")
+            .json(&payload)
+            .send()
+            .await
+            .map_err(|e| format!("Request failed: {}", e))?;
+
+        if !response.status().is_success() {
+            return Err(format!("API error: {}", response.status()));
+        }
+
+        response
+            .json()
+            .await
+            .map_err(|e| format!("Parse error: {}", e))
+    }
+
+    /// Get search history
+    ///
+    /// # Arguments
+    /// * `limit` - Maximum number of history items
+    pub async fn get_search_history(&self, limit: i64) -> Result<Vec<SearchHistoryEntry>, String> {
+        let url = format!("{}/dict/history?limit={}", self.base_url, limit);
+
+        log::info!("Fetching search history: {}", url);
+
+        let response = self
+            .client
+            .get(&url)
+            .header("Accept", "application/json")
+            .send()
+            .await
+            .map_err(|e| format!("Request failed: {}", e))?;
+
+        if !response.status().is_success() {
+            return Err(format!("API error: {}", response.status()));
+        }
+
+        response
+            .json()
+            .await
+            .map_err(|e| format!("Parse error: {}", e))
+    }
+
+    /// Clear search history
+    pub async fn clear_search_history(&self) -> Result<(), String> {
+        let url = format!("{}/dict/history", self.base_url);
+
+        log::info!("Clearing search history: {}", url);
+
+        let response = self
+            .client
+            .delete(&url)
+            .header("Accept", "application/json")
+            .send()
+            .await
+            .map_err(|e| format!("Request failed: {}", e))?;
+
+        if !response.status().is_success() {
+            return Err(format!("API error: {}", response.status()));
+        }
+
+        Ok(())
     }
 }
 
