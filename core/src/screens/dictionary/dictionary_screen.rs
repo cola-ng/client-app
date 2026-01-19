@@ -16,11 +16,11 @@ live_design! {
 
     use colang_widgets::theme::*;
 
-    // Orange theme colors for dictionary
+    // Orange theme colors for dictionary (accent only, not background)
     DICT_ACCENT = #f97316         // Orange-500
     DICT_ACCENT_HOVER = #ea580c   // Orange-600
-    DICT_ACCENT_LIGHT = #fff7ed   // Orange-50
     DICT_ACCENT_BORDER = #fdba74  // Orange-300
+    ORANGE_100 = #ffedd5          // For input selection
 
     // ========================================================================
     // Design Tokens
@@ -324,7 +324,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 // Orange accent for active/hover states
                 let bg = mix((WHITE), (SLATE_700), self.dark_mode);
-                let active_bg = mix((DICT_ACCENT_LIGHT), (SLATE_600), self.dark_mode);
+                let active_bg = mix((SLATE_100), (SLATE_600), self.dark_mode);
                 let hover_bg = mix(bg, active_bg, self.active);
                 let final_bg = mix(hover_bg, active_bg, self.hover * 0.5);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
@@ -542,37 +542,6 @@ live_design! {
     // Main Dictionary Screen
     // ========================================================================
 
-    // Page header with title
-    DictPageHeader = <View> {
-        width: Fill, height: Fit
-        flow: Down
-        spacing: 8
-        align: {x: 0.5}
-        padding: {bottom: 20}
-
-        title = <Label> {
-            text: "词典查询"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_BOLD>{ font_size: 28.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((DICT_ACCENT), (ORANGE_400), self.dark_mode);
-                }
-            }
-        }
-
-        subtitle = <Label> {
-            text: "查询单词，探索英语世界"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 14.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                }
-            }
-        }
-    }
-
     pub DictionaryScreen = {{DictionaryScreen}} {
         width: Fill, height: Fill
 
@@ -580,7 +549,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                return mix((DICT_ACCENT_LIGHT), (DARK_BG_DARK), self.dark_mode);
+                return mix((DARK_BG), (DARK_BG_DARK), self.dark_mode);
             }
         }
 
@@ -595,22 +564,18 @@ live_design! {
             // Center column - Search and Results
             center_column = <View> {
                 width: Fill, height: Fill
-                padding: {top: 24, bottom: 24, left: 32, right: 32}
+                padding: {top: 20, bottom: 20, left: 24, right: 24}
                 flow: Down
-                spacing: 20
-
-                // Page header
-                page_header = <DictPageHeader> {}
+                spacing: 16
 
                 // Search bar row
                 search_row = <View> {
                     width: Fill, height: Fit
                     flow: Right
                     spacing: 12
-                    align: {x: 0.5}
 
                     search_bar = <SearchBar> {
-                        width: 600
+                        width: Fill
                     }
                 }
 

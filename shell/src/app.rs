@@ -49,6 +49,12 @@ enum DesktopAuthResult {
     Error(String),
 }
 
+/// User information from /me API
+#[derive(Clone, Debug)]
+struct UserInfo {
+    username: String,
+}
+
 // ============================================================================
 // UI DEFINITIONS
 // ============================================================================
@@ -292,6 +298,12 @@ pub struct App {
     #[rust]
     auth_token: Option<String>,
     #[rust]
+    user_name: Option<String>,
+    #[rust]
+    user_info_rx: Option<mpsc::Receiver<Result<UserInfo, String>>>,
+    #[rust]
+    user_info_fetching: bool,
+    #[rust]
     desktop_auth_in_progress: bool,
     #[rust]
     desktop_auth_state: Option<String>,
@@ -327,6 +339,9 @@ impl LiveHook for App {
         self.dark_mode = prefs.dark_mode;
         self.dark_mode_anim = if prefs.dark_mode { 1.0 } else { 0.0 };
         self.auth_token = prefs.auth_token.clone();
+        self.user_name = None;
+        self.user_info_rx = None;
+        self.user_info_fetching = false;
         self.desktop_auth_in_progress = false;
         self.desktop_auth_state = None;
         self.desktop_auth_redirect_uri = None;
@@ -376,6 +391,11 @@ impl AppMain for App {
                 self.apply_dark_mode_screens(cx);
                 // Update header theme toggle icon
                 self.update_theme_toggle_icon(cx);
+                // Fetch user info if token exists (verify login state)
+                if self.auth_token.is_some() {
+                    self.fetch_user_info(cx);
+                }
+                // Update login button label
                 self.update_login_button_label(cx);
                 // Set website URL for settings screen links
                 self.ui
@@ -406,6 +426,7 @@ impl AppMain for App {
         };
 
         self.poll_desktop_auth(cx);
+        self.poll_user_info(cx);
 
         // Handle hover events
         self.handle_sidebar_hover(cx, event);
@@ -545,12 +566,19 @@ impl App {
             .button(ids!(body.base.header.user_profile_container.login_btn))
             .clicked(actions)
         {
+            println!("[Login] Button clicked, auth_token: {:?}", self.auth_token.is_some());
             if self.auth_token.is_some() {
                 // Open user profile page when already logged in
                 let config = Config::load().unwrap_or_default();
-                let _ = webbrowser::open(&config.profile_url());
+                let profile_url = config.profile_url();
+                println!("[Login] Opening profile URL: {}", profile_url);
+                match webbrowser::open(&profile_url) {
+                    Ok(_) => println!("[Login] Browser opened successfully"),
+                    Err(e) => println!("[Login] Failed to open browser: {}", e),
+                }
             } else {
                 // Start desktop login flow when not logged in
+                println!("[Login] Starting desktop login flow");
                 self.start_desktop_login(cx);
             }
         }
@@ -591,12 +619,14 @@ impl App {
         match result {
             DesktopAuthResult::Success(token) => {
                 self.auth_token = Some(token.clone());
-                println!("Desktop login succeeded, token: {}", token);
+                println!("[Login] Desktop login succeeded, token: {}", token);
                 // Update learn API client with new token
                 set_learn_api_token(Some(token.clone()));
                 let mut prefs = Preferences::load();
                 prefs.auth_token = Some(token);
                 let _ = prefs.save();
+                // Fetch user info to get username
+                self.fetch_user_info(cx);
             }
             DesktopAuthResult::Error(message) => {
                 eprintln!("Desktop login failed: {}", message);
@@ -610,16 +640,138 @@ impl App {
 
     fn update_login_button_label(&mut self, cx: &mut Cx) {
         let id = ids!(body.base.header.user_profile_container.login_btn);
-        if self.desktop_auth_in_progress {
+        if self.desktop_auth_in_progress || self.user_info_fetching {
             self.ui
                 .button(id)
                 .apply_over(cx, live! { text: "登录中..." });
+        } else if let Some(ref username) = self.user_name {
+            // Show username when logged in
+            self.ui.button(id).apply_over(cx, live! { text: (username.clone()) });
         } else if self.auth_token.is_some() {
-            self.ui.button(id).apply_over(cx, live! { text: "已登录" });
+            // Token exists but no username yet - show loading
+            self.ui.button(id).apply_over(cx, live! { text: "加载中..." });
         } else {
             self.ui.button(id).apply_over(cx, live! { text: "登录" });
         }
         self.ui.redraw(cx);
+    }
+
+    /// Fetch user info from /me API to verify token and get username
+    fn fetch_user_info(&mut self, cx: &mut Cx) {
+        let token = match &self.auth_token {
+            Some(t) => t.clone(),
+            None => return,
+        };
+
+        if self.user_info_fetching {
+            return;
+        }
+
+        self.user_info_fetching = true;
+        self.update_login_button_label(cx);
+
+        let config = Config::load().unwrap_or_default();
+        let api_url = config.api_url;
+
+        let (tx, rx) = mpsc::channel::<Result<UserInfo, String>>();
+        self.user_info_rx = Some(rx);
+
+        println!("[Login] Fetching user info from {}/me", api_url);
+
+        thread::spawn(move || {
+            let url = format!("{}/me", api_url.trim_end_matches('/'));
+            let client = match reqwest::blocking::Client::builder()
+                .timeout(Duration::from_secs(10))
+                .build()
+            {
+                Ok(c) => c,
+                Err(e) => {
+                    let _ = tx.send(Err(format!("Failed to create HTTP client: {}", e)));
+                    return;
+                }
+            };
+
+            let response = client
+                .get(&url)
+                .header("Authorization", format!("Bearer {}", token))
+                .send();
+
+            match response {
+                Ok(resp) => {
+                    if resp.status().is_success() {
+                        match resp.json::<serde_json::Value>() {
+                            Ok(json) => {
+                                // Try to extract username from response
+                                let username = json
+                                    .get("username")
+                                    .or_else(|| json.get("name"))
+                                    .or_else(|| json.get("email"))
+                                    .and_then(|v| v.as_str())
+                                    .unwrap_or("用户")
+                                    .to_string();
+                                println!("[Login] Got user info: {}", username);
+                                let _ = tx.send(Ok(UserInfo { username }));
+                            }
+                            Err(e) => {
+                                let _ = tx.send(Err(format!("Failed to parse response: {}", e)));
+                            }
+                        }
+                    } else if resp.status().as_u16() == 401 {
+                        // Token is invalid
+                        let _ = tx.send(Err("Token expired or invalid".to_string()));
+                    } else {
+                        let _ = tx.send(Err(format!("Server error: {}", resp.status())));
+                    }
+                }
+                Err(e) => {
+                    let _ = tx.send(Err(format!("Request failed: {}", e)));
+                }
+            }
+        });
+    }
+
+    /// Poll for user info fetch result
+    fn poll_user_info(&mut self, cx: &mut Cx) {
+        let rx = match &self.user_info_rx {
+            Some(rx) => rx,
+            None => return,
+        };
+
+        let result = match rx.try_recv() {
+            Ok(v) => v,
+            Err(std::sync::mpsc::TryRecvError::Empty) => return,
+            Err(std::sync::mpsc::TryRecvError::Disconnected) => {
+                self.user_info_rx = None;
+                self.user_info_fetching = false;
+                self.update_login_button_label(cx);
+                return;
+            }
+        };
+
+        self.user_info_rx = None;
+        self.user_info_fetching = false;
+
+        match result {
+            Ok(user_info) => {
+                println!("[Login] User info received: {:?}", user_info);
+                self.user_name = Some(user_info.username);
+            }
+            Err(e) => {
+                println!("[Login] Failed to fetch user info: {}", e);
+                // If token is invalid, clear it
+                if e.contains("401") || e.contains("expired") || e.contains("invalid") {
+                    self.auth_token = None;
+                    self.user_name = None;
+                    // Update preferences
+                    let mut prefs = Preferences::load();
+                    prefs.auth_token = None;
+                    let _ = prefs.save();
+                    set_learn_api_token(None);
+                }
+            }
+        }
+
+        self.update_login_button_label(cx);
     }
 
     fn start_desktop_login(&mut self, cx: &mut Cx) {
@@ -653,7 +805,7 @@ impl App {
             encode_query_component(&state)
         );
 
-        println!("Opening browser for URL: {}", authorize_url);
+        println!("[Login] Opening browser for URL: {}", authorize_url);
 
         self.desktop_auth_in_progress = true;
         self.desktop_auth_state = Some(state.clone());
@@ -729,7 +881,10 @@ impl App {
             }
         });
 
-        let _ = webbrowser::open(&authorize_url);
+        match webbrowser::open(&authorize_url) {
+            Ok(_) => println!("[Login] Browser opened successfully for auth"),
+            Err(e) => println!("[Login] Failed to open browser for auth: {}", e),
+        }
     }
 
     /// Handle header theme toggle button
