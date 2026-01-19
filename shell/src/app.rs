@@ -2526,7 +2526,7 @@ impl App {
             self.navigate_to_scenario(cx);
         }
 
-        // Handle quick action: 跟读练习 - navigate to reading practice
+        // Handle quick action: 大声跟读 - navigate to reading practice
         if self
             .ui
             .view(ids!(
@@ -2680,7 +2680,7 @@ impl App {
                 body.base.content_area.main_content.content.reading_screen
             ))
             .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🎤", "跟读练习");
+        self.set_header_page_title(cx, "🎤", "大声跟读");
         self.ui.redraw(cx);
     }
 

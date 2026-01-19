@@ -13,6 +13,27 @@ use makepad_component::*;
 
 use crate::asset_api::{ClassicDialogueSource, Scene, get_asset_api};
 
+/// Scene category for filtering
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub enum SceneCategory {
+    #[default]
+    All,
+    Daily,
+    Travel,
+    Business,
+}
+
+impl SceneCategory {
+    fn matches(&self, category_str: &str) -> bool {
+        match self {
+            SceneCategory::All => true,
+            SceneCategory::Daily => category_str == "daily",
+            SceneCategory::Travel => category_str == "travel",
+            SceneCategory::Business => category_str == "business",
+        }
+    }
+}
+
 live_design! {
     use link::theme::*;
     use link::shaders::*;
@@ -26,6 +47,14 @@ live_design! {
     ACCENT_ORANGE_LIGHT = #fff7ed
     ORANGE_400 = #fb923c
     ORANGE_500 = #f97316
+
+    // Difficulty badge colors
+    GREEN_50 = #f0fdf4
+    GREEN_600 = #16a34a
+    AMBER_50 = #fffbeb
+    AMBER_600 = #d97706
+    RED_50 = #fef2f2
+    RED_600 = #dc2626
 
     // ========================================================================
     // Design Tokens
@@ -83,48 +112,56 @@ live_design! {
         }
     }
 
-    // Template for scenario card in today's section
+    // Category filter button base
+    CategoryButton = <RoundedView> {
+        width: Fit, height: 32
+        padding: {left: 16, right: 16}
+        show_bg: true
+        draw_bg: {
+            instance selected: 0.0
+            instance dark_mode: 0.0
+            border_radius: 16.0
+            fn pixel(self) -> vec4 {
+                let orange = vec4(0.976, 0.451, 0.086, 1.0); // #f97316
+                let white = vec4(1.0, 1.0, 1.0, 1.0);
+                return mix(white, orange, self.selected);
+            }
+        }
+        align: {x: 0.5, y: 0.5}
+        cursor: Hand
+    }
+
+    // Template for scenario card in today's section (improved)
     ScenesCardTemplate = <CardBase> {
-        width: 180, height: 160
-        padding: 12
+        width: Fill, height: Fit
+        padding: 16
         flow: Down
         spacing: 8
+        cursor: Hand
 
-        icon_area = <RoundedView> {
-            width: Fill, height: 75
-            show_bg: true
-            draw_bg: {
-                instance dark_mode: 0.0
-                border_radius: 12.0
-                fn pixel(self) -> vec4 {
-                    let light_color = vec4(0.063, 0.725, 0.502, 0.2);
-                    let dark_color = vec4(0.125, 0.65, 0.475, 0.3);
-                    return mix(light_color, dark_color, self.dark_mode);
-                }
-            }
-            align: {x: 0.5, y: 0.5}
-
-            icon = <Label> {
-                text: "🍽️"
-                draw_text: {
-                    text_style: <FONT_BOLD>{ font_size: 32.0 }
-                }
+        // Icon at top
+        icon = <Label> {
+            text: "🍽️"
+            draw_text: {
+                text_style: <FONT_BOLD>{ font_size: 36.0 }
             }
         }
 
+        // Chinese title
         title = <Label> {
             text: "场景名称"
             draw_text: {
                 instance dark_mode: 0.0
-                text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
+                text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
                 fn get_color(self) -> vec4 {
                     return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                 }
             }
         }
 
-        info = <Label> {
-            text: "⭐⭐ · 5分钟"
+        // English subtitle
+        title_en = <Label> {
+            text: "Scene Name"
             draw_text: {
                 instance dark_mode: 0.0
                 text_style: <FONT_REGULAR>{ font_size: 11.0 }
@@ -133,17 +170,65 @@ live_design! {
                 }
             }
         }
+
+        // Bottom row with difficulty badge and duration
+        info_row = <View> {
+            width: Fill, height: Fit
+            flow: Right
+            spacing: 8
+            align: {y: 0.5}
+
+            // Difficulty badge
+            difficulty_badge = <RoundedView> {
+                width: Fit, height: 20
+                padding: {left: 8, right: 8}
+                show_bg: true
+                draw_bg: {
+                    instance badge_color: 0.0  // 0=green, 1=amber, 2=red
+                    border_radius: 10.0
+                    fn pixel(self) -> vec4 {
+                        let green = vec4(0.941, 0.992, 0.957, 1.0);  // #f0fdf4
+                        let amber = vec4(1.0, 0.984, 0.922, 1.0);    // #fffbeb
+                        let red = vec4(0.996, 0.949, 0.949, 1.0);    // #fef2f2
+                        if self.badge_color < 0.5 { return green; }
+                        else if self.badge_color < 1.5 { return amber; }
+                        else { return red; }
+                    }
+                }
+                align: {x: 0.5, y: 0.5}
+
+                badge_label = <Label> {
+                    text: "⭐"
+                    draw_text: {
+                        text_style: <FONT_REGULAR>{ font_size: 10.0 }
+                    }
+                }
+            }
+
+            // Duration with clock
+            duration = <Label> {
+                text: "🕐 5分钟"
+                draw_text: {
+                    instance dark_mode: 0.0
+                    text_style: <FONT_REGULAR>{ font_size: 10.0 }
+                    fn get_color(self) -> vec4 {
+                        return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                    }
+                }
+            }
+        }
     }
 
     // Template for classic dialogue card
     ClassicCardTemplate = <CardBase> {
-        width: 220, height: 100
+        width: Fill, height: Fit
         padding: 12
         flow: Right
         spacing: 12
+        cursor: Hand
 
         icon_area = <RoundedView> {
-            width: 60, height: 60
+            width: 56, height: 56
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
@@ -159,7 +244,7 @@ live_design! {
             icon = <Label> {
                 text: "🎥"
                 draw_text: {
-                    text_style: <FONT_BOLD>{ font_size: 28.0 }
+                    text_style: <FONT_BOLD>{ font_size: 24.0 }
                 }
             }
         }
@@ -174,7 +259,7 @@ live_design! {
                 text: "《电影名》"
                 draw_text: {
                     instance dark_mode: 0.0
-                    text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
+                    text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
                     fn get_color(self) -> vec4 {
                         return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                     }
@@ -192,6 +277,14 @@ live_design! {
                 }
             }
         }
+
+        chevron = <Label> {
+            text: "›"
+            draw_text: {
+                text_style: <FONT_REGULAR>{ font_size: 18.0 }
+                color: (SLATE_300)
+            }
+        }
     }
 
     // ========================================================================
@@ -205,7 +298,20 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                return mix((SLATE_50), (DARK_BG_DARK), self.dark_mode);
+                // Gradient: orange-50 (#fff7ed) → amber-50 (#fffbeb) → yellow-50 (#fefce8)
+                let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
+                let amber_50 = vec4(1.0, 0.984, 0.922, 1.0);
+                let yellow_50 = vec4(0.996, 0.988, 0.910, 1.0);
+                let dark_bg = vec4(0.067, 0.075, 0.102, 1.0);
+
+                let t = self.pos.x;
+                let light_color = vec4(0.0);
+                if t < 0.5 {
+                    light_color = mix(orange_50, amber_50, t * 2.0);
+                } else {
+                    light_color = mix(amber_50, yellow_50, (t - 0.5) * 2.0);
+                }
+                return mix(light_color, dark_bg, self.dark_mode);
             }
         }
 
@@ -253,11 +359,19 @@ live_design! {
                 spacing: 12
                 align: {y: 0.5}
 
-                search_input = <PanelBase> {
-                    width: 300, height: 36
+                search_input = <RoundedView> {
+                    width: 300, height: 40
                     padding: {left: 12, right: 12}
                     flow: Right
+                    spacing: 8
                     align: {y: 0.5}
+                    show_bg: true
+                    draw_bg: {
+                        border_radius: 8.0
+                        color: (WHITE)
+                        border_color: (SLATE_200)
+                        border_width: 1.0
+                    }
 
                     search_icon = <Label> {
                         text: "🔍"
@@ -266,38 +380,62 @@ live_design! {
                         }
                     }
 
-                    search_placeholder = <Label> {
-                        text: "搜索场景..."
+                    search_text_input = <TextInput> {
+                        width: Fill, height: Fit
+                        empty_message: "搜索场景..."
                         draw_text: {
-                            color: (TEXT_MUTED)
-                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            text_style: <FONT_REGULAR>{ font_size: 13.0 }
+                            color: (TEXT_PRIMARY)
                         }
                     }
                 }
 
                 filter_chips = <View> {
-                    width: Fit, height: 36
+                    width: Fit, height: 40
                     flow: Right
                     spacing: 8
                     align: {y: 0.5}
 
-                    filter_all = <RoundedView> {
-                        width: Fit, height: 32
-                        padding: {left: 12, right: 12}
-                        show_bg: true
-                        draw_bg: {
-                            instance dark_mode: 0.0
-                            fn get_color(self) -> vec4 {
-                                return mix((ACCENT_ORANGE), (ORANGE_500), self.dark_mode);
-                            }
-                        }
-                        align: {x: 0.5, y: 0.5}
-
-                        filter_label = <Label> {
+                    filter_all = <CategoryButton> {
+                        draw_bg: { selected: 1.0 }
+                        label = <Label> {
                             text: "全部"
                             draw_text: {
-                                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
                                 color: (WHITE)
+                            }
+                        }
+                    }
+
+                    filter_daily = <CategoryButton> {
+                        draw_bg: { selected: 0.0 }
+                        label = <Label> {
+                            text: "日常生活"
+                            draw_text: {
+                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                color: (TEXT_SECONDARY)
+                            }
+                        }
+                    }
+
+                    filter_travel = <CategoryButton> {
+                        draw_bg: { selected: 0.0 }
+                        label = <Label> {
+                            text: "旅行出行"
+                            draw_text: {
+                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                color: (TEXT_SECONDARY)
+                            }
+                        }
+                    }
+
+                    filter_business = <CategoryButton> {
+                        draw_bg: { selected: 0.0 }
+                        label = <Label> {
+                            text: "商务职场"
+                            draw_text: {
+                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                color: (TEXT_SECONDARY)
                             }
                         }
                     }
@@ -315,16 +453,28 @@ live_design! {
                 }
 
                 continue_card = <CardBase> {
-                    width: Fill, height: 120
+                    width: Fill, height: Fit
                     padding: 16
-                    flow: Right
-                    spacing: 16
-                    align: {y: 0.5}
+                    flow: Down
+                    spacing: 12
 
-                    icon_area = <RoundedView> {
-                        width: 90, height: Fit
-                        flow: Down
-                        align: {x: 0.5, y: 0.5}
+                    // Inner content with gradient background
+                    inner_content = <RoundedView> {
+                        width: Fill, height: Fit
+                        padding: 16
+                        flow: Right
+                        spacing: 16
+                        align: {y: 0.5}
+                        show_bg: true
+                        draw_bg: {
+                            border_radius: 12.0
+                            fn pixel(self) -> vec4 {
+                                // Gradient from orange-50 to amber-50
+                                let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
+                                let amber_50 = vec4(1.0, 0.984, 0.922, 1.0);
+                                return mix(orange_50, amber_50, self.pos.x);
+                            }
+                        }
 
                         icon = <Label> {
                             text: "🏨"
@@ -332,81 +482,59 @@ live_design! {
                                 text_style: <FONT_BOLD>{ font_size: 48.0 }
                             }
                         }
-                    }
 
-                    content = <View> {
-                        width: Fill, height: Fit
-                        flow: Down
-                        spacing: 8
+                        content = <View> {
+                            width: Fill, height: Fit
+                            flow: Down
+                            spacing: 6
 
-                        title = <Label> {
-                            text: "酒店入住"
-                            draw_text: {
-                                instance dark_mode: 0.0
-                                text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
-                                fn get_color(self) -> vec4 {
-                                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            title = <Label> {
+                                text: "酒店入住"
+                                draw_text: {
+                                    text_style: <FONT_SEMIBOLD>{ font_size: 15.0 }
+                                    color: (TEXT_PRIMARY)
+                                }
+                            }
+
+                            progress = <Label> {
+                                text: "进度 60% · 还剩 3 个对话"
+                                draw_text: {
+                                    text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                    color: (TEXT_MUTED)
+                                }
+                            }
+
+                            task = <Label> {
+                                text: "下一个任务：前台预订房间"
+                                draw_text: {
+                                    text_style: <FONT_REGULAR>{ font_size: 13.0 }
+                                    color: (TEXT_SECONDARY)
                                 }
                             }
                         }
 
-                        progress = <Label> {
-                            text: "进度 60% · 还剩 3 个对话"
-                            draw_text: {
-                                instance dark_mode: 0.0
-                                text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                                fn get_color(self) -> vec4 {
-                                    return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                        button = <Button> {
+                            width: Fit, height: 40
+                            padding: {left: 16, right: 16}
+                            text: "继续学习 ›"
+                            draw_bg: {
+                                fn pixel(self) -> vec4 {
+                                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                    sdf.fill(vec4(0.976, 0.451, 0.086, 1.0)); // #f97316
+                                    return sdf.result;
                                 }
                             }
-                        }
-
-                        task = <Label> {
-                            text: "下一个任务：前台预订房间"
                             draw_text: {
-                                instance dark_mode: 0.0
-                                text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                                fn get_color(self) -> vec4 {
-                                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                                }
+                                text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
+                                color: (WHITE)
                             }
-                        }
-
-                        estimate = <Label> {
-                            text: "预计耗时 8 分钟"
-                            draw_text: {
-                                instance dark_mode: 0.0
-                                text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                                fn get_color(self) -> vec4 {
-                                    return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
-                                }
-                            }
-                        }
-                    }
-
-                    button = <Button> {
-                        width: 120, height: 40
-                        text: "继续学习 →"
-                        draw_bg: {
-                            instance dark_mode: 0.0
-                            fn pixel(self) -> vec4 {
-                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                let r = 8.0;
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, r);
-                                let color = mix((ACCENT_ORANGE), (ORANGE_500), self.dark_mode);
-                                sdf.fill(color);
-                                return sdf.result;
-                            }
-                        }
-                        draw_text: {
-                            text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
-                            color: (WHITE)
                         }
                     }
                 }
             }
 
-            // Today's Scenes Section (Dynamic)
+            // Today's Scenes Section (Dynamic) - Grid Layout
             today_section = <View> {
                 width: Fill, height: Fit
                 flow: Down
@@ -432,17 +560,39 @@ live_design! {
                     }
                 }
 
-                // Dynamic scenes list
-                today_cards = <PortalList> {
-                    width: Fill, height: 170
-                    flow: Right
+                // Grid layout for scenes (using nested views for columns)
+                today_cards = <View> {
+                    width: Fill, height: Fit
+                    flow: Down
                     spacing: 12
 
-                    scenetemplate = <ScenesCardTemplate> {}
+                    // Row 1
+                    row1 = <View> {
+                        width: Fill, height: Fit
+                        flow: Right
+                        spacing: 12
+
+                        card0 = <ScenesCardTemplate> {}
+                        card1 = <ScenesCardTemplate> {}
+                        card2 = <ScenesCardTemplate> {}
+                        card3 = <ScenesCardTemplate> {}
+                    }
+
+                    // Row 2
+                    row2 = <View> {
+                        width: Fill, height: Fit
+                        flow: Right
+                        spacing: 12
+
+                        card4 = <ScenesCardTemplate> {}
+                        card5 = <ScenesCardTemplate> {}
+                        card6 = <ScenesCardTemplate> {}
+                        card7 = <ScenesCardTemplate> {}
+                    }
                 }
             }
 
-            // Classic Dialogues Section (Dynamic)
+            // Classic Dialogues Section (Dynamic) - 2 Column Grid
             classic_section = <View> {
                 width: Fill, height: Fit
                 flow: Down
@@ -486,13 +636,31 @@ live_design! {
                     }
                 }
 
-                // Dynamic classic dialogues list
-                classic_cards = <PortalList> {
-                    width: Fill, height: 110
-                    flow: Right
-                    spacing: 16
+                // 2-column grid for classic dialogues
+                classic_cards = <View> {
+                    width: Fill, height: Fit
+                    flow: Down
+                    spacing: 12
 
-                    classic_template = <ClassicCardTemplate> {}
+                    // Row 1
+                    classic_row1 = <View> {
+                        width: Fill, height: Fit
+                        flow: Right
+                        spacing: 12
+
+                        classic0 = <ClassicCardTemplate> {}
+                        classic1 = <ClassicCardTemplate> {}
+                    }
+
+                    // Row 2
+                    classic_row2 = <View> {
+                        width: Fill, height: Fit
+                        flow: Right
+                        spacing: 12
+
+                        classic2 = <ClassicCardTemplate> {}
+                        classic3 = <ClassicCardTemplate> {}
+                    }
                 }
             }
         }
@@ -514,6 +682,9 @@ pub struct Scenes {
     scenes: Vec<Scene>,
 
     #[rust]
+    filtered_scenes: Vec<Scene>,
+
+    #[rust]
     classic_sources: Vec<ClassicDialogueSource>,
 
     #[rust]
@@ -527,46 +698,101 @@ pub struct Scenes {
 
     #[rust]
     fetch_rx: Option<mpsc::Receiver<FetchResult>>,
+
+    #[rust]
+    search_query: String,
+
+    #[rust]
+    active_category: SceneCategory,
 }
 
 impl Widget for Scenes {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
+        let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
 
-        // Check for fetch results
+        // Check for text changes in search input
+        let search_input = self.view.text_input(ids!(search_bar.search_input.search_text_input));
+        let current_text = search_input.text();
+        if current_text != self.search_query {
+            self.search_query = current_text;
+            self.filter_scenes();
+            self.update_scene_cards(cx);
+            self.view.redraw(cx);
+        }
+
+        // Handle category filter clicks
+        for (widget_id, category) in [
+            (ids!(search_bar.filter_chips.filter_all), SceneCategory::All),
+            (ids!(search_bar.filter_chips.filter_daily), SceneCategory::Daily),
+            (ids!(search_bar.filter_chips.filter_travel), SceneCategory::Travel),
+            (ids!(search_bar.filter_chips.filter_business), SceneCategory::Business),
+        ] {
+            if self.view.view(widget_id).finger_up(&actions).is_some() {
+                if self.active_category != category {
+                    self.active_category = category;
+                    self.update_category_buttons(cx);
+                    self.filter_scenes();
+                    self.update_scene_cards(cx);
+                    self.view.redraw(cx);
+                }
+            }
+        }
+
+        // Collect fetch results first to avoid borrow issues
+        let mut scenes_result: Option<Result<Vec<Scene>, String>> = None;
+        let mut classic_result: Option<Result<Vec<ClassicDialogueSource>, String>> = None;
+
         if let Some(rx) = &self.fetch_rx {
             while let Ok(result) = rx.try_recv() {
                 match result {
-                    FetchResult::Scenes(Ok(scenes)) => {
-                        self.scenes = scenes;
-                        self.scenes_loading = false;
-                        self.view
-                            .view(ids!(today_section.loading_label))
-                            .set_visible(cx, false);
-                        self.view.redraw(cx);
-                    }
-                    FetchResult::Scenes(Err(e)) => {
-                        eprintln!("Failed to fetch scenes: {}", e);
-                        self.scenes_loading = false;
-                        self.view
-                            .label(ids!(today_section.loading_label.label))
-                            .set_text(cx, &format!("加载失败: {}", e));
-                    }
-                    FetchResult::ClassicSources(Ok(sources)) => {
-                        self.classic_sources = sources;
-                        self.classic_loading = false;
-                        self.view
-                            .view(ids!(classic_section.classic_loading_label))
-                            .set_visible(cx, false);
-                        self.view.redraw(cx);
-                    }
-                    FetchResult::ClassicSources(Err(e)) => {
-                        eprintln!("Failed to fetch classic sources: {}", e);
-                        self.classic_loading = false;
-                        self.view
-                            .label(ids!(classic_section.classic_loading_label.label))
-                            .set_text(cx, &format!("加载失败: {}", e));
-                    }
+                    FetchResult::Scenes(r) => scenes_result = Some(r),
+                    FetchResult::ClassicSources(r) => classic_result = Some(r),
+                }
+            }
+        }
+
+        // Process scenes result
+        if let Some(result) = scenes_result {
+            match result {
+                Ok(scenes) => {
+                    self.scenes = scenes;
+                    self.scenes_loading = false;
+                    self.filter_scenes();
+                    self.view
+                        .view(ids!(today_section.loading_label))
+                        .set_visible(cx, false);
+                    self.update_scene_cards(cx);
+                    self.view.redraw(cx);
+                }
+                Err(e) => {
+                    eprintln!("Failed to fetch scenes: {}", e);
+                    self.scenes_loading = false;
+                    self.view
+                        .label(ids!(today_section.loading_label.label))
+                        .set_text(cx, &format!("加载失败: {}", e));
+                }
+            }
+        }
+
+        // Process classic sources result
+        if let Some(result) = classic_result {
+            match result {
+                Ok(sources) => {
+                    self.classic_sources = sources;
+                    self.classic_loading = false;
+                    self.view
+                        .view(ids!(classic_section.classic_loading_label))
+                        .set_visible(cx, false);
+                    self.update_classic_cards(cx);
+                    self.view.redraw(cx);
+                }
+                Err(e) => {
+                    eprintln!("Failed to fetch classic sources: {}", e);
+                    self.classic_loading = false;
+                    self.view
+                        .label(ids!(classic_section.classic_loading_label.label))
+                        .set_text(cx, &format!("加载失败: {}", e));
                 }
             }
         }
@@ -581,81 +807,162 @@ impl Widget for Scenes {
     }
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
-        let today_list_id = self.view.portal_list(ids!(today_cards)).widget_uid();
-        let classic_list_id = self.view.portal_list(ids!(classic_cards)).widget_uid();
-
-        while let Some(item) = self.view.draw_walk(cx, scope, walk).step() {
-            if let Some(mut list) = item.as_portal_list().borrow_mut() {
-                // Check which list this is by its live_id
-                let list_id = list.widget_uid();
-
-                if list_id == today_list_id {
-                    // Render scenes
-                    list.set_item_range(cx, 0, self.scenes.len());
-
-                    while let Some(item_id) = list.next_visible_item(cx) {
-                        if item_id < self.scenes.len() {
-                            let item = list.item(cx, item_id, live_id!(scenetemplate));
-                            let scenario = &self.scenes[item_id];
-
-                            // Set icon
-                            let icon = scenario.icon_emoji.as_deref().unwrap_or("🎭");
-                            item.label(ids!(icon_area.icon)).set_text(cx, icon);
-
-                            // Set title
-                            item.label(ids!(title)).set_text(cx, &scenario.name_zh);
-
-                            // Set info (difficulty and estimated time)
-                            let difficulty = scenario.difficulty_level.as_deref().unwrap_or("中级");
-                            let stars = match difficulty {
-                                "beginner" => "⭐",
-                                "intermediate" => "⭐⭐",
-                                "advanced" => "⭐⭐⭐",
-                                _ => "⭐⭐",
-                            };
-                            item.label(ids!(info))
-                                .set_text(cx, &format!("{} · 5分钟", stars));
-
-                            item.draw_all(cx, scope);
-                        }
-                    }
-                } else if list_id == classic_list_id {
-                    // Render classic sources
-                    list.set_item_range(cx, 0, self.classic_sources.len());
-
-                    while let Some(item_id) = list.next_visible_item(cx) {
-                        if item_id < self.classic_sources.len() {
-                            let item = list.item(cx, item_id, live_id!(classic_template));
-                            let source = &self.classic_sources[item_id];
-
-                            // Set icon based on source type
-                            let icon = match source.source_type.as_str() {
-                                "movie" => "🎥",
-                                "tv_show" => "📺",
-                                "ted_talk" => "🎤",
-                                _ => "🎬",
-                            };
-                            item.label(ids!(icon_area.icon)).set_text(cx, icon);
-
-                            // Set title
-                            let title = format!("《{}》", source.title);
-                            item.label(ids!(content.title)).set_text(cx, &title);
-
-                            // Set description
-                            let desc = source.description_zh.as_deref().unwrap_or("经典场景");
-                            item.label(ids!(content.description)).set_text(cx, desc);
-
-                            item.draw_all(cx, scope);
-                        }
-                    }
-                }
-            }
-        }
-        DrawStep::done()
+        self.view.draw_walk(cx, scope, walk)
     }
 }
 
 impl Scenes {
+    /// Filter scenes based on search query and category
+    fn filter_scenes(&mut self) {
+        let query = self.search_query.to_lowercase();
+
+        self.filtered_scenes = self.scenes.iter()
+            .filter(|scene| {
+                // Category filter
+                let category_str = scene.category.as_deref().unwrap_or("daily");
+                if !self.active_category.matches(category_str) {
+                    return false;
+                }
+
+                // Search filter
+                if query.is_empty() {
+                    return true;
+                }
+
+                let name_zh_matches = scene.name_zh.to_lowercase().contains(&query);
+                let name_en_matches = scene.name_en.to_lowercase().contains(&query);
+
+                name_zh_matches || name_en_matches
+            })
+            .cloned()
+            .collect();
+    }
+
+    /// Update category button visual states
+    fn update_category_buttons(&mut self, cx: &mut Cx) {
+        // Color values for selected/unselected state
+        let white = vec4(1.0, 1.0, 1.0, 1.0);
+        let gray = vec4(0.392, 0.455, 0.545, 1.0); // #64748b
+
+        let buttons = [
+            (ids!(search_bar.filter_chips.filter_all), SceneCategory::All),
+            (ids!(search_bar.filter_chips.filter_daily), SceneCategory::Daily),
+            (ids!(search_bar.filter_chips.filter_travel), SceneCategory::Travel),
+            (ids!(search_bar.filter_chips.filter_business), SceneCategory::Business),
+        ];
+
+        for (widget_id, category) in buttons {
+            let is_selected = self.active_category == category;
+            let selected_val = if is_selected { 1.0f64 } else { 0.0f64 };
+            let button = self.view.view(widget_id);
+
+            // Update background
+            button.apply_over(cx, live! {
+                draw_bg: { selected: (selected_val) }
+            });
+
+            // Update label color using apply_over with color values
+            let label = button.label(ids!(label));
+            let text_color = if is_selected { white } else { gray };
+            label.apply_over(cx, live! { draw_text: { color: (text_color) } });
+        }
+    }
+
+    /// Update scene cards with filtered data
+    fn update_scene_cards(&mut self, cx: &mut Cx) {
+        let card_ids = [
+            ids!(today_section.today_cards.row1.card0),
+            ids!(today_section.today_cards.row1.card1),
+            ids!(today_section.today_cards.row1.card2),
+            ids!(today_section.today_cards.row1.card3),
+            ids!(today_section.today_cards.row2.card4),
+            ids!(today_section.today_cards.row2.card5),
+            ids!(today_section.today_cards.row2.card6),
+            ids!(today_section.today_cards.row2.card7),
+        ];
+
+        for (i, card_id) in card_ids.iter().enumerate() {
+            let card = self.view.view(*card_id);
+
+            if i < self.filtered_scenes.len() {
+                let scene = &self.filtered_scenes[i];
+
+                // Show card
+                card.set_visible(cx, true);
+
+                // Set icon
+                let icon = scene.icon_emoji.as_deref().unwrap_or("🎭");
+                card.label(ids!(icon)).set_text(cx, icon);
+
+                // Set Chinese title
+                card.label(ids!(title)).set_text(cx, &scene.name_zh);
+
+                // Set English title
+                card.label(ids!(title_en)).set_text(cx, &scene.name_en);
+
+                // Set difficulty badge
+                let difficulty = scene.difficulty_level.as_deref().unwrap_or("intermediate");
+                let (stars, badge_color) = match difficulty {
+                    "beginner" => ("⭐", 0.0),
+                    "intermediate" => ("⭐⭐", 1.0),
+                    "advanced" => ("⭐⭐⭐", 2.0),
+                    _ => ("⭐⭐", 1.0),
+                };
+                card.label(ids!(info_row.difficulty_badge.badge_label)).set_text(cx, stars);
+                card.view(ids!(info_row.difficulty_badge)).apply_over(cx, live! {
+                    draw_bg: { badge_color: (badge_color) }
+                });
+
+                // Set duration (use fixed value since Scene doesn't have duration field)
+                card.label(ids!(info_row.duration)).set_text(cx, "🕐 5分钟");
+            } else {
+                // Hide card if no data
+                card.set_visible(cx, false);
+            }
+        }
+    }
+
+    /// Update classic dialogue cards
+    fn update_classic_cards(&mut self, cx: &mut Cx) {
+        let card_ids = [
+            ids!(classic_section.classic_cards.classic_row1.classic0),
+            ids!(classic_section.classic_cards.classic_row1.classic1),
+            ids!(classic_section.classic_cards.classic_row2.classic2),
+            ids!(classic_section.classic_cards.classic_row2.classic3),
+        ];
+
+        for (i, card_id) in card_ids.iter().enumerate() {
+            let card = self.view.view(*card_id);
+
+            if i < self.classic_sources.len() {
+                let source = &self.classic_sources[i];
+
+                // Show card
+                card.set_visible(cx, true);
+
+                // Set icon based on source type
+                let icon = match source.source_type.as_str() {
+                    "movie" => "🎥",
+                    "tv_show" => "📺",
+                    "ted_talk" => "🎤",
+                    _ => "🎬",
+                };
+                card.label(ids!(icon_area.icon)).set_text(cx, icon);
+
+                // Set title
+                let title = format!("《{}》", source.title);
+                card.label(ids!(content.title)).set_text(cx, &title);
+
+                // Set description
+                let desc = source.description_zh.as_deref().unwrap_or("经典场景");
+                card.label(ids!(content.description)).set_text(cx, desc);
+            } else {
+                // Hide card if no data
+                card.set_visible(cx, false);
+            }
+        }
+    }
+
     /// Load data from the API
     fn load_data(&mut self, cx: &mut Cx) {
         self.scenes_loading = true;

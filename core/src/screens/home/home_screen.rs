@@ -474,7 +474,7 @@ live_design! {
                 action_panel = {
                     action_icon = { text: "🎤" }
                 }
-                action_label = { text: "跟读练习" }
+                action_label = { text: "大声跟读" }
             }
 
             action_assistant = <QuickActionButton> {
