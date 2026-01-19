@@ -28,7 +28,7 @@ impl Preferences {
     /// Get the preferences file path
     pub fn get_preferences_path() -> PathBuf {
         let home = dirs::home_dir().unwrap_or_else(|| PathBuf::from("."));
-        home.join(".dora")
+        home.join(".colang")
             .join("dashboard")
             .join("preferences.json")
     }
