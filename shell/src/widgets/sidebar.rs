@@ -159,7 +159,7 @@ live_design! {
         }
 
         review_tab = <SidebarMenuButton> {
-            text: "复习巩固"
+            text: "温故知新"
             draw_icon: {
                 svg_file: dep("crate://self/resources/icons/reset.svg")
             }
