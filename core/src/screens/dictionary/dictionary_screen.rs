@@ -105,8 +105,6 @@ live_design! {
             draw_bg: {
                 instance dark_mode: 0.0
                 border_radius: 8.0
-                border_width: 1.0
-                border_color: (SLATE_300)
                 fn get_color(self) -> vec4 {
                     return mix((WHITE), (SLATE_800), self.dark_mode);
                 }
@@ -176,7 +174,7 @@ live_design! {
                     let base_color = (DICT_ACCENT);
                     let hover_color = (DICT_ACCENT_HOVER);
                     let color = mix(base_color, hover_color, self.hover);
-                    sdf.rounded_box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
                     sdf.fill(color);
                     return sdf.result;
                 }

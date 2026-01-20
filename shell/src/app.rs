@@ -2026,58 +2026,7 @@ impl App {
             ))
             .clicked(actions)
         {
-            // Navigate to scene center
-            self.sidebar_menu_open = false;
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-
-            // Stop dialog scene timers
-            self.ui
-                .chat_screen(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .stop_timers(cx);
-
-            // Hide dialog scene, show scene center
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.set_header_page_title(cx, "🎭", "场景中心");
-
-            // Hide other scenes
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::SCENES);
         }
     }
 
@@ -2098,47 +2047,7 @@ impl App {
             ))
             .clicked(actions)
         {
-            // Navigate to scene center
-            self.sidebar_menu_open = false;
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-
-            // Hide review scene, show scene center
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.set_header_page_title(cx, "🎭", "场景中心");
-
-            // Hide other scenes
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::SCENES);
         }
     }
 
@@ -2160,52 +2069,7 @@ impl App {
             ))
             .clicked(actions)
         {
-            // Navigate to scene center
-            self.sidebar_menu_open = false;
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-
-            // Hide home scene, show scene center
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.set_header_page_title(cx, "🎭", "场景中心");
-
-            // Hide other scenes
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::SCENES);
         }
 
         // Handle "开始对话" button - navigate to dialog screen
@@ -2226,7 +2090,7 @@ impl App {
             ))
             .clicked(actions)
         {
-            self.navigate_to_chat_screen(cx);
+            self.navigate(cx, paths::CHAT);
         }
 
         // Handle quick action: 场景模拟 - navigate to scene center

@@ -217,6 +217,16 @@ live_design! {
     // --- Yellow/Amber (warning) ---
     pub YELLOW_500 = #eab308
     pub AMBER_500 = #f59f0b        // Adjusted from #f59e0b (lexer issue with 9e)
+    pub AMBER_50 = #fffbeb
+    pub AMBER_100 = #fff3c4        // Adjusted from #fef3c7 (lexer issue)
+    pub AMBER_600 = #d97706
+    pub AMBER_700 = #b45309
+
+    // --- Tip/Badge Colors ---
+    pub TIP_GREEN_BG = #dcfcf7     // Light green background for tips
+    pub TIP_GREEN_TEXT = #166534   // Dark green text for tips
+    pub TIP_AMBER_BG = #fff3c4     // Light amber background for tips
+    pub TIP_AMBER_TEXT = #b45309   // Dark amber text for tips
 
     // --- Orange (Primary accent for dictionary app) ---
     pub ORANGE_50 = #fff7ed

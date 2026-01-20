@@ -324,8 +324,6 @@ live_design! {
                             show_bg: true
                             draw_bg: {
                                 border_radius: 4.0
-                                border_color: (SLATE_200)
-                                border_width: 1.0
                                 color: (WHITE)
                             }
 
@@ -382,8 +380,6 @@ live_design! {
                             show_bg: true
                             draw_bg: {
                                 border_radius: 4.0
-                                border_color: (SLATE_200)
-                                border_width: 1.0
                                 color: (WHITE)
                             }
 
@@ -555,12 +551,15 @@ live_design! {
                                 icon_walk: { width: 0, height: 0 }
                             }
 
-                            recording_hint = <Label> {
+                            recording_hint = <View> {
                                 visible: false
-                                text: "正在录音... 点击话筒停止"
-                                draw_text: {
-                                    text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                                    color: #ef4444
+                                width: Fit, height: Fit
+                                <Label> {
+                                    text: "正在录音... 点击话筒停止"
+                                    draw_text: {
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        color: #ef4444
+                                    }
                                 }
                             }
                         }

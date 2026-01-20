@@ -274,28 +274,44 @@ live_design! {
     STAT_BLUE_BG = #eff6ff
     STAT_BLUE_TEXT = #2563DD
 
+    pub StatCardOrange = <StatCard> {
+        draw_bg: { tint: (STAT_ORANGE_BG) }
+        stat_value = { draw_text: { tint: (STAT_ORANGE_TEXT) } }
+    }
+
+    pub StatCardGreen = <StatCard> {
+        draw_bg: { tint: (STAT_GREEN_BG) }
+        stat_value = { draw_text: { tint: (STAT_GREEN_TEXT) } }
+    }
+
+    pub StatCardRed = <StatCard> {
+        draw_bg: { tint: (STAT_RED_BG) }
+        stat_value = { draw_text: { tint: (STAT_RED_TEXT) } }
+    }
+
+    pub StatCardBlue = <StatCard> {
+        draw_bg: { tint: (STAT_BLUE_BG) }
+        stat_value = { draw_text: { tint: (STAT_BLUE_TEXT) } }
+    }
+
     pub StatsPanel = <View> {
         width: Fill, height: Fit
         flow: Right
         spacing: 12
-        stat_due = <StatCard> {
-            draw_bg: { tint: (STAT_ORANGE_BG) }
-            stat_value = { text: "23", draw_text: { tint: (STAT_ORANGE_TEXT) } }
+        stat_due = <StatCardOrange> {
+            stat_value = { text: "23" }
             stat_label = { text: "待复习" }
         }
-        stat_mastered = <StatCard> {
-            draw_bg: { tint: (STAT_GREEN_BG) }
-            stat_value = { text: "156", draw_text: { tint: (STAT_GREEN_TEXT) } }
+        stat_mastered = <StatCardGreen> {
+            stat_value = { text: "156" }
             stat_label = { text: "已掌握" }
         }
-        stat_mistakes = <StatCard> {
-            draw_bg: { tint: (STAT_RED_BG) }
-            stat_value = { text: "8", draw_text: { tint: (STAT_RED_TEXT) } }
+        stat_mistakes = <StatCardRed> {
+            stat_value = { text: "8" }
             stat_label = { text: "易错点" }
         }
-        stat_accuracy = <StatCard> {
-            draw_bg: { tint: (STAT_BLUE_BG) }
-            stat_value = { text: "85%", draw_text: { tint: (STAT_BLUE_TEXT) } }
+        stat_accuracy = <StatCardBlue> {
+            stat_value = { text: "85%" }
             stat_label = { text: "正确率" }
         }
     }
@@ -410,10 +426,10 @@ live_design! {
     }
 
     // Color constants for tip banners
-    TIP_AMBER_BG = #fffbDD
-    TIP_AMBER_TEXT = #924000
-    TIP_GREEN_BG = #f0fdf4
-    TIP_GREEN_TEXT = #166534
+    pub TIP_AMBER_BG = #fffbDD
+    pub TIP_AMBER_TEXT = #924000
+    pub TIP_GREEN_BG = #f0fdf4
+    pub TIP_GREEN_TEXT = #166534
 
     // Tip banner for mistakes/mastered tabs
     pub TipBanner = <RoundedView> {

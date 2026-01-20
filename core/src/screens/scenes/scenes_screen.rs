@@ -369,8 +369,6 @@ live_design! {
                     draw_bg: {
                         border_radius: 8.0
                         color: (WHITE)
-                        border_color: (SLATE_200)
-                        border_width: 1.0
                     }
 
                     search_icon = <Label> {
@@ -382,7 +380,7 @@ live_design! {
 
                     search_text_input = <TextInput> {
                         width: Fill, height: Fit
-                        empty_message: "搜索场景..."
+                        empty_text: "搜索场景..."
                         draw_text: {
                             text_style: <FONT_REGULAR>{ font_size: 13.0 }
                             color: (TEXT_PRIMARY)
