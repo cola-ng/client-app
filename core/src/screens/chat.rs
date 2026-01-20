@@ -1,12 +1,12 @@
-pub mod conversation_screen;
+pub mod chat_screen;
 pub mod mofa_hero;
 
-pub use conversation_screen::{ConversationScreen, ConversationScreenWidgetRefExt};
+pub use chat_screen::{ChatScreen, ChatScreenWidgetRefExt};
 use makepad_widgets::Cx;
 
 pub(super) fn live_design(cx: &mut Cx) {
     mofa_hero::live_design(cx);
-    conversation_screen::live_design(cx);
+    chat_screen::live_design(cx);
 }
 
 /// Chat message entry for display

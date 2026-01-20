@@ -36,7 +36,7 @@ live_design! {
     ORANGE_500 = #f97316
     use colang_widgets::participant_panel::ParticipantPanel;
     use colang_widgets::log_panel::LogPanel;
-    use crate::screens::conversation::mofa_hero::MofaHero;
+    use crate::screens::chat::mofa_hero::MofaHero;
 
     // Local layout constants (colors imported from theme)
     SECTION_SPACING = 12.0
@@ -141,7 +141,7 @@ live_design! {
     }
 
     // 日常唠嗑 Screen - redesigned to match website
-    pub ConversationScreen = {{ConversationScreen}} {
+    pub ChatScreen = {{ChatScreen}} {
         width: Fill, height: Fill
         flow: Overlay
         padding: { left: 24, right: 24, top: 24, bottom: 24 }
@@ -763,7 +763,7 @@ live_design! {
 }
 
 #[derive(Live, LiveHook, Widget)]
-pub struct ConversationScreen {
+pub struct ChatScreen {
     #[deref]
     view: View,
     #[rust]
@@ -808,7 +808,7 @@ pub struct ConversationScreen {
     participant_levels: [f64; 2], // 0=myself, 1=teacher
 }
 
-impl Widget for ConversationScreen {
+impl Widget for ChatScreen {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event, scope: &mut Scope) {
         self.view.handle_event(cx, event, scope);
 
@@ -1044,7 +1044,7 @@ impl Widget for ConversationScreen {
     }
 }
 
-impl ConversationScreenRef {
+impl ChatScreenRef {
     /// Stop audio and dora timers - call this before hiding/removing the widget
     /// to prevent timer callbacks on inactive state
     /// Note: AEC blink animation is shader-driven and doesn't need stopping
@@ -1052,7 +1052,7 @@ impl ConversationScreenRef {
         if let Some(inner) = self.borrow_mut() {
             cx.stop_timer(inner.audio_timer);
             cx.stop_timer(inner.dora_timer);
-            ::log::debug!("ConversationScreen timers stopped");
+            ::log::debug!("ChatScreen timers stopped");
         }
     }
 
@@ -1062,12 +1062,12 @@ impl ConversationScreenRef {
         if let Some(mut inner) = self.borrow_mut() {
             inner.audio_timer = cx.start_interval(0.05); // 50ms for mic level
             inner.dora_timer = cx.start_interval(0.1); // 100ms for dora events
-            ::log::debug!("ConversationScreen timers started");
+            ::log::debug!("ChatScreen timers started");
         }
     }
 }
 
-impl StateChangeListener for ConversationScreenRef {
+impl StateChangeListener for ChatScreenRef {
     fn on_dark_mode_change(&self, cx: &mut Cx, dark_mode: f64) {
         if let Some(mut inner) = self.borrow_mut() {
             // Apply dark mode to screen background

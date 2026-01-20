@@ -1,14 +1,14 @@
-//! Log panel methods for ConversationScreen
+//! Log panel methods for ChatScreen
 //!
 //! Handles log display, filtering, and clipboard operations.
 
 use makepad_widgets::*;
 use makepad_component::*;
 
-use super::ConversationScreen;
+use super::ChatScreen;
 use crate::log_bridge;
 
-impl ConversationScreen {
+impl ChatScreen {
     /// Toggle log overlay visibility
     pub(super) fn toggle_log_overlay(&mut self, cx: &mut Cx) {
         self.log_overlay_visible = !self.log_overlay_visible;

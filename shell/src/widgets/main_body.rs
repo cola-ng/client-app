@@ -44,7 +44,7 @@ live_design! {
     use colang_widgets::theme::TEXT_PRIMARY_DARK;
     use colang_widgets::theme::TEXT_SECONDARY_DARK;
 
-    use colang_core::screens::conversation::conversation_screen::ConversationScreen;
+    use colang_core::screens::chat::chat_screen::ChatScreen;
     use colang_core::screens::dictionary::dictionary_screen::DictionaryScreen;
     use colang_core::screens::home::home_screen::HomeScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
@@ -398,7 +398,7 @@ live_design! {
                             visible: true
                         }
 
-                        conversation_screen = <ConversationScreen> {
+                        chat_screen = <ChatScreen> {
                             width: Fill, height: Fill
                             visible: false
                         }

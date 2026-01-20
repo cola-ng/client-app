@@ -1,13 +1,13 @@
-//! Audio control methods for ConversationScreen
+//! Audio control methods for ChatScreen
 //!
 //! Handles audio device selection, mic monitoring, and level visualization.
 
 use makepad_widgets::*;
 use makepad_component::*;
 
-use super::ConversationScreen;
+use super::ChatScreen;
 
-impl ConversationScreen {
+impl ChatScreen {
     /// Initialize audio manager and timers (UI controls removed)
     pub(super) fn init_audio(&mut self, cx: &mut Cx) {
         let mut audio_manager = crate::audio::AudioManager::new();

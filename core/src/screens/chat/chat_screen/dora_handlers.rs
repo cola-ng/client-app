@@ -1,4 +1,4 @@
-//! Dora integration handlers for ConversationScreen
+//! Dora integration handlers for ChatScreen
 //!
 //! Handles dataflow control, event processing, and participant panel updates.
 
@@ -8,12 +8,12 @@ use std::path::PathBuf;
 use makepad_widgets::*;
 use makepad_component::*;
 
-use super::{ChatMessageEntry, ConversationScreen};
+use super::{ChatMessageEntry, ChatScreen};
 use crate::dora_integration::{DoraEvent, DoraIntegration};
 use crate::models::Preferences;
-use crate::screens::conversation::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
+use crate::screens::chat::mofa_hero::{ConnectionStatus, MofaHeroWidgetExt};
 
-impl ConversationScreen {
+impl ChatScreen {
     // =====================================================
     // Dora Integration Methods
     // =====================================================
