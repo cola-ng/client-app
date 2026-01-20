@@ -226,4 +226,280 @@ live_design! {
             color: (WHITE)
         }
     }
+
+    // Stats panel for top of review page
+    pub StatCard = <RoundedView> {
+        width: Fill, height: Fit
+        padding: 16
+        align: {x: 0.5}
+        flow: Down
+        spacing: 4
+        show_bg: true
+        draw_bg: {
+            instance dark_mode: 0.0
+            instance tint: #fff5eb  // default orange-50
+            border_radius: 8.0
+            fn get_color(self) -> vec4 {
+                return mix(self.tint, (SLATE_700), self.dark_mode);
+            }
+        }
+        stat_value = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                instance tint: #f97316  // default orange-600
+                text_style: <FONT_BOLD>{ font_size: 20.0 }
+                fn get_color(self) -> vec4 {
+                    return mix(self.tint, self.tint, self.dark_mode);
+                }
+            }
+        }
+        stat_label = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_MUTED), (TEXT_SECONDARY_DARK), self.dark_mode);
+                }
+            }
+        }
+    }
+
+    // Color constants for stats
+    STAT_ORANGE_BG = #fff5eb
+    STAT_ORANGE_TEXT = #f97316
+    STAT_GREEN_BG = #f0fdf4
+    STAT_GREEN_TEXT = #16a34a
+    STAT_RED_BG = #fef2f2
+    STAT_RED_TEXT = #dc2626
+    STAT_BLUE_BG = #eff6ff
+    STAT_BLUE_TEXT = #2563DD
+
+    pub StatsPanel = <View> {
+        width: Fill, height: Fit
+        flow: Right
+        spacing: 12
+        stat_due = <StatCard> {
+            draw_bg: { tint: (STAT_ORANGE_BG) }
+            stat_value = { text: "23", draw_text: { tint: (STAT_ORANGE_TEXT) } }
+            stat_label = { text: "待复习" }
+        }
+        stat_mastered = <StatCard> {
+            draw_bg: { tint: (STAT_GREEN_BG) }
+            stat_value = { text: "156", draw_text: { tint: (STAT_GREEN_TEXT) } }
+            stat_label = { text: "已掌握" }
+        }
+        stat_mistakes = <StatCard> {
+            draw_bg: { tint: (STAT_RED_BG) }
+            stat_value = { text: "8", draw_text: { tint: (STAT_RED_TEXT) } }
+            stat_label = { text: "易错点" }
+        }
+        stat_accuracy = <StatCard> {
+            draw_bg: { tint: (STAT_BLUE_BG) }
+            stat_value = { text: "85%", draw_text: { tint: (STAT_BLUE_TEXT) } }
+            stat_label = { text: "正确率" }
+        }
+    }
+
+    // Word card component matching website design
+    pub WordCard = <RoundedView> {
+        width: Fill, height: Fit
+        padding: 16
+        flow: Down
+        spacing: 8
+        show_bg: true
+        draw_bg: {
+            instance dark_mode: 0.0
+            border_radius: 12.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                let bg = mix((WHITE), (SLATE_800), self.dark_mode);
+                let border = mix((SLATE_200), (SLATE_700), self.dark_mode);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.fill(bg);
+                sdf.stroke(border, 1.0);
+                return sdf.result;
+            }
+        }
+        header_row = <View> {
+            width: Fill, height: Fit
+            flow: Right
+            align: {y: 0.5}
+            word_label = <Label> {
+                draw_text: {
+                    instance dark_mode: 0.0
+                    text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                    fn get_color(self) -> vec4 {
+                        return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    }
+                }
+            }
+            <View> { width: Fill }
+            due_badge = <RoundedView> {
+                visible: false
+                width: Fit, height: Fit
+                padding: {left: 8, right: 8, top: 3, bottom: 3}
+                show_bg: true
+                draw_bg: {
+                    instance urgent: 1.0
+                    border_radius: 10.0
+                    fn get_color(self) -> vec4 {
+                        let urgent_bg = #fef2f2;
+                        let normal_bg = #fffbeb;
+                        return mix(normal_bg, urgent_bg, self.urgent);
+                    }
+                }
+                due_text = <Label> {
+                    draw_text: {
+                        instance urgent: 1.0
+                        text_style: <FONT_MEDIUM>{ font_size: 10.0 }
+                        fn get_color(self) -> vec4 {
+                            let urgent_color = #dc2626;
+                            let normal_color = #d97706;
+                            return mix(normal_color, urgent_color, self.urgent);
+                        }
+                    }
+                }
+            }
+        }
+        hint_label = <Label> {
+            text: "点击查看释义"
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_MUTED), (TEXT_SECONDARY_DARK), self.dark_mode);
+                }
+            }
+        }
+        progress_row = <View> {
+            width: Fill, height: Fit
+            flow: Right
+            align: {y: 0.5}
+            spacing: 8
+            margin: {top: 4}
+            progress_bar = <RoundedView> {
+                width: Fill, height: 8
+                show_bg: true
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    instance progress: 0.6
+                    border_radius: 4.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        let bg = mix((SLATE_200), (SLATE_700), self.dark_mode);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                        sdf.fill(bg);
+                        let fill_w = self.rect_size.x * self.progress;
+                        sdf.box(0., 0., fill_w, self.rect_size.y, 4.0);
+                        let fill_color = mix(#ef4444, mix(#f59e0b, #22c55e, step(0.5, self.progress)), step(0.3, self.progress));
+                        sdf.fill(fill_color);
+                        return sdf.result;
+                    }
+                }
+            }
+            progress_label = <Label> {
+                draw_text: {
+                    instance dark_mode: 0.0
+                    text_style: <FONT_REGULAR>{ font_size: 10.0 }
+                    fn get_color(self) -> vec4 {
+                        return mix((TEXT_MUTED), (TEXT_SECONDARY_DARK), self.dark_mode);
+                    }
+                }
+            }
+        }
+    }
+
+    // Color constants for tip banners
+    TIP_AMBER_BG = #fffbDD
+    TIP_AMBER_TEXT = #924000
+    TIP_GREEN_BG = #f0fdf4
+    TIP_GREEN_TEXT = #166534
+
+    // Tip banner for mistakes/mastered tabs
+    pub TipBanner = <RoundedView> {
+        width: Fill, height: Fit
+        padding: 16
+        flow: Right
+        align: {y: 0.5}
+        spacing: 8
+        show_bg: true
+        draw_bg: {
+            instance dark_mode: 0.0
+            instance tint: (TIP_AMBER_BG)
+            border_radius: 8.0
+            fn get_color(self) -> vec4 {
+                return mix(self.tint, (SLATE_700), self.dark_mode);
+            }
+        }
+        tip_text = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                instance tint: (TIP_AMBER_TEXT)
+                text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                fn get_color(self) -> vec4 {
+                    return mix(self.tint, (TEXT_PRIMARY_DARK), self.dark_mode);
+                }
+            }
+        }
+    }
+
+    // Bar chart component for stats
+    pub WeekBarChart = <View> {
+        width: Fill, height: 128
+        flow: Right
+        align: {y: 1.0}
+        spacing: 8
+    }
+
+    pub ChartBar = <View> {
+        width: Fill, height: Fill
+        flow: Down
+        align: {x: 0.5, y: 1.0}
+        spacing: 4
+        bar = <RoundedView> {
+            width: Fill, height: 60
+            show_bg: true
+            draw_bg: {
+                border_radius: 4.0
+                fn get_color(self) -> vec4 {
+                    return #fb923c;  // orange-400
+                }
+            }
+        }
+        day_label = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 10.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_MUTED), (TEXT_SECONDARY_DARK), self.dark_mode);
+                }
+            }
+        }
+    }
+
+    // Stat overview item for stats tab
+    pub StatOverviewItem = <PanelBase> {
+        width: Fill, height: Fit
+        padding: 16
+        flow: Down
+        spacing: 4
+        item_label = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_MUTED), (TEXT_SECONDARY_DARK), self.dark_mode);
+                }
+            }
+        }
+        item_value = <Label> {
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_BOLD>{ font_size: 20.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                }
+            }
+        }
+    }
 }

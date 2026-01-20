@@ -13,7 +13,7 @@
     </style>
   </defs>
   <rect x="0" y="0" width="1200" height="820" fill="#ffffff"/>
-  <text x="40" y="56" class="t h1">方案5（移动端）草图：SRS 复习中心（复习为默认入口）</text>
+  <text x="40" y="56" class="t h1">方案5（移动端）草图：SRS 温故知新（复习为默认入口）</text>
   <text x="40" y="86" class="t p muted">重点：队列管理/卡片作答/错题解释（Chat）一体化。</text>
 
   <rect x="60" y="120" width="520" height="640" class="frame"/>

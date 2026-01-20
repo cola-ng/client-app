@@ -30,13 +30,13 @@
   </defs>
 
   <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
-  <text x="40" y="40" class="t h1">开朗英语 - 复习中心（已掌握页草图）</text>
+  <text x="40" y="40" class="t h1">开朗英语 - 温故知新（已掌握页草图）</text>
   <text x="40" y="65" class="t p muted">点击“已掌握”后：查看长期掌握资产、安排“低频复测”，并把高价值句子沉淀到表达库</text>
 
   <rect x="40" y="90" width="1320" height="830" class="card"/>
 
   <rect x="40" y="90" width="1320" height="56" class="header"/>
-  <text x="70" y="125" class="t h2">📚 复习中心</text>
+  <text x="70" y="125" class="t h2">📚 温故知新</text>
 
   <rect x="250" y="102" width="80" height="32" class="chip"/>
   <text x="290" y="123" class="t small" text-anchor="middle">待复习</text>

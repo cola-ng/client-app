@@ -25,7 +25,7 @@
 | [02-AI对话-sketch.svg](02-AI对话-sketch.svg) | 核心对话界面，即时词卡，温和纠错 |
 | [03-场景中心-sketch.svg](03-场景中心-sketch.svg) | 场景选择，经典对白入口 |
 | [04-实时助手-sketch.svg](04-实时助手-sketch.svg) | 与真人聊天的 AI 辅助功能 |
-| [05-复习中心-sketch.svg](05-复习中心-sketch.svg) | 错误追踪，智能复习，学习日历 |
+| [05-温故知新-sketch.svg](05-温故知新-sketch.svg) | 错误追踪，智能复习，学习日历 |
 | [06-跟读练习-sketch.svg](06-跟读练习-sketch.svg) | 发音纠正，音波对比，AI 评分 |
 | [07-经典对白-sketch.svg](07-经典对白-sketch.svg) | 电影/美剧场景，角色扮演学习 |
 

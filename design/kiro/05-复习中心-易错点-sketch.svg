@@ -30,13 +30,13 @@
   </defs>
 
   <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
-  <text x="40" y="40" class="t h1">开朗英语 - 复习中心（易错点页草图）</text>
+  <text x="40" y="40" class="t h1">开朗英语 - 温故知新（易错点页草图）</text>
   <text x="40" y="65" class="t p muted">点击“易错点”后：按类型/频次/影响排序，进入专项微练习，并可一键“带入下一次对话”</text>
 
   <rect x="40" y="90" width="1320" height="830" class="card"/>
 
   <rect x="40" y="90" width="1320" height="56" class="header"/>
-  <text x="70" y="125" class="t h2">📚 复习中心</text>
+  <text x="70" y="125" class="t h2">📚 温故知新</text>
 
   <rect x="250" y="102" width="80" height="32" class="chip"/>
   <text x="290" y="123" class="t small" text-anchor="middle">待复习</text>

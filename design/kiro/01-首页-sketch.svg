@@ -77,7 +77,7 @@
   <text x="80" y="305" class="t p muted">🎭 场景中心</text>
   
   <rect x="52" y="332" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
-  <text x="80" y="359" class="t p muted">📚 复习中心</text>
+  <text x="80" y="359" class="t p muted">📚 温故知新</text>
   
   <rect x="52" y="386" width="176" height="44" class="chip" fill="transparent" stroke="none"/>
   <text x="80" y="413" class="t p muted">🤝 实时助手</text>

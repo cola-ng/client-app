@@ -1277,7 +1277,7 @@ impl App {
                     body.base.content_area.main_content.content.dictionary_screen
                 ))
                 .apply_over(cx, live! { visible: false });
-            self.set_header_page_title(cx, "📚", "复习中心");
+            self.set_header_page_title(cx, "📚", "温故知新");
             self.ui.redraw(cx);
         }
 

@@ -37,7 +37,7 @@
   <rect x="0" y="0" width="1400" height="950" fill="#f8fafc"/>
   
   <!-- Title -->
-  <text x="40" y="40" class="t h1">SpeakFlow - 复习中心草图</text>
+  <text x="40" y="40" class="t h1">SpeakFlow - 温故知新草图</text>
   <text x="40" y="65" class="t p muted">智能复习系统 · 错误追踪 · 间隔重复 · 无感融入对话</text>
 
   <!-- Main App Frame -->
@@ -45,7 +45,7 @@
   
   <!-- Header -->
   <rect x="40" y="90" width="1320" height="56" class="header"/>
-  <text x="70" y="125" class="t h2">📚 复习中心</text>
+  <text x="70" y="125" class="t h2">📚 温故知新</text>
   
   <!-- Tab Navigation -->
   <rect x="250" y="102" width="80" height="32" class="chip-active"/>
