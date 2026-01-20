@@ -8,4 +8,5 @@ pub mod doubao_api;
 pub mod learn_api;
 pub mod log_bridge;
 pub mod models;
+pub mod routes;
 pub mod screens;

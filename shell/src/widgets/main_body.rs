@@ -389,43 +389,36 @@ live_design! {
                     width: Fill, height: Fill
                     flow: Down
 
-                    content = <View> {
+                    content = <PageFlip> {
                         width: Fill, height: Fill
-                        flow: Overlay
+                        active_page: home_screen
 
                         home_screen = <HomeScreen> {
                             width: Fill, height: Fill
-                            visible: true
                         }
 
                         chat_screen = <ChatScreen> {
                             width: Fill, height: Fill
-                            visible: false
                         }
 
                         scenes_screen = <Scenes> {
                             width: Fill, height: Fill
-                            visible: false
                         }
 
                         review_screen = <ReviewScreen> {
                             width: Fill, height: Fill
-                            visible: false
                         }
 
                         reading_screen = <ReadingScreen> {
                             width: Fill, height: Fill
-                            visible: false
                         }
 
                         dictionary_screen = <DictionaryScreen> {
                             width: Fill, height: Fill
-                            visible: false
                         }
 
                         settings_screen = <SettingsScreen> {
                             width: Fill, height: Fill
-                            visible: false
                         }
                     }
                 }

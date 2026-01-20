@@ -80,6 +80,7 @@ pub mod debug_panel;
 pub mod led_gauge;
 pub mod log_panel;
 pub mod participant_panel;
+pub mod router;
 pub mod theme;
 pub mod waveform_view;
 
@@ -123,8 +124,10 @@ pub fn live_design(cx: &mut Cx) {
     log_panel::live_design(cx);
     led_gauge::live_design(cx);
     debug_panel::live_design(cx);
+    router::live_design(cx);
 }
 
 // Re-export commonly used types
 pub use audio_player::*;
 pub use participant_panel::ParticipantPanel;
+pub use router::{Route, Router, RouterAction, RouterRef};

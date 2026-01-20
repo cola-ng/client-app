@@ -487,6 +487,51 @@ impl SidebarRef {
             inner.view.redraw(cx);
         }
     }
+
+    /// Update sidebar selection based on current route path
+    pub fn select_by_path(&self, cx: &mut Cx, path: &str) {
+        if let Some(mut inner) = self.borrow_mut() {
+            // Determine selection based on path
+            let selection = if path == "/" {
+                SidebarSelection::Home
+            } else if path.starts_with("/chat") {
+                SidebarSelection::Dialog
+            } else if path.starts_with("/review") {
+                SidebarSelection::Review
+            } else if path.starts_with("/scenes") {
+                SidebarSelection::Scenes
+            } else if path.starts_with("/reading") {
+                SidebarSelection::Reading
+            } else if path.starts_with("/dictionary") {
+                SidebarSelection::Dictionary
+            } else if path.starts_with("/settings") {
+                SidebarSelection::Settings
+            } else {
+                return; // Unknown path
+            };
+
+            // Update selection state
+            inner.selection = Some(selection.clone());
+            inner.clear_all_selections(cx);
+
+            // Apply selected state
+            let tab_id = match selection {
+                SidebarSelection::Home => ids!(home_tab),
+                SidebarSelection::Dialog => ids!(dialog_tab),
+                SidebarSelection::Review => ids!(review_tab),
+                SidebarSelection::Scenes => ids!(scenes_tab),
+                SidebarSelection::Reading => ids!(reading_tab),
+                SidebarSelection::Dictionary => ids!(dictionary_tab),
+                SidebarSelection::Settings => ids!(settings_tab),
+            };
+
+            inner.view.button(tab_id).apply_over(
+                cx,
+                live! { draw_bg: { selected: 1.0 }, draw_icon: { selected: 1.0 } },
+            );
+            inner.view.redraw(cx);
+        }
+    }
 }
 
 // Navigation uses button clicks, handled in app.rs

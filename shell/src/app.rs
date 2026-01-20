@@ -19,6 +19,7 @@ use colang_core::asset_api::init_asset_api;
 use colang_core::dict_api::init_dict_api;
 use colang_core::learn_api::{init_learn_api, set_learn_api_token};
 use colang_core::models::Preferences;
+use colang_core::routes::{self, paths, get_page_meta, SidebarRoute};
 use colang_core::screens::chat::chat_screen::ChatScreenWidgetRefExt;
 use colang_core::screens::settings::settings_screen::SettingsScreenWidgetRefExt;
 use colang_core::screens::settings::{SettingsScreenAction, ThemeMode};
@@ -321,6 +322,9 @@ pub struct App {
     debug_panel_drag_start_x: f64,
     #[rust]
     debug_panel_drag_start_width: f64,
+    /// Current route path for navigation
+    #[rust]
+    current_path: String,
 }
 
 impl LiveHook for App {
@@ -350,6 +354,7 @@ impl LiveHook for App {
         self.debug_panel_dragging = false;
         self.debug_panel_drag_start_x = 0.0;
         self.debug_panel_drag_start_width = 400.0;
+        self.current_path = paths::HOME.to_string();
 
         // Initialize API clients with backend URL
         init_asset_api(&config.api_url);
@@ -1107,178 +1112,28 @@ impl App {
             .button(ids!(sidebar_menu_overlay.sidebar_content.home_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            // Stop any running timers
-            self.ui
-                .chat_screen(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .stop_timers(cx);
-            // Show home, hide others
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.dictionary_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.set_header_page_title(cx, "🏠", "首页");
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::HOME);
         }
 
-        // Colang tab
+        // Chat tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.dialog_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.dictionary_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .chat_screen(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .start_timers(cx);
-            self.set_header_page_title(cx, "💬", "日常唠嗑");
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::CHAT);
         }
+
+        // Review tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.review_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.dictionary_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.set_header_page_title(cx, "📚", "温故知新");
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::REVIEW);
         }
 
         // Scene Center tab
@@ -1287,81 +1142,28 @@ impl App {
             .button(ids!(sidebar_menu_overlay.sidebar_content.scenes_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            self.ui
-                .chat_screen(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .stop_timers(cx);
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.dictionary_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.set_header_page_title(cx, "🎭", "场景中心");
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::SCENES);
         }
 
+        // Reading tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.reading_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.navigate_to_reading_practice(cx);
+            self.navigate(cx, paths::READING);
         }
 
+        // Dictionary tab
         if self
             .ui
             .button(ids!(sidebar_menu_overlay.sidebar_content.dictionary_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.navigate_to_dictionary(cx);
+            self.navigate(cx, paths::DICTIONARY);
         }
 
         // Settings tab
@@ -1370,61 +1172,8 @@ impl App {
             .button(ids!(sidebar_menu_overlay.sidebar_content.settings_tab))
             .clicked(actions)
         {
-            self.sidebar_menu_open = false;
             self.start_sidebar_slide_out(cx);
-            self.open_tabs.clear();
-            self.active_tab = None;
-            self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
-            self.ui
-                .chat_screen(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .stop_timers(cx);
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.home_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.reading_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base
-                        .content_area
-                        .main_content
-                        .content
-                        .chat_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.review_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.scenes_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.dictionary_screen
-                ))
-                .apply_over(cx, live! { visible: false });
-            self.ui
-                .view(ids!(
-                    body.base.content_area.main_content.content.settings_screen
-                ))
-                .apply_over(cx, live! { visible: true });
-            self.set_header_page_title(cx, "⚙️", "设置");
-            self.ui.redraw(cx);
+            self.navigate(cx, paths::SETTINGS);
         }
     }
 }
@@ -2637,121 +2386,102 @@ impl App {
         }
     }
 
-    // Helper navigation methods
-    fn navigate_to_chat_screen(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
-            .view(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .chat_screen
-            ))
-            .apply_over(cx, live! { visible: true });
-        self.ui
-            .chat_screen(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .chat_screen
-            ))
-            .start_timers(cx);
-        self.set_header_page_title(cx, "💬", "交流对话");
-        self.ui.redraw(cx);
-    }
+    // ========================================================================
+    // UNIFIED NAVIGATION METHOD
+    // ========================================================================
 
-    fn navigate_to_scenario(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.scenes_screen
-            ))
-            .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🎭", "场景中心");
-        self.ui.redraw(cx);
-    }
+    /// Navigate to a path using the router system
+    /// This is the main navigation entry point that handles:
+    /// - Updating the current path
+    /// - Switching pages via PageFlip
+    /// - Updating header title and icon
+    /// - Managing chat screen timers
+    pub fn navigate(&mut self, cx: &mut Cx, path: &str) {
+        // Skip if already on this path
+        if self.current_path == path {
+            return;
+        }
 
-    fn navigate_to_reading_practice(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.reading_screen
-            ))
-            .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "🎤", "大声跟读");
-        self.ui.redraw(cx);
-    }
+        // Store previous path to check if we need to stop chat timers
+        let was_on_chat = self.current_path.starts_with(paths::CHAT);
 
-    fn navigate_to_dictionary(&mut self, cx: &mut Cx) {
-        self.hide_all_screens(cx);
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.dictionary_screen
-            ))
-            .apply_over(cx, live! { visible: true });
-        self.set_header_page_title(cx, "📖", "词典查询");
-        self.ui.redraw(cx);
-    }
+        // Update current path
+        self.current_path = path.to_string();
 
-    fn hide_all_screens(&mut self, cx: &mut Cx) {
+        // Close sidebar and tab overlay
         self.sidebar_menu_open = false;
         self.open_tabs.clear();
         self.active_tab = None;
         self.ui.view(ids!(body.tab_overlay)).set_visible(cx, false);
 
-        // Stop dialog timers if running
-        self.ui
-            .chat_screen(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .chat_screen
-            ))
-            .stop_timers(cx);
+        // Stop chat timers if leaving chat screen
+        if was_on_chat && !path.starts_with(paths::CHAT) {
+            self.ui
+                .chat_screen(ids!(
+                    body.base.content_area.main_content.content.chat_screen
+                ))
+                .stop_timers(cx);
+        }
 
-        // Hide all screens
+        // Determine which page to show based on path
+        let page_id = match path {
+            p if p == paths::HOME => live_id!(home_screen),
+            p if p.starts_with(paths::CHAT) => live_id!(chat_screen),
+            p if p.starts_with("/review") => live_id!(review_screen),
+            p if p.starts_with("/scenes") => live_id!(scenes_screen),
+            p if p.starts_with("/reading") => live_id!(reading_screen),
+            p if p.starts_with("/dictionary") => live_id!(dictionary_screen),
+            p if p.starts_with("/settings") => live_id!(settings_screen),
+            _ => live_id!(home_screen), // Default to home
+        };
+
+        // Switch page using PageFlip
         self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.home_screen
-            ))
-            .apply_over(cx, live! { visible: false });
+            .page_flip(ids!(body.base.content_area.main_content.content))
+            .set_active_page(cx, page_id);
+
+        // Start chat timers if navigating to chat screen
+        if path.starts_with(paths::CHAT) {
+            self.ui
+                .chat_screen(ids!(
+                    body.base.content_area.main_content.content.chat_screen
+                ))
+                .start_timers(cx);
+        }
+
+        // Update header title and icon
+        if let Some(meta) = get_page_meta(path) {
+            self.set_header_page_title(cx, meta.icon, meta.title);
+        }
+
+        // Update sidebar selection state
         self.ui
-            .view(ids!(
-                body.base
-                    .content_area
-                    .main_content
-                    .content
-                    .chat_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.review_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.scenes_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.reading_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.dictionary_screen
-            ))
-            .apply_over(cx, live! { visible: false });
-        self.ui
-            .view(ids!(
-                body.base.content_area.main_content.content.settings_screen
-            ))
-            .apply_over(cx, live! { visible: false });
+            .sidebar(ids!(sidebar_menu_overlay.sidebar_content))
+            .select_by_path(cx, path);
+
+        self.ui.redraw(cx);
+    }
+
+    /// Get the current navigation path
+    pub fn current_path(&self) -> &str {
+        &self.current_path
+    }
+
+    // Legacy navigation methods (delegates to navigate)
+    fn navigate_to_chat_screen(&mut self, cx: &mut Cx) {
+        self.navigate(cx, paths::CHAT);
+    }
+
+    fn navigate_to_scenario(&mut self, cx: &mut Cx) {
+        self.navigate(cx, paths::SCENES);
+    }
+
+    fn navigate_to_reading_practice(&mut self, cx: &mut Cx) {
+        self.navigate(cx, paths::READING);
+    }
+
+    fn navigate_to_dictionary(&mut self, cx: &mut Cx) {
+        self.navigate(cx, paths::DICTIONARY);
     }
 }
 
