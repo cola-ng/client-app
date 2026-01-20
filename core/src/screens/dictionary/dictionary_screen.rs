@@ -115,7 +115,7 @@ live_design! {
             // Text input
             search_input = <TextInput> {
                 width: Fill, height: Fit
-                empty_text: "输入要查询的单词..."
+                empty_text: "输入英/汉字词..."
 
                 draw_bg: {
                     color: #0000
