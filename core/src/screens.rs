@@ -2,11 +2,16 @@
 
 pub mod chat;
 pub mod dictionary;
+pub mod favorites;
+pub mod feedback;
 pub mod home;
+pub mod login;
+pub mod profile;
 pub mod reading;
 pub mod review;
 pub mod scenes;
 pub mod settings;
+pub mod subscription;
 
 // pub use dialog::{DialogScreen, DialogScreenWidgetRefExt};
 // pub use home::{HomeScreen, HomeScreenWidgetRefExt};
@@ -23,4 +28,9 @@ pub fn live_design(cx: &mut Cx) {
     scenes::live_design(cx);
     settings::live_design(cx);
     reading::live_design(cx);
+    login::live_design(cx);
+    favorites::live_design(cx);
+    profile::live_design(cx);
+    subscription::live_design(cx);
+    feedback::live_design(cx);
 }

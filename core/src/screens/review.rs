@@ -2,6 +2,7 @@ mod components;
 mod due_screen;
 mod mastered_screen;
 mod mistakes_screen;
+pub mod practice;
 pub mod review_screen;
 mod stats_screen;
 
@@ -14,4 +15,5 @@ pub(super) fn live_design(cx: &mut Cx) {
     mistakes_screen::live_design(cx);
     stats_screen::live_design(cx);
     review_screen::live_design(cx);
+    practice::live_design(cx);
 }

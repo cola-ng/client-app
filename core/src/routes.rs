@@ -14,6 +14,7 @@ pub mod paths {
     pub const REVIEW_STATS: &str = "/review/stats";
     pub const REVIEW_MISTAKES: &str = "/review/mistakes";
     pub const REVIEW_MASTERED: &str = "/review/mastered";
+    pub const REVIEW_PRACTICE: &str = "/review/practice";
     pub const SCENES: &str = "/scenes";
     pub const READING: &str = "/reading";
     pub const DICTIONARY: &str = "/dictionary";
@@ -22,6 +23,12 @@ pub mod paths {
     pub const SETTINGS_AUDIO: &str = "/settings/audio";
     pub const SETTINGS_PROVIDERS: &str = "/settings/providers";
     pub const SETTINGS_ABOUT: &str = "/settings/about";
+    // New pages
+    pub const LOGIN: &str = "/login";
+    pub const FAVORITES: &str = "/favorites";
+    pub const PROFILE: &str = "/profile";
+    pub const SUBSCRIPTION: &str = "/subscription";
+    pub const FEEDBACK: &str = "/feedback";
 }
 
 /// Route identifiers matching screen widget ids
@@ -50,6 +57,22 @@ pub mod page_ids {
     pub fn settings_screen() -> LiveId {
         live_id!(settings_screen)
     }
+    // New pages
+    pub fn login_screen() -> LiveId {
+        live_id!(login_screen)
+    }
+    pub fn favorites_screen() -> LiveId {
+        live_id!(favorites_screen)
+    }
+    pub fn profile_screen() -> LiveId {
+        live_id!(profile_screen)
+    }
+    pub fn subscription_screen() -> LiveId {
+        live_id!(subscription_screen)
+    }
+    pub fn feedback_screen() -> LiveId {
+        live_id!(feedback_screen)
+    }
 }
 
 /// Page metadata for header display
@@ -70,7 +93,7 @@ pub fn get_page_meta(path: &str) -> Option<PageMeta> {
             icon: "💬",
             title: "日常唠嗑",
         }),
-        paths::REVIEW | paths::REVIEW_DUE | paths::REVIEW_STATS | paths::REVIEW_MISTAKES | paths::REVIEW_MASTERED => {
+        paths::REVIEW | paths::REVIEW_DUE | paths::REVIEW_STATS | paths::REVIEW_MISTAKES | paths::REVIEW_MASTERED | paths::REVIEW_PRACTICE => {
             Some(PageMeta {
                 icon: "📚",
                 title: "温故知新",
@@ -94,6 +117,27 @@ pub fn get_page_meta(path: &str) -> Option<PageMeta> {
                 title: "设置",
             })
         }
+        // New pages
+        paths::LOGIN => Some(PageMeta {
+            icon: "🔐",
+            title: "登录",
+        }),
+        paths::FAVORITES => Some(PageMeta {
+            icon: "⭐",
+            title: "我的收藏",
+        }),
+        paths::PROFILE => Some(PageMeta {
+            icon: "👤",
+            title: "个人中心",
+        }),
+        paths::SUBSCRIPTION => Some(PageMeta {
+            icon: "💳",
+            title: "订阅管理",
+        }),
+        paths::FEEDBACK => Some(PageMeta {
+            icon: "📬",
+            title: "意见反馈",
+        }),
         _ => None,
     }
 }
@@ -123,6 +167,9 @@ pub fn create_routes() -> Vec<Route> {
         Route::new(paths::REVIEW_MASTERED, page_ids::review_screen())
             .with_title("已掌握")
             .with_icon("✅"),
+        Route::new(paths::REVIEW_PRACTICE, page_ids::review_screen())
+            .with_title("练习")
+            .with_icon("✏️"),
         Route::new(paths::SCENES, page_ids::scenes_screen())
             .with_title("场景中心")
             .with_icon("🎭"),
@@ -147,6 +194,22 @@ pub fn create_routes() -> Vec<Route> {
         Route::new(paths::SETTINGS_ABOUT, page_ids::settings_screen())
             .with_title("关于")
             .with_icon("ℹ️"),
+        // New pages
+        Route::new(paths::LOGIN, page_ids::login_screen())
+            .with_title("登录")
+            .with_icon("🔐"),
+        Route::new(paths::FAVORITES, page_ids::favorites_screen())
+            .with_title("我的收藏")
+            .with_icon("⭐"),
+        Route::new(paths::PROFILE, page_ids::profile_screen())
+            .with_title("个人中心")
+            .with_icon("👤"),
+        Route::new(paths::SUBSCRIPTION, page_ids::subscription_screen())
+            .with_title("订阅管理")
+            .with_icon("💳"),
+        Route::new(paths::FEEDBACK, page_ids::feedback_screen())
+            .with_title("意见反馈")
+            .with_icon("📬"),
     ]
 }
 
@@ -159,6 +222,10 @@ pub enum SidebarRoute {
     Scenes,
     Reading,
     Dictionary,
+    Favorites,
+    Profile,
+    Subscription,
+    Feedback,
     Settings,
 }
 
@@ -172,6 +239,10 @@ impl SidebarRoute {
             SidebarRoute::Scenes => paths::SCENES,
             SidebarRoute::Reading => paths::READING,
             SidebarRoute::Dictionary => paths::DICTIONARY,
+            SidebarRoute::Favorites => paths::FAVORITES,
+            SidebarRoute::Profile => paths::PROFILE,
+            SidebarRoute::Subscription => paths::SUBSCRIPTION,
+            SidebarRoute::Feedback => paths::FEEDBACK,
             SidebarRoute::Settings => paths::SETTINGS,
         }
     }
@@ -185,6 +256,10 @@ impl SidebarRoute {
             p if p.starts_with("/scenes") => Some(SidebarRoute::Scenes),
             p if p.starts_with("/reading") => Some(SidebarRoute::Reading),
             p if p.starts_with("/dictionary") => Some(SidebarRoute::Dictionary),
+            p if p.starts_with("/favorites") => Some(SidebarRoute::Favorites),
+            p if p.starts_with("/profile") => Some(SidebarRoute::Profile),
+            p if p.starts_with("/subscription") => Some(SidebarRoute::Subscription),
+            p if p.starts_with("/feedback") => Some(SidebarRoute::Feedback),
             p if p.starts_with("/settings") => Some(SidebarRoute::Settings),
             _ => None,
         }

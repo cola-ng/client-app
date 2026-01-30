@@ -46,11 +46,16 @@ live_design! {
 
     use colang_core::screens::chat::chat_screen::ChatScreen;
     use colang_core::screens::dictionary::dictionary_screen::DictionaryScreen;
+    use colang_core::screens::favorites::favorites_screen::FavoritesScreen;
+    use colang_core::screens::feedback::feedback_screen::FeedbackScreen;
     use colang_core::screens::home::home_screen::HomeScreen;
+    use colang_core::screens::login::login_screen::LoginScreen;
+    use colang_core::screens::profile::profile_screen::ProfileScreen;
     use colang_core::screens::reading::reading_screen::ReadingScreen;
     use colang_core::screens::review::review_screen::ReviewScreen;
     use colang_core::screens::scenes::scenes_screen::Scenes;
     use colang_core::screens::settings::settings_screen::SettingsScreen;
+    use colang_core::screens::subscription::subscription_screen::SubscriptionScreen;
     use crate::widgets::tabs::TabWidget;
     use crate::widgets::tabs::TabBar;
     use colang_widgets::debug_panel::DebugPanel;
@@ -418,6 +423,27 @@ live_design! {
                         }
 
                         settings_screen = <SettingsScreen> {
+                            width: Fill, height: Fill
+                        }
+
+                        // New screens
+                        login_screen = <LoginScreen> {
+                            width: Fill, height: Fill
+                        }
+
+                        favorites_screen = <FavoritesScreen> {
+                            width: Fill, height: Fill
+                        }
+
+                        profile_screen = <ProfileScreen> {
+                            width: Fill, height: Fill
+                        }
+
+                        subscription_screen = <SubscriptionScreen> {
+                            width: Fill, height: Fill
+                        }
+
+                        feedback_screen = <FeedbackScreen> {
                             width: Fill, height: Fill
                         }
                     }

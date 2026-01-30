@@ -76,12 +76,22 @@
 
 pub mod app_trait;
 pub mod audio_player;
+pub mod avatar;
+pub mod button;
+pub mod card;
 pub mod debug_panel;
+pub mod dialog;
+pub mod dropdown_menu;
+pub mod form;
 pub mod led_gauge;
 pub mod log_panel;
 pub mod participant_panel;
+pub mod progress;
 pub mod router;
+pub mod stats_chart;
+pub mod tabs;
 pub mod theme;
+pub mod toast;
 pub mod waveform_view;
 
 // Re-export app trait types for convenience
@@ -118,7 +128,19 @@ pub fn live_design(cx: &mut Cx) {
     // Theme provides fonts and base styles - must be first
     theme::live_design(cx);
 
-    // Register widgets in dependency order
+    // Register shared UI components
+    button::live_design(cx);
+    card::live_design(cx);
+    dialog::live_design(cx);
+    dropdown_menu::live_design(cx);
+    tabs::live_design(cx);
+    form::live_design(cx);
+    toast::live_design(cx);
+    progress::live_design(cx);
+    avatar::live_design(cx);
+    stats_chart::live_design(cx);
+
+    // Register existing widgets
     waveform_view::live_design(cx);
     participant_panel::live_design(cx);
     log_panel::live_design(cx);

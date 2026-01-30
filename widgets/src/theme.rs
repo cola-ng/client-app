@@ -245,6 +245,11 @@ live_design! {
     pub ACCENT_PRIMARY_HOVER = #ea580c // Orange-600
     pub ACCENT_PRIMARY_LIGHT = #fff7ed // Orange-50
 
+    // Additional semantic colors for components
+    pub ACCENT_ORANGE = #f97316        // Alias for ACCENT_PRIMARY
+    pub INPUT_BG = #ffffff             // Input background (light)
+    pub INPUT_BORDER = #e5e7eb         // Input border (gray-200)
+
     // --- Transparent ---
     pub TRANSPARENT = #00000000
 

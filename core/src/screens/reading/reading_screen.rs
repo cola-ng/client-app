@@ -28,21 +28,24 @@ live_design! {
     // Reading Practice Components
     // ========================================================================
 
-    // Exercise tab button
-    ExerciseTab = <RoundedView> {
+    // Exercise tab button - use View instead of RoundedView for apply_over compatibility
+    ExerciseTab = <View> {
         width: Fit, height: 32
         padding: {left: 12, right: 12}
         show_bg: true
         draw_bg: {
             instance selected: 0.0
             instance dark_mode: 0.0
-            border_radius: 8.0
             fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let orange = vec4(0.976, 0.451, 0.086, 1.0); // #f97316
                 let light_bg = vec4(0.95, 0.96, 0.97, 1.0);  // gray-100
                 let dark_bg = vec4(0.2, 0.22, 0.25, 1.0);
                 let unselected = mix(light_bg, dark_bg, self.dark_mode);
-                return mix(unselected, orange, self.selected);
+                let color = mix(unselected, orange, self.selected);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.fill(color);
+                return sdf.result;
             }
         }
         align: {x: 0.5, y: 0.5}
@@ -204,16 +207,21 @@ live_design! {
             }
         }
 
-        waveform_view = <RoundedView> {
+        // Use View instead of RoundedView for apply_over compatibility
+        waveform_view = <View> {
             width: Fill, height: 80
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
                 instance has_audio: 0.0
                 instance is_native: 0.0
-                border_radius: 8.0
                 fn pixel(self) -> vec4 {
+                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     let bg = mix((SLATE_100), (SLATE_900), self.dark_mode);
+
+                    // Draw rounded background
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                    sdf.fill(bg);
 
                     // Simple waveform visualization placeholder
                     if self.has_audio > 0.5 {
@@ -231,7 +239,7 @@ live_design! {
                             return wave_color;
                         }
                     }
-                    return bg;
+                    return sdf.result;
                 }
             }
             align: {x: 0.5, y: 0.5}
@@ -494,14 +502,26 @@ live_design! {
         }
     }
 
-    ActionButtons = <View> {
-        width: Fill, height: Fit
-        flow: Right
-        spacing: 12
-        align: {x: 0.5}
-
-        prev_btn = <Button> {
-            width: 120, height: 48
+    // Custom button using View for apply_over compatibility
+    PrevButton = <View> {
+        width: 120, height: 48
+        show_bg: true
+        cursor: Hand
+        align: {x: 0.5, y: 0.5}
+        draw_bg: {
+            instance dark_mode: 0.0
+            instance disabled: 0.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
+                let enabled_color = mix((SLATE_100), (SLATE_700), self.dark_mode);
+                let disabled_color = mix((SLATE_200), (SLATE_800), self.dark_mode);
+                let color = mix(enabled_color, disabled_color, self.disabled);
+                sdf.fill(color);
+                return sdf.result;
+            }
+        }
+        btn_label = <Label> {
             text: "⏮ 上一句"
             draw_text: {
                 instance dark_mode: 0.0
@@ -510,60 +530,68 @@ live_design! {
                     return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
                 }
             }
-            draw_bg: {
-                instance dark_mode: 0.0
-                instance disabled: 0.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
-                    let enabled_color = mix((SLATE_100), (SLATE_700), self.dark_mode);
-                    let disabled_color = mix((SLATE_200), (SLATE_800), self.dark_mode);
-                    let color = mix(enabled_color, disabled_color, self.disabled);
-                    sdf.fill(color);
-                    return sdf.result;
-                }
+        }
+    }
+
+    RecordButton = <View> {
+        width: 140, height: 48
+        show_bg: true
+        cursor: Hand
+        align: {x: 0.5, y: 0.5}
+        draw_bg: {
+            instance recording: 0.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
+                let normal = vec4(0.976, 0.451, 0.086, 1.0); // orange
+                let recording_color = vec4(0.937, 0.267, 0.267, 1.0); // red
+                sdf.fill(mix(normal, recording_color, self.recording));
+                return sdf.result;
             }
         }
-
-        record_btn = <Button> {
-            width: 140, height: 48
+        btn_label = <Label> {
             text: "🎙 开始录音"
             draw_text: {
                 text_style: <FONT_MEDIUM>{ font_size: 13.0 }
                 color: (WHITE)
             }
-            draw_bg: {
-                instance recording: 0.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
-                    let normal = vec4(0.976, 0.451, 0.086, 1.0); // orange
-                    let recording_color = vec4(0.937, 0.267, 0.267, 1.0); // red
-                    sdf.fill(mix(normal, recording_color, self.recording));
-                    return sdf.result;
-                }
+        }
+    }
+
+    NextButton = <View> {
+        width: 120, height: 48
+        show_bg: true
+        cursor: Hand
+        align: {x: 0.5, y: 0.5}
+        draw_bg: {
+            instance disabled: 0.0
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
+                let enabled = vec4(0.133, 0.773, 0.369, 1.0); // green
+                let disabled_color = vec4(0.6, 0.65, 0.68, 1.0);
+                sdf.fill(mix(enabled, disabled_color, self.disabled));
+                return sdf.result;
             }
         }
-
-        next_btn = <Button> {
-            width: 120, height: 48
+        btn_label = <Label> {
             text: "下一句 ⏭"
             draw_text: {
                 text_style: <FONT_MEDIUM>{ font_size: 13.0 }
                 color: (WHITE)
             }
-            draw_bg: {
-                instance disabled: 0.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
-                    let enabled = vec4(0.133, 0.773, 0.369, 1.0); // green
-                    let disabled_color = vec4(0.6, 0.65, 0.68, 1.0);
-                    sdf.fill(mix(enabled, disabled_color, self.disabled));
-                    return sdf.result;
-                }
-            }
         }
+    }
+
+    ActionButtons = <View> {
+        width: Fill, height: Fit
+        flow: Right
+        spacing: 12
+        align: {x: 0.5}
+
+        prev_btn = <PrevButton> {}
+        record_btn = <RecordButton> {}
+        next_btn = <NextButton> {}
     }
 
     // ========================================================================
@@ -868,23 +896,15 @@ impl Widget for ReadingScreen {
         self.view.handle_event(cx, event, scope);
         let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
 
-        // Get commonly used parent views
-        let header_card = self.view.view(ids!(header_card));
-        let exercise_tabs = header_card.view(ids!(exercise_tabs));
-        let action_buttons = self.view.view(ids!(action_buttons));
-        let waveforms_row = self.view.view(ids!(waveforms_row));
-
-        // Handle exercise tab clicks
-        let tab_views = [
-            exercise_tabs.view(ids!(tab0)),
-            exercise_tabs.view(ids!(tab1)),
-            exercise_tabs.view(ids!(tab2)),
-            exercise_tabs.view(ids!(tab3)),
-            exercise_tabs.view(ids!(tab4)),
-        ];
-
-        for (i, tab) in tab_views.iter().enumerate() {
-            if tab.finger_up(&actions).is_some() {
+        // Handle exercise tab clicks - use full paths from root
+        for (i, tab_path) in [
+            ids!(header_card.exercise_tabs.tab0),
+            ids!(header_card.exercise_tabs.tab1),
+            ids!(header_card.exercise_tabs.tab2),
+            ids!(header_card.exercise_tabs.tab3),
+            ids!(header_card.exercise_tabs.tab4),
+        ].iter().enumerate() {
+            if self.view.view(*tab_path).finger_up(&actions).is_some() {
                 if i < self.exercises.len() && i != self.selected_exercise_index {
                     self.selected_exercise_index = i;
                     self.update_exercise_tabs(cx);
@@ -894,8 +914,8 @@ impl Widget for ReadingScreen {
             }
         }
 
-        // Handle prev button click
-        if action_buttons.button(ids!(prev_btn)).clicked(&actions) {
+        // Handle prev button click (custom View button)
+        if self.view.view(ids!(action_buttons.prev_btn)).finger_up(&actions).is_some() {
             if self.current_sentence_index > 0 {
                 self.current_sentence_index -= 1;
                 self.has_recorded = false;
@@ -905,8 +925,8 @@ impl Widget for ReadingScreen {
             }
         }
 
-        // Handle next button click
-        if action_buttons.button(ids!(next_btn)).clicked(&actions) {
+        // Handle next button click (custom View button)
+        if self.view.view(ids!(action_buttons.next_btn)).finger_up(&actions).is_some() {
             if self.current_sentence_index < self.sentences.len().saturating_sub(1) {
                 self.current_sentence_index += 1;
                 self.has_recorded = false;
@@ -916,8 +936,8 @@ impl Widget for ReadingScreen {
             }
         }
 
-        // Handle record button click
-        if action_buttons.button(ids!(record_btn)).clicked(&actions) {
+        // Handle record button click (custom View button)
+        if self.view.view(ids!(action_buttons.record_btn)).finger_up(&actions).is_some() {
             self.is_recording = !self.is_recording;
             if !self.is_recording {
                 // Stopped recording, show score
@@ -930,14 +950,12 @@ impl Widget for ReadingScreen {
         }
 
         // Handle native audio play button
-        let native_waveform = waveforms_row.view(ids!(native_waveform));
-        if native_waveform.view(ids!(header)).button(ids!(play_btn)).clicked(&actions) {
+        if self.view.button(ids!(waveforms_row.native_waveform.header.play_btn)).clicked(&actions) {
             // TODO: Play native audio
         }
 
         // Handle user audio play button
-        let user_waveform = waveforms_row.view(ids!(user_waveform));
-        if user_waveform.view(ids!(header)).button(ids!(play_btn)).clicked(&actions) {
+        if self.view.button(ids!(waveforms_row.user_waveform.header.play_btn)).clicked(&actions) {
             // TODO: Play user recorded audio
         }
 
@@ -960,7 +978,8 @@ impl Widget for ReadingScreen {
                 Ok(exercises) => {
                     self.exercises = exercises;
                     self.exercises_loading = false;
-                    exercise_tabs.label(ids!(loading_label)).set_visible(cx, false);
+                    self.view.label(ids!(header_card.exercise_tabs.loading_label))
+                        .set_visible(cx, false);
                     self.update_exercise_tabs(cx);
                     // Auto-select first exercise and load its sentences
                     if !self.exercises.is_empty() {
@@ -972,7 +991,7 @@ impl Widget for ReadingScreen {
                 Err(e) => {
                     eprintln!("Failed to fetch exercises: {}", e);
                     self.exercises_loading = false;
-                    exercise_tabs.label(ids!(loading_label))
+                    self.view.label(ids!(header_card.exercise_tabs.loading_label))
                         .set_text(cx, &format!("加载失败: {}", e));
                 }
             }
@@ -1018,9 +1037,8 @@ impl ReadingScreen {
     fn load_exercises(&mut self, cx: &mut Cx) {
         self.exercises_loading = true;
 
-        // Show loading - use parent chain
-        let header_card = self.view.view(ids!(header_card));
-        header_card.view(ids!(exercise_tabs)).label(ids!(loading_label))
+        // Show loading - use full path
+        self.view.label(ids!(header_card.exercise_tabs.loading_label))
             .set_visible(cx, true);
 
         let (tx, rx) = mpsc::channel();
@@ -1042,7 +1060,7 @@ impl ReadingScreen {
     }
 
     /// Load sentences for current exercise
-    fn load_sentences(&mut self, cx: &mut Cx) {
+    fn load_sentences(&mut self, _cx: &mut Cx) {
         if self.selected_exercise_index >= self.exercises.len() {
             return;
         }
@@ -1069,19 +1087,18 @@ impl ReadingScreen {
 
     /// Update exercise tab visibility and selection state
     fn update_exercise_tabs(&mut self, cx: &mut Cx) {
-        // Get exercise_tabs through parent chain
-        let header_card = self.view.view(ids!(header_card));
-        let exercise_tabs = header_card.view(ids!(exercise_tabs));
-
-        let tabs = [
-            exercise_tabs.view(ids!(tab0)),
-            exercise_tabs.view(ids!(tab1)),
-            exercise_tabs.view(ids!(tab2)),
-            exercise_tabs.view(ids!(tab3)),
-            exercise_tabs.view(ids!(tab4)),
+        // Use full paths from root for each tab
+        let tab_paths = [
+            ids!(header_card.exercise_tabs.tab0),
+            ids!(header_card.exercise_tabs.tab1),
+            ids!(header_card.exercise_tabs.tab2),
+            ids!(header_card.exercise_tabs.tab3),
+            ids!(header_card.exercise_tabs.tab4),
         ];
 
-        for (i, tab) in tabs.iter().enumerate() {
+        for (i, tab_path) in tab_paths.iter().enumerate() {
+            let tab = self.view.view(*tab_path);
+
             if i < self.exercises.len() {
                 let exercise = &self.exercises[i];
                 tab.set_visible(cx, true);
@@ -1107,8 +1124,6 @@ impl ReadingScreen {
 
     /// Update sentence display with current sentence
     fn update_sentence_display(&mut self, cx: &mut Cx) {
-        let display = self.view.view(ids!(sentence_display));
-
         if let Some(sentence) = self.sentences.get(self.current_sentence_index) {
             // Get exercise title
             let exercise_title_text = self.exercises
@@ -1116,26 +1131,37 @@ impl ReadingScreen {
                 .map(|e| e.title_zh.as_str())
                 .unwrap_or("今日练习");
 
-            display.label(ids!(exercise_title)).set_text(cx, exercise_title_text);
-            display.label(ids!(sentence_en)).set_text(cx, &sentence.content_en);
-            display.label(ids!(sentence_zh)).set_text(cx, &sentence.content_zh);
+            self.view.label(ids!(sentence_display.exercise_title))
+                .set_text(cx, exercise_title_text);
+            self.view.label(ids!(sentence_display.sentence_en))
+                .set_text(cx, &sentence.content_en);
+            self.view.label(ids!(sentence_display.sentence_zh))
+                .set_text(cx, &sentence.content_zh);
 
             // Show tips if available from phonetic transcription
             if let Some(phonetic) = &sentence.phonetic_transcription {
                 if !phonetic.is_empty() {
-                    display.label(ids!(sentence_tips)).set_text(cx, &format!("💡 {}", phonetic));
-                    display.label(ids!(sentence_tips)).set_visible(cx, true);
+                    self.view.label(ids!(sentence_display.sentence_tips))
+                        .set_text(cx, &format!("💡 {}", phonetic));
+                    self.view.label(ids!(sentence_display.sentence_tips))
+                        .set_visible(cx, true);
                 } else {
-                    display.label(ids!(sentence_tips)).set_visible(cx, false);
+                    self.view.label(ids!(sentence_display.sentence_tips))
+                        .set_visible(cx, false);
                 }
             } else {
-                display.label(ids!(sentence_tips)).set_visible(cx, false);
+                self.view.label(ids!(sentence_display.sentence_tips))
+                    .set_visible(cx, false);
             }
         } else {
-            display.label(ids!(exercise_title)).set_text(cx, "今日练习");
-            display.label(ids!(sentence_en)).set_text(cx, "暂无练习内容");
-            display.label(ids!(sentence_zh)).set_text(cx, "请选择其他练习");
-            display.label(ids!(sentence_tips)).set_visible(cx, false);
+            self.view.label(ids!(sentence_display.exercise_title))
+                .set_text(cx, "今日练习");
+            self.view.label(ids!(sentence_display.sentence_en))
+                .set_text(cx, "暂无练习内容");
+            self.view.label(ids!(sentence_display.sentence_zh))
+                .set_text(cx, "请选择其他练习");
+            self.view.label(ids!(sentence_display.sentence_tips))
+                .set_visible(cx, false);
         }
     }
 
@@ -1149,15 +1175,13 @@ impl ReadingScreen {
             0.0
         };
 
-        // Get progress track through parent chain
-        let header_card = self.view.view(ids!(header_card));
-        let progress_section = header_card.view(ids!(progress_section));
-        progress_section.view(ids!(progress_track))
+        // Use full path from root
+        self.view.view(ids!(header_card.progress_section.progress_track))
             .apply_over(cx, live! {
                 draw_bg: { progress: (progress) }
             });
 
-        progress_section.label(ids!(progress_label))
+        self.view.label(ids!(header_card.progress_section.progress_label))
             .set_text(cx, &format!("{}/{} 句", current, total));
     }
 
@@ -1166,18 +1190,15 @@ impl ReadingScreen {
         let can_prev = self.current_sentence_index > 0;
         let can_next = self.current_sentence_index < self.sentences.len().saturating_sub(1);
 
-        // Get action buttons through parent
-        let action_buttons = self.view.view(ids!(action_buttons));
-
-        // Update prev button
+        // Update prev button - custom View button
         let prev_disabled = if can_prev { 0.0f64 } else { 1.0f64 };
-        action_buttons.button(ids!(prev_btn)).apply_over(cx, live! {
+        self.view.view(ids!(action_buttons.prev_btn)).apply_over(cx, live! {
             draw_bg: { disabled: (prev_disabled) }
         });
 
-        // Update next button
+        // Update next button - custom View button
         let next_disabled = if can_next { 0.0f64 } else { 1.0f64 };
-        action_buttons.button(ids!(next_btn)).apply_over(cx, live! {
+        self.view.view(ids!(action_buttons.next_btn)).apply_over(cx, live! {
             draw_bg: { disabled: (next_disabled) }
         });
 
@@ -1196,11 +1217,9 @@ impl ReadingScreen {
             "🎙 开始录音"
         };
 
-        // Get record button through parent
-        let action_buttons = self.view.view(ids!(action_buttons));
-        let record_btn = action_buttons.button(ids!(record_btn));
-        record_btn.set_text(cx, text);
-        record_btn.apply_over(cx, live! {
+        // Custom View button - update label and bg
+        self.view.label(ids!(action_buttons.record_btn.btn_label)).set_text(cx, text);
+        self.view.view(ids!(action_buttons.record_btn)).apply_over(cx, live! {
             draw_bg: { recording: (recording_val) }
         });
     }
@@ -1209,25 +1228,21 @@ impl ReadingScreen {
     fn update_user_waveform(&mut self, cx: &mut Cx) {
         let has_audio = if self.has_recorded || self.is_recording { 1.0f64 } else { 0.0f64 };
 
-        // Get waveform view through parent chain
-        let waveforms_row = self.view.view(ids!(waveforms_row));
-        let user_waveform = waveforms_row.view(ids!(user_waveform));
-        let waveform_view = user_waveform.view(ids!(waveform_view));
-
-        waveform_view.apply_over(cx, live! {
-            draw_bg: { has_audio: (has_audio) }
-        });
+        // Use full path from root
+        self.view.view(ids!(waveforms_row.user_waveform.waveform_view))
+            .apply_over(cx, live! {
+                draw_bg: { has_audio: (has_audio) }
+            });
 
         // Hide/show placeholder text
         let show_placeholder = !self.has_recorded && !self.is_recording;
-        waveform_view.label(ids!(placeholder_text))
+        self.view.label(ids!(waveforms_row.user_waveform.waveform_view.placeholder_text))
             .set_visible(cx, show_placeholder);
     }
 
     /// Show score card with mock scores
     fn show_score_card(&mut self, cx: &mut Cx) {
-        let score_card = self.view.view(ids!(score_card));
-        score_card.set_visible(cx, true);
+        self.view.view(ids!(score_card)).set_visible(cx, true);
 
         // Generate mock scores (in real app, this would come from AI evaluation)
         let pronunciation = 85 + (self.current_sentence_index % 10) as i32;
@@ -1235,34 +1250,26 @@ impl ReadingScreen {
         let intonation = 80 + ((self.current_sentence_index * 7) % 12) as i32;
         let total = (pronunciation + fluency + intonation) / 3;
 
-        // Get nested views through parent chain
-        let score_row = score_card.view(ids!(score_row));
-        let total_score = score_row.view(ids!(total_score));
-        let detailed_scores = score_row.view(ids!(detailed_scores));
-
-        // Update total score
-        total_score.view(ids!(score_circle)).label(ids!(score_value))
+        // Update total score - use full paths
+        self.view.label(ids!(score_card.score_row.total_score.score_circle.score_value))
             .set_text(cx, &format!("{}", total));
 
         // Update pronunciation score
-        let pronunciation_row = detailed_scores.view(ids!(pronunciation_row));
-        pronunciation_row.label(ids!(pronunciation_score))
+        self.view.label(ids!(score_card.score_row.detailed_scores.pronunciation_row.pronunciation_score))
             .set_text(cx, &format!("{}%", pronunciation));
-        pronunciation_row.view(ids!(pronunciation_bar))
+        self.view.view(ids!(score_card.score_row.detailed_scores.pronunciation_row.pronunciation_bar))
             .apply_over(cx, live! { draw_bg: { progress: (pronunciation as f64 / 100.0) } });
 
         // Update fluency score
-        let fluency_row = detailed_scores.view(ids!(fluency_row));
-        fluency_row.label(ids!(fluency_score))
+        self.view.label(ids!(score_card.score_row.detailed_scores.fluency_row.fluency_score))
             .set_text(cx, &format!("{}%", fluency));
-        fluency_row.view(ids!(fluency_bar))
+        self.view.view(ids!(score_card.score_row.detailed_scores.fluency_row.fluency_bar))
             .apply_over(cx, live! { draw_bg: { progress: (fluency as f64 / 100.0) } });
 
         // Update intonation score
-        let intonation_row = detailed_scores.view(ids!(intonation_row));
-        intonation_row.label(ids!(intonation_score))
+        self.view.label(ids!(score_card.score_row.detailed_scores.intonation_row.intonation_score))
             .set_text(cx, &format!("{}%", intonation));
-        intonation_row.view(ids!(intonation_bar))
+        self.view.view(ids!(score_card.score_row.detailed_scores.intonation_row.intonation_bar))
             .apply_over(cx, live! { draw_bg: { progress: (intonation as f64 / 100.0) } });
     }
 
