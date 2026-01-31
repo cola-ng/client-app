@@ -17,47 +17,10 @@ live_design! {
     use colang_widgets::theme::*;
 
     // ========================================================================
-    // Review Type Colors (matching website)
+    // Simple Card Component for Review Types
     // ========================================================================
 
-    // Red for pronunciation
-    RED_50 = #fef2f2
-    RED_200 = #fecaca
-    RED_600 = #dc2626
-
-    // Blue for meaning
-    BLUE_50 = #eff6ff
-    BLUE_200 = #bfdbfe
-    BLUE_600 = #3b82f6  // Using Tailwind blue-500 to avoid exponent parsing
-
-    // Purple for spelling
-    PURPLE_50 = #faf5ff
-    PURPLE_200 = #d8b4fc
-    PURPLE_600 = #a855f7  // Using Tailwind purple-500 to avoid exponent parsing
-
-    // Green for recognition
-    GREEN_50 = #f0fdf4
-    GREEN_200 = #bbf7d0
-    GREEN_600 = #16a34a
-
-    // Amber for phrase
-    AMBER_50 = #fffbeb
-    AMBER_200 = #fde68a
-    AMBER_600 = #d97706
-
-    // Orange for smart review
-    ORANGE_50 = #fff7ed
-    ORANGE_100 = #ffedd5
-    ORANGE_300 = #fdba74
-    ORANGE_400 = #fb923c
-    ORANGE_500 = #f97316
-    ORANGE_600 = #ea580c
-
-    // ========================================================================
-    // Review Type Card Component
-    // ========================================================================
-
-    ReviewTypeCard = <View> {
+    SimpleCard = <View> {
         width: Fill, height: Fit
         padding: 16
         show_bg: true
@@ -66,48 +29,44 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
-            instance card_type: 0.0  // 0=red, 1=blue, 2=purple, 3=green, 4=amber
+            instance card_color: 0.0  // 0=orange, 1=red, 2=blue, 3=purple, 4=green, 5=amber
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
 
-                // Background colors based on card_type
+                // Background colors based on card_color
                 let bg = vec4(0.0);
-                if self.card_type < 0.5 {
+                let border = vec4(0.0);
+
+                if self.card_color < 0.5 {
+                    // Orange (smart)
+                    bg = mix(#fff7ed, #1a1510, self.dark_mode);
+                    border = mix(#fdba74, #5a4020, self.dark_mode);
+                } else if self.card_color < 1.5 {
                     // Red (pronunciation)
-                    bg = mix((RED_50), #1f1412, self.dark_mode);
-                } else if self.card_type < 1.5 {
+                    bg = mix(#fef2f2, #1f1412, self.dark_mode);
+                    border = mix(#fecaca, #4a2020, self.dark_mode);
+                } else if self.card_color < 2.5 {
                     // Blue (meaning)
-                    bg = mix((BLUE_50), #121820, self.dark_mode);
-                } else if self.card_type < 2.5 {
+                    bg = mix(#eff6ff, #121820, self.dark_mode);
+                    border = mix(#bfdbfe, #203040, self.dark_mode);
+                } else if self.card_color < 3.5 {
                     // Purple (spelling)
-                    bg = mix((PURPLE_50), #1a1420, self.dark_mode);
-                } else if self.card_type < 3.5 {
+                    bg = mix(#faf5ff, #1a1420, self.dark_mode);
+                    border = mix(#d8b4fc, #302040, self.dark_mode);
+                } else if self.card_color < 4.5 {
                     // Green (recognition)
-                    bg = mix((GREEN_50), #121a14, self.dark_mode);
+                    bg = mix(#f0fdf4, #121a14, self.dark_mode);
+                    border = mix(#bbf7d0, #204030, self.dark_mode);
                 } else {
                     // Amber (phrase)
-                    bg = mix((AMBER_50), #1a1812, self.dark_mode);
+                    bg = mix(#fffbeb, #1a1812, self.dark_mode);
+                    border = mix(#fde68a, #403020, self.dark_mode);
                 }
 
-                // Hover effect
                 let hover_bg = mix(bg, vec4(bg.xyz * 0.95, 1.0), self.hover);
                 sdf.fill(hover_bg);
-
-                // Border color
-                let border = vec4(0.0);
-                if self.card_type < 0.5 {
-                    border = mix((RED_200), #4a2020, self.dark_mode);
-                } else if self.card_type < 1.5 {
-                    border = mix((BLUE_200), #203040, self.dark_mode);
-                } else if self.card_type < 2.5 {
-                    border = mix((PURPLE_200), #302040, self.dark_mode);
-                } else if self.card_type < 3.5 {
-                    border = mix((GREEN_200), #204030, self.dark_mode);
-                } else {
-                    border = mix((AMBER_200), #403020, self.dark_mode);
-                }
                 sdf.stroke(border, 2.0);
 
                 return sdf.result;
@@ -119,416 +78,6 @@ live_design! {
                 default: off
                 off = { from: {all: Forward {duration: 0.15}} apply: {draw_bg: {hover: 0.0}} }
                 on = { from: {all: Forward {duration: 0.15}} apply: {draw_bg: {hover: 1.0}} }
-            }
-        }
-
-        content = <View> {
-            width: Fill, height: Fit
-            flow: Right
-            spacing: 12
-            align: {y: 0.0}
-
-            icon_container = <RoundedView> {
-                width: 44, height: 44
-                align: {x: 0.5, y: 0.5}
-                show_bg: true
-                draw_bg: {
-                    instance dark_mode: 0.0
-                    instance card_type: 0.0
-                    border_radius: 8.0
-
-                    fn pixel(self) -> vec4 {
-                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-
-                        let bg = vec4(0.0);
-                        if self.card_type < 0.5 {
-                            bg = mix((RED_50), #2a1818, self.dark_mode);
-                        } else if self.card_type < 1.5 {
-                            bg = mix((BLUE_50), #182028, self.dark_mode);
-                        } else if self.card_type < 2.5 {
-                            bg = mix((PURPLE_50), #201828, self.dark_mode);
-                        } else if self.card_type < 3.5 {
-                            bg = mix((GREEN_50), #182018, self.dark_mode);
-                        } else {
-                            bg = mix((AMBER_50), #282018, self.dark_mode);
-                        }
-                        sdf.fill(bg);
-
-                        return sdf.result;
-                    }
-                }
-
-                icon_label = <Label> {
-                    text: "🎤"
-                    draw_text: {
-                        text_style: { font_size: 20.0 }
-                        fn get_color(self) -> vec4 {
-                            return (TEXT_PRIMARY);
-                        }
-                    }
-                }
-            }
-
-            text_content = <View> {
-                width: Fill, height: Fit
-                flow: Down
-                spacing: 4
-
-                header_row = <View> {
-                    width: Fill, height: Fit
-                    flow: Right
-                    align: {y: 0.5}
-
-                    title = <Label> {
-                        text: "发音纠正"
-                        draw_text: {
-                            instance dark_mode: 0.0
-                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
-                            fn get_color(self) -> vec4 {
-                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                            }
-                        }
-                    }
-
-                    <View> { width: Fill }
-
-                    count_badge = <RoundedView> {
-                        width: Fit, height: Fit
-                        padding: {left: 8, right: 8, top: 2, bottom: 2}
-                        visible: false
-                        show_bg: true
-                        draw_bg: {
-                            instance dark_mode: 0.0
-                            instance card_type: 0.0
-                            border_radius: 10.0
-
-                            fn pixel(self) -> vec4 {
-                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
-
-                                let bg = vec4(0.0);
-                                if self.card_type < 0.5 {
-                                    bg = mix((RED_50), #3a2020, self.dark_mode);
-                                } else if self.card_type < 1.5 {
-                                    bg = mix((BLUE_50), #203040, self.dark_mode);
-                                } else if self.card_type < 2.5 {
-                                    bg = mix((PURPLE_50), #302040, self.dark_mode);
-                                } else if self.card_type < 3.5 {
-                                    bg = mix((GREEN_50), #204030, self.dark_mode);
-                                } else {
-                                    bg = mix((AMBER_50), #403020, self.dark_mode);
-                                }
-                                sdf.fill(bg);
-
-                                return sdf.result;
-                            }
-                        }
-
-                        count_label = <Label> {
-                            text: "0"
-                            draw_text: {
-                                instance dark_mode: 0.0
-                                instance card_type: 0.0
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                fn get_color(self) -> vec4 {
-                                    if self.card_type < 0.5 {
-                                        return (RED_600);
-                                    } else if self.card_type < 1.5 {
-                                        return (BLUE_600);
-                                    } else if self.card_type < 2.5 {
-                                        return (PURPLE_600);
-                                    } else if self.card_type < 3.5 {
-                                        return (GREEN_600);
-                                    } else {
-                                        return (AMBER_600);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                description = <Label> {
-                    text: "练习准确发音，AI评分反馈"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // Smart Review Card (with gradient)
-    // ========================================================================
-
-    SmartReviewCard = <View> {
-        width: Fill, height: Fit
-        padding: 16
-        show_bg: true
-        cursor: Hand
-
-        draw_bg: {
-            instance dark_mode: 0.0
-            instance hover: 0.0
-
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
-
-                // Gradient background
-                let light_start = (ORANGE_50);
-                let light_end = (AMBER_50);
-                let dark_start = #1a1510;
-                let dark_end = #1a1812;
-
-                let start = mix(light_start, dark_start, self.dark_mode);
-                let end = mix(light_end, dark_end, self.dark_mode);
-                let bg = mix(start, end, self.pos.x);
-
-                // Hover effect
-                let hover_bg = mix(bg, vec4(bg.xyz * 0.95, 1.0), self.hover);
-                sdf.fill(hover_bg);
-
-                // Border
-                let border = mix((ORANGE_300), #5a4020, self.dark_mode);
-                sdf.stroke(border, 2.0);
-
-                return sdf.result;
-            }
-        }
-
-        animator: {
-            hover = {
-                default: off
-                off = { from: {all: Forward {duration: 0.15}} apply: {draw_bg: {hover: 0.0}} }
-                on = { from: {all: Forward {duration: 0.15}} apply: {draw_bg: {hover: 1.0}} }
-            }
-        }
-
-        content = <View> {
-            width: Fill, height: Fit
-            flow: Right
-            spacing: 12
-            align: {y: 0.0}
-
-            icon_container = <RoundedView> {
-                width: 44, height: 44
-                align: {x: 0.5, y: 0.5}
-                show_bg: true
-                draw_bg: {
-                    border_radius: 8.0
-
-                    fn pixel(self) -> vec4 {
-                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-
-                        // Gradient from orange to amber
-                        let start = (ORANGE_400);
-                        let end = (ORANGE_500);
-                        let bg = mix(start, end, self.pos.y);
-                        sdf.fill(bg);
-
-                        return sdf.result;
-                    }
-                }
-
-                icon_label = <Label> {
-                    text: "✨"
-                    draw_text: {
-                        text_style: { font_size: 20.0 }
-                        color: (WHITE)
-                    }
-                }
-            }
-
-            text_content = <View> {
-                width: Fill, height: Fit
-                flow: Down
-                spacing: 4
-
-                header_row = <View> {
-                    width: Fill, height: Fit
-                    flow: Right
-                    align: {y: 0.5}
-
-                    title = <Label> {
-                        text: "智能选择"
-                        draw_text: {
-                            instance dark_mode: 0.0
-                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
-                            fn get_color(self) -> vec4 {
-                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                            }
-                        }
-                    }
-
-                    <View> { width: Fill }
-
-                    count_badge = <RoundedView> {
-                        width: Fit, height: Fit
-                        padding: {left: 8, right: 8, top: 2, bottom: 2}
-                        visible: false
-                        show_bg: true
-                        draw_bg: {
-                            border_radius: 10.0
-                            color: (ORANGE_100)
-                        }
-
-                        count_label = <Label> {
-                            text: "0"
-                            draw_text: {
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                color: (ORANGE_600)
-                            }
-                        }
-                    }
-                }
-
-                description = <Label> {
-                    text: "根据遗忘曲线智能推荐复习内容"
-                    draw_text: {
-                        instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                        fn get_color(self) -> vec4 {
-                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // Loading Spinner
-    // ========================================================================
-
-    LoadingView = <View> {
-        width: Fill, height: 200
-        align: {x: 0.5, y: 0.5}
-        flow: Down
-        spacing: 16
-
-        spinner = <View> {
-            width: 32, height: 32
-            show_bg: true
-            draw_bg: {
-                instance spin: 0.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    let c = self.rect_size * 0.5;
-                    let r = min(c.x, c.y) - 2.0;
-
-                    // Spinning arc
-                    let angle = self.spin * 6.28318;
-                    for i in 0..8 {
-                        let a = angle + float(i) * 0.785;
-                        let opacity = float(i) / 8.0;
-                        let px = c.x + cos(a) * r;
-                        let py = c.y + sin(a) * r;
-                        sdf.circle(px, py, 3.0);
-                        sdf.fill(vec4(0.97, 0.52, 0.09, opacity));
-                    }
-
-                    return sdf.result;
-                }
-            }
-
-            animator: {
-                spin = {
-                    default: loop
-                    loop = {
-                        from: {all: Loop {duration: 1.0, end: 1.0}}
-                        apply: {draw_bg: {spin: 1.0}}
-                    }
-                }
-            }
-        }
-
-        loading_text = <Label> {
-            text: "加载中..."
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 14.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-    // Login Required Card
-    // ========================================================================
-
-    LoginRequiredCard = <RoundedView> {
-        width: Fill, height: Fit
-        padding: 32
-        align: {x: 0.5}
-        flow: Down
-        spacing: 16
-        show_bg: true
-        draw_bg: {
-            instance dark_mode: 0.0
-            border_radius: 12.0
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
-                let bg = mix((WHITE), (SLATE_800), self.dark_mode);
-                sdf.fill(bg);
-                return sdf.result;
-            }
-        }
-
-        icon = <Label> {
-            text: "📚"
-            draw_text: {
-                text_style: { font_size: 48.0 }
-            }
-        }
-
-        title = <Label> {
-            text: "温故知新"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_BOLD>{ font_size: 20.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
-                }
-            }
-        }
-
-        subtitle = <Label> {
-            text: "科学的间隔重复系统，帮助你巩固所学知识"
-            draw_text: {
-                instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 14.0 }
-                fn get_color(self) -> vec4 {
-                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
-                }
-            }
-        }
-
-        login_btn = <Button> {
-            width: Fit, height: Fit
-            padding: {left: 24, right: 24, top: 12, bottom: 12}
-            text: "登录开始复习"
-            draw_bg: {
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-                    sdf.fill((ACCENT_PRIMARY));
-                    return sdf.result;
-                }
-            }
-            draw_text: {
-                text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
-                color: (WHITE)
             }
         }
     }
@@ -543,13 +92,10 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                // Gradient background matching website
-                let light_start = (ORANGE_50);
-                let light_mid = (AMBER_50);
-                let light_end = #fefce8; // yellow-50
+                let light_start = #fff7ed;
+                let light_end = #fefce8;
                 let dark_bg = (DARK_BG_DARK);
-
-                let light = mix(mix(light_start, light_mid, self.pos.x), light_end, self.pos.y);
+                let light = mix(light_start, light_end, self.pos.y);
                 return mix(light, dark_bg, self.dark_mode);
             }
         }
@@ -557,13 +103,13 @@ live_design! {
         content_scroll = <ScrollYView> {
             width: Fill, height: Fill
 
-            content = <View> {
+            main_container = <View> {
                 width: Fill, height: Fit
                 flow: Down
                 padding: 16
                 spacing: 16
 
-                // Main card container
+                // Main card
                 main_card = <RoundedView> {
                     width: Fill, height: Fit
                     padding: 24
@@ -578,7 +124,6 @@ live_design! {
                             sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
                             let bg = mix((WHITE), (SLATE_800), self.dark_mode);
                             sdf.fill(bg);
-                            // Shadow effect
                             return sdf.result;
                         }
                     }
@@ -614,128 +159,498 @@ live_design! {
                     }
 
                     // Loading state
-                    loading_view = <LoadingView> {
+                    loading_view = <View> {
+                        width: Fill, height: 200
                         visible: false
+                        align: {x: 0.5, y: 0.5}
+                        flow: Down
+                        spacing: 16
+
+                        <Label> {
+                            text: "加载中..."
+                            draw_text: {
+                                instance dark_mode: 0.0
+                                text_style: <FONT_REGULAR>{ font_size: 14.0 }
+                                fn get_color(self) -> vec4 {
+                                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                }
+                            }
+                        }
                     }
 
                     // Login required state
-                    login_required = <LoginRequiredCard> {
+                    login_required = <View> {
+                        width: Fill, height: Fit
                         visible: false
+                        padding: 32
+                        align: {x: 0.5}
+                        flow: Down
+                        spacing: 16
+
+                        <Label> {
+                            text: "📚"
+                            draw_text: { text_style: { font_size: 48.0 } }
+                        }
+
+                        <Label> {
+                            text: "温故知新"
+                            draw_text: {
+                                instance dark_mode: 0.0
+                                text_style: <FONT_BOLD>{ font_size: 20.0 }
+                                fn get_color(self) -> vec4 {
+                                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                }
+                            }
+                        }
+
+                        <Label> {
+                            text: "科学的间隔重复系统，帮助你巩固所学知识"
+                            draw_text: {
+                                instance dark_mode: 0.0
+                                text_style: <FONT_REGULAR>{ font_size: 14.0 }
+                                fn get_color(self) -> vec4 {
+                                    return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                }
+                            }
+                        }
+
+                        login_btn = <Button> {
+                            width: Fit, height: Fit
+                            padding: {left: 24, right: 24, top: 12, bottom: 12}
+                            text: "登录开始复习"
+                            draw_bg: {
+                                fn pixel(self) -> vec4 {
+                                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                    sdf.fill((ACCENT_PRIMARY));
+                                    return sdf.result;
+                                }
+                            }
+                            draw_text: {
+                                text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                color: (WHITE)
+                            }
+                        }
                     }
 
-                    // Cards grid (3 columns on desktop, responsive)
+                    // Cards grid
                     cards_grid = <View> {
                         width: Fill, height: Fit
                         flow: Down
                         spacing: 12
 
-                        // Row 1: Smart + Pronunciation + Meaning
+                        // Row 1
                         row1 = <View> {
                             width: Fill, height: Fit
                             flow: Right
                             spacing: 12
 
-                            smart_card = <SmartReviewCard> {}
-                            pronunciation_card = <ReviewTypeCard> {
-                                draw_bg: { card_type: 0.0 }
-                                content = {
-                                    icon_container = {
-                                        draw_bg: { card_type: 0.0 }
-                                        icon_label = { text: "🎤" }
-                                    }
-                                    text_content = {
-                                        header_row = {
-                                            title = { text: "发音纠正" }
-                                            count_badge = {
-                                                draw_bg: { card_type: 0.0 }
-                                                count_label = { draw_text: { card_type: 0.0 } }
+                            // Smart card
+                            smart_card = <SimpleCard> {
+                                draw_bg: { card_color: 0.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                let start = #fb923c;
+                                                let end = #f97316;
+                                                sdf.fill(mix(start, end, self.pos.y));
+                                                return sdf.result;
                                             }
                                         }
-                                        description = { text: "练习准确发音，AI评分反馈" }
+                                        <Label> {
+                                            text: "✨"
+                                            draw_text: { text_style: { font_size: 20.0 }, color: (WHITE) }
+                                        }
+                                    }
+
+                                    <Label> {
+                                        text: "智能选择"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    smart_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #ffedd5 }
+                                        smart_count = <Label> {
+                                            text: "0"
+                                            draw_text: {
+                                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                                color: #ea580c
+                                            }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "根据遗忘曲线智能推荐复习内容"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
                                     }
                                 }
                             }
-                            meaning_card = <ReviewTypeCard> {
-                                draw_bg: { card_type: 1.0 }
-                                content = {
-                                    icon_container = {
-                                        draw_bg: { card_type: 1.0 }
-                                        icon_label = { text: "📖" }
-                                    }
-                                    text_content = {
-                                        header_row = {
-                                            title = { text: "词义复习" }
-                                            count_badge = {
-                                                draw_bg: { card_type: 1.0 }
-                                                count_label = { draw_text: { card_type: 1.0 } }
+
+                            // Pronunciation card
+                            pronunciation_card = <SimpleCard> {
+                                draw_bg: { card_color: 1.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            instance dark_mode: 0.0
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                sdf.fill(mix(#fef2f2, #2a1818, self.dark_mode));
+                                                return sdf.result;
                                             }
                                         }
-                                        description = { text: "巩固单词释义，选择正确答案" }
+                                        <Label> { text: "🎤", draw_text: { text_style: { font_size: 20.0 } } }
+                                    }
+
+                                    <Label> {
+                                        text: "发音纠正"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    pronunciation_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #fef2f2 }
+                                        pronunciation_count = <Label> {
+                                            text: "0"
+                                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 12.0 }, color: #dc2626 }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "练习准确发音，AI评分反馈"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Meaning card
+                            meaning_card = <SimpleCard> {
+                                draw_bg: { card_color: 2.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            instance dark_mode: 0.0
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                sdf.fill(mix(#eff6ff, #182028, self.dark_mode));
+                                                return sdf.result;
+                                            }
+                                        }
+                                        <Label> { text: "📖", draw_text: { text_style: { font_size: 20.0 } } }
+                                    }
+
+                                    <Label> {
+                                        text: "词义复习"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    meaning_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #eff6ff }
+                                        meaning_count = <Label> {
+                                            text: "0"
+                                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 12.0 }, color: #3b82f6 }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "巩固单词释义，选择正确答案"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
                                     }
                                 }
                             }
                         }
 
-                        // Row 2: Spelling + Recognition + Phrase
+                        // Row 2
                         row2 = <View> {
                             width: Fill, height: Fit
                             flow: Right
                             spacing: 12
 
-                            spelling_card = <ReviewTypeCard> {
-                                draw_bg: { card_type: 2.0 }
-                                content = {
-                                    icon_container = {
-                                        draw_bg: { card_type: 2.0 }
-                                        icon_label = { text: "✏️" }
-                                    }
-                                    text_content = {
-                                        header_row = {
-                                            title = { text: "拼写练习" }
-                                            count_badge = {
-                                                draw_bg: { card_type: 2.0 }
-                                                count_label = { draw_text: { card_type: 2.0 } }
+                            // Spelling card
+                            spelling_card = <SimpleCard> {
+                                draw_bg: { card_color: 3.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            instance dark_mode: 0.0
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                sdf.fill(mix(#faf5ff, #201828, self.dark_mode));
+                                                return sdf.result;
                                             }
                                         }
-                                        description = { text: "听音拼写，强化记忆" }
+                                        <Label> { text: "✏️", draw_text: { text_style: { font_size: 20.0 } } }
+                                    }
+
+                                    <Label> {
+                                        text: "拼写练习"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    spelling_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #faf5ff }
+                                        spelling_count = <Label> {
+                                            text: "0"
+                                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 12.0 }, color: #a855f7 }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "听音拼写，强化记忆"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
                                     }
                                 }
                             }
-                            recognition_card = <ReviewTypeCard> {
-                                draw_bg: { card_type: 3.0 }
-                                content = {
-                                    icon_container = {
-                                        draw_bg: { card_type: 3.0 }
-                                        icon_label = { text: "🃏" }
-                                    }
-                                    text_content = {
-                                        header_row = {
-                                            title = { text: "单词识记" }
-                                            count_badge = {
-                                                draw_bg: { card_type: 3.0 }
-                                                count_label = { draw_text: { card_type: 3.0 } }
+
+                            // Recognition card
+                            recognition_card = <SimpleCard> {
+                                draw_bg: { card_color: 4.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            instance dark_mode: 0.0
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                sdf.fill(mix(#f0fdf4, #182018, self.dark_mode));
+                                                return sdf.result;
                                             }
                                         }
-                                        description = { text: "翻卡片复习，自评掌握程度" }
+                                        <Label> { text: "🃏", draw_text: { text_style: { font_size: 20.0 } } }
+                                    }
+
+                                    <Label> {
+                                        text: "单词识记"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    recognition_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #f0fdf4 }
+                                        recognition_count = <Label> {
+                                            text: "0"
+                                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 12.0 }, color: #16a34a }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "翻卡片复习，自评掌握程度"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
                                     }
                                 }
                             }
-                            phrase_card = <ReviewTypeCard> {
-                                draw_bg: { card_type: 4.0 }
-                                content = {
-                                    icon_container = {
-                                        draw_bg: { card_type: 4.0 }
-                                        icon_label = { text: "🧩" }
-                                    }
-                                    text_content = {
-                                        header_row = {
-                                            title = { text: "短语搭配" }
-                                            count_badge = {
-                                                draw_bg: { card_type: 4.0 }
-                                                count_label = { draw_text: { card_type: 4.0 } }
+
+                            // Phrase card
+                            phrase_card = <SimpleCard> {
+                                draw_bg: { card_color: 5.0 }
+                                flow: Down
+                                spacing: 8
+
+                                header_row = <View> {
+                                    width: Fill, height: Fit
+                                    flow: Right
+                                    spacing: 12
+                                    align: {y: 0.5}
+
+                                    <View> {
+                                        width: 44, height: 44
+                                        align: {x: 0.5, y: 0.5}
+                                        show_bg: true
+                                        draw_bg: {
+                                            instance dark_mode: 0.0
+                                            fn pixel(self) -> vec4 {
+                                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                                sdf.fill(mix(#fffbeb, #282018, self.dark_mode));
+                                                return sdf.result;
                                             }
                                         }
-                                        description = { text: "填空练习，掌握常用搭配" }
+                                        <Label> { text: "🧩", draw_text: { text_style: { font_size: 20.0 } } }
+                                    }
+
+                                    <Label> {
+                                        text: "短语搭配"
+                                        draw_text: {
+                                            instance dark_mode: 0.0
+                                            text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
+                                            fn get_color(self) -> vec4 {
+                                                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                            }
+                                        }
+                                    }
+
+                                    <View> { width: Fill }
+
+                                    phrase_badge = <RoundedView> {
+                                        width: Fit, height: Fit
+                                        padding: {left: 8, right: 8, top: 2, bottom: 2}
+                                        visible: false
+                                        show_bg: true
+                                        draw_bg: { border_radius: 10.0, color: #fffbeb }
+                                        phrase_count = <Label> {
+                                            text: "0"
+                                            draw_text: { text_style: <FONT_MEDIUM>{ font_size: 12.0 }, color: #d97706 }
+                                        }
+                                    }
+                                }
+
+                                <Label> {
+                                    text: "填空练习，掌握常用搭配"
+                                    draw_text: {
+                                        instance dark_mode: 0.0
+                                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (TEXT_SECONDARY_DARK), self.dark_mode);
+                                        }
                                     }
                                 }
                             }
@@ -852,12 +767,12 @@ impl Widget for ReviewScreen {
 
         // Handle card clicks
         let card_ids = [
-            (ids!(content_scroll.content.main_card.cards_grid.row1.smart_card), ReviewType::Smart),
-            (ids!(content_scroll.content.main_card.cards_grid.row1.pronunciation_card), ReviewType::Pronunciation),
-            (ids!(content_scroll.content.main_card.cards_grid.row1.meaning_card), ReviewType::Meaning),
-            (ids!(content_scroll.content.main_card.cards_grid.row2.spelling_card), ReviewType::Spelling),
-            (ids!(content_scroll.content.main_card.cards_grid.row2.recognition_card), ReviewType::Recognition),
-            (ids!(content_scroll.content.main_card.cards_grid.row2.phrase_card), ReviewType::Phrase),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row1.smart_card), ReviewType::Smart),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row1.pronunciation_card), ReviewType::Pronunciation),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row1.meaning_card), ReviewType::Meaning),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row2.spelling_card), ReviewType::Spelling),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row2.recognition_card), ReviewType::Recognition),
+            (ids!(content_scroll.main_container.main_card.cards_grid.row2.phrase_card), ReviewType::Phrase),
         ];
 
         for (card_id, review_type) in card_ids {
@@ -871,7 +786,7 @@ impl Widget for ReviewScreen {
         }
 
         // Handle login button
-        if self.view.button(ids!(content_scroll.content.main_card.login_required.login_btn)).clicked(actions) {
+        if self.view.button(ids!(content_scroll.main_container.main_card.login_required.login_btn)).clicked(actions) {
             cx.widget_action(self.widget_uid(), &scope.path, ReviewScreenAction::NavigateToLogin);
         }
     }
@@ -888,13 +803,13 @@ impl ReviewScreen {
 
         if self.is_authenticated {
             self.is_loading = true;
-            self.load_stats(cx);
+            self.load_stats();
         }
 
         self.update_ui(cx);
     }
 
-    fn load_stats(&mut self, _cx: &mut Cx) {
+    fn load_stats(&mut self) {
         let (tx, rx) = mpsc::channel();
         self.fetch_rx = Some(rx);
 
@@ -913,11 +828,11 @@ impl ReviewScreen {
 
     fn update_ui(&mut self, cx: &mut Cx) {
         // Show/hide based on auth state
-        self.view.view(ids!(content_scroll.content.main_card.login_required))
+        self.view.view(ids!(content_scroll.main_container.main_card.login_required))
             .set_visible(cx, !self.is_authenticated);
-        self.view.view(ids!(content_scroll.content.main_card.cards_grid))
+        self.view.view(ids!(content_scroll.main_container.main_card.cards_grid))
             .set_visible(cx, self.is_authenticated && !self.is_loading);
-        self.view.view(ids!(content_scroll.content.main_card.loading_view))
+        self.view.view(ids!(content_scroll.main_container.main_card.loading_view))
             .set_visible(cx, self.is_authenticated && self.is_loading);
 
         if self.is_authenticated && !self.is_loading {
@@ -930,56 +845,32 @@ impl ReviewScreen {
     fn update_counts(&mut self, cx: &mut Cx) {
         let total = self.stats.total();
 
-        // Smart card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row1.smart_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row1.smart_card.content.text_content.header_row.count_badge.count_label),
-            total,
-        );
+        // Smart card - badge is now under header_row
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row1.smart_card.header_row.smart_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row1.smart_card.header_row.smart_badge.smart_count), total);
 
-        // Pronunciation card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row1.pronunciation_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row1.pronunciation_card.content.text_content.header_row.count_badge.count_label),
-            self.stats.pronunciation,
-        );
+        // Pronunciation
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row1.pronunciation_card.header_row.pronunciation_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row1.pronunciation_card.header_row.pronunciation_badge.pronunciation_count), self.stats.pronunciation);
 
-        // Meaning card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row1.meaning_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row1.meaning_card.content.text_content.header_row.count_badge.count_label),
-            self.stats.meaning,
-        );
+        // Meaning
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row1.meaning_card.header_row.meaning_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row1.meaning_card.header_row.meaning_badge.meaning_count), self.stats.meaning);
 
-        // Spelling card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row2.spelling_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row2.spelling_card.content.text_content.header_row.count_badge.count_label),
-            self.stats.spelling,
-        );
+        // Spelling
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row2.spelling_card.header_row.spelling_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row2.spelling_card.header_row.spelling_badge.spelling_count), self.stats.spelling);
 
-        // Recognition card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row2.recognition_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row2.recognition_card.content.text_content.header_row.count_badge.count_label),
-            self.stats.recognition,
-        );
+        // Recognition
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row2.recognition_card.header_row.recognition_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row2.recognition_card.header_row.recognition_badge.recognition_count), self.stats.recognition);
 
-        // Phrase card
-        self.update_card_count(
-            cx,
-            ids!(content_scroll.content.main_card.cards_grid.row2.phrase_card.content.text_content.header_row.count_badge),
-            ids!(content_scroll.content.main_card.cards_grid.row2.phrase_card.content.text_content.header_row.count_badge.count_label),
-            self.stats.phrase,
-        );
+        // Phrase
+        self.update_badge(cx, ids!(content_scroll.main_container.main_card.cards_grid.row2.phrase_card.header_row.phrase_badge),
+                          ids!(content_scroll.main_container.main_card.cards_grid.row2.phrase_card.header_row.phrase_badge.phrase_count), self.stats.phrase);
     }
 
-    fn update_card_count(&mut self, cx: &mut Cx, badge_id: &[LiveId], label_id: &[LiveId], count: i32) {
+    fn update_badge(&mut self, cx: &mut Cx, badge_id: &[LiveId], label_id: &[LiveId], count: i32) {
         self.view.view(badge_id).set_visible(cx, count > 0);
         if count > 0 {
             self.view.label(label_id).set_text(cx, &count.to_string());

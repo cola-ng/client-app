@@ -114,7 +114,7 @@ live_design! {
             word_input = <TextInput> {
                 width: Fill, height: Fit
                 padding: {left: 16, right: 16, top: 14, bottom: 14}
-                empty_message: "输入你听到的单词..."
+                text: "输入你听到的单词..."
 
                 draw_bg: {
                     instance dark_mode: 0.0

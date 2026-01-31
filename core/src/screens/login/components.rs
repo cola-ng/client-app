@@ -142,11 +142,16 @@ live_design! {
         }
     }
 
-    // Form error text
-    pub FormError = <Label> {
-        draw_text: {
-            text_style: <FONT_REGULAR>{ font_size: 12.0 }
-            color: (ACCENT_RED)
+    // Form error text (wrapped in View for visibility control)
+    pub FormError = <View> {
+        width: Fill, height: Fit
+        visible: false
+
+        error_label = <Label> {
+            draw_text: {
+                text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                color: (ACCENT_RED)
+            }
         }
     }
 

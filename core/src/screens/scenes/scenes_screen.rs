@@ -509,8 +509,12 @@ live_design! {
 
                         search_text_input = <TextInput> {
                             width: Fill, height: Fit
-                            empty_text: "搜索场景..."
-                            draw_bg: { color: #0000 }
+                            text: "搜索场景..."
+                            draw_bg: {
+                                fn pixel(self) -> vec4 {
+                                    return vec4(0.0, 0.0, 0.0, 0.0);
+                                }
+                            }
                             draw_text: {
                                 instance dark_mode: 0.0
                                 text_style: <FONT_REGULAR>{ font_size: 13.0 }

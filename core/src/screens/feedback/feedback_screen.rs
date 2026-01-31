@@ -86,7 +86,7 @@ live_design! {
     FeedbackTextarea = <TextInput> {
         width: Fill, height: 200
         padding: {left: 16, right: 16, top: 12, bottom: 12}
-        empty_message: "请详细描述您的问题或建议..."
+        text: "请详细描述您的问题或建议..."
 
         draw_bg: {
             instance dark_mode: 0.0
@@ -272,7 +272,7 @@ live_design! {
                     contact_input = <TextInput> {
                         width: Fill, height: Fit
                         padding: {left: 16, right: 16, top: 12, bottom: 12}
-                        empty_message: "邮箱或其他联系方式"
+                        text: "邮箱或其他联系方式"
 
                         draw_bg: {
                             instance dark_mode: 0.0

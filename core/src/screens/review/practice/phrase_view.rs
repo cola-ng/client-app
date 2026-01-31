@@ -150,7 +150,7 @@ live_design! {
                 }
 
                 blank_wrapper = <BlankInputWrapper> {
-                    blank_input = { empty_message: "___" }
+                    blank_input = { text: "___" }
                 }
 
                 sentence_after = <Label> {

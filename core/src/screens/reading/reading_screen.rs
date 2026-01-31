@@ -643,11 +643,14 @@ live_design! {
                             }
                         }
 
-                        difficulty_label = <Label> {
+                        difficulty_label = <View> {
+                            width: Fit, height: Fit
                             visible: false
-                            draw_text: {
-                                text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                                color: #9ca3af
+                            <Label> {
+                                draw_text: {
+                                    text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                                    color: #9ca3af
+                                }
                             }
                         }
                     }

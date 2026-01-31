@@ -977,17 +977,15 @@ impl App {
                 let new_visible = !is_visible;
 
                 // Toggle visibility
+                debug_panel.set_visible(cx, new_visible);
                 debug_panel.apply_over(
                     cx,
                     live! {
-                        visible: (new_visible),
                         width: (self.debug_panel_width)
                     },
                 );
                 debug_panel.update_dark_mode(cx, self.dark_mode_anim);
-                self.ui
-                    .view(splitter_path)
-                    .apply_over(cx, live! { visible: (new_visible) });
+                self.ui.view(splitter_path).set_visible(cx, new_visible);
                 self.ui.redraw(cx);
             }
             _ => {}

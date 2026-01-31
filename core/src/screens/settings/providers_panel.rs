@@ -72,25 +72,52 @@ live_design! {
         text: "+ Add Custom Provider"
     }
 
-    // Provider item - using RoundedView with manual hover via apply_over
-    ProviderItem = <RoundedView> {
+    // Provider item - using instance variables for hover/selected states
+    ProviderItem = <View> {
         width: Fill, height: Fit
         padding: {left: 16, right: 16, top: 12, bottom: 12}
         margin: 0
         show_bg: true
         draw_bg: {
-            border_radius: 0
-            color: (WHITE)
+            instance hover: 0.0
+            instance selected: 0.0
+            instance dark_mode: 0.0
+
+            fn pixel(self) -> vec4 {
+                // Normal colors
+                let light_normal = (WHITE);
+                let dark_normal = #1f293b;
+                let normal = mix(light_normal, dark_normal, self.dark_mode);
+
+                // Hover colors
+                let light_hover = #f1f5f9;
+                let dark_hover = #334155;
+                let hover_color = mix(light_hover, dark_hover, self.dark_mode);
+
+                // Selected colors
+                let light_selected = #DBEAFE;
+                let dark_selected = #1E3A5F;
+                let selected_color = mix(light_selected, dark_selected, self.dark_mode);
+
+                // Mix states: normal -> hover -> selected
+                let base = mix(normal, hover_color, self.hover);
+                return mix(base, selected_color, self.selected);
+            }
         }
         flow: Right
         align: {x: 0.0, y: 0.5}
     }
 
-    // Provider label
+    // Provider label with dark mode support
     ProviderLabel = <Label> {
         draw_text: {
-            color: (GRAY_700)
+            instance dark_mode: 0.0
             text_style: <FONT_REGULAR>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 {
+                let light = #374151;
+                let dark = #f1f5f9;
+                return mix(light, dark, self.dark_mode);
+            }
         }
     }
 
@@ -225,23 +252,10 @@ impl Widget for ProvidersPanel {
                         _ => false,
                     };
                     if !is_selected {
-                        if self.dark_mode {
-                            // SLATE_700 hover color in dark mode (#334155)
-                            self.view.view(item_id.clone()).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(0.2, 0.255, 0.333, 1.0)) }
-                                },
-                            );
-                        } else {
-                            // SLATE_100 hover color in light mode (#f1f5f9)
-                            self.view.view(item_id.clone()).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(0.945, 0.960, 0.976, 1.0)) }
-                                },
-                            );
-                        }
+                        self.view.view(item_id.clone()).apply_over(
+                            cx,
+                            live! { draw_bg: { hover: 1.0 } },
+                        );
                         self.view.redraw(cx);
                     }
                 }
@@ -255,23 +269,10 @@ impl Widget for ProvidersPanel {
                         _ => false,
                     };
                     if !is_selected {
-                        if self.dark_mode {
-                            // SLATE_800 normal color in dark mode (#1f293b)
-                            self.view.view(item_id.clone()).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(0.122, 0.157, 0.231, 1.0)) }
-                                },
-                            );
-                        } else {
-                            // White (#ffffff)
-                            self.view.view(item_id.clone()).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(1.0, 1.0, 1.0, 1.0)) }
-                                },
-                            );
-                        }
+                        self.view.view(item_id.clone()).apply_over(
+                            cx,
+                            live! { draw_bg: { hover: 0.0 } },
+                        );
                         self.view.redraw(cx);
                     }
                 }
@@ -317,88 +318,32 @@ impl Widget for ProvidersPanel {
             // Only process if different from current selection
             if self.selected_provider_id.as_ref() != Some(&id) {
                 let selected = id.as_str();
-                // First reset all to normal
+                // First reset all to normal (not selected, not hovered)
                 for item_id in &items {
-                    if self.dark_mode {
-                        // Dark normal: #1f293b
-                        self.view.view(item_id.clone()).apply_over(
-                            cx,
-                            live! {
-                                draw_bg: { color: (vec4(0.122, 0.157, 0.231, 1.0)) }
-                            },
-                        );
-                    } else {
-                        // Light normal: #ffffff
-                        self.view.view(item_id.clone()).apply_over(
-                            cx,
-                            live! {
-                                draw_bg: { color: (vec4(1.0, 1.0, 1.0, 1.0)) }
-                            },
-                        );
-                    }
+                    self.view.view(item_id.clone()).apply_over(
+                        cx,
+                        live! { draw_bg: { selected: 0.0, hover: 0.0 } },
+                    );
                 }
-                // Then set selected color
+                // Then set selected state on the chosen item
                 match selected {
                     "openai" => {
-                        if self.dark_mode {
-                            // Dark selected: #1f3a5f
-                            self.view.view(ids!(list_container.openai_item)).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
-                                },
-                            );
-                        } else {
-                            // Light selected: #dbeafe
-                            self.view.view(ids!(list_container.openai_item)).apply_over(
-                                cx,
-                                live! {
-                                    draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
-                                },
-                            );
-                        }
+                        self.view.view(ids!(list_container.openai_item)).apply_over(
+                            cx,
+                            live! { draw_bg: { selected: 1.0 } },
+                        );
                     }
                     "deepseek" => {
-                        if self.dark_mode {
-                            self.view
-                                .view(ids!(list_container.deepseek_item))
-                                .apply_over(
-                                    cx,
-                                    live! {
-                                        draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
-                                    },
-                                );
-                        } else {
-                            self.view
-                                .view(ids!(list_container.deepseek_item))
-                                .apply_over(
-                                    cx,
-                                    live! {
-                                        draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
-                                    },
-                                );
-                        }
+                        self.view.view(ids!(list_container.deepseek_item)).apply_over(
+                            cx,
+                            live! { draw_bg: { selected: 1.0 } },
+                        );
                     }
                     "alibaba_cloud" => {
-                        if self.dark_mode {
-                            self.view
-                                .view(ids!(list_container.alibaba_item))
-                                .apply_over(
-                                    cx,
-                                    live! {
-                                        draw_bg: { color: (vec4(0.122, 0.227, 0.541, 1.0)) }
-                                    },
-                                );
-                        } else {
-                            self.view
-                                .view(ids!(list_container.alibaba_item))
-                                .apply_over(
-                                    cx,
-                                    live! {
-                                        draw_bg: { color: (vec4(0.859, 0.918, 0.996, 1.0)) }
-                                    },
-                                );
-                        }
+                        self.view.view(ids!(list_container.alibaba_item)).apply_over(
+                            cx,
+                            live! { draw_bg: { selected: 1.0 } },
+                        );
                     }
                     _ => {}
                 }
@@ -466,121 +411,37 @@ impl ProvidersPanelRef {
                 },
             );
 
-            // Provider items - apply background and text colors using vec4
-            // Colors: normal dark=#1f293b, normal light=#ffffff
-            //         selected dark=#1f3a5f, selected light=#dbeafe
-            //         text dark=#f1f5f9, text light=#374151
+            // Update provider items with dark_mode and selected instance variables
             let selected = inner.selected_provider_id.as_ref().map(|id| id.as_str());
-            let is_dark = inner.dark_mode;
-
-            // Color constants as vec4
-            let dark_normal = vec4(0.12, 0.16, 0.23, 1.0); // #1f293b
-            let light_normal = vec4(1.0, 1.0, 1.0, 1.0); // #ffffff
-            let dark_selected = vec4(0.12, 0.23, 0.37, 1.0); // #1f3a5f
-            let light_selected = vec4(0.86, 0.92, 1.0, 1.0); // #dbeafe
-            let dark_text = vec4(0.95, 0.96, 0.98, 1.0); // #f1f5f9
-            let light_text = vec4(0.22, 0.25, 0.32, 1.0); // #374151
 
             // OpenAI item
-            let is_openai_selected = selected == Some("openai");
-            if is_openai_selected && is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.openai_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_selected) } });
-            } else if is_openai_selected {
-                inner
-                    .view
-                    .view(ids!(list_container.openai_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_selected) } });
-            } else if is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.openai_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_normal) } });
-            } else {
-                inner
-                    .view
-                    .view(ids!(list_container.openai_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_normal) } });
-            }
+            let is_openai_selected = if selected == Some("openai") { 1.0 } else { 0.0 };
+            inner.view.view(ids!(list_container.openai_item)).apply_over(
+                cx,
+                live! { draw_bg: { dark_mode: (dark_mode), selected: (is_openai_selected) } },
+            );
 
             // DeepSeek item
-            let is_deepseek_selected = selected == Some("deepseek");
-            if is_deepseek_selected && is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.deepseek_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_selected) } });
-            } else if is_deepseek_selected {
-                inner
-                    .view
-                    .view(ids!(list_container.deepseek_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_selected) } });
-            } else if is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.deepseek_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_normal) } });
-            } else {
-                inner
-                    .view
-                    .view(ids!(list_container.deepseek_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_normal) } });
-            }
+            let is_deepseek_selected = if selected == Some("deepseek") { 1.0 } else { 0.0 };
+            inner.view.view(ids!(list_container.deepseek_item)).apply_over(
+                cx,
+                live! { draw_bg: { dark_mode: (dark_mode), selected: (is_deepseek_selected) } },
+            );
 
             // Alibaba item
-            let is_alibaba_selected = selected == Some("alibaba_cloud");
-            if is_alibaba_selected && is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.alibaba_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_selected) } });
-            } else if is_alibaba_selected {
-                inner
-                    .view
-                    .view(ids!(list_container.alibaba_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_selected) } });
-            } else if is_dark {
-                inner
-                    .view
-                    .view(ids!(list_container.alibaba_item))
-                    .apply_over(cx, live! { draw_bg: { color: (dark_normal) } });
-            } else {
-                inner
-                    .view
-                    .view(ids!(list_container.alibaba_item))
-                    .apply_over(cx, live! { draw_bg: { color: (light_normal) } });
-            }
+            let is_alibaba_selected = if selected == Some("alibaba_cloud") { 1.0 } else { 0.0 };
+            inner.view.view(ids!(list_container.alibaba_item)).apply_over(
+                cx,
+                live! { draw_bg: { dark_mode: (dark_mode), selected: (is_alibaba_selected) } },
+            );
 
-            // Provider labels - update text colors
-            if is_dark {
-                inner
-                    .view
-                    .label(ids!(list_container.openai_item.openai_label))
-                    .apply_over(cx, live! { draw_text: { color: (dark_text) } });
-                inner
-                    .view
-                    .label(ids!(list_container.deepseek_item.deepseek_label))
-                    .apply_over(cx, live! { draw_text: { color: (dark_text) } });
-                inner
-                    .view
-                    .label(ids!(list_container.alibaba_item.alibaba_label))
-                    .apply_over(cx, live! { draw_text: { color: (dark_text) } });
-            } else {
-                inner
-                    .view
-                    .label(ids!(list_container.openai_item.openai_label))
-                    .apply_over(cx, live! { draw_text: { color: (light_text) } });
-                inner
-                    .view
-                    .label(ids!(list_container.deepseek_item.deepseek_label))
-                    .apply_over(cx, live! { draw_text: { color: (light_text) } });
-                inner
-                    .view
-                    .label(ids!(list_container.alibaba_item.alibaba_label))
-                    .apply_over(cx, live! { draw_text: { color: (light_text) } });
-            }
+            // Provider labels - update dark_mode
+            inner.view.label(ids!(list_container.openai_item.openai_label))
+                .apply_over(cx, live! { draw_text: { dark_mode: (dark_mode) } });
+            inner.view.label(ids!(list_container.deepseek_item.deepseek_label))
+                .apply_over(cx, live! { draw_text: { dark_mode: (dark_mode) } });
+            inner.view.label(ids!(list_container.alibaba_item.alibaba_label))
+                .apply_over(cx, live! { draw_text: { dark_mode: (dark_mode) } });
 
             // Add button
             inner.view.button(ids!(add_button)).apply_over(

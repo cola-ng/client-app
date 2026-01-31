@@ -22,8 +22,9 @@ live_design! {
         padding: { left: 12, right: 12, top: 6, bottom: 6 }
         draw_bg: {
             instance dark_mode: 0.0
+            instance badge_color: (ACCENT_GREEN)
             fn pixel(self) -> vec4 {
-                return mix((ACCENT_GREEN), (GREEN_400), self.dark_mode);
+                return self.badge_color;
             }
             border_radius: 12.0
         }
@@ -39,16 +40,18 @@ live_design! {
     // Section title
     SectionTitle = <Label> {
         draw_text: {
-            color: (TEXT_PRIMARY)
+            instance text_color: (TEXT_PRIMARY)
             text_style: <FONT_SEMIBOLD>{ font_size: 12.0 }
+            fn get_color(self) -> vec4 { return self.text_color; }
         }
     }
 
     // Muted helper text
     HintText = <Label> {
         draw_text: {
-            color: (TEXT_SECONDARY)
+            instance text_color: (TEXT_SECONDARY)
             text_style: <FONT_REGULAR>{ font_size: 11.0 }
+            fn get_color(self) -> vec4 { return self.text_color; }
         }
     }
 
@@ -202,8 +205,9 @@ live_design! {
                     width: 12, height: 12
                     draw_bg: {
                         instance dark_mode: 0.0
+                        instance dot_color: (ACCENT_GREEN)
                         fn pixel(self) -> vec4 {
-                            return mix((ACCENT_GREEN), (GREEN_400), self.dark_mode);
+                            return self.dot_color;
                         }
                         border_radius: 6.0
                     }
@@ -337,13 +341,13 @@ impl MofaHero {
             .apply_over(
                 cx,
                 live! {
-                    draw_bg: { color: (color) }
+                    draw_bg: { badge_color: (color) }
                 },
             );
         self.view.view(ids!(status_section.status_dot)).apply_over(
             cx,
             live! {
-                draw_bg: { color: (color) }
+                draw_bg: { dot_color: (color) }
             },
         );
         self.view
@@ -419,7 +423,7 @@ impl MofaHeroRef {
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { color: (status_title_color) }
+                        draw_text: { text_color: (status_title_color) }
                     },
                 );
             let status_hint_color = if dark_mode > 0.5 {
@@ -433,7 +437,7 @@ impl MofaHeroRef {
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { color: (status_hint_color) }
+                        draw_text: { text_color: (status_hint_color) }
                     },
                 );
 
@@ -450,7 +454,7 @@ impl MofaHeroRef {
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { color: (status_title_color) }
+                        draw_text: { text_color: (status_title_color) }
                     },
                 );
             inner
@@ -459,7 +463,7 @@ impl MofaHeroRef {
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { color: (status_hint_color) }
+                        draw_text: { text_color: (status_hint_color) }
                     },
                 );
 

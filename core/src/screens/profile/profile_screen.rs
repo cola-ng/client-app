@@ -486,7 +486,7 @@ live_design! {
                             name_input = <TextInput> {
                                 width: Fill, height: Fit
                                 padding: {left: 12, right: 12, top: 10, bottom: 10}
-                                empty_message: "输入您的姓名"
+                                text: "输入您的姓名"
 
                                 draw_bg: {
                                     instance dark_mode: 0.0

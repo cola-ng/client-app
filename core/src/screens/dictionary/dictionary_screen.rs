@@ -342,12 +342,15 @@ live_design! {
         <View> { width: Fill }
 
         // Delete button (hidden, shows on hover)
-        delete_btn = <Label> {
-            text: "×"
+        delete_btn = <View> {
+            width: Fit, height: Fit
             visible: false
-            draw_text: {
-                text_style: <FONT_REGULAR>{ font_size: 14.0 }
-                color: (SLATE_400)
+            <Label> {
+                text: "×"
+                draw_text: {
+                    text_style: <FONT_REGULAR>{ font_size: 14.0 }
+                    color: (SLATE_400)
+                }
             }
         }
     }
@@ -976,19 +979,25 @@ live_design! {
                 }
             }
 
-            register_label = <Label> {
+            register_label = <View> {
+                width: Fit, height: Fit
                 visible: false
-                draw_text: {
-                    text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                    color: (SLATE_500)
+                <Label> {
+                    draw_text: {
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        color: (SLATE_500)
+                    }
                 }
             }
 
-            region_label = <Label> {
+            region_label = <View> {
+                width: Fit, height: Fit
                 visible: false
-                draw_text: {
-                    text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                    color: (SLATE_500)
+                <Label> {
+                    draw_text: {
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                        color: (SLATE_500)
+                    }
                 }
             }
         }
@@ -1006,12 +1015,15 @@ live_design! {
         }
 
         // Usage notes
-        usage_notes = <Label> {
-            width: Fill
+        usage_notes = <View> {
+            width: Fill, height: Fit
             visible: false
-            draw_text: {
-                text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                color: (SLATE_500)
+            <Label> {
+                width: Fill
+                draw_text: {
+                    text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                    color: (SLATE_500)
+                }
             }
         }
     }
@@ -1121,11 +1133,14 @@ live_design! {
             }
         }
 
-        sentence_source = <Label> {
+        sentence_source = <View> {
+            width: Fit, height: Fit
             visible: false
-            draw_text: {
-                text_style: <FONT_REGULAR>{ font_size: 11.0 }
-                color: (SLATE_500)
+            <Label> {
+                draw_text: {
+                    text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                    color: (SLATE_500)
+                }
             }
         }
     }
@@ -1732,7 +1747,7 @@ live_design! {
                 source_input = <TextInput> {
                     width: Fill, height: 120
                     padding: {left: 16, right: 16, top: 12, bottom: 12}
-                    empty_message: "输入中文或英文，自动检测并翻译..."
+                    text: "输入中文或英文，自动检测并翻译..."
 
                     draw_bg: {
                         instance dark_mode: 0.0

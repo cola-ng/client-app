@@ -345,14 +345,21 @@ live_design! {
                 width: Fit, height: Fit
                 padding: { left: 10, right: 10, top: 4, bottom: 4 }
                 draw_bg: {
-                    color: (INDIGO_100)
+                    instance badge_bg: (INDIGO_100)
                     border_radius: 12.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
+                        sdf.fill(self.badge_bg);
+                        return sdf.result;
+                    }
                 }
                 role_badge_label = <Label> {
                     text: "活跃"
                     draw_text: {
-                        color: (ACCENT_INDIGO)
+                        instance text_color: (ACCENT_INDIGO)
                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
+                        fn get_color(self) -> vec4 { return self.text_color; }
                     }
                 }
             }
@@ -408,7 +415,7 @@ impl ParticipantPanelRef {
             inner.view.view(ids!(header.role_badge)).apply_over(
                 cx,
                 live! {
-                    draw_bg: { color: (badge_bg) }
+                    draw_bg: { badge_bg: (badge_bg) }
                 },
             );
             let badge_text_color = if dark_mode > 0.5 {
@@ -422,7 +429,7 @@ impl ParticipantPanelRef {
                 .apply_over(
                     cx,
                     live! {
-                        draw_text: { color: (badge_text_color) }
+                        draw_text: { text_color: (badge_text_color) }
                     },
                 );
 

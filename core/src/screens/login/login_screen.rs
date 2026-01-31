@@ -166,12 +166,12 @@ live_design! {
 
                         email_field = <FormField> {
                             label = { text: "邮箱" }
-                            input = { empty_message: "请输入邮箱地址" }
+                            input = { text: "请输入邮箱地址" }
                         }
 
                         password_field = <FormField> {
                             label = { text: "密码" }
-                            input = { empty_message: "请输入密码" }
+                            input = { text: "请输入密码" }
                         }
 
                         forgot_password = <View> {
@@ -201,22 +201,22 @@ live_design! {
 
                         name_field = <FormField> {
                             label = { text: "用户名" }
-                            input = { empty_message: "请输入用户名" }
+                            input = { text: "请输入用户名" }
                         }
 
                         email_field = <FormField> {
                             label = { text: "邮箱" }
-                            input = { empty_message: "请输入邮箱地址" }
+                            input = { text: "请输入邮箱地址" }
                         }
 
                         password_field = <FormField> {
                             label = { text: "密码" }
-                            input = { empty_message: "请输入密码（至少6位）" }
+                            input = { text: "请输入密码（至少6位）" }
                         }
 
                         confirm_password_field = <FormField> {
                             label = { text: "确认密码" }
-                            input = { empty_message: "请再次输入密码" }
+                            input = { text: "请再次输入密码" }
                         }
 
                         register_btn = <FormButton> {
