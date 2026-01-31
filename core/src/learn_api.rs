@@ -168,6 +168,22 @@ pub struct ResetResponse {
     pub table: String,
 }
 
+/// Review statistics by type
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ReviewStats {
+    pub pronunciation: i32,
+    pub meaning: i32,
+    pub spelling: i32,
+    pub recognition: i32,
+    pub phrase: i32,
+}
+
+impl ReviewStats {
+    pub fn total(&self) -> i32 {
+        self.pronunciation + self.meaning + self.spelling + self.recognition + self.phrase
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResetAllResponse {
     pub tables_reset: Vec<ResetResponse>,
@@ -857,6 +873,33 @@ impl LearnApiClient {
         let response = self
             .client
             .delete(&url)
+            .header("Authorization", auth)
+            .header("Accept", "application/json")
+            .send()
+            .await
+            .map_err(|e| format!("Request failed: {}", e))?;
+
+        if !response.status().is_success() {
+            return Err(format!("API error: {}", response.status()));
+        }
+
+        response
+            .json()
+            .await
+            .map_err(|e| format!("Parse error: {}", e))
+    }
+
+    // ========================================================================
+    // Review Stats API
+    // ========================================================================
+
+    pub async fn get_review_stats(&self) -> Result<ReviewStats, String> {
+        let auth = self.auth_header().ok_or("Not authenticated")?;
+        let url = format!("{}/learn/review/stats", self.base_url);
+
+        let response = self
+            .client
+            .get(&url)
             .header("Authorization", auth)
             .header("Accept", "application/json")
             .send()
