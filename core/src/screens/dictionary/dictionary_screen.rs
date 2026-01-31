@@ -44,13 +44,13 @@ live_design! {
 
                 // Shadow effect (shadow-lg approximation)
                 let shadow_color = vec4(0.0, 0.0, 0.0, 0.08);
-                sdf.box(2.0, 4.0, self.rect_size.x - 4.0, self.rect_size.y - 2.0, 12.0);
+                sdf.box(2.0, 4.0, self.rect_size.x - 4.0, self.rect_size.y - 2.0, self.border_radius);
                 sdf.fill(shadow_color);
 
                 // Main card
                 let light_bg = vec4(1.0, 1.0, 1.0, 1.0);
                 let dark_bg = (SLATE_800);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light_bg, dark_bg, self.dark_mode));
 
                 return sdf.result;
@@ -69,7 +69,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light_bg = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
                 let dark_bg = (SLATE_700);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light_bg, dark_bg, self.dark_mode));
                 return sdf.result;
             }
@@ -112,7 +112,7 @@ live_design! {
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
 
                 if self.active > 0.5 {
                     // Active: orange-100 bg with semibold text
@@ -144,6 +144,19 @@ live_design! {
                 let inactive = mix(light_inactive, dark_inactive, self.dark_mode);
                 let active_color = mix(light_active, dark_active, self.dark_mode);
                 return mix(inactive, active_color, self.active);
+            }
+        }
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+            down = {
+                default: off
+                off = { from: {all: Snap} apply: {} }
+                on = { from: {all: Snap} apply: {} }
             }
         }
     }
@@ -190,7 +203,7 @@ live_design! {
                     let dark_bg = (SLATE_800);
                     let bg = mix(light_bg, dark_bg, self.dark_mode);
 
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                     sdf.fill(bg);
 
                     // Border: gray-300 normally, orange-500 on focus
@@ -243,13 +256,14 @@ live_design! {
 
             draw_bg: {
                 instance hover: 0.0
+                border_radius: 8.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     // orange-600 (#ea580c) -> orange-700 (#c2410c) on hover
                     let base = vec4(0.918, 0.345, 0.047, 1.0);   // orange-600
                     let hover = vec4(0.761, 0.255, 0.047, 1.0);  // orange-700
                     let color = mix(base, hover, self.hover);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                     sdf.fill(color);
                     return sdf.result;
                 }
@@ -258,6 +272,19 @@ live_design! {
             draw_text: {
                 text_style: <FONT_MEDIUM>{ font_size: 13.0 }
                 color: (WHITE)
+            }
+
+            animator: {
+                hover = {
+                    default: off
+                    off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                    on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+                }
+                down = {
+                    default: off
+                    off = { from: {all: Snap} apply: {} }
+                    on = { from: {all: Snap} apply: {} }
+                }
             }
         }
     }
@@ -280,6 +307,7 @@ live_design! {
             instance hover: 0.0
             instance active: 0.0
             instance dark_mode: 0.0
+            border_radius: 8.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -298,7 +326,7 @@ live_design! {
                 let base = mix(normal, hover_color, self.hover);
                 let color = mix(base, active_color, self.active);
 
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(color);
                 return sdf.result;
             }
@@ -398,12 +426,13 @@ live_design! {
 
                 draw_bg: {
                     instance hover: 0.0
+                    border_radius: 4.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         // Transparent, red-50 on hover
                         let normal = vec4(0.0, 0.0, 0.0, 0.0);
                         let hover = vec4(0.996, 0.949, 0.949, 1.0); // red-50
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(mix(normal, hover, self.hover));
                         return sdf.result;
                     }
@@ -411,6 +440,15 @@ live_design! {
 
                 draw_text: {
                     text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                }
+
+                animator: {
+                    hover = {
+                        default: off
+                        off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                        on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+                    }
+                    down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
                 }
             }
         }
@@ -472,6 +510,7 @@ live_design! {
             instance hover: 0.0
             instance active: 0.0
             instance dark_mode: 0.0
+            border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 // Orange accent for active/hover states
@@ -479,7 +518,7 @@ live_design! {
                 let active_bg = mix((SLATE_100), (SLATE_600), self.dark_mode);
                 let hover_bg = mix(bg, active_bg, self.active);
                 let final_bg = mix(hover_bg, active_bg, self.hover * 0.5);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(final_bg);
                 // Left border indicator when active
                 if self.active > 0.5 {
@@ -650,7 +689,7 @@ live_design! {
                 if self.badge_type < 0.5 { bg = orange_100; }
                 else if self.badge_type < 1.5 { bg = amber_100; }
                 else { bg = yellow_100; }
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 11.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(bg);
                 return sdf.result;
             }
@@ -708,7 +747,7 @@ live_design! {
             border_radius: 11.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 11.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(vec4(1.0, 0.929, 0.835, 1.0)); // orange-100
                 return sdf.result;
             }
@@ -732,7 +771,7 @@ live_design! {
             border_radius: 11.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 11.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(vec4(0.996, 0.941, 0.780, 1.0)); // amber-100
                 return sdf.result;
             }
@@ -959,7 +998,7 @@ live_design! {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let orange = vec4(0.992, 0.796, 0.545, 1.0); // orange-200
                         let blue = vec4(0.749, 0.859, 0.992, 1.0);   // blue-200
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(mix(orange, blue, self.lang));
                         return sdf.result;
                     }
@@ -1056,7 +1095,7 @@ live_design! {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let light = vec4(0.961, 0.953, 0.945, 1.0);
                         let dark = (SLATE_800);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(mix(light, dark, self.dark_mode));
                         return sdf.result;
                     }
@@ -1116,7 +1155,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
                 let dark = (SLATE_700);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light, dark, self.dark_mode));
                 return sdf.result;
             }
@@ -1235,7 +1274,7 @@ live_design! {
                 } else {
                     normal = blue_100; hover_color = blue_200;
                 }
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 14.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(normal, hover_color, self.hover));
                 return sdf.result;
             }
@@ -1286,7 +1325,7 @@ live_design! {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let light = vec4(0.961, 0.953, 0.945, 1.0);
                         let dark = (SLATE_800);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(mix(light, dark, self.dark_mode));
                         return sdf.result;
                     }
@@ -1419,6 +1458,7 @@ live_design! {
         draw_bg: {
             instance selected: 0.0
             instance hover: 0.0
+            border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
@@ -1431,7 +1471,7 @@ live_design! {
                 let selected_bg = orange_50;
                 let bg = mix(normal, selected_bg, self.selected);
 
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(bg);
                 if self.selected > 0.5 {
                     sdf.stroke(orange_200, 1.0);
@@ -1508,11 +1548,12 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance checked: 0.0
+                border_radius: 4.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     let orange_500 = vec4(0.976, 0.451, 0.086, 1.0);
                     let gray_200 = vec4(0.898, 0.906, 0.922, 1.0);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                     sdf.fill(mix(#fff, orange_500, self.checked));
                     sdf.stroke(mix(gray_200, orange_500, self.checked), 1.0);
                     // Checkmark when checked
@@ -1724,7 +1765,7 @@ live_design! {
                             border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(vec4(0.953, 0.961, 0.969, 1.0)); // gray-100
                                 return sdf.result;
                             }
@@ -1751,9 +1792,10 @@ live_design! {
 
                     draw_bg: {
                         instance dark_mode: 0.0
+                        border_radius: 8.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                             let bg = mix((SLATE_50), (SLATE_700), self.dark_mode);
                             sdf.fill(bg);
                             return sdf.result;
@@ -1784,11 +1826,12 @@ live_design! {
 
                         draw_bg: {
                             instance hover: 0.0
+                            border_radius: 8.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let base = vec4(0.976, 0.451, 0.086, 1.0);   // orange-500
                                 let hover = vec4(0.918, 0.345, 0.047, 1.0); // orange-600
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(mix(base, hover, self.hover));
                                 return sdf.result;
                             }
@@ -1797,6 +1840,15 @@ live_design! {
                         draw_text: {
                             text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
                             color: (WHITE)
+                        }
+
+                        animator: {
+                            hover = {
+                                default: off
+                                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+                            }
+                            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
                         }
                     }
                 }
@@ -1826,7 +1878,7 @@ live_design! {
                             border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(vec4(1.0, 0.969, 0.929, 1.0)); // orange-50
                                 return sdf.result;
                             }
@@ -1850,11 +1902,12 @@ live_design! {
 
                         draw_bg: {
                             instance hover: 0.0
+                            border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let normal = vec4(0.0, 0.0, 0.0, 0.0);
                                 let hover = vec4(1.0, 0.969, 0.929, 1.0); // orange-50
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(mix(normal, hover, self.hover));
                                 return sdf.result;
                             }
@@ -1863,6 +1916,15 @@ live_design! {
                         draw_text: {
                             text_style: <FONT_MEDIUM>{ font_size: 12.0 }
                             color: (DICT_ACCENT)
+                        }
+
+                        animator: {
+                            hover = {
+                                default: off
+                                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+                            }
+                            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
                         }
                     }
                 }
@@ -1889,7 +1951,7 @@ live_design! {
                     border_radius: 8.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(#fffbeb); // amber-50
                         sdf.stroke(#fde68a, 1.0); // amber-200
                         return sdf.result;
@@ -1987,7 +2049,7 @@ live_design! {
                             // Muted background like website TabsList (bg-muted)
                             let light = vec4(0.961, 0.953, 0.945, 1.0); // gray-100/muted
                             let dark = (SLATE_800);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                             sdf.fill(mix(light, dark, self.dark_mode));
                             return sdf.result;
                         }
@@ -2109,7 +2171,7 @@ live_design! {
     }
 }
 
-use crate::dict_api::{get_dict_api, Word, WordQueryResponse, SearchHistoryEntry};
+use crate::dict_api::{get_dict_api, Word, WordQueryResponse, SearchedWord};
 use crossbeam_channel::{Receiver, Sender, bounded};
 
 /// Active tab for dictionary screen
@@ -2218,6 +2280,22 @@ impl WidgetMatchEvent for DictionaryScreen {
             ::log::info!("Translate button clicked");
         }
 
+        // Handle definition tab switching (zh/en)
+        if self.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.def_tabs_row.def_tab_bg.zh_def_tab)).clicked(actions) {
+            self.switch_definition_tab(cx, true); // Chinese
+        }
+        if self.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.def_tabs_row.def_tab_bg.en_def_tab)).clicked(actions) {
+            self.switch_definition_tab(cx, false); // English
+        }
+
+        // Handle audio playback
+        if self.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.word_detail_card.pronunciation_row.uk_pron.uk_audio_btn)).finger_up(actions).is_some() {
+            self.play_audio(cx, "uk");
+        }
+        if self.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.word_detail_card.pronunciation_row.us_pron.us_audio_btn)).finger_up(actions).is_some() {
+            self.play_audio(cx, "us");
+        }
+
         // Check for lookup results from channel
         if let Some(ref receiver) = self.lookup_result_receiver {
             if let Ok(result) = receiver.try_recv() {
@@ -2307,6 +2385,55 @@ impl DictionaryScreen {
                 draw_bg: { dark_mode: (dark_mode) }
             },
         );
+    }
+
+    /// Switch between Chinese and English definition tabs
+    fn switch_definition_tab(&mut self, cx: &mut Cx, show_chinese: bool) {
+        let (zh_active, en_active) = if show_chinese { (1.0, 0.0) } else { (0.0, 1.0) };
+
+        // Update tab button styles
+        self.view.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.def_tabs_row.def_tab_bg.zh_def_tab)).apply_over(
+            cx,
+            live! {
+                draw_bg: { active: (zh_active) }
+                draw_text: { active: (zh_active) }
+            },
+        );
+        self.view.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.def_tabs_row.def_tab_bg.en_def_tab)).apply_over(
+            cx,
+            live! {
+                draw_bg: { active: (en_active) }
+                draw_text: { active: (en_active) }
+            },
+        );
+
+        // Toggle content visibility
+        self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.zh_definitions))
+            .set_visible(cx, show_chinese);
+        self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.en_definitions))
+            .set_visible(cx, !show_chinese);
+
+        self.view.redraw(cx);
+    }
+
+    /// Play pronunciation audio
+    fn play_audio(&mut self, _cx: &mut Cx, dialect: &str) {
+        // Get the audio URL from the selected word
+        if let Some(ref word_response) = self.selected_word {
+            let audio_url = word_response.pronunciations.iter()
+                .find(|p| p.dialect.as_deref() == Some(dialect) ||
+                          (dialect == "uk" && p.dialect.as_deref() == Some("British")) ||
+                          (dialect == "us" && p.dialect.as_deref() == Some("American")))
+                .and_then(|p| p.audio_url.as_ref().or(p.audio_path.as_ref()));
+
+            if let Some(url) = audio_url {
+                ::log::info!("Playing audio: {} ({})", url, dialect);
+                // TODO: Implement actual audio playback
+                // For now, just log the URL
+            } else {
+                ::log::warn!("No audio URL found for dialect: {}", dialect);
+            }
+        }
     }
 
     /// Perform prefix search (for autocomplete as user types)

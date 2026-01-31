@@ -36,12 +36,12 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 // Shadow
                 let shadow = vec4(0.0, 0.0, 0.0, 0.06);
-                sdf.box(2.0, 4.0, self.rect_size.x - 4.0, self.rect_size.y - 2.0, 12.0);
+                sdf.box(2.0, 4.0, self.rect_size.x - 4.0, self.rect_size.y - 2.0, self.border_radius);
                 sdf.fill(shadow);
                 // Card bg
                 let light = vec4(1.0, 1.0, 1.0, 1.0);
                 let dark = (SLATE_800);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light, dark, self.dark_mode));
                 return sdf.result;
             }
@@ -58,7 +58,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
                 let dark = (SLATE_700);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light, dark, self.dark_mode));
                 return sdf.result;
             }
@@ -103,11 +103,12 @@ live_design! {
 
         draw_bg: {
             instance hover: 0.0
+            border_radius: 6.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let base = vec4(0.976, 0.451, 0.086, 1.0);  // orange-500
                 let hover_color = vec4(0.918, 0.345, 0.047, 1.0); // orange-600
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(base, hover_color, self.hover));
                 return sdf.result;
             }
@@ -124,6 +125,11 @@ live_design! {
                 off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
                 on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
             }
+            down = {
+                default: off
+                off = { from: {all: Snap} apply: {} }
+                on = { from: {all: Snap} apply: {} }
+            }
         }
     }
 
@@ -136,6 +142,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
+            border_radius: 6.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(1.0, 1.0, 1.0, 1.0);
@@ -147,7 +154,7 @@ live_design! {
                     mix(hover_light, hover_dark, self.dark_mode),
                     self.hover
                 );
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(bg);
                 let border = mix(vec4(0.82, 0.835, 0.863, 1.0), (SLATE_600), self.dark_mode);
                 sdf.stroke(border, 1.0);
@@ -168,6 +175,11 @@ live_design! {
                 default: off
                 off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
                 on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+            down = {
+                default: off
+                off = { from: {all: Snap} apply: {} }
+                on = { from: {all: Snap} apply: {} }
             }
         }
     }
@@ -267,7 +279,7 @@ live_design! {
                     mix(light_hover, dark_hover, self.dark_mode),
                     self.hover
                 );
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(bg);
                 return sdf.result;
             }
@@ -313,7 +325,7 @@ live_design! {
                 else if self.bg_color < 1.5 { bg = amber; }
                 else if self.bg_color < 2.5 { bg = blue; }
                 else { bg = purple; }
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(bg);
                 return sdf.result;
             }
@@ -352,7 +364,7 @@ live_design! {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(1.0, 0.969, 0.929, 1.0); // orange-50
                 let dark = (SLATE_700);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light, dark, self.dark_mode));
                 return sdf.result;
             }
@@ -538,9 +550,10 @@ live_design! {
                         width: 28, height: 20
                         text: "日"
                         draw_bg: {
+                            border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(vec4(0.976, 0.451, 0.086, 1.0));
                                 return sdf.result;
                             }
@@ -549,14 +562,19 @@ live_design! {
                             text_style: <FONT_REGULAR>{ font_size: 10.0 }
                             color: (WHITE)
                         }
+                        animator: {
+                            hover = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+                            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+                        }
                     }
                     period_week = <Button> {
                         width: 28, height: 20
                         text: "周"
                         draw_bg: {
+                            border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(vec4(1.0, 1.0, 1.0, 1.0));
                                 return sdf.result;
                             }
@@ -564,15 +582,20 @@ live_design! {
                         draw_text: {
                             text_style: <FONT_REGULAR>{ font_size: 10.0 }
                             color: (TEXT_MUTED)
+                        }
+                        animator: {
+                            hover = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+                            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
                         }
                     }
                     period_month = <Button> {
                         width: 28, height: 20
                         text: "月"
                         draw_bg: {
+                            border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(vec4(1.0, 1.0, 1.0, 1.0));
                                 return sdf.result;
                             }
@@ -580,6 +603,10 @@ live_design! {
                         draw_text: {
                             text_style: <FONT_REGULAR>{ font_size: 10.0 }
                             color: (TEXT_MUTED)
+                        }
+                        animator: {
+                            hover = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+                            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
                         }
                     }
                 }

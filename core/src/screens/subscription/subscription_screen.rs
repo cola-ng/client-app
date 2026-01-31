@@ -238,9 +238,10 @@ live_design! {
             text: "充值"
 
             draw_bg: {
+                border_radius: 6.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                     sdf.fill((ACCENT_PRIMARY));
                     return sdf.result;
                 }
@@ -249,6 +250,11 @@ live_design! {
             draw_text: {
                 text_style: <FONT_MEDIUM>{ font_size: 13.0 }
                 color: (WHITE)
+            }
+
+            animator: {
+                hover = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+                down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
             }
         }
     }

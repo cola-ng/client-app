@@ -29,10 +29,11 @@ live_design! {
             instance dark_mode: 0.0
             instance active: 0.0
             instance hover: 0.0
+            border_radius: 8.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
 
                 if self.active > 0.5 {
                     // Active: orange-100 bg
@@ -66,6 +67,15 @@ live_design! {
                 return mix(inactive, active_color, self.active);
             }
         }
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+            down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
+        }
     }
 
     // Favorite item card - matches website card styling with shadow
@@ -88,7 +98,7 @@ live_design! {
                 // Subtle shadow on hover
                 if self.hover > 0.5 {
                     let shadow = vec4(0.0, 0.0, 0.0, 0.06);
-                    sdf.box(1.0, 2.0, self.rect_size.x - 2.0, self.rect_size.y - 1.0, 12.0);
+                    sdf.box(1.0, 2.0, self.rect_size.x - 2.0, self.rect_size.y - 1.0, self.border_radius);
                     sdf.fill(shadow);
                 }
 
@@ -100,7 +110,7 @@ live_design! {
 
                 let light = mix(light_bg, light_hover, self.hover);
                 let dark = mix(dark_bg, dark_hover, self.hover);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                 sdf.fill(mix(light, dark, self.dark_mode));
 
                 return sdf.result;
@@ -168,11 +178,12 @@ live_design! {
             text: "×"
             draw_bg: {
                 instance hover: 0.0
+                border_radius: 6.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     let normal = vec4(0.0, 0.0, 0.0, 0.0);
                     let hover_bg = vec4(0.996, 0.949, 0.949, 1.0); // red-50
-                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                     sdf.fill(mix(normal, hover_bg, self.hover));
                     return sdf.result;
                 }
@@ -185,6 +196,14 @@ live_design! {
                     let hover_color = vec4(0.863, 0.196, 0.196, 1.0); // red-600
                     return mix(normal, hover_color, self.hover);
                 }
+            }
+            animator: {
+                hover = {
+                    default: off
+                    off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}, draw_text: {hover: 0.0}} }
+                    on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}, draw_text: {hover: 1.0}} }
+                }
+                down = { default: off, off = { from: {all: Snap} apply: {} } on = { from: {all: Snap} apply: {} } }
             }
         }
     }
@@ -291,7 +310,7 @@ live_design! {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             let light = vec4(1.0, 1.0, 1.0, 1.0);
                             let dark = (SLATE_700);
-                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                             sdf.fill(mix(light, dark, self.dark_mode));
                             // Border
                             let border = mix(vec4(0.835, 0.847, 0.863, 1.0), (SLATE_600), self.dark_mode);
@@ -340,7 +359,7 @@ live_design! {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let light = vec4(0.961, 0.953, 0.945, 1.0); // muted
                         let dark = (SLATE_800);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         sdf.fill(mix(light, dark, self.dark_mode));
                         return sdf.result;
                     }

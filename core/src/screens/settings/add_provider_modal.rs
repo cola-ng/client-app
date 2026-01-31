@@ -84,6 +84,19 @@ live_design! {
         }
 
         text: "Add Provider"
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+            down = {
+                default: off
+                off = { from: {all: Snap} apply: {draw_bg: {pressed: 0.0}} }
+                on = { from: {all: Snap} apply: {draw_bg: {pressed: 1.0}} }
+            }
+        }
     }
 
     // Modal button - secondary (cancel)
@@ -120,6 +133,19 @@ live_design! {
         }
 
         text: "Cancel"
+
+        animator: {
+            hover = {
+                default: off
+                off = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 0.0}} }
+                on = { from: {all: Forward {duration: 0.1}} apply: {draw_bg: {hover: 1.0}} }
+            }
+            down = {
+                default: off
+                off = { from: {all: Snap} apply: {draw_bg: {pressed: 0.0}} }
+                on = { from: {all: Snap} apply: {draw_bg: {pressed: 1.0}} }
+            }
+        }
     }
 
     // Add provider modal dialog

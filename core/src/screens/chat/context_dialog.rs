@@ -26,7 +26,7 @@ live_design! {
             border_radius: 12.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
 
                 let light_normal = vec4(1.0, 1.0, 1.0, 1.0);
                 let light_hover = vec4(1.0, 0.969, 0.929, 1.0);  // orange-50
@@ -141,7 +141,7 @@ live_design! {
                     border_radius: 16.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 16.0);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                         let light = vec4(1.0, 1.0, 1.0, 1.0);
                         let dark = vec4(0.067, 0.090, 0.133, 1.0);
                         sdf.fill(mix(light, dark, self.dark_mode));
@@ -174,9 +174,10 @@ live_design! {
                         text: "✕"
                         draw_bg: {
                             instance hover: 0.0
+                            border_radius: 8.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
                                 sdf.fill(mix(vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.1), self.hover));
                                 return sdf.result;
                             }

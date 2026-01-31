@@ -2,12 +2,14 @@
 //!
 //! This module provides a client for querying the dictionary from the backend server.
 //! The dictionary provides English-Chinese word lookups with phonetics, examples, and more.
+//!
+//! Types are kept in sync with colang-website/crates/server/src/models/dict.rs
 
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 // ============================================================================
-// API Response Types (matching colang-website models)
+// API Response Types (matching colang-website models/dict.rs)
 // ============================================================================
 
 /// Word record from the dictionary
@@ -28,8 +30,8 @@ pub struct Word {
     pub notes: Option<String>,
     pub created_by: Option<i64>,
     pub updated_by: Option<i64>,
-    pub created_at: String,
     pub updated_at: String,
+    pub created_at: String,
 }
 
 /// Word definition
@@ -40,7 +42,7 @@ pub struct Definition {
     pub language: String,
     pub definition: String,
     pub part_of_speech: Option<String>,
-    pub definition_order: Option<i16>,
+    pub definition_order: Option<i32>,
     pub register: Option<String>,
     pub region: Option<String>,
     pub context: Option<String>,
@@ -57,8 +59,7 @@ pub struct Sentence {
     pub sentence: String,
     pub source: Option<String>,
     pub author: Option<String>,
-    pub priority_order: Option<i16>,
-    pub difficulty: Option<i16>,
+    pub difficulty: Option<i32>,
     pub is_common: Option<bool>,
     pub created_at: String,
 }
@@ -78,9 +79,9 @@ pub struct Pronunciation {
     pub created_at: String,
 }
 
-/// Word relation (synonym, antonym, etc.)
+/// Word relation with related word info
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Relation {
+pub struct RelationWithWord {
     pub id: i64,
     pub word_id: i64,
     pub relation_type: Option<String>,
@@ -94,12 +95,13 @@ pub struct Relation {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Etymology {
     pub id: i64,
+    pub origin_code: Option<String>,
     pub origin_language: Option<String>,
     pub origin_word: Option<String>,
     pub origin_meaning: Option<String>,
     pub language: String,
     pub etymology: String,
-    pub first_attested_year: Option<i32>,
+    pub first_attested_year: Option<String>,
     pub historical_forms: Option<serde_json::Value>,
     pub cognate_words: Option<serde_json::Value>,
     pub created_at: String,
@@ -114,15 +116,6 @@ pub struct Form {
     pub form: String,
     pub is_irregular: Option<bool>,
     pub notes: Option<String>,
-    pub created_at: String,
-}
-
-/// Category
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Category {
-    pub id: i64,
-    pub name: String,
-    pub parent_id: Option<i64>,
     pub created_at: String,
 }
 
@@ -145,7 +138,10 @@ pub struct Image {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Dictionary {
     pub id: i64,
-    pub name: String,
+    pub name_en: String,
+    pub name_zh: String,
+    pub short_en: String,
+    pub short_zh: String,
     pub description_en: Option<String>,
     pub description_zh: Option<String>,
     pub version: Option<String>,
@@ -153,27 +149,14 @@ pub struct Dictionary {
     pub license_type: Option<String>,
     pub license_url: Option<String>,
     pub source_url: Option<String>,
-    pub total_entries: Option<i32>,
+    pub total_entries: Option<i64>,
     pub is_active: Option<bool>,
     pub is_official: Option<bool>,
-    pub priority_order: Option<i16>,
+    pub priority_order: Option<i32>,
     pub created_by: Option<i64>,
     pub updated_by: Option<i64>,
     pub updated_at: String,
     pub created_at: String,
-}
-
-/// Word-Dictionary association
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordDictionary {
-    pub id: i64,
-    pub word_id: i64,
-    pub dictionary_id: i64,
-    pub definition_id: Option<i64>,
-    pub priority_order: Option<i16>,
-    pub name: String,
-    pub created_at: String,
-    pub dictionary: Dictionary,
 }
 
 /// Full word lookup response
@@ -183,37 +166,21 @@ pub struct WordQueryResponse {
     pub definitions: Vec<Definition>,
     pub sentences: Vec<Sentence>,
     pub pronunciations: Vec<Pronunciation>,
-    pub relations: Vec<Relation>,
+    pub dictionaries: Vec<Dictionary>,
+    pub relations: Vec<RelationWithWord>,
     pub etymologies: Vec<Etymology>,
     pub forms: Vec<Form>,
-    pub categories: Vec<Category>,
     pub images: Vec<Image>,
-    pub dictionaries: Vec<WordDictionary>,
-}
-
-/// Brief dictionary entry for search results
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DictEntryBrief {
-    pub id: i64,
-    pub word: String,
-    pub phonetic: Option<String>,
-    pub part_of_speech: Option<String>,
-    pub definition_zh: String,
 }
 
 /// Search history entry
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SearchHistoryEntry {
+pub struct SearchedWord {
     pub id: i64,
     pub user_id: i64,
+    pub word_id: Option<i64>,
     pub word: String,
-    pub searched_at: String,
-}
-
-/// New search history entry for insertion
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NewSearchHistoryEntry {
-    pub word: String,
+    pub searched_at: Option<String>,
 }
 
 // ============================================================================
@@ -235,10 +202,6 @@ impl DictApiClient {
     }
 
     /// Search dictionary entries by word prefix
-    ///
-    /// # Arguments
-    /// * `query` - The search query (word or prefix)
-    /// * `limit` - Maximum number of results
     pub async fn search(&self, query: &str, limit: Option<i64>) -> Result<Vec<Word>, String> {
         let limit = limit.unwrap_or(20);
         let url = format!(
@@ -283,9 +246,6 @@ impl DictApiClient {
     }
 
     /// Lookup a word by exact match
-    ///
-    /// # Arguments
-    /// * `word` - The word to lookup
     pub async fn lookup(&self, word: &str) -> Result<WordQueryResponse, String> {
         let url = format!(
             "{}/dict/lookup?word={}",
@@ -390,10 +350,7 @@ impl DictApiClient {
     }
 
     /// Save search history
-    ///
-    /// # Arguments
-    /// * `word` - The word that was searched
-    pub async fn save_search_history(&self, word: &str) -> Result<SearchHistoryEntry, String> {
+    pub async fn save_search_history(&self, word: &str) -> Result<SearchedWord, String> {
         let url = format!("{}/dict/history", self.base_url);
 
         let payload = serde_json::json!({ "word": word });
@@ -436,10 +393,7 @@ impl DictApiClient {
     }
 
     /// Get search history
-    ///
-    /// # Arguments
-    /// * `limit` - Maximum number of history items
-    pub async fn get_search_history(&self, limit: i64) -> Result<Vec<SearchHistoryEntry>, String> {
+    pub async fn get_search_history(&self, limit: i64) -> Result<Vec<SearchedWord>, String> {
         let url = format!("{}/dict/history?limit={}", self.base_url, limit);
 
         log::debug!("[DictAPI] GET {}", url);
