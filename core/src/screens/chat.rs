@@ -1,10 +1,19 @@
 pub mod chat_screen;
+pub mod chat_sidebar;
+pub mod context_dialog;
+pub mod message_bubble;
 pub mod mofa_hero;
 
 pub use chat_screen::{ChatScreen, ChatScreenWidgetRefExt};
+pub use chat_sidebar::{ChatSidebar, ChatSidebarAction, ChatSidebarWidgetRefExt};
+pub use context_dialog::{ContextCard, ContextCardWidgetRefExt, ContextDialog, ContextDialogAction, ContextDialogWidgetRefExt};
+pub use message_bubble::{AiBubble, AiBubbleWidgetRefExt, MessageList, UserBubble, UserBubbleWidgetRefExt};
 use makepad_widgets::Cx;
 
 pub(super) fn live_design(cx: &mut Cx) {
+    message_bubble::live_design(cx);
+    chat_sidebar::live_design(cx);
+    context_dialog::live_design(cx);
     mofa_hero::live_design(cx);
     chat_screen::live_design(cx);
 }

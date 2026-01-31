@@ -1,7 +1,7 @@
 //! Asset content API client
 //!
 //! This module provides a client for fetching shared asset content from the backend server.
-//! Asset content includes scenes, dialogues, classic sources, reading exercises, and key phrases.
+//! Asset content includes stages, scripts, reading exercises, and key phrases.
 //! These are shared content that don't require authentication.
 
 use reqwest::Client;
@@ -12,25 +12,26 @@ use serde_json::Value;
 // API Response Types (Shared Content)
 // ============================================================================
 
+/// Stage matches backend asset_stages table (renamed from Scene)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Scene {
+pub struct Stage {
     pub id: i64,
     pub name_en: String,
     pub name_zh: String,
     pub description_en: Option<String>,
     pub description_zh: Option<String>,
     pub icon_emoji: Option<String>,
-    pub difficulty_level: Option<String>,
-    pub category: Option<String>,
     pub display_order: Option<i32>,
+    pub difficulty: Option<i32>,
     pub is_active: Option<bool>,
     pub created_at: String,
 }
 
+/// Script within a stage (dialogues)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SceneDialogue {
+pub struct Script {
     pub id: i64,
-    pub scene_id: i64,
+    pub stage_id: i64,
     pub title_en: String,
     pub title_zh: String,
     pub description_en: Option<String>,
@@ -41,10 +42,11 @@ pub struct SceneDialogue {
     pub created_at: String,
 }
 
+/// Script turn (dialogue line)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DialogueTurn {
+pub struct ScriptTurn {
     pub id: i64,
-    pub dialogue_id: i64,
+    pub script_id: i64,
     pub turn_number: i32,
     pub speaker_role: String,
     pub speaker_name: Option<String>,
@@ -54,41 +56,6 @@ pub struct DialogueTurn {
     pub phonetic_transcription: Option<String>,
     pub asset_phrases: Option<Value>,
     pub notes: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ClassicDialogueSource {
-    pub id: i64,
-    pub source_type: String,
-    pub title: String,
-    pub year: Option<i32>,
-    pub description_en: Option<String>,
-    pub description_zh: Option<String>,
-    pub thumbnail_url: Option<String>,
-    pub imdb_id: Option<String>,
-    pub difficulty_level: Option<String>,
-    pub created_at: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ClassicDialogueClip {
-    pub id: i64,
-    pub source_id: i64,
-    pub clip_title_en: String,
-    pub clip_title_zh: String,
-    pub start_time_seconds: Option<i32>,
-    pub end_time_seconds: Option<i32>,
-    pub video_url: Option<String>,
-    pub transcript_en: String,
-    pub transcript_zh: String,
-    pub key_vocabulary: Option<Value>,
-    pub cultural_notes: Option<String>,
-    pub grammar_points: Option<Value>,
-    pub difficulty_vocab: Option<i32>,
-    pub difficulty_speed: Option<i32>,
-    pub difficulty_slang: Option<i32>,
-    pub popularity_score: Option<i32>,
-    pub created_at: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -131,6 +98,21 @@ pub struct KeyPhrase {
     pub created_at: String,
 }
 
+/// Chat context for context-based conversations
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChatContext {
+    pub id: i64,
+    pub name_en: String,
+    pub name_zh: String,
+    pub description_en: Option<String>,
+    pub description_zh: Option<String>,
+    pub icon_emoji: Option<String>,
+    pub display_order: Option<i32>,
+    pub difficulty: Option<i32>,
+    pub is_active: Option<bool>,
+    pub created_at: String,
+}
+
 // ============================================================================
 // Asset API Client
 // ============================================================================
@@ -150,31 +132,13 @@ impl AssetApiClient {
     }
 
     // ========================================================================
-    // Scenes API
+    // Stages API (matches website /api/asset/stages)
     // ========================================================================
 
-    pub async fn list_scenes(
-        &self,
-        category: Option<&str>,
-        difficulty: Option<&str>,
-        limit: Option<i64>,
-    ) -> Result<Vec<Scene>, String> {
-        let mut url = format!("{}/asset/scenes", self.base_url);
-        let mut params = vec![];
-
-        if let Some(cat) = category {
-            params.push(format!("category={}", cat));
-        }
-        if let Some(diff) = difficulty {
-            params.push(format!("difficulty={}", diff));
-        }
-        if let Some(lim) = limit {
-            params.push(format!("limit={}", lim));
-        }
-
-        if !params.is_empty() {
-            url = format!("{}?{}", url, params.join("&"));
-        }
+    /// List all stages
+    pub async fn list_stages(&self) -> Result<Vec<Stage>, String> {
+        let url = format!("{}/asset/stages", self.base_url);
+        log::debug!("[AssetAPI] GET {}", url);
 
         let response = self
             .client
@@ -182,20 +146,36 @@ impl AssetApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
-    pub async fn get_scene(&self, id: i64) -> Result<Scene, String> {
-        let url = format!("{}/asset/scenes/{}", self.base_url, id);
+    /// Get a specific stage by ID
+    pub async fn get_stage(&self, id: i64) -> Result<Stage, String> {
+        let url = format!("{}/asset/stages/{}", self.base_url, id);
+        log::debug!("[AssetAPI] GET {}", url);
 
         let response = self
             .client
@@ -203,20 +183,36 @@ impl AssetApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
-    pub async fn get_scene_dialogues(&self, scene_id: i64) -> Result<Vec<SceneDialogue>, String> {
-        let url = format!("{}/asset/scenes/{}/dialogues", self.base_url, scene_id);
+    /// Get scripts (dialogues) for a stage
+    pub async fn get_stage_scripts(&self, stage_id: i64) -> Result<Vec<Script>, String> {
+        let url = format!("{}/asset/stages/{}/scripts", self.base_url, stage_id);
+        log::debug!("[AssetAPI] GET {}", url);
 
         let response = self
             .client
@@ -224,20 +220,36 @@ impl AssetApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
-    pub async fn get_dialogue_turns(&self, dialogue_id: i64) -> Result<Vec<DialogueTurn>, String> {
-        let url = format!("{}/asset/dialogues/{}/turns", self.base_url, dialogue_id);
+    /// Get turns for a script
+    pub async fn get_script_turns(&self, script_id: i64) -> Result<Vec<ScriptTurn>, String> {
+        let url = format!("{}/asset/scripts/{}/turns", self.base_url, script_id);
+        log::debug!("[AssetAPI] GET {}", url);
 
         let response = self
             .client
@@ -245,94 +257,30 @@ impl AssetApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
-    }
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
 
-    // ========================================================================
-    // Classic Dialogues API
-    // ========================================================================
-
-    pub async fn list_classic_sources(
-        &self,
-        source_type: Option<&str>,
-        limit: Option<i64>,
-    ) -> Result<Vec<ClassicDialogueSource>, String> {
-        let mut url = format!("{}/asset/classic-sources", self.base_url);
-        let mut params = vec![];
-
-        if let Some(st) = source_type {
-            params.push(format!("type={}", st));
-        }
-        if let Some(lim) = limit {
-            params.push(format!("limit={}", lim));
-        }
-
-        if !params.is_empty() {
-            url = format!("{}?{}", url, params.join("&"));
-        }
-
-        let response = self
-            .client
-            .get(&url)
-            .header("Accept", "application/json")
-            .send()
-            .await
-            .map_err(|e| format!("Request failed: {}", e))?;
-
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
-        }
-
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
-    }
-
-    pub async fn list_classic_clips(
-        &self,
-        source_id: Option<i64>,
-        limit: Option<i64>,
-    ) -> Result<Vec<ClassicDialogueClip>, String> {
-        let mut url = format!("{}/asset/classic-clips", self.base_url);
-        let mut params = vec![];
-
-        if let Some(sid) = source_id {
-            params.push(format!("source_id={}", sid));
-        }
-        if let Some(lim) = limit {
-            params.push(format!("limit={}", lim));
-        }
-
-        if !params.is_empty() {
-            url = format!("{}?{}", url, params.join("&"));
-        }
-
-        let response = self
-            .client
-            .get(&url)
-            .header("Accept", "application/json")
-            .send()
-            .await
-            .map_err(|e| format!("Request failed: {}", e))?;
-
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
-        }
-
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     // ========================================================================
@@ -362,22 +310,38 @@ impl AssetApiClient {
             url = format!("{}?{}", url, params.join("&"));
         }
 
+        log::debug!("[AssetAPI] GET {}", url);
+
         let response = self
             .client
             .get(&url)
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     pub async fn get_reading_sentences(
@@ -388,6 +352,7 @@ impl AssetApiClient {
             "{}/asset/reading-exercises/{}/sentences",
             self.base_url, exercise_id
         );
+        log::debug!("[AssetAPI] GET {}", url);
 
         let response = self
             .client
@@ -395,16 +360,30 @@ impl AssetApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     // ========================================================================
@@ -434,22 +413,79 @@ impl AssetApiClient {
             url = format!("{}?{}", url, params.join("&"));
         }
 
+        log::debug!("[AssetAPI] GET {}", url);
+
         let response = self
             .client
             .get(&url)
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
+    }
+
+    // ========================================================================
+    // Chat Contexts API
+    // ========================================================================
+
+    /// List all available chat contexts for context-based conversations
+    pub async fn list_contexts(&self) -> Result<Vec<ChatContext>, String> {
+        let url = format!("{}/asset/contexts", self.base_url);
+        log::debug!("[AssetAPI] GET {}", url);
+
+        let response = self
+            .client
+            .get(&url)
+            .header("Accept", "application/json")
+            .send()
             .await
-            .map_err(|e| format!("Parse error: {}", e))
+            .map_err(|e| {
+                log::error!("[AssetAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
+
+        let status = response.status();
+        log::debug!("[AssetAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[AssetAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
+        }
+
+        let body = response.text().await.map_err(|e| {
+            log::error!("[AssetAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 }
 

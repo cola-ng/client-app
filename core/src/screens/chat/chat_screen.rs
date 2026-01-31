@@ -14,6 +14,8 @@ use colang_widgets::participant_panel::ParticipantPanelWidgetExt;
 use makepad_component::*;
 
 use super::ChatMessageEntry;
+use super::chat_sidebar::{ChatSidebarAction, ChatSidebarWidgetExt};
+use super::context_dialog::{ContextDialogAction, ContextDialogWidgetExt};
 use super::mofa_hero::{MofaHeroAction, MofaHeroWidgetExt};
 use crate::dora_integration::{DoraCommand, DoraIntegration};
 use crate::log_bridge;
@@ -37,6 +39,9 @@ live_design! {
     use colang_widgets::participant_panel::ParticipantPanel;
     use colang_widgets::log_panel::LogPanel;
     use crate::screens::chat::mofa_hero::MofaHero;
+    use crate::screens::chat::chat_sidebar::ChatSidebar;
+    use crate::screens::chat::context_dialog::ContextDialog;
+    use crate::screens::chat::message_bubble::*;
 
     // Local layout constants (colors imported from theme)
     SECTION_SPACING = 12.0
@@ -179,93 +184,8 @@ live_design! {
                 }
             }
 
-            // Left sidebar - Conversation history
-            left_sidebar = <View> {
-                width: 280, height: Fill
-                flow: Down
-                show_bg: true
-                draw_bg: {
-                    instance dark_mode: 0.0
-                    fn pixel(self) -> vec4 {
-                        return mix(vec4(0.976, 0.980, 0.984, 1.0), (SLATE_900), self.dark_mode);
-                    }
-                }
-
-                // New conversation button
-                new_conv_section = <View> {
-                    width: Fill, height: Fit
-                    padding: 16
-                    show_bg: true
-                    draw_bg: {
-                        instance dark_mode: 0.0
-                        fn get_color(self) -> vec4 {
-                            return mix((WHITE), (SLATE_800), self.dark_mode);
-                        }
-                    }
-
-                    new_conv_btn = <Button> {
-                        width: Fill, height: 40
-                        text: "+ 新对话"
-                        draw_text: {
-                            text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
-                            color: (WHITE)
-                        }
-                        draw_bg: {
-                            fn pixel(self) -> vec4 {
-                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-                                sdf.fill(vec4(0.976, 0.451, 0.086, 1.0));
-                                return sdf.result;
-                            }
-                        }
-                    }
-                }
-
-                // Conversation list
-                conv_list_scroll = <ScrollYView> {
-                    width: Fill, height: Fill
-                    flow: Down
-
-                    conv_list = <View> {
-                        width: Fill, height: Fit
-                        flow: Down
-
-                        conv_item_1 = <ConversationItem> {
-                            show_bg: true
-                            draw_bg: {
-                                fn pixel(self) -> vec4 {
-                                    return vec4(1.0, 1.0, 1.0, 1.0);
-                                }
-                            }
-                            // Active indicator - left border
-                            margin: {left: 0}
-                            padding: {left: 12}
-
-                            conv_content = {
-                                conv_title = { text: "旅行计划讨论" }
-                                conv_preview = { text: "That sounds like a great trip!" }
-                                conv_time = { text: "30分钟前" }
-                            }
-                        }
-
-                        conv_item_2 = <ConversationItem> {
-                            conv_content = {
-                                conv_title = { text: "工作面试准备" }
-                                conv_preview = { text: "Let's practice some common questions." }
-                                conv_time = { text: "2小时前" }
-                            }
-                        }
-
-                        conv_item_3 = <ConversationItem> {
-                            conv_content = {
-                                conv_title = { text: "餐厅点餐练习" }
-                                conv_preview = { text: "Would you like to see the menu?" }
-                                conv_time = { text: "昨天" }
-                            }
-                        }
-                    }
-                }
-            }
+            // Left sidebar - Conversation history (using new ChatSidebar component)
+            left_sidebar = <ChatSidebar> {}
 
             // Divider
             sidebar_divider = <View> {
@@ -303,12 +223,59 @@ live_design! {
 
                     <View> { width: Fill }
 
-                    // Language toggle for AI
+                    // Report mode toggle button
+                    report_mode_btn = <Button> {
+                        width: 28, height: 24
+                        text: "📋"
+                        draw_bg: {
+                            instance active: 0.0
+                            instance hover: 0.0
+                            fn pixel(self) -> vec4 {
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                                let inactive = mix(vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.05), self.hover);
+                                let active_color = vec4(0.992, 0.933, 0.780, 1.0);  // amber-100
+                                sdf.fill(mix(inactive, active_color, self.active));
+                                return sdf.result;
+                            }
+                        }
+                        draw_text: {
+                            instance active: 0.0
+                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            fn get_color(self) -> vec4 {
+                                let inactive = (TEXT_MUTED);
+                                let active_color = vec4(0.784, 0.533, 0.0, 1.0);  // amber-600
+                                return mix(inactive, active_color, self.active);
+                            }
+                        }
+                    }
+
+                    // Export PDF button
+                    export_pdf_btn = <Button> {
+                        width: 28, height: 24
+                        text: "📄"
+                        draw_bg: {
+                            instance hover: 0.0
+                            fn pixel(self) -> vec4 {
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                                sdf.fill(mix(vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.05), self.hover));
+                                return sdf.result;
+                            }
+                        }
+                        draw_text: {
+                            text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                            color: (TEXT_MUTED)
+                        }
+                    }
+
+                    // Language toggle for AI (simplified: 英/中 only)
                     ai_lang_section = <View> {
                         width: Fit, height: Fit
                         flow: Right
                         spacing: 6
                         align: {y: 0.5}
+                        margin: {left: 8}
 
                         <Label> {
                             text: "AI:"
@@ -318,53 +285,47 @@ live_design! {
                             }
                         }
 
-                        ai_lang_group = <RoundedView> {
-                            width: Fit, height: 26
+                        ai_lang_group = <View> {
+                            width: Fit, height: Fit
                             flow: Right
-                            show_bg: true
-                            draw_bg: {
-                                border_radius: 4.0
-                                color: (WHITE)
-                            }
+                            spacing: 4
 
-                            ai_lang_both = <LangToggleBtn> {
-                                draw_bg: { selected: 1.0 }
-                                <Label> {
-                                    text: "双语"
-                                    draw_text: {
-                                        text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (WHITE)
-                                    }
-                                }
-                            }
                             ai_lang_en = <LangToggleBtn> {
+                                draw_bg: { selected: 1.0 }
                                 <Label> {
                                     text: "英"
                                     draw_text: {
+                                        instance selected: 1.0
                                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (TEXT_SECONDARY)
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (WHITE), self.selected);
+                                        }
                                     }
                                 }
                             }
                             ai_lang_zh = <LangToggleBtn> {
+                                draw_bg: { selected: 1.0 }
                                 <Label> {
                                     text: "中"
                                     draw_text: {
+                                        instance selected: 1.0
                                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (TEXT_SECONDARY)
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (WHITE), self.selected);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
 
-                    // Language toggle for user
+                    // Language toggle for user (simplified: 英/中 only)
                     user_lang_section = <View> {
                         width: Fit, height: Fit
                         flow: Right
                         spacing: 6
                         align: {y: 0.5}
-                        margin: {left: 12}
+                        margin: {left: 8}
 
                         <Label> {
                             text: "我:"
@@ -374,71 +335,36 @@ live_design! {
                             }
                         }
 
-                        user_lang_group = <RoundedView> {
-                            width: Fit, height: 26
+                        user_lang_group = <View> {
+                            width: Fit, height: Fit
                             flow: Right
-                            show_bg: true
-                            draw_bg: {
-                                border_radius: 4.0
-                                color: (WHITE)
-                            }
+                            spacing: 4
 
-                            user_lang_both = <LangToggleBtn> {
-                                draw_bg: { selected: 1.0 }
-                                <Label> {
-                                    text: "双语"
-                                    draw_text: {
-                                        text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (WHITE)
-                                    }
-                                }
-                            }
                             user_lang_en = <LangToggleBtn> {
+                                draw_bg: { selected: 1.0 }
                                 <Label> {
                                     text: "英"
                                     draw_text: {
+                                        instance selected: 1.0
                                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (TEXT_SECONDARY)
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (WHITE), self.selected);
+                                        }
                                     }
                                 }
                             }
                             user_lang_zh = <LangToggleBtn> {
+                                draw_bg: { selected: 1.0 }
                                 <Label> {
                                     text: "中"
                                     draw_text: {
+                                        instance selected: 1.0
                                         text_style: <FONT_MEDIUM>{ font_size: 11.0 }
-                                        color: (TEXT_SECONDARY)
+                                        fn get_color(self) -> vec4 {
+                                            return mix((TEXT_SECONDARY), (WHITE), self.selected);
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    }
-
-                    // Copy button
-                    copy_chat_btn = <Button> {
-                        width: 28, height: 24
-                        margin: {left: 12}
-                        text: ""
-                        draw_bg: {
-                            instance hover: 0.0
-                            instance pressed: 0.0
-                            instance copied: 0.0
-                            fn pixel(self) -> vec4 {
-                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                let c = self.rect_size * 0.5;
-                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
-                                let bg_color = mix((SLATE_200), (SLATE_500), self.hover);
-                                let bg_color = mix(bg_color, (SLATE_600), self.pressed);
-                                let bg_color = mix(bg_color, #22c55e, self.copied);
-                                sdf.fill(bg_color);
-                                let icon_color = mix((WHITE), (WHITE), self.copied);
-                                sdf.box(c.x - 4.0, c.y - 2.0, 8.0, 9.0, 1.0);
-                                sdf.stroke(icon_color, 1.2);
-                                sdf.box(c.x - 2.0, c.y - 5.0, 8.0, 9.0, 1.0);
-                                sdf.fill(bg_color);
-                                sdf.box(c.x - 2.0, c.y - 5.0, 8.0, 9.0, 1.0);
-                                sdf.stroke(icon_color, 1.2);
-                                return sdf.result;
                             }
                         }
                     }
@@ -758,6 +684,9 @@ live_design! {
                 }
             }
         }
+
+        // Context selection dialog overlay
+        context_dialog = <ContextDialog> {}
     }
 }
 
@@ -805,6 +734,18 @@ pub struct ChatScreen {
     // Participant audio levels for decay animation (matches conference-dashboard)
     #[rust]
     participant_levels: [f64; 2], // 0=myself, 1=teacher
+    // Report mode state
+    #[rust]
+    report_mode: bool,
+    // Language display toggles (true = show, false = hide)
+    #[rust]
+    show_ai_en: bool,
+    #[rust]
+    show_ai_zh: bool,
+    #[rust]
+    show_user_en: bool,
+    #[rust]
+    show_user_zh: bool,
 }
 
 impl Widget for ChatScreen {
@@ -817,6 +758,12 @@ impl Widget for ChatScreen {
             log_bridge::init();
             self.init_audio(cx);
             self.audio_initialized = true;
+
+            // Initialize language toggle defaults (all on)
+            self.show_ai_en = true;
+            self.show_ai_zh = true;
+            self.show_user_en = true;
+            self.show_user_zh = true;
         }
 
         // Handle audio timer for mic level updates, log polling, and buffer status
@@ -856,17 +803,9 @@ impl Widget for ChatScreen {
             self.poll_dora_events(cx);
         }
 
-        // Handle copy chat feedback timer - reset animation
+        // Handle copy chat feedback timer - reset animation (deprecated, kept for compat)
         if self.copy_chat_feedback_timer.is_event(event).is_some() {
-            self.view
-                .button(ids!(
-                    main_layout
-                        .left_column
-                        .chat_header
-                        .copy_chat_btn
-                ))
-                .apply_over(cx, live! { draw_bg: { copied: 0.0 } });
-            self.view.redraw(cx);
+            // Timer callback - no longer used
         }
 
         // Handle copy log feedback timer - reset animation
@@ -965,30 +904,154 @@ impl Widget for ChatScreen {
             self.hide_log_overlay(cx);
         }
 
-        // Handle copy chat button
+        // Handle report mode toggle button
         if self
             .view
-            .button(ids!(
+            .button(ids!(main_layout.left_column.chat_header.report_mode_btn))
+            .clicked(actions)
+        {
+            self.report_mode = !self.report_mode;
+            let active = if self.report_mode { 1.0 } else { 0.0 };
+            self.view
+                .button(ids!(main_layout.left_column.chat_header.report_mode_btn))
+                .apply_over(
+                    cx,
+                    live! {
+                        draw_bg: { active: (active) }
+                        draw_text: { active: (active) }
+                    },
+                );
+            self.view.redraw(cx);
+            ::log::info!("Report mode: {}", self.report_mode);
+        }
+
+        // Handle export PDF button
+        if self
+            .view
+            .button(ids!(main_layout.left_column.chat_header.export_pdf_btn))
+            .clicked(actions)
+        {
+            ::log::info!("Export PDF clicked");
+            // TODO: Implement PDF export functionality
+        }
+
+        // Handle AI language toggles
+        if self
+            .view
+            .view(ids!(
                 main_layout
                     .left_column
                     .chat_header
-                    .copy_chat_btn
+                    .ai_lang_section
+                    .ai_lang_group
+                    .ai_lang_en
             ))
-            .clicked(actions)
+            .finger_up(actions)
+            .is_some()
         {
-            self.copy_chat_to_clipboard(cx);
-            // Trigger copied feedback animation
-            self.view
-                .button(ids!(
-                    main_layout
-                        .left_column
-                        .chat_header
-                        .copy_chat_btn
-                ))
-                .apply_over(cx, live! { draw_bg: { copied: 1.0 } });
-            self.view.redraw(cx);
-            // Start timer to reset animation after 1 second
-            self.copy_chat_feedback_timer = cx.start_timeout(1.0);
+            self.show_ai_en = !self.show_ai_en;
+            self.update_lang_toggle_ui(cx);
+        }
+        if self
+            .view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .ai_lang_section
+                    .ai_lang_group
+                    .ai_lang_zh
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.show_ai_zh = !self.show_ai_zh;
+            self.update_lang_toggle_ui(cx);
+        }
+
+        // Handle user language toggles
+        if self
+            .view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .user_lang_section
+                    .user_lang_group
+                    .user_lang_en
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.show_user_en = !self.show_user_en;
+            self.update_lang_toggle_ui(cx);
+        }
+        if self
+            .view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .user_lang_section
+                    .user_lang_group
+                    .user_lang_zh
+            ))
+            .finger_up(actions)
+            .is_some()
+        {
+            self.show_user_zh = !self.show_user_zh;
+            self.update_lang_toggle_ui(cx);
+        }
+
+        // Handle ChatSidebar actions
+        for action in actions {
+            match action.as_widget_action().cast() {
+                ChatSidebarAction::NewFreeChat => {
+                    ::log::info!("New free chat requested");
+                    // TODO: Create new chat session
+                }
+                ChatSidebarAction::OpenContextDialog => {
+                    ::log::info!("Open context dialog requested");
+                    self.view.context_dialog(ids!(context_dialog)).show(cx);
+                }
+                ChatSidebarAction::SelectChat(index) => {
+                    ::log::info!("Select chat: {}", index);
+                    // TODO: Switch to selected chat
+                }
+                ChatSidebarAction::PinChat(index) => {
+                    ::log::info!("Pin chat: {}", index);
+                }
+                ChatSidebarAction::RenameChat(index) => {
+                    ::log::info!("Rename chat: {}", index);
+                }
+                ChatSidebarAction::ClearChat(index) => {
+                    ::log::info!("Clear chat: {}", index);
+                }
+                ChatSidebarAction::DeleteChat(index) => {
+                    ::log::info!("Delete chat: {}", index);
+                }
+                ChatSidebarAction::None => {}
+            }
+        }
+
+        // Handle ContextDialog actions
+        for action in actions {
+            match action.as_widget_action().cast() {
+                ContextDialogAction::Close => {
+                    ::log::info!("Context dialog closed");
+                }
+                ContextDialogAction::SelectContext { context } => {
+                    ::log::info!(
+                        "Selected context: {} ({}) - {}",
+                        context.name_zh,
+                        context.id,
+                        context.name_en
+                    );
+                    // TODO: Create new chat with selected context
+                    // For now, just log the selection
+                }
+                ContextDialogAction::None => {}
+            }
         }
 
         // Handle log search text change
@@ -1040,6 +1103,83 @@ impl Widget for ChatScreen {
 
     fn draw_walk(&mut self, cx: &mut Cx2d, scope: &mut Scope, walk: Walk) -> DrawStep {
         self.view.draw_walk(cx, scope, walk)
+    }
+}
+
+impl ChatScreen {
+    /// Update the language toggle UI based on current state
+    fn update_lang_toggle_ui(&mut self, cx: &mut Cx) {
+        // Update AI language toggles
+        let ai_en_selected = if self.show_ai_en { 1.0 } else { 0.0 };
+        let ai_zh_selected = if self.show_ai_zh { 1.0 } else { 0.0 };
+
+        self.view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .ai_lang_section
+                    .ai_lang_group
+                    .ai_lang_en
+            ))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { selected: (ai_en_selected) }
+                },
+            );
+        self.view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .ai_lang_section
+                    .ai_lang_group
+                    .ai_lang_zh
+            ))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { selected: (ai_zh_selected) }
+                },
+            );
+
+        // Update user language toggles
+        let user_en_selected = if self.show_user_en { 1.0 } else { 0.0 };
+        let user_zh_selected = if self.show_user_zh { 1.0 } else { 0.0 };
+
+        self.view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .user_lang_section
+                    .user_lang_group
+                    .user_lang_en
+            ))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { selected: (user_en_selected) }
+                },
+            );
+        self.view
+            .view(ids!(
+                main_layout
+                    .left_column
+                    .chat_header
+                    .user_lang_section
+                    .user_lang_group
+                    .user_lang_zh
+            ))
+            .apply_over(
+                cx,
+                live! {
+                    draw_bg: { selected: (user_zh_selected) }
+                },
+            );
+
+        self.view.redraw(cx);
     }
 }
 
@@ -1108,16 +1248,11 @@ impl StateChangeListener for ChatScreenRef {
                     },
                 );
 
-            // Apply dark mode to left sidebar
+            // Apply dark mode to left sidebar (ChatSidebar component)
             inner
                 .view
-                .view(ids!(main_layout.left_sidebar))
-                .apply_over(
-                    cx,
-                    live! {
-                        draw_bg: { dark_mode: (dark_mode) }
-                    },
-                );
+                .chat_sidebar(ids!(main_layout.left_sidebar))
+                .update_dark_mode(cx, dark_mode);
 
             // Apply dark mode to prompt container
             inner

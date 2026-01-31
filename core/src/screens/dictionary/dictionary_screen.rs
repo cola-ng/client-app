@@ -2450,21 +2450,29 @@ impl DictionaryScreen {
             badge.label(ids!(badge_label)).set_text(cx, word_type);
         }
 
-        // Set pronunciations from forms
+        // Set pronunciations from pronunciations array
         let mut has_pron = false;
-        for form in result.forms.iter().take(1) {
-            if let Some(ref uk) = form.phonetic_uk {
-                let uk_pron = word_detail.view(ids!(pronunciations_row.uk_pron));
-                uk_pron.set_visible(cx, true);
-                uk_pron.label(ids!(uk_ipa)).set_text(cx, &format!("/{}/", uk));
-                has_pron = true;
-            }
-            if let Some(ref us) = form.phonetic_us {
-                let us_pron = word_detail.view(ids!(pronunciations_row.us_pron));
-                us_pron.set_visible(cx, true);
-                us_pron.label(ids!(us_ipa)).set_text(cx, &format!("/{}/", us));
-                has_pron = true;
-            }
+        // Find UK and US pronunciations
+        let uk_prons: Vec<_> = result.pronunciations.iter()
+            .filter(|p| p.dialect.as_deref() == Some("uk") || p.dialect.as_deref() == Some("UK"))
+            .collect();
+        let us_prons: Vec<_> = result.pronunciations.iter()
+            .filter(|p| p.dialect.as_deref() == Some("us") || p.dialect.as_deref() == Some("US"))
+            .collect();
+        // If no dialect specified, use the first pronunciation for both
+        let default_pron = result.pronunciations.first();
+
+        if let Some(pron) = uk_prons.first().or(default_pron.as_ref()) {
+            let uk_pron = word_detail.view(ids!(pronunciations_row.uk_pron));
+            uk_pron.set_visible(cx, true);
+            uk_pron.label(ids!(uk_ipa)).set_text(cx, &format!("/{}/", pron.ipa));
+            has_pron = true;
+        }
+        if let Some(pron) = us_prons.first().or(if uk_prons.is_empty() { default_pron.as_ref() } else { None }) {
+            let us_pron = word_detail.view(ids!(pronunciations_row.us_pron));
+            us_pron.set_visible(cx, true);
+            us_pron.label(ids!(us_ipa)).set_text(cx, &format!("/{}/", pron.ipa));
+            has_pron = true;
         }
         if has_pron {
             word_detail.view(ids!(pronunciations_row)).set_visible(cx, true);
@@ -2481,18 +2489,20 @@ impl DictionaryScreen {
             for (i, form) in result.forms.iter().take(3).enumerate() {
                 let form_view = word_detail.view(form_ids[i]);
                 form_view.set_visible(cx, true);
-                form_view.label(ids!(form_label)).set_text(cx, &format!("{}: {}", form.form_type, form.form_value));
+                let form_type = form.form_type.as_deref().unwrap_or("form");
+                form_view.label(ids!(form_label)).set_text(cx, &format!("{}: {}", form_type, form.form));
             }
         }
 
         // =================================================================
         // Definitions Card
         // =================================================================
+        // Filter definitions by language
         let zh_defs: Vec<_> = result.definitions.iter()
-            .filter(|d| d.definition_en.is_none() || !d.definition_zh.is_empty())
+            .filter(|d| d.language == "zh")
             .collect();
         let en_defs: Vec<_> = result.definitions.iter()
-            .filter(|d| d.definition_en.is_some())
+            .filter(|d| d.language == "en")
             .collect();
 
         if !zh_defs.is_empty() || !en_defs.is_empty() {
@@ -2508,7 +2518,7 @@ impl DictionaryScreen {
             for (i, def) in zh_defs.iter().take(3).enumerate() {
                 let def_view = def_card.view(zh_def_ids[i]);
                 def_view.set_visible(cx, true);
-                def_view.label(ids!(definition_text)).set_text(cx, &def.definition_zh);
+                def_view.label(ids!(definition_text)).set_text(cx, &def.definition);
 
                 if let Some(ref pos) = def.part_of_speech {
                     let pos_tag = def_view.view(ids!(tags_row.pos_tag));
@@ -2527,7 +2537,7 @@ impl DictionaryScreen {
         // =================================================================
         // Example Sentences Card
         // =================================================================
-        if !result.examples.is_empty() {
+        if !result.sentences.is_empty() {
             let sent_card = self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.sentences_card));
             sent_card.set_visible(cx, true);
 
@@ -2538,12 +2548,12 @@ impl DictionaryScreen {
                 ids!(sentences_list.sent_4),
                 ids!(sentences_list.sent_5),
             ];
-            for (i, example) in result.examples.iter().take(5).enumerate() {
+            for (i, sentence) in result.sentences.iter().take(5).enumerate() {
                 let sent_view = sent_card.view(sent_ids[i]);
                 sent_view.set_visible(cx, true);
-                sent_view.label(ids!(sentence_text)).set_text(cx, &example.example_en);
+                sent_view.label(ids!(sentence_text)).set_text(cx, &sentence.sentence);
 
-                if let Some(ref source) = example.source {
+                if let Some(ref source) = sentence.source {
                     let source_label = sent_view.label(ids!(sentence_source));
                     source_label.set_visible(cx, true);
                     source_label.set_text(cx, &format!("— {}", source));
@@ -2551,18 +2561,32 @@ impl DictionaryScreen {
             }
 
             // Show "more" button if there are more than 5 sentences
-            if result.examples.len() > 5 {
+            if result.sentences.len() > 5 {
                 sent_card.button(ids!(show_more_btn)).set_visible(cx, true);
-                sent_card.button(ids!(show_more_btn)).set_text(cx, &format!("查看更多 ({} 条)", result.examples.len() - 5));
+                sent_card.button(ids!(show_more_btn)).set_text(cx, &format!("查看更多 ({} 条)", result.sentences.len() - 5));
             }
         }
 
         // =================================================================
         // Related Words Card (synonyms, antonyms, word family)
         // =================================================================
-        let has_synonyms = !result.synonyms.is_empty();
-        let has_antonyms = !result.antonyms.is_empty();
-        let has_family = !result.word_family.is_empty();
+        // Filter relations by type
+        let synonyms: Vec<_> = result.relations.iter()
+            .filter(|r| r.relation_type.as_deref() == Some("synonym"))
+            .collect();
+        let antonyms: Vec<_> = result.relations.iter()
+            .filter(|r| r.relation_type.as_deref() == Some("antonym"))
+            .collect();
+        let family: Vec<_> = result.relations.iter()
+            .filter(|r| {
+                let rt = r.relation_type.as_deref();
+                rt != Some("synonym") && rt != Some("antonym")
+            })
+            .collect();
+
+        let has_synonyms = !synonyms.is_empty();
+        let has_antonyms = !antonyms.is_empty();
+        let has_family = !family.is_empty();
 
         if has_synonyms || has_antonyms || has_family {
             let rel_card = self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card));
@@ -2576,10 +2600,10 @@ impl DictionaryScreen {
                     ids!(synonyms_content.syn_3),
                     ids!(synonyms_content.syn_4),
                 ];
-                for (i, syn) in result.synonyms.iter().take(4).enumerate() {
+                for (i, syn) in synonyms.iter().take(4).enumerate() {
                     let syn_view = rel_card.view(syn_ids[i]);
                     syn_view.set_visible(cx, true);
-                    syn_view.label(ids!(tag_label)).set_text(cx, &syn.synonym.word);
+                    syn_view.label(ids!(tag_label)).set_text(cx, &syn.related_word);
                 }
             }
 
@@ -2589,10 +2613,10 @@ impl DictionaryScreen {
                     ids!(antonyms_content.ant_1),
                     ids!(antonyms_content.ant_2),
                 ];
-                for (i, ant) in result.antonyms.iter().take(2).enumerate() {
+                for (i, ant) in antonyms.iter().take(2).enumerate() {
                     let ant_view = rel_card.view(ant_ids[i]);
                     ant_view.set_visible(cx, true);
-                    ant_view.label(ids!(tag_label)).set_text(cx, &ant.antonym.word);
+                    ant_view.label(ids!(tag_label)).set_text(cx, &ant.related_word);
                 }
             }
 
@@ -2602,10 +2626,10 @@ impl DictionaryScreen {
                     ids!(related_content.rel_1),
                     ids!(related_content.rel_2),
                 ];
-                for (i, rel) in result.word_family.iter().take(2).enumerate() {
+                for (i, rel) in family.iter().take(2).enumerate() {
                     let rel_view = rel_card.view(rel_ids[i]);
                     rel_view.set_visible(cx, true);
-                    rel_view.label(ids!(tag_label)).set_text(cx, &rel.related.word);
+                    rel_view.label(ids!(tag_label)).set_text(cx, &rel.related_word);
                 }
             }
         }

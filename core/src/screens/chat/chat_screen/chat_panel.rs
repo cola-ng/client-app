@@ -15,6 +15,7 @@ impl ChatScreen {
             .text_input(ids!(
                 main_layout
                     .left_column
+                    .chat_container
                     .prompt_container
                     .prompt_section
                     .prompt_input
@@ -44,6 +45,7 @@ impl ChatScreen {
             .text_input(ids!(
                 main_layout
                     .left_column
+                    .chat_container
                     .prompt_container
                     .prompt_section
                     .prompt_input
@@ -103,6 +105,7 @@ impl ChatScreen {
             .text_input(ids!(
                 main_layout
                     .left_column
+                    .chat_container
                     .prompt_container
                     .prompt_section
                     .prompt_input

@@ -24,128 +24,97 @@ pub struct Word {
     pub is_lemma: Option<bool>,
     pub word_count: Option<i32>,
     pub is_active: Option<bool>,
+    pub memory: Option<String>,
+    pub notes: Option<String>,
+    pub created_by: Option<i64>,
+    pub updated_by: Option<i64>,
     pub created_at: String,
     pub updated_at: String,
 }
 
 /// Word definition
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordDefinition {
+pub struct Definition {
     pub id: i64,
     pub word_id: i64,
+    pub language: String,
+    pub definition: String,
     pub part_of_speech: Option<String>,
-    pub definition_en: Option<String>,
-    pub definition_zh: String,
     pub definition_order: Option<i16>,
     pub register: Option<String>,
-    pub domain: Option<String>,
     pub region: Option<String>,
-    pub source: Option<String>,
+    pub context: Option<String>,
+    pub usage_notes: Option<String>,
+    pub is_primary: Option<bool>,
+    pub created_at: String,
 }
 
-/// Word example sentence
+/// Sentence (example sentence)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordExample {
+pub struct Sentence {
+    pub id: i64,
+    pub language: String,
+    pub sentence: String,
+    pub source: Option<String>,
+    pub author: Option<String>,
+    pub priority_order: Option<i16>,
+    pub difficulty: Option<i16>,
+    pub is_common: Option<bool>,
+    pub created_at: String,
+}
+
+/// Pronunciation
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Pronunciation {
     pub id: i64,
     pub word_id: i64,
-    pub example_en: String,
-    pub example_zh: Option<String>,
-    pub example_order: Option<i16>,
-    pub source: Option<String>,
+    pub definition_id: Option<i64>,
+    pub ipa: String,
+    pub audio_url: Option<String>,
     pub audio_path: Option<String>,
+    pub dialect: Option<String>,
+    pub gender: Option<String>,
+    pub is_primary: Option<bool>,
+    pub created_at: String,
+}
+
+/// Word relation (synonym, antonym, etc.)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Relation {
+    pub id: i64,
+    pub word_id: i64,
+    pub relation_type: Option<String>,
+    pub related_word_id: i64,
+    pub related_word: String,
+    pub semantic_field: Option<String>,
+    pub relation_strength: Option<i16>,
+}
+
+/// Etymology entry
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Etymology {
+    pub id: i64,
+    pub origin_language: Option<String>,
+    pub origin_word: Option<String>,
+    pub origin_meaning: Option<String>,
+    pub language: String,
+    pub etymology: String,
+    pub first_attested_year: Option<i32>,
+    pub historical_forms: Option<serde_json::Value>,
+    pub cognate_words: Option<serde_json::Value>,
+    pub created_at: String,
 }
 
 /// Word form (conjugation, plural, etc.)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordForm {
+pub struct Form {
     pub id: i64,
     pub word_id: i64,
-    pub form_type: String,
-    pub form_value: String,
-    pub phonetic_us: Option<String>,
-    pub phonetic_uk: Option<String>,
-    pub audio_us_path: Option<String>,
-    pub audio_uk_path: Option<String>,
-}
-
-/// Reference to a related word
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordRef {
-    pub id: i64,
-    pub word: String,
-}
-
-/// Synonym link with reference
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordSynonymView {
-    pub link: WordSynonymLink,
-    pub synonym: WordRef,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordSynonymLink {
-    pub id: i64,
-    pub word_id: i64,
-    pub synonym_word_id: i64,
-    pub similarity_score: Option<f32>,
-    pub context: Option<String>,
-}
-
-/// Antonym link with reference
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordAntonymView {
-    pub link: WordAntonymLink,
-    pub antonym: WordRef,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordAntonymLink {
-    pub id: i64,
-    pub word_id: i64,
-    pub antonym_word_id: i64,
-    pub antonym_type: Option<String>,
-}
-
-/// Word family link with reference
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordFamilyView {
-    pub link: WordFamilyLink,
-    pub related: WordRef,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordFamilyLink {
-    pub id: i64,
-    pub root_word_id: i64,
-    pub related_word_id: i64,
-    pub relationship_type: Option<String>,
-    pub morpheme: Option<String>,
-}
-
-/// Word collocation
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordCollocation {
-    pub id: i64,
-    pub word_id: i64,
-    pub collocation: String,
-    pub collocation_type: Option<String>,
-    pub frequency: Option<i16>,
-    pub example_en: Option<String>,
-    pub example_zh: Option<String>,
-}
-
-/// Phrase (idiom or common phrase)
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Phrase {
-    pub id: i64,
-    pub phrase: String,
-    pub phrase_type: Option<String>,
-    pub definition_en: Option<String>,
-    pub definition_zh: Option<String>,
-    pub example_en: Option<String>,
-    pub example_zh: Option<String>,
-    pub origin: Option<String>,
-    pub usage_notes: Option<String>,
+    pub form_type: Option<String>,
+    pub form: String,
+    pub is_irregular: Option<bool>,
+    pub notes: Option<String>,
+    pub created_at: String,
 }
 
 /// Category
@@ -153,57 +122,73 @@ pub struct Phrase {
 pub struct Category {
     pub id: i64,
     pub name: String,
-    pub description: Option<String>,
     pub parent_id: Option<i64>,
-}
-
-/// Etymology entry
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordEtymology {
-    pub id: i64,
-    pub word_id: i64,
-    pub origin_language: Option<String>,
-    pub origin_word: Option<String>,
-    pub etymology_description: Option<String>,
-    pub first_known_use: Option<String>,
-}
-
-/// Usage note
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordUsageNote {
-    pub id: i64,
-    pub word_id: i64,
-    pub note_type: Option<String>,
-    pub note_content: String,
+    pub created_at: String,
 }
 
 /// Word image
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WordImage {
+pub struct Image {
     pub id: i64,
     pub word_id: i64,
-    pub image_url: String,
+    pub image_url: Option<String>,
+    pub image_path: Option<String>,
     pub image_type: Option<String>,
-    pub caption: Option<String>,
+    pub alt_text_en: Option<String>,
+    pub alt_text_zh: Option<String>,
+    pub is_primary: Option<bool>,
+    pub created_by: Option<i64>,
+    pub created_at: String,
+}
+
+/// Dictionary source
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Dictionary {
+    pub id: i64,
+    pub name: String,
+    pub description_en: Option<String>,
+    pub description_zh: Option<String>,
+    pub version: Option<String>,
+    pub publisher: Option<String>,
+    pub license_type: Option<String>,
+    pub license_url: Option<String>,
+    pub source_url: Option<String>,
+    pub total_entries: Option<i32>,
+    pub is_active: Option<bool>,
+    pub is_official: Option<bool>,
+    pub priority_order: Option<i16>,
+    pub created_by: Option<i64>,
+    pub updated_by: Option<i64>,
+    pub updated_at: String,
+    pub created_at: String,
+}
+
+/// Word-Dictionary association
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WordDictionary {
+    pub id: i64,
+    pub word_id: i64,
+    pub dictionary_id: i64,
+    pub definition_id: Option<i64>,
+    pub priority_order: Option<i16>,
+    pub name: String,
+    pub created_at: String,
+    pub dictionary: Dictionary,
 }
 
 /// Full word lookup response
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WordQueryResponse {
     pub word: Word,
-    pub definitions: Vec<WordDefinition>,
-    pub examples: Vec<WordExample>,
-    pub synonyms: Vec<WordSynonymView>,
-    pub antonyms: Vec<WordAntonymView>,
-    pub forms: Vec<WordForm>,
-    pub collocations: Vec<WordCollocation>,
-    pub word_family: Vec<WordFamilyView>,
-    pub phrases: Vec<Phrase>,
-    pub idioms: Vec<Phrase>,
+    pub definitions: Vec<Definition>,
+    pub sentences: Vec<Sentence>,
+    pub pronunciations: Vec<Pronunciation>,
+    pub relations: Vec<Relation>,
+    pub etymologies: Vec<Etymology>,
+    pub forms: Vec<Form>,
     pub categories: Vec<Category>,
-    pub etymology: Vec<WordEtymology>,
-    pub usage_notes: Vec<WordUsageNote>,
-    pub images: Vec<WordImage>,
+    pub images: Vec<Image>,
+    pub dictionaries: Vec<WordDictionary>,
 }
 
 /// Brief dictionary entry for search results
@@ -263,7 +248,7 @@ impl DictApiClient {
             limit
         );
 
-        log::info!("Dictionary search: {}", url);
+        log::debug!("[DictAPI] GET {}", url);
 
         let response = self
             .client
@@ -271,16 +256,30 @@ impl DictApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[DictAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     /// Lookup a word by exact match
@@ -294,7 +293,7 @@ impl DictApiClient {
             urlencoding::encode(word)
         );
 
-        log::info!("Dictionary lookup: {}", url);
+        log::debug!("[DictAPI] GET {}", url);
 
         let response = self
             .client
@@ -302,16 +301,30 @@ impl DictApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {} - word not found", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response ({}): {}", status, body);
+            return Err(format!("API error: {} - word not found", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[DictAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     /// List dictionary entries with optional filters
@@ -342,22 +355,38 @@ impl DictApiClient {
             url = format!("{}?{}", url, params.join("&"));
         }
 
+        log::debug!("[DictAPI] GET {}", url);
+
         let response = self
             .client
             .get(&url)
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[DictAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     /// Save search history
@@ -369,7 +398,8 @@ impl DictApiClient {
 
         let payload = serde_json::json!({ "word": word });
 
-        log::info!("Saving search history: {}", url);
+        log::debug!("[DictAPI] POST {}", url);
+        log::debug!("[DictAPI] Request body: {}", payload);
 
         let response = self
             .client
@@ -379,16 +409,30 @@ impl DictApiClient {
             .json(&payload)
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[DictAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     /// Get search history
@@ -398,7 +442,7 @@ impl DictApiClient {
     pub async fn get_search_history(&self, limit: i64) -> Result<Vec<SearchHistoryEntry>, String> {
         let url = format!("{}/dict/history?limit={}", self.base_url, limit);
 
-        log::info!("Fetching search history: {}", url);
+        log::debug!("[DictAPI] GET {}", url);
 
         let response = self
             .client
@@ -406,23 +450,37 @@ impl DictApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
-        response
-            .json()
-            .await
-            .map_err(|e| format!("Parse error: {}", e))
+        let body = response.text().await.map_err(|e| {
+            log::error!("[DictAPI] Failed to read response body: {}", e);
+            format!("Read error: {}", e)
+        })?;
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+
+        serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            format!("Parse error: {}", e)
+        })
     }
 
     /// Clear search history
     pub async fn clear_search_history(&self) -> Result<(), String> {
         let url = format!("{}/dict/history", self.base_url);
 
-        log::info!("Clearing search history: {}", url);
+        log::debug!("[DictAPI] DELETE {}", url);
 
         let response = self
             .client
@@ -430,12 +488,21 @@ impl DictApiClient {
             .header("Accept", "application/json")
             .send()
             .await
-            .map_err(|e| format!("Request failed: {}", e))?;
+            .map_err(|e| {
+                log::error!("[DictAPI] Request failed: {}", e);
+                format!("Request failed: {}", e)
+            })?;
 
-        if !response.status().is_success() {
-            return Err(format!("API error: {}", response.status()));
+        let status = response.status();
+        log::debug!("[DictAPI] Response status: {}", status);
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            log::error!("[DictAPI] Error response: {}", body);
+            return Err(format!("API error: {}", status));
         }
 
+        log::debug!("[DictAPI] Search history cleared successfully");
         Ok(())
     }
 }

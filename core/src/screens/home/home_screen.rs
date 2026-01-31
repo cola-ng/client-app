@@ -11,7 +11,7 @@ use std::sync::mpsc;
 
 use makepad_widgets::*;
 
-use crate::asset_api::{Scene, get_asset_api};
+use crate::asset_api::{Stage, get_asset_api};
 use crate::learn_api::{get_learn_api, DailyStat};
 use crate::models::Preferences;
 
@@ -849,7 +849,7 @@ live_design! {
 
 /// Data fetch result types
 enum FetchResult {
-    Scenes(Result<Vec<Scene>, String>),
+    Stages(Result<Vec<Stage>, String>),
     Stats(Result<Vec<DailyStat>, String>),
 }
 
@@ -870,7 +870,7 @@ pub struct HomeScreen {
     view: View,
 
     #[rust]
-    scenes: Vec<Scene>,
+    stages: Vec<Stage>,
 
     #[rust]
     data_loaded: bool,
@@ -899,13 +899,13 @@ impl Widget for HomeScreen {
 
         for result in results {
             match result {
-                FetchResult::Scenes(Ok(scenes)) => {
-                    self.scenes = scenes;
+                FetchResult::Stages(Ok(stages)) => {
+                    self.stages = stages;
                     self.update_stage_cards(cx);
                     self.view.redraw(cx);
                 }
-                FetchResult::Scenes(Err(e)) => {
-                    eprintln!("Failed to fetch scenes: {}", e);
+                FetchResult::Stages(Err(e)) => {
+                    eprintln!("Failed to fetch stages: {}", e);
                 }
                 FetchResult::Stats(Ok(stats)) => {
                     self.update_stats(cx, &stats);
@@ -947,12 +947,12 @@ impl Widget for HomeScreen {
 
         for (i, stage_id) in stage_ids.iter().enumerate() {
             if self.view.view(*stage_id).finger_up(actions).is_some() {
-                if i < self.scenes.len() {
-                    let scene = &self.scenes[i];
+                if i < self.stages.len() {
+                    let stage = &self.stages[i];
                     cx.widget_action(
                         self.widget_uid(),
                         &scope.path,
-                        HomeScreenAction::NavigateToStage { stage_id: scene.id },
+                        HomeScreenAction::NavigateToStage { stage_id: stage.id },
                     );
                 }
             }
@@ -1011,14 +1011,14 @@ impl HomeScreen {
         let tx1 = tx.clone();
         let tx2 = tx;
 
-        // Fetch scenes
+        // Fetch stages
         std::thread::spawn(move || {
             let rt = tokio::runtime::Runtime::new().unwrap();
             rt.block_on(async {
                 if let Some(api) = get_asset_api() {
                     if let Ok(client) = api.read() {
-                        let result = client.list_scenes(None, None, Some(6)).await;
-                        let _ = tx1.send(FetchResult::Scenes(result));
+                        let result = client.list_stages().await;
+                        let _ = tx1.send(FetchResult::Stages(result));
                     }
                 }
             });
@@ -1057,12 +1057,12 @@ impl HomeScreen {
         for (i, stage_id) in stage_ids.iter().enumerate() {
             let card = self.view.view(*stage_id);
 
-            if i < self.scenes.len() {
-                let scene = &self.scenes[i];
+            if i < self.stages.len() {
+                let stage = &self.stages[i];
                 card.set_visible(cx, true);
-                card.label(ids!(stage_icon)).set_text(cx, scene.icon_emoji.as_deref().unwrap_or("📚"));
-                card.label(ids!(stage_title)).set_text(cx, &scene.name_zh);
-                card.label(ids!(stage_subtitle)).set_text(cx, &scene.name_en);
+                card.label(ids!(stage_icon)).set_text(cx, stage.icon_emoji.as_deref().unwrap_or("📚"));
+                card.label(ids!(stage_title)).set_text(cx, &stage.name_zh);
+                card.label(ids!(stage_subtitle)).set_text(cx, &stage.name_en);
             } else {
                 card.set_visible(cx, false);
             }
