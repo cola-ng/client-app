@@ -101,7 +101,7 @@ pub fn get_page_meta(path: &str) -> Option<PageMeta> {
         }
         paths::SCENES => Some(PageMeta {
             icon: "🎭",
-            title: "场景中心",
+            title: "角色扮演",
         }),
         paths::READING => Some(PageMeta {
             icon: "🎤",
@@ -109,7 +109,7 @@ pub fn get_page_meta(path: &str) -> Option<PageMeta> {
         }),
         paths::DICTIONARY => Some(PageMeta {
             icon: "📖",
-            title: "词典查询",
+            title: "词典翻译",
         }),
         paths::SETTINGS | paths::SETTINGS_GENERAL | paths::SETTINGS_AUDIO | paths::SETTINGS_PROVIDERS | paths::SETTINGS_ABOUT => {
             Some(PageMeta {
@@ -171,13 +171,13 @@ pub fn create_routes() -> Vec<Route> {
             .with_title("练习")
             .with_icon("✏️"),
         Route::new(paths::SCENES, page_ids::scenes_screen())
-            .with_title("场景中心")
+            .with_title("角色扮演")
             .with_icon("🎭"),
         Route::new(paths::READING, page_ids::reading_screen())
             .with_title("大声跟读")
             .with_icon("🎤"),
         Route::new(paths::DICTIONARY, page_ids::dictionary_screen())
-            .with_title("词典查询")
+            .with_title("词典翻译")
             .with_icon("📖"),
         Route::new(paths::SETTINGS, page_ids::settings_screen())
             .with_title("设置")

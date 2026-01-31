@@ -1,6 +1,6 @@
-//! Scene Center - Scene selection and management
+//! Role Play Screen - Scene selection and immersive role-play learning
 //!
-//! Layout based on design/kiro/03-场景中心-sketch.svg (optimized v2):
+//! Layout based on website frontend StagesPage.tsx:
 //! - Continue Learning section with progress tracking
 //! - Smart AI recommendations section
 //! - Today's featured scenes (dynamic from API)
@@ -41,18 +41,20 @@ live_design! {
 
     use colang_widgets::theme::*;
 
-    // Orange theme accent colors
-    ACCENT_ORANGE = #f97316
-    ACCENT_ORANGE_HOVER = #ea580c
-    ACCENT_ORANGE_LIGHT = #fff7ed
+    // Orange/Amber theme colors matching website
+    ORANGE_50 = #fff7ed
+    ORANGE_100 = #ffedd5
     ORANGE_400 = #fb923c
     ORANGE_500 = #f97316
+    ORANGE_600 = #ea580c
+    ORANGE_700 = #c2410c
+    AMBER_50 = #fffbeb
+    AMBER_500 = #f59e0b
+    YELLOW_50 = #fefce8
 
     // Difficulty badge colors
     GREEN_50 = #f0fdf4
     GREEN_600 = #16a34a
-    AMBER_50 = #fffbeb
-    AMBER_600 = #d97706
     RED_50 = #fef2f2
     RED_600 = #dc2626
 
@@ -112,87 +114,155 @@ live_design! {
         }
     }
 
-    // Category filter button base
+    // Category filter button - matches website filter chips
+    // Selected: orange-500 bg with white text
+    // Unselected: gray-100 bg with gray-600 text
     CategoryButton = <RoundedView> {
         width: Fit, height: 32
-        padding: {left: 16, right: 16}
+        padding: {left: 12, right: 12}
         show_bg: true
         draw_bg: {
             instance selected: 0.0
+            instance hover: 0.0
             instance dark_mode: 0.0
-            border_radius: 16.0
+            border_radius: 8.0
+
             fn pixel(self) -> vec4 {
-                let orange = vec4(0.976, 0.451, 0.086, 1.0); // #f97316
-                let white = vec4(1.0, 1.0, 1.0, 1.0);
-                return mix(white, orange, self.selected);
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+
+                // Selected: orange-500, Hover: orange-50, Normal: gray-100
+                let orange_500 = vec4(0.976, 0.451, 0.086, 1.0);
+                let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
+                let gray_100 = vec4(0.953, 0.961, 0.969, 1.0);
+                let dark_selected = (SLATE_600);
+                let dark_hover = (SLATE_700);
+                let dark_normal = (SLATE_800);
+
+                let light_normal = mix(gray_100, orange_50, self.hover);
+                let dark_base = mix(dark_normal, dark_hover, self.hover);
+                let normal = mix(light_normal, dark_base, self.dark_mode);
+                let selected_color = mix(orange_500, dark_selected, self.dark_mode);
+
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                sdf.fill(mix(normal, selected_color, self.selected));
+                return sdf.result;
             }
         }
         align: {x: 0.5, y: 0.5}
         cursor: Hand
     }
 
-    // Template for scenario card in today's section (improved)
-    ScenesCardTemplate = <CardBase> {
+    // Scene card - matches website StageCard component
+    // "bg-white border rounded-xl p-4 hover:shadow-lg hover:border-orange-200"
+    ScenesCardTemplate = <RoundedView> {
         width: Fill, height: Fit
         padding: 16
         flow: Down
         spacing: 8
         cursor: Hand
+        show_bg: true
 
-        // Icon at top
-        icon = <Label> {
-            text: "🍽️"
-            draw_text: {
-                text_style: <FONT_BOLD>{ font_size: 36.0 }
+        draw_bg: {
+            instance dark_mode: 0.0
+            instance hover: 0.0
+            border_radius: 12.0
+
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+
+                // Shadow on hover
+                if self.hover > 0.5 {
+                    let shadow = vec4(0.0, 0.0, 0.0, 0.08);
+                    sdf.box(2.0, 4.0, self.rect_size.x - 4.0, self.rect_size.y - 2.0, 12.0);
+                    sdf.fill(shadow);
+                }
+
+                // Card background
+                let light_bg = vec4(1.0, 1.0, 1.0, 1.0);
+                let dark_bg = (SLATE_800);
+                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                sdf.fill(mix(light_bg, dark_bg, self.dark_mode));
+
+                // Border - gray normally, orange-200 on hover
+                let light_border = vec4(0.898, 0.906, 0.922, 1.0); // gray-200
+                let hover_border = vec4(0.992, 0.796, 0.545, 1.0); // orange-200
+                let dark_border = (SLATE_700);
+                let border = mix(
+                    mix(light_border, dark_border, self.dark_mode),
+                    hover_border,
+                    self.hover
+                );
+                sdf.stroke(border, 1.0);
+
+                return sdf.result;
             }
         }
 
-        // Chinese title
+        // Icon at top - text-4xl
+        icon = <Label> {
+            text: "🍽️"
+            draw_text: {
+                text_style: <FONT_BOLD>{ font_size: 32.0 }
+            }
+        }
+
+        // Chinese title - font-semibold text-gray-900
         title = <Label> {
             text: "场景名称"
             draw_text: {
                 instance dark_mode: 0.0
                 text_style: <FONT_SEMIBOLD>{ font_size: 14.0 }
                 fn get_color(self) -> vec4 {
-                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                    let light = vec4(0.110, 0.118, 0.149, 1.0); // gray-900
+                    let dark = (TEXT_PRIMARY_DARK);
+                    return mix(light, dark, self.dark_mode);
                 }
             }
         }
 
-        // English subtitle
+        // English subtitle - text-sm text-gray-500
         title_en = <Label> {
             text: "Scene Name"
             draw_text: {
                 instance dark_mode: 0.0
-                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                text_style: <FONT_REGULAR>{ font_size: 12.0 }
                 fn get_color(self) -> vec4 {
-                    return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                    let light = vec4(0.420, 0.447, 0.502, 1.0); // gray-500
+                    let dark = (SLATE_400);
+                    return mix(light, dark, self.dark_mode);
                 }
             }
         }
 
-        // Bottom row with difficulty badge and duration
+        // Bottom row with difficulty badge
         info_row = <View> {
             width: Fill, height: Fit
             flow: Right
             spacing: 8
             align: {y: 0.5}
+            margin: {top: 4}
 
-            // Difficulty badge
+            // Difficulty badge - rounded-full with colored bg
             difficulty_badge = <RoundedView> {
-                width: Fit, height: 20
+                width: Fit, height: 22
                 padding: {left: 8, right: 8}
                 show_bg: true
                 draw_bg: {
                     instance badge_color: 0.0  // 0=green, 1=amber, 2=red
-                    border_radius: 10.0
+                    border_radius: 11.0
+
                     fn pixel(self) -> vec4 {
-                        let green = vec4(0.941, 0.992, 0.957, 1.0);  // #f0fdf4
-                        let amber = vec4(1.0, 0.984, 0.922, 1.0);    // #fffbeb
-                        let red = vec4(0.996, 0.949, 0.949, 1.0);    // #fef2f2
-                        if self.badge_color < 0.5 { return green; }
-                        else if self.badge_color < 1.5 { return amber; }
-                        else { return red; }
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        let green = vec4(0.941, 0.992, 0.957, 1.0);   // green-50
+                        let amber = vec4(1.0, 0.984, 0.922, 1.0);     // amber-50
+                        let red = vec4(0.996, 0.949, 0.949, 1.0);     // red-50
+                        let bg = vec4(0.0);
+                        if self.badge_color < 0.5 { bg = green; }
+                        else if self.badge_color < 1.5 { bg = amber; }
+                        else { bg = red; }
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 11.0);
+                        sdf.fill(bg);
+                        return sdf.result;
                     }
                 }
                 align: {x: 0.5, y: 0.5}
@@ -200,19 +270,36 @@ live_design! {
                 badge_label = <Label> {
                     text: "⭐"
                     draw_text: {
-                        text_style: <FONT_REGULAR>{ font_size: 10.0 }
+                        text_style: <FONT_REGULAR>{ font_size: 11.0 }
                     }
                 }
             }
 
-            // Duration with clock
-            duration = <Label> {
-                text: "🕐 5分钟"
-                draw_text: {
-                    instance dark_mode: 0.0
-                    text_style: <FONT_REGULAR>{ font_size: 10.0 }
-                    fn get_color(self) -> vec4 {
-                        return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+            <View> { width: Fill }
+
+            // Play button (shows on hover in website)
+            play_btn = <View> {
+                width: 28, height: 28
+                show_bg: true
+                draw_bg: {
+                    instance hover: 0.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        // Ghost button style
+                        let normal = vec4(0.0, 0.0, 0.0, 0.0);
+                        let hover_bg = vec4(0.953, 0.961, 0.969, 1.0); // gray-100
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                        sdf.fill(mix(normal, hover_bg, self.hover));
+                        return sdf.result;
+                    }
+                }
+                align: {x: 0.5, y: 0.5}
+
+                <Label> {
+                    text: "▶"
+                    draw_text: {
+                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                        color: (SLATE_600)
                     }
                 }
             }
@@ -288,7 +375,7 @@ live_design! {
     }
 
     // ========================================================================
-    // Scene Center Main Widget
+    // Scenes Screen Main Widget - matches website StagesPage.tsx
     // ========================================================================
 
     pub Scenes = {{Scenes}} <View> {
@@ -298,13 +385,13 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             fn pixel(self) -> vec4 {
-                // Gradient: orange-50 (#fff7ed) → amber-50 (#fffbeb) → yellow-50 (#fefce8)
+                // Gradient matching website: from-orange-50 via-amber-50 to-yellow-50
                 let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
                 let amber_50 = vec4(1.0, 0.984, 0.922, 1.0);
                 let yellow_50 = vec4(0.996, 0.988, 0.910, 1.0);
                 let dark_bg = vec4(0.067, 0.075, 0.102, 1.0);
 
-                let t = self.pos.x;
+                let t = self.pos.x + self.pos.y * 0.3;
                 let light_color = vec4(0.0);
                 if t < 0.5 {
                     light_color = mix(orange_50, amber_50, t * 2.0);
@@ -319,215 +406,297 @@ live_design! {
         scene_list = <ScrollYView> {
             width: Fill, height: Fill
             flow: Down
-            spacing: 20
-            padding: {left: 40, right: 40, top: 30, bottom: 30}
+            spacing: 24
+            padding: {left: 16, right: 16, top: 16, bottom: 24}
 
-            // Header
+            // Header with title - matches website layout
             header = <View> {
                 width: Fill, height: Fit
-                flow: Down
-                spacing: 8
-                visible: false
+                flow: Right
+                spacing: 12
+                align: {y: 0.5}
+                margin: {bottom: 8}
 
                 title = <Label> {
-                    text: "🎭 场景中心"
+                    text: "🎭 角色扮演"
                     draw_text: {
                         instance dark_mode: 0.0
-                        text_style: <FONT_BOLD>{ font_size: 28.0 }
+                        text_style: <FONT_BOLD>{ font_size: 20.0 }
                         fn get_color(self) -> vec4 {
-                            return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                            let light = vec4(0.110, 0.118, 0.149, 1.0); // gray-900
+                            let dark = (TEXT_PRIMARY_DARK);
+                            return mix(light, dark, self.dark_mode);
                         }
                     }
                 }
 
                 subtitle = <Label> {
-                    text: "沉浸式场景模拟 · AI智能推荐 · 经典对白学习 · 多口音体验"
+                    text: "沉浸式场景模拟 · AI智能推荐"
                     draw_text: {
                         instance dark_mode: 0.0
-                        text_style: <FONT_REGULAR>{ font_size: 12.0 }
+                        text_style: <FONT_REGULAR>{ font_size: 13.0 }
                         fn get_color(self) -> vec4 {
-                            return mix((TEXT_MUTED), (SLATE_500), self.dark_mode);
+                            let light = vec4(0.420, 0.447, 0.502, 1.0); // gray-500
+                            let dark = (SLATE_400);
+                            return mix(light, dark, self.dark_mode);
                         }
                     }
                 }
             }
 
-            // Search and Filters
-            search_bar = <View> {
+            // Search and Filters card - matches website white card with border
+            search_bar = <RoundedView> {
                 width: Fill, height: Fit
-                flow: Right
-                spacing: 12
-                align: {y: 0.5}
-
-                search_input = <RoundedView> {
-                    width: 300, height: 40
-                    padding: {left: 12, right: 12}
-                    flow: Right
-                    spacing: 8
-                    align: {y: 0.5}
-                    show_bg: true
-                    draw_bg: {
-                        border_radius: 8.0
-                        color: (WHITE)
-                    }
-
-                    search_icon = <Label> {
-                        text: "🔍"
-                        draw_text: {
-                            text_style: <FONT_REGULAR>{ font_size: 14.0 }
-                        }
-                    }
-
-                    search_text_input = <TextInput> {
-                        width: Fill, height: Fit
-                        empty_text: "搜索场景..."
-                        draw_text: {
-                            text_style: <FONT_REGULAR>{ font_size: 13.0 }
-                            color: (TEXT_PRIMARY)
-                        }
-                    }
-                }
-
-                filter_chips = <View> {
-                    width: Fit, height: 40
-                    flow: Right
-                    spacing: 8
-                    align: {y: 0.5}
-
-                    filter_all = <CategoryButton> {
-                        draw_bg: { selected: 1.0 }
-                        label = <Label> {
-                            text: "全部"
-                            draw_text: {
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                color: (WHITE)
-                            }
-                        }
-                    }
-
-                    filter_daily = <CategoryButton> {
-                        draw_bg: { selected: 0.0 }
-                        label = <Label> {
-                            text: "日常生活"
-                            draw_text: {
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                color: (TEXT_SECONDARY)
-                            }
-                        }
-                    }
-
-                    filter_travel = <CategoryButton> {
-                        draw_bg: { selected: 0.0 }
-                        label = <Label> {
-                            text: "旅行出行"
-                            draw_text: {
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                color: (TEXT_SECONDARY)
-                            }
-                        }
-                    }
-
-                    filter_business = <CategoryButton> {
-                        draw_bg: { selected: 0.0 }
-                        label = <Label> {
-                            text: "商务职场"
-                            draw_text: {
-                                text_style: <FONT_MEDIUM>{ font_size: 12.0 }
-                                color: (TEXT_SECONDARY)
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Continue Learning Section
-            continue_learning_section = <View> {
-                width: Fill, height: Fit
+                padding: 12
                 flow: Down
-                spacing: 12
-
-                section_title = <SectionTitle> {
-                    text: "📚 继续学习"
+                spacing: 8
+                show_bg: true
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    border_radius: 12.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        // Shadow
+                        let shadow = vec4(0.0, 0.0, 0.0, 0.04);
+                        sdf.box(1.0, 2.0, self.rect_size.x - 2.0, self.rect_size.y - 1.0, 12.0);
+                        sdf.fill(shadow);
+                        // Card bg
+                        let light = vec4(1.0, 1.0, 1.0, 1.0);
+                        let dark = (SLATE_800);
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 12.0);
+                        sdf.fill(mix(light, dark, self.dark_mode));
+                        // Border
+                        let border = mix(vec4(0.898, 0.906, 0.922, 1.0), (SLATE_700), self.dark_mode);
+                        sdf.stroke(border, 1.0);
+                        return sdf.result;
+                    }
                 }
 
-                continue_card = <CardBase> {
+                // Row 1: Search and Filters
+                search_row = <View> {
                     width: Fill, height: Fit
-                    padding: 16
-                    flow: Down
-                    spacing: 12
+                    flow: Right
+                    spacing: 8
+                    align: {y: 0.5}
 
-                    // Inner content with gradient background
-                    inner_content = <RoundedView> {
-                        width: Fill, height: Fit
-                        padding: 16
+                    // Search input
+                    search_input = <RoundedView> {
+                        width: Fill, height: 36
+                        padding: {left: 10, right: 10}
                         flow: Right
-                        spacing: 16
+                        spacing: 6
                         align: {y: 0.5}
                         show_bg: true
                         draw_bg: {
-                            border_radius: 12.0
+                            instance dark_mode: 0.0
+                            border_radius: 8.0
                             fn pixel(self) -> vec4 {
-                                // Gradient from orange-50 to amber-50
-                                let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
-                                let amber_50 = vec4(1.0, 0.984, 0.922, 1.0);
-                                return mix(orange_50, amber_50, self.pos.x);
+                                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
+                                let dark = (SLATE_700);
+                                sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                                sdf.fill(mix(light, dark, self.dark_mode));
+                                return sdf.result;
                             }
                         }
 
-                        icon = <Label> {
-                            text: "🏨"
+                        search_icon = <Label> {
+                            text: "🔍"
                             draw_text: {
-                                text_style: <FONT_BOLD>{ font_size: 48.0 }
+                                text_style: <FONT_REGULAR>{ font_size: 12.0 }
                             }
                         }
 
-                        content = <View> {
+                        search_text_input = <TextInput> {
                             width: Fill, height: Fit
-                            flow: Down
-                            spacing: 6
-
-                            title = <Label> {
-                                text: "酒店入住"
-                                draw_text: {
-                                    text_style: <FONT_SEMIBOLD>{ font_size: 15.0 }
-                                    color: (TEXT_PRIMARY)
-                                }
-                            }
-
-                            progress = <Label> {
-                                text: "进度 60% · 还剩 3 个对话"
-                                draw_text: {
-                                    text_style: <FONT_REGULAR>{ font_size: 12.0 }
-                                    color: (TEXT_MUTED)
-                                }
-                            }
-
-                            task = <Label> {
-                                text: "下一个任务：前台预订房间"
-                                draw_text: {
-                                    text_style: <FONT_REGULAR>{ font_size: 13.0 }
-                                    color: (TEXT_SECONDARY)
-                                }
-                            }
-                        }
-
-                        button = <Button> {
-                            width: Fit, height: 40
-                            padding: {left: 16, right: 16}
-                            text: "继续学习 ›"
-                            draw_bg: {
-                                fn pixel(self) -> vec4 {
-                                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                                    sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
-                                    sdf.fill(vec4(0.976, 0.451, 0.086, 1.0)); // #f97316
-                                    return sdf.result;
-                                }
-                            }
+                            empty_text: "搜索场景..."
+                            draw_bg: { color: #0000 }
                             draw_text: {
-                                text_style: <FONT_SEMIBOLD>{ font_size: 13.0 }
-                                color: (WHITE)
+                                instance dark_mode: 0.0
+                                text_style: <FONT_REGULAR>{ font_size: 13.0 }
+                                fn get_color(self) -> vec4 {
+                                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                                }
                             }
                         }
+                    }
+
+                    // Filter chips
+                    filter_chips = <View> {
+                        width: Fit, height: 36
+                        flow: Right
+                        spacing: 6
+                        align: {y: 0.5}
+
+                        filter_all = <CategoryButton> {
+                            draw_bg: { selected: 1.0 }
+                            label = <Label> {
+                                text: "全部"
+                                draw_text: {
+                                    instance selected: 1.0
+                                    text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                    fn get_color(self) -> vec4 {
+                                        let unselected = vec4(0.298, 0.333, 0.388, 1.0); // gray-600
+                                        let selected_color = vec4(1.0, 1.0, 1.0, 1.0);
+                                        return mix(unselected, selected_color, self.selected);
+                                    }
+                                }
+                            }
+                        }
+
+                        filter_daily = <CategoryButton> {
+                            draw_bg: { selected: 0.0 }
+                            label = <Label> {
+                                text: "日常生活"
+                                draw_text: {
+                                    instance selected: 0.0
+                                    text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                    fn get_color(self) -> vec4 {
+                                        let unselected = vec4(0.298, 0.333, 0.388, 1.0);
+                                        let selected_color = vec4(1.0, 1.0, 1.0, 1.0);
+                                        return mix(unselected, selected_color, self.selected);
+                                    }
+                                }
+                            }
+                        }
+
+                        filter_travel = <CategoryButton> {
+                            draw_bg: { selected: 0.0 }
+                            label = <Label> {
+                                text: "旅行出行"
+                                draw_text: {
+                                    instance selected: 0.0
+                                    text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                    fn get_color(self) -> vec4 {
+                                        let unselected = vec4(0.298, 0.333, 0.388, 1.0);
+                                        let selected_color = vec4(1.0, 1.0, 1.0, 1.0);
+                                        return mix(unselected, selected_color, self.selected);
+                                    }
+                                }
+                            }
+                        }
+
+                        filter_business = <CategoryButton> {
+                            draw_bg: { selected: 0.0 }
+                            label = <Label> {
+                                text: "商务职场"
+                                draw_text: {
+                                    instance selected: 0.0
+                                    text_style: <FONT_MEDIUM>{ font_size: 12.0 }
+                                    fn get_color(self) -> vec4 {
+                                        let unselected = vec4(0.298, 0.333, 0.388, 1.0);
+                                        let selected_color = vec4(1.0, 1.0, 1.0, 1.0);
+                                        return mix(unselected, selected_color, self.selected);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Continue Learning Section - matches website layout (inside search card)
+            continue_learning_section = <RoundedView> {
+                width: Fill, height: Fit
+                padding: 12
+                flow: Right
+                spacing: 12
+                align: {y: 0.5}
+                cursor: Hand
+                show_bg: true
+                draw_bg: {
+                    instance dark_mode: 0.0
+                    instance hover: 0.0
+                    border_radius: 8.0
+                    fn pixel(self) -> vec4 {
+                        let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                        // Gradient from orange-50 to amber-50
+                        let orange_50 = vec4(1.0, 0.969, 0.929, 1.0);
+                        let amber_50 = vec4(1.0, 0.984, 0.922, 1.0);
+                        let orange_100 = vec4(1.0, 0.929, 0.835, 1.0);
+                        let amber_100 = vec4(0.996, 0.941, 0.780, 1.0);
+                        let dark_bg = (SLATE_700);
+                        let dark_hover = (SLATE_600);
+
+                        // Light mode: gradient, Dark mode: slate
+                        let light_start = mix(orange_50, orange_100, self.hover);
+                        let light_end = mix(amber_50, amber_100, self.hover);
+                        let light_color = mix(light_start, light_end, self.pos.x);
+                        let dark_color = mix(dark_bg, dark_hover, self.hover);
+
+                        sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 8.0);
+                        sdf.fill(mix(light_color, dark_color, self.dark_mode));
+                        return sdf.result;
+                    }
+                }
+
+                // Icon
+                continue_icon = <Label> {
+                    text: "🏨"
+                    draw_text: {
+                        text_style: <FONT_BOLD>{ font_size: 24.0 }
+                    }
+                }
+
+                // Content
+                continue_content = <View> {
+                    width: Fill, height: Fit
+                    flow: Down
+                    spacing: 2
+
+                    continue_title_row = <View> {
+                        width: Fill, height: Fit
+                        flow: Right
+                        spacing: 8
+                        align: {y: 0.5}
+
+                        continue_title = <Label> {
+                            text: "酒店入住"
+                            draw_text: {
+                                instance dark_mode: 0.0
+                                text_style: <FONT_MEDIUM>{ font_size: 13.0 }
+                                fn get_color(self) -> vec4 {
+                                    let light = vec4(0.110, 0.118, 0.149, 1.0); // gray-900
+                                    let dark = (TEXT_PRIMARY_DARK);
+                                    return mix(light, dark, self.dark_mode);
+                                }
+                            }
+                        }
+
+                        continue_hint = <Label> {
+                            text: "开始学习"
+                            draw_text: {
+                                instance dark_mode: 0.0
+                                text_style: <FONT_REGULAR>{ font_size: 11.0 }
+                                fn get_color(self) -> vec4 {
+                                    let light = vec4(0.420, 0.447, 0.502, 1.0); // gray-500
+                                    let dark = (SLATE_400);
+                                    return mix(light, dark, self.dark_mode);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Button
+                continue_btn = <Button> {
+                    width: Fit, height: 28
+                    padding: {left: 12, right: 12}
+                    text: "继续学习 ›"
+                    draw_bg: {
+                        instance hover: 0.0
+                        fn pixel(self) -> vec4 {
+                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                            let base = vec4(0.976, 0.451, 0.086, 1.0);  // orange-500
+                            let hover_color = vec4(0.918, 0.345, 0.047, 1.0); // orange-600
+                            sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 6.0);
+                            sdf.fill(mix(base, hover_color, self.hover));
+                            return sdf.result;
+                        }
+                    }
+                    draw_text: {
+                        text_style: <FONT_MEDIUM>{ font_size: 11.0 }
+                        color: (WHITE)
                     }
                 }
             }
@@ -710,7 +879,7 @@ impl Widget for Scenes {
         let actions = cx.capture_actions(|cx| self.view.handle_event(cx, event, scope));
 
         // Check for text changes in search input
-        let search_input = self.view.text_input(ids!(search_bar.search_input.search_text_input));
+        let search_input = self.view.text_input(ids!(scene_list.search_bar.search_row.search_input.search_text_input));
         let current_text = search_input.text();
         if current_text != self.search_query {
             self.search_query = current_text;
@@ -721,10 +890,10 @@ impl Widget for Scenes {
 
         // Handle category filter clicks
         for (widget_id, category) in [
-            (ids!(search_bar.filter_chips.filter_all), SceneCategory::All),
-            (ids!(search_bar.filter_chips.filter_daily), SceneCategory::Daily),
-            (ids!(search_bar.filter_chips.filter_travel), SceneCategory::Travel),
-            (ids!(search_bar.filter_chips.filter_business), SceneCategory::Business),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_all), SceneCategory::All),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_daily), SceneCategory::Daily),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_travel), SceneCategory::Travel),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_business), SceneCategory::Business),
         ] {
             if self.view.view(widget_id).finger_up(&actions).is_some() {
                 if self.active_category != category {
@@ -758,7 +927,7 @@ impl Widget for Scenes {
                     self.scenes_loading = false;
                     self.filter_scenes();
                     self.view
-                        .view(ids!(today_section.loading_label))
+                        .view(ids!(scene_list.today_section.loading_label))
                         .set_visible(cx, false);
                     self.update_scene_cards(cx);
                     self.view.redraw(cx);
@@ -767,7 +936,7 @@ impl Widget for Scenes {
                     eprintln!("Failed to fetch scenes: {}", e);
                     self.scenes_loading = false;
                     self.view
-                        .label(ids!(today_section.loading_label.label))
+                        .label(ids!(scene_list.today_section.loading_label.label))
                         .set_text(cx, &format!("加载失败: {}", e));
                 }
             }
@@ -780,7 +949,7 @@ impl Widget for Scenes {
                     self.classic_sources = sources;
                     self.classic_loading = false;
                     self.view
-                        .view(ids!(classic_section.classic_loading_label))
+                        .view(ids!(scene_list.classic_section.classic_loading_label))
                         .set_visible(cx, false);
                     self.update_classic_cards(cx);
                     self.view.redraw(cx);
@@ -789,7 +958,7 @@ impl Widget for Scenes {
                     eprintln!("Failed to fetch classic sources: {}", e);
                     self.classic_loading = false;
                     self.view
-                        .label(ids!(classic_section.classic_loading_label.label))
+                        .label(ids!(scene_list.classic_section.classic_loading_label.label))
                         .set_text(cx, &format!("加载失败: {}", e));
                 }
             }
@@ -838,15 +1007,11 @@ impl Scenes {
 
     /// Update category button visual states
     fn update_category_buttons(&mut self, cx: &mut Cx) {
-        // Color values for selected/unselected state
-        let white = vec4(1.0, 1.0, 1.0, 1.0);
-        let gray = vec4(0.392, 0.455, 0.545, 1.0); // #64748b
-
         let buttons = [
-            (ids!(search_bar.filter_chips.filter_all), SceneCategory::All),
-            (ids!(search_bar.filter_chips.filter_daily), SceneCategory::Daily),
-            (ids!(search_bar.filter_chips.filter_travel), SceneCategory::Travel),
-            (ids!(search_bar.filter_chips.filter_business), SceneCategory::Business),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_all), SceneCategory::All),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_daily), SceneCategory::Daily),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_travel), SceneCategory::Travel),
+            (ids!(scene_list.search_bar.search_row.filter_chips.filter_business), SceneCategory::Business),
         ];
 
         for (widget_id, category) in buttons {
@@ -859,24 +1024,23 @@ impl Scenes {
                 draw_bg: { selected: (selected_val) }
             });
 
-            // Update label color using apply_over with color values
+            // Update label selected state
             let label = button.label(ids!(label));
-            let text_color = if is_selected { white } else { gray };
-            label.apply_over(cx, live! { draw_text: { color: (text_color) } });
+            label.apply_over(cx, live! { draw_text: { selected: (selected_val) } });
         }
     }
 
     /// Update scene cards with filtered data
     fn update_scene_cards(&mut self, cx: &mut Cx) {
         let card_ids = [
-            ids!(today_section.today_cards.row1.card0),
-            ids!(today_section.today_cards.row1.card1),
-            ids!(today_section.today_cards.row1.card2),
-            ids!(today_section.today_cards.row1.card3),
-            ids!(today_section.today_cards.row2.card4),
-            ids!(today_section.today_cards.row2.card5),
-            ids!(today_section.today_cards.row2.card6),
-            ids!(today_section.today_cards.row2.card7),
+            ids!(scene_list.today_section.today_cards.row1.card0),
+            ids!(scene_list.today_section.today_cards.row1.card1),
+            ids!(scene_list.today_section.today_cards.row1.card2),
+            ids!(scene_list.today_section.today_cards.row1.card3),
+            ids!(scene_list.today_section.today_cards.row2.card4),
+            ids!(scene_list.today_section.today_cards.row2.card5),
+            ids!(scene_list.today_section.today_cards.row2.card6),
+            ids!(scene_list.today_section.today_cards.row2.card7),
         ];
 
         for (i, card_id) in card_ids.iter().enumerate() {
@@ -923,10 +1087,10 @@ impl Scenes {
     /// Update classic dialogue cards
     fn update_classic_cards(&mut self, cx: &mut Cx) {
         let card_ids = [
-            ids!(classic_section.classic_cards.classic_row1.classic0),
-            ids!(classic_section.classic_cards.classic_row1.classic1),
-            ids!(classic_section.classic_cards.classic_row2.classic2),
-            ids!(classic_section.classic_cards.classic_row2.classic3),
+            ids!(scene_list.classic_section.classic_cards.classic_row1.classic0),
+            ids!(scene_list.classic_section.classic_cards.classic_row1.classic1),
+            ids!(scene_list.classic_section.classic_cards.classic_row2.classic2),
+            ids!(scene_list.classic_section.classic_cards.classic_row2.classic3),
         ];
 
         for (i, card_id) in card_ids.iter().enumerate() {
@@ -968,10 +1132,10 @@ impl Scenes {
 
         // Show loading labels
         self.view
-            .view(ids!(today_section.loading_label))
+            .view(ids!(scene_list.today_section.loading_label))
             .set_visible(cx, true);
         self.view
-            .view(ids!(classic_section.classic_loading_label))
+            .view(ids!(scene_list.classic_section.classic_loading_label))
             .set_visible(cx, true);
 
         let (tx, rx) = mpsc::channel();

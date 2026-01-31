@@ -14,36 +14,51 @@ live_design! {
     use crate::screens::review::components::PrimaryButton;
     use crate::screens::review::components::SecondaryButton;
 
-    // Inline blank input for sentences
-    BlankInput = <TextInput> {
-        width: 120, height: Fit
-        padding: {left: 8, right: 8, top: 4, bottom: 4}
+    // Wrapper for blank input with state indicator (avoids apply_over on TextInput)
+    BlankInputWrapper = <View> {
+        width: Fit, height: Fit
+        flow: Down
+        spacing: 0
 
-        draw_bg: {
-            instance dark_mode: 0.0
-            instance error: 0.0
-            instance correct: 0.0
+        blank_input = <TextInput> {
+            width: 120, height: Fit
+            padding: {left: 8, right: 8, top: 4, bottom: 4}
 
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+            draw_bg: {
+                instance dark_mode: 0.0
+                fn pixel(self) -> vec4 {
+                    return vec4(0., 0., 0., 0.);
+                }
+            }
 
-                // Underline style input
-                sdf.rect(0., self.rect_size.y - 2., self.rect_size.x, 2.);
-                let normal = mix((SLATE_400), (SLATE_500), self.dark_mode);
-                let error_color = (ACCENT_RED);
-                let correct_color = (ACCENT_GREEN);
-                let color = mix(mix(normal, error_color, self.error), correct_color, self.correct);
-                sdf.fill(color);
-
-                return sdf.result;
+            draw_text: {
+                instance dark_mode: 0.0
+                text_style: <FONT_SEMIBOLD>{ font_size: 16.0 }
+                fn get_color(self) -> vec4 {
+                    return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+                }
             }
         }
 
-        draw_text: {
-            instance dark_mode: 0.0
-            text_style: <FONT_SEMIBOLD>{ font_size: 16.0 }
-            fn get_color(self) -> vec4 {
-                return mix((TEXT_PRIMARY), (TEXT_PRIMARY_DARK), self.dark_mode);
+        // Underline indicator - uses View so apply_over works
+        underline = <View> {
+            width: Fill, height: 2
+            show_bg: true
+            draw_bg: {
+                instance dark_mode: 0.0
+                instance error: 0.0
+                instance correct: 0.0
+
+                fn pixel(self) -> vec4 {
+                    let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                    sdf.rect(0., 0., self.rect_size.x, self.rect_size.y);
+                    let normal = mix((SLATE_400), (SLATE_500), self.dark_mode);
+                    let error_color = (ACCENT_RED);
+                    let correct_color = (ACCENT_GREEN);
+                    let color = mix(mix(normal, error_color, self.error), correct_color, self.correct);
+                    sdf.fill(color);
+                    return sdf.result;
+                }
             }
         }
     }
@@ -134,8 +149,8 @@ live_design! {
                     }
                 }
 
-                blank_input = <BlankInput> {
-                    empty_message: "___"
+                blank_wrapper = <BlankInputWrapper> {
+                    blank_input = { empty_message: "___" }
                 }
 
                 sentence_after = <Label> {
@@ -344,14 +359,14 @@ impl Widget for PhraseView {
 
 impl PhraseView {
     fn check_answer(&mut self, cx: &mut Cx, scope: &mut Scope) {
-        let user_input = self.view.text_input(ids!(sentence_card.sentence_container.blank_input)).text();
+        let user_input = self.view.text_input(ids!(sentence_card.sentence_container.blank_wrapper.blank_input)).text();
         let user_answer = user_input.trim().to_lowercase();
         let correct = user_answer == self.correct_answer.to_lowercase();
 
         self.answered = true;
 
-        // Update blank input style
-        self.view.text_input(ids!(sentence_card.sentence_container.blank_input)).apply_over(
+        // Update underline indicator style (uses View which supports apply_over)
+        self.view.view(ids!(sentence_card.sentence_container.blank_wrapper.underline)).apply_over(
             cx,
             live! {
                 draw_bg: {
@@ -399,8 +414,9 @@ impl PhraseView {
     fn reset(&mut self, cx: &mut Cx) {
         self.answered = false;
 
-        self.view.text_input(ids!(sentence_card.sentence_container.blank_input)).set_text(cx, "");
-        self.view.text_input(ids!(sentence_card.sentence_container.blank_input)).apply_over(
+        self.view.text_input(ids!(sentence_card.sentence_container.blank_wrapper.blank_input)).set_text(cx, "");
+        // Update underline indicator (uses View which supports apply_over)
+        self.view.view(ids!(sentence_card.sentence_container.blank_wrapper.underline)).apply_over(
             cx,
             live! { draw_bg: { correct: 0.0, error: 0.0 } },
         );
