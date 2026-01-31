@@ -8,6 +8,19 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
+/// Safely truncate a string to at most `max_bytes` bytes, respecting UTF-8 char boundaries.
+fn truncate_str(s: &str, max_bytes: usize) -> &str {
+    if s.len() <= max_bytes {
+        return s;
+    }
+    // Find the last valid char boundary at or before max_bytes
+    let mut end = max_bytes;
+    while end > 0 && !s.is_char_boundary(end) {
+        end -= 1;
+    }
+    &s[..end]
+}
+
 // ============================================================================
 // API Response Types (matching colang-website models/dict.rs)
 // ============================================================================
@@ -183,6 +196,12 @@ pub struct SearchedWord {
     pub searched_at: Option<String>,
 }
 
+/// API response wrapper for word list
+#[derive(Debug, Clone, Deserialize)]
+struct WordsResponse {
+    words: Vec<Word>,
+}
+
 // ============================================================================
 // Dictionary API Client
 // ============================================================================
@@ -237,12 +256,14 @@ impl DictApiClient {
             log::error!("[DictAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
-        serde_json::from_str(&body).map_err(|e| {
-            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+        // API returns {"words": [...]} wrapper
+        let response: WordsResponse = serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
-        })
+        })?;
+        Ok(response.words)
     }
 
     /// Lookup a word by exact match
@@ -279,10 +300,10 @@ impl DictApiClient {
             log::error!("[DictAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -341,12 +362,14 @@ impl DictApiClient {
             log::error!("[DictAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
-        serde_json::from_str(&body).map_err(|e| {
-            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+        // API returns {"words": [...]} wrapper
+        let response: WordsResponse = serde_json::from_str(&body).map_err(|e| {
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
-        })
+        })?;
+        Ok(response.words)
     }
 
     /// Save search history
@@ -384,10 +407,10 @@ impl DictApiClient {
             log::error!("[DictAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -422,10 +445,10 @@ impl DictApiClient {
             log::error!("[DictAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[DictAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[DictAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[DictAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }

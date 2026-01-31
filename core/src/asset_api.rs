@@ -8,6 +8,19 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// Safely truncate a string to at most `max_bytes` bytes, respecting UTF-8 char boundaries.
+fn truncate_str(s: &str, max_bytes: usize) -> &str {
+    if s.len() <= max_bytes {
+        return s;
+    }
+    // Find the last valid char boundary at or before max_bytes
+    let mut end = max_bytes;
+    while end > 0 && !s.is_char_boundary(end) {
+        end -= 1;
+    }
+    &s[..end]
+}
+
 // ============================================================================
 // API Response Types (Shared Content)
 // ============================================================================
@@ -164,10 +177,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -201,10 +214,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -238,10 +251,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -275,10 +288,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -336,10 +349,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -378,10 +391,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -439,10 +452,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }
@@ -480,10 +493,10 @@ impl AssetApiClient {
             log::error!("[AssetAPI] Failed to read response body: {}", e);
             format!("Read error: {}", e)
         })?;
-        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), &body[..body.len().min(500)]);
+        log::debug!("[AssetAPI] Response body ({}B): {}", body.len(), truncate_str(&body, 500));
 
         serde_json::from_str(&body).map_err(|e| {
-            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, &body[..body.len().min(200)]);
+            log::error!("[AssetAPI] Parse error: {} - Body: {}", e, truncate_str(&body, 200));
             format!("Parse error: {}", e)
         })
     }

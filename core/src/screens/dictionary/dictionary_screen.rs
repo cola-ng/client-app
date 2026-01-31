@@ -1247,14 +1247,14 @@ live_design! {
 
     // Related word tag (clickable)
     RelatedWordTag = <RoundedView> {
-        width: Fit, height: 28
-        padding: {left: 12, right: 12}
+        width: Fit, height: 32
+        padding: {left: 14, right: 14, top: 6, bottom: 6}
         cursor: Hand
         show_bg: true
         draw_bg: {
             instance tag_type: 0.0  // 0=synonym (green), 1=antonym (red), 2=related (blue)
             instance hover: 0.0
-            border_radius: 14.0
+            border_radius: 6.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -2073,8 +2073,8 @@ live_design! {
             width: Fill, height: Fill
             flow: Right
 
-            // Left column - Navigation anchors (lookup mode only)
-            nav_sidebar = <NavSidebar> {}
+            // Left column - Navigation anchors (removed)
+            // nav_sidebar = <NavSidebar> {}
 
             // Center column - Search and Results / Translation
             center_column = <View> {
@@ -2288,6 +2288,17 @@ impl WidgetMatchEvent for DictionaryScreen {
             self.switch_definition_tab(cx, false); // English
         }
 
+        // Handle relation tab switching (synonyms/antonyms/related)
+        if self.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.synonyms_tab)).clicked(actions) {
+            self.switch_relation_tab(cx, 0); // Synonyms
+        }
+        if self.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.antonyms_tab)).clicked(actions) {
+            self.switch_relation_tab(cx, 1); // Antonyms
+        }
+        if self.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.related_tab)).clicked(actions) {
+            self.switch_relation_tab(cx, 2); // Related
+        }
+
         // Handle audio playback
         if self.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.word_detail_card.pronunciation_row.uk_pron.uk_audio_btn)).finger_up(actions).is_some() {
             self.play_audio(cx, "uk");
@@ -2368,9 +2379,7 @@ impl DictionaryScreen {
         self.view.view(ids!(main_content.center_column.translation_content))
             .set_visible(cx, !show_lookup);
 
-        // Toggle sidebar visibility (only show in lookup mode)
-        self.view.view(ids!(main_content.nav_sidebar))
-            .set_visible(cx, show_lookup);
+        // Toggle right column visibility (only show in lookup mode)
         self.view.view(ids!(main_content.right_column))
             .set_visible(cx, show_lookup);
 
@@ -2412,6 +2421,49 @@ impl DictionaryScreen {
             .set_visible(cx, show_chinese);
         self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.definitions_card.en_definitions))
             .set_visible(cx, !show_chinese);
+
+        self.view.redraw(cx);
+    }
+
+    /// Switch between synonyms, antonyms, and related words tabs
+    /// tab: 0 = synonyms, 1 = antonyms, 2 = related
+    fn switch_relation_tab(&mut self, cx: &mut Cx, tab: u8) {
+        let (syn_active, ant_active, rel_active) = match tab {
+            0 => (1.0, 0.0, 0.0),
+            1 => (0.0, 1.0, 0.0),
+            _ => (0.0, 0.0, 1.0),
+        };
+
+        // Update tab button styles
+        self.view.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.synonyms_tab)).apply_over(
+            cx,
+            live! {
+                draw_bg: { active: (syn_active) }
+                draw_text: { active: (syn_active) }
+            },
+        );
+        self.view.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.antonyms_tab)).apply_over(
+            cx,
+            live! {
+                draw_bg: { active: (ant_active) }
+                draw_text: { active: (ant_active) }
+            },
+        );
+        self.view.button(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.rel_tabs_row.rel_tab_bg.related_tab)).apply_over(
+            cx,
+            live! {
+                draw_bg: { active: (rel_active) }
+                draw_text: { active: (rel_active) }
+            },
+        );
+
+        // Toggle content visibility
+        self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.synonyms_content))
+            .set_visible(cx, tab == 0);
+        self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.antonyms_content))
+            .set_visible(cx, tab == 1);
+        self.view.view(ids!(main_content.center_column.lookup_content.word_detail_scroll.word_detail_content.related_card.related_content))
+            .set_visible(cx, tab == 2);
 
         self.view.redraw(cx);
     }
@@ -2644,6 +2696,30 @@ impl DictionaryScreen {
             ];
             for (i, def) in zh_defs.iter().take(3).enumerate() {
                 let def_view = def_card.view(zh_def_ids[i]);
+                def_view.set_visible(cx, true);
+                def_view.label(ids!(definition_text)).set_text(cx, &def.definition);
+
+                if let Some(ref pos) = def.part_of_speech {
+                    let pos_tag = def_view.view(ids!(tags_row.pos_tag));
+                    pos_tag.set_visible(cx, true);
+                    pos_tag.label(ids!(pos_label)).set_text(cx, pos);
+                }
+
+                if let Some(ref register) = def.register {
+                    let label = def_view.label(ids!(tags_row.register_label));
+                    label.set_visible(cx, true);
+                    label.set_text(cx, register);
+                }
+            }
+
+            // Populate English definitions
+            let en_def_ids = [
+                ids!(en_definitions.en_def_1),
+                ids!(en_definitions.en_def_2),
+                ids!(en_definitions.en_def_3),
+            ];
+            for (i, def) in en_defs.iter().take(3).enumerate() {
+                let def_view = def_card.view(en_def_ids[i]);
                 def_view.set_visible(cx, true);
                 def_view.label(ids!(definition_text)).set_text(cx, &def.definition);
 
