@@ -27,7 +27,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -242,7 +242,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 10.0
+                instance border_radius: 10.0
                 fn get_color(self) -> vec4 {
                     return mix((ACCENT_PRIMARY), (ACCENT_ORANGE_DARK), self.dark_mode);
                 }

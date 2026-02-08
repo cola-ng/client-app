@@ -131,7 +131,7 @@ live_design! {
                         empty_text: "Search..."
                         draw_bg: {
                             instance dark_mode: 0.0
-                            border_radius: 4.0
+                            instance border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let bg = mix((SLATE_100), (SLATE_700), self.dark_mode);
@@ -206,7 +206,7 @@ live_design! {
                 width: Fill, height: Fill
                 draw_bg: {
                     instance dark_mode: 0.0
-                    border_radius: 6.0
+                    instance border_radius: 6.0
                     fn get_color(self) -> vec4 {
                         return mix((SLATE_50), (SLATE_900), self.dark_mode);
                     }

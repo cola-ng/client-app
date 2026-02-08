@@ -296,7 +296,7 @@ live_design! {
         padding: 10
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 10.0
+            instance border_radius: 10.0
             fn get_color(self) -> vec4 {
                 return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);
             }
@@ -315,7 +315,7 @@ live_design! {
                 width: 28, height: 28
                 draw_bg: {
                     color: (INDIGO_100)
-                    border_radius: 14.0
+                    instance border_radius: 14.0
                 }
                 <Icon> {
                     draw_icon: {
@@ -346,7 +346,7 @@ live_design! {
                 padding: { left: 10, right: 10, top: 4, bottom: 4 }
                 draw_bg: {
                     instance badge_bg: (INDIGO_100)
-                    border_radius: 12.0
+                    instance border_radius: 12.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);

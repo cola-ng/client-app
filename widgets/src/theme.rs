@@ -309,7 +309,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 4.0
+            instance border_radius: 4.0
 
             fn get_bg_color(self) -> vec4 {
                 return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);

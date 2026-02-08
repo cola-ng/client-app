@@ -29,7 +29,7 @@ live_design! {
             instance dark_mode: 0.0
             instance active: 0.0
             instance hover: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -90,7 +90,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -178,7 +178,7 @@ live_design! {
             text: "×"
             draw_bg: {
                 instance hover: 0.0
-                border_radius: 6.0
+                instance border_radius: 6.0
                 fn pixel(self) -> vec4 {
                     let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                     let normal = vec4(0.0, 0.0, 0.0, 0.0);
@@ -305,7 +305,7 @@ live_design! {
                     show_bg: true
                     draw_bg: {
                         instance dark_mode: 0.0
-                        border_radius: 8.0
+                        instance border_radius: 8.0
                         fn pixel(self) -> vec4 {
                             let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                             let light = vec4(1.0, 1.0, 1.0, 1.0);
@@ -354,7 +354,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     instance dark_mode: 0.0
-                    border_radius: 8.0
+                    instance border_radius: 8.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let light = vec4(0.961, 0.953, 0.945, 1.0); // muted

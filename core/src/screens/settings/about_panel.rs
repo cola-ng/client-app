@@ -101,7 +101,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     color: (ACCENT_BLUE)
-                    border_radius: 16.0
+                    instance border_radius: 16.0
                 }
                 align: {x: 0.5, y: 0.5}
 

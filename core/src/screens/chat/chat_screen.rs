@@ -61,7 +61,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 color: (ORANGE_100)
-                border_radius: 20.0
+                instance border_radius: 20.0
             }
             align: {x: 0.5, y: 0.5}
 
@@ -120,7 +120,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance selected: 0.0
-            border_radius: 4.0
+            instance border_radius: 4.0
             fn pixel(self) -> vec4 {
                 let orange = vec4(0.976, 0.451, 0.086, 1.0);
                 let white = vec4(1.0, 1.0, 1.0, 1.0);
@@ -178,7 +178,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 12.0
+                instance border_radius: 12.0
                 fn get_color(self) -> vec4 {
                     return mix((WHITE), (SLATE_800), self.dark_mode);
                 }
@@ -503,7 +503,7 @@ live_design! {
                                 empty_text: "输入文字消息... (Shift+Enter 换行)"
                                 draw_bg: {
                                     instance dark_mode: 0.0
-                                    border_radius: 8.0
+                                    instance border_radius: 8.0
                                     fn pixel(self) -> vec4 {
                                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                         sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);

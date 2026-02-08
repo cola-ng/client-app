@@ -27,7 +27,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 18.0
+            instance border_radius: 18.0
             fn pixel(self) -> vec4 {
                 let light = vec4(0.976, 0.980, 0.984, 1.0);  // gray-50
                 let dark = vec4(0.216, 0.255, 0.318, 1.0);   // slate-700
@@ -56,7 +56,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 color: (BUBBLE_ORANGE)
-                border_radius: 16.0
+                instance border_radius: 16.0
             }
             padding: {left: 16, right: 16, top: 12, bottom: 12}
             flow: Down
@@ -144,7 +144,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 16.0
+                instance border_radius: 16.0
                 fn pixel(self) -> vec4 {
                     let light = vec4(0.953, 0.957, 0.961, 1.0);  // gray-100
                     let dark = vec4(0.216, 0.255, 0.318, 1.0);   // slate-700

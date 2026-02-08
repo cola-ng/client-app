@@ -88,7 +88,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 color: (GREEN_100)
-                border_radius: 4.0
+                instance border_radius: 4.0
             }
             tag_label = <Label> {
                 draw_text: {
@@ -191,7 +191,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     instance dark_mode: 0.0
-                    border_radius: 12.0
+                    instance border_radius: 12.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
 
@@ -494,7 +494,7 @@ live_design! {
                                             let dark_color = (AMBER_500);
                                             return mix(light_color, dark_color, self.dark_mode);
                                         }
-                                        border_radius: 4.0
+                                        instance border_radius: 4.0
                                     }
                                     <Label> {
                                         text: "Alpha"

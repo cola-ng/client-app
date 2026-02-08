@@ -55,7 +55,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 16.0
+            instance border_radius: 16.0
             fn pixel(self) -> vec4 {
                 return mix((WHITE), (SLATE_800), self.dark_mode);
             }
@@ -66,7 +66,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn pixel(self) -> vec4 {
                 return mix((SLATE_50), (SLATE_700), self.dark_mode);
             }
@@ -114,7 +114,7 @@ live_design! {
             instance selected: 0.0
             instance hover: 0.0
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -154,7 +154,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -238,7 +238,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     instance badge_color: 0.0  // 0=green, 1=amber, 2=red
-                    border_radius: 11.0
+                    instance border_radius: 11.0
 
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -374,7 +374,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     instance dark_mode: 0.0
-                    border_radius: 12.0
+                    instance border_radius: 12.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         // Shadow
@@ -410,7 +410,7 @@ live_design! {
                         show_bg: true
                         draw_bg: {
                             instance dark_mode: 0.0
-                            border_radius: 8.0
+                            instance border_radius: 8.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
@@ -532,7 +532,7 @@ live_design! {
                 draw_bg: {
                     instance dark_mode: 0.0
                     instance hover: 0.0
-                    border_radius: 8.0
+                    instance border_radius: 8.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         // Gradient from orange-50 to amber-50

@@ -27,7 +27,7 @@ live_design! {
             instance color_r: 0.976  // ACCENT_PRIMARY default
             instance color_g: 0.451
             instance color_b: 0.086
-            border_radius: 4.0
+            instance border_radius: 4.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);

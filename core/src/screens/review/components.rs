@@ -15,7 +15,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
             fn get_color(self) -> vec4 {
                 return mix((WHITE), (SLATE_800), self.dark_mode);
             }
@@ -26,7 +26,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn get_color(self) -> vec4 {
                 return mix((SLATE_50), (SLATE_700), self.dark_mode);
             }
@@ -128,7 +128,7 @@ live_design! {
             instance dark_mode: 0.0
             instance active: 0.0
             instance done: 0.0
-            border_radius: 3.0
+            instance border_radius: 3.0
             fn get_color(self) -> vec4 {
                 let normal = mix((SLATE_200), (SLATE_700), self.dark_mode);
                 let done = mix((ACCENT_GREEN), (ACCENT_GREEN), self.dark_mode);
@@ -144,7 +144,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance progress: 0.7
-            border_radius: 4.0
+            instance border_radius: 4.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 4.0);
@@ -164,7 +164,7 @@ live_design! {
         padding: {left: 12, right: 12, top: 8, bottom: 8}
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 16.0
+            instance border_radius: 16.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 16.0);
@@ -189,7 +189,7 @@ live_design! {
         padding: {left: 12, right: 12, top: 8, bottom: 8}
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 10.0
+            instance border_radius: 10.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
@@ -213,7 +213,7 @@ live_design! {
         width: Fit, height: Fit
         padding: {left: 14, right: 14, top: 9, bottom: 9}
         draw_bg: {
-            border_radius: 10.0
+            instance border_radius: 10.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, 10.0);
@@ -238,7 +238,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance tint: #fff5eb  // default orange-50
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn get_color(self) -> vec4 {
                 return mix(self.tint, (SLATE_700), self.dark_mode);
             }
@@ -325,7 +325,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let bg = mix((WHITE), (SLATE_800), self.dark_mode);
@@ -357,7 +357,7 @@ live_design! {
                 show_bg: true
                 draw_bg: {
                     instance urgent: 1.0
-                    border_radius: 10.0
+                    instance border_radius: 10.0
                     fn get_color(self) -> vec4 {
                         let urgent_bg = #fef2f2;
                         let normal_bg = #fffbeb;
@@ -399,7 +399,7 @@ live_design! {
                 draw_bg: {
                     instance dark_mode: 0.0
                     instance progress: 0.6
-                    border_radius: 4.0
+                    instance border_radius: 4.0
                     fn pixel(self) -> vec4 {
                         let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                         let bg = mix((SLATE_200), (SLATE_700), self.dark_mode);
@@ -442,7 +442,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance tint: (TIP_AMBER_BG)
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn get_color(self) -> vec4 {
                 return mix(self.tint, (SLATE_700), self.dark_mode);
             }
@@ -476,7 +476,7 @@ live_design! {
             width: Fill, height: 60
             show_bg: true
             draw_bg: {
-                border_radius: 4.0
+                instance border_radius: 4.0
                 fn get_color(self) -> vec4 {
                     return #fb923c;  // orange-400
                 }

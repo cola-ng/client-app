@@ -152,7 +152,7 @@ live_design! {
         }
         draw_bg: {
             instance status: 0.0  // 0=ready(gray), 1=connected(green), 2=error(red)
-            border_radius: 4.0
+            instance border_radius: 4.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -180,7 +180,7 @@ live_design! {
         padding: 6
         draw_bg: {
             color: (HERO_PANEL_BG)
-            border_radius: 2.0
+            instance border_radius: 2.0
         }
         flow: Down
         spacing: 4
@@ -198,7 +198,7 @@ live_design! {
             padding: 6
             draw_bg: {
                 color: (HERO_PANEL_BG)
-                border_radius: 2.0
+                instance border_radius: 2.0
             }
             flow: Down
             spacing: 4

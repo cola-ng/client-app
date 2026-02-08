@@ -490,7 +490,7 @@ live_design! {
                     show_bg: true
                     draw_bg: {
                         instance dark_mode: 0.0
-                        border_radius: 12.0
+                        instance border_radius: 12.0
                         fn get_color(self) -> vec4 {
                             return mix((WHITE), (SLATE_800), self.dark_mode);
                         }
@@ -608,7 +608,7 @@ live_design! {
                     show_bg: true
                     draw_bg: {
                         instance dark_mode: 0.0
-                        border_radius: 12.0
+                        instance border_radius: 12.0
                         fn get_color(self) -> vec4 {
                             return mix((WHITE), (SLATE_800), self.dark_mode);
                         }
@@ -837,7 +837,7 @@ live_design! {
                     show_bg: true
                     draw_bg: {
                         instance dark_mode: 0.0
-                        border_radius: 12.0
+                        instance border_radius: 12.0
                         fn get_color(self) -> vec4 {
                             return mix((WHITE), (SLATE_800), self.dark_mode);
                         }

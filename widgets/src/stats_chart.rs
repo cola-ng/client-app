@@ -40,7 +40,7 @@ live_design! {
             draw_bg: {
                 instance dark_mode: 0.0
                 instance value: 0.5  // 0 to 1
-                border_radius: 4.0
+                instance border_radius: 4.0
 
                 fn get_color(self) -> vec4 {
                     return mix((ACCENT_PRIMARY), (ACCENT_ORANGE_DARK), self.dark_mode);
@@ -81,7 +81,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 4.0
+                instance border_radius: 4.0
                 fn get_color(self) -> vec4 {
                     return mix((ACCENT_PRIMARY), (ACCENT_ORANGE_DARK), self.dark_mode);
                 }
@@ -186,7 +186,7 @@ live_design! {
             instance tint_r: 1.0
             instance tint_g: 0.969
             instance tint_b: 0.929
-            border_radius: 8.0
+            instance border_radius: 8.0
 
             fn get_color(self) -> vec4 {
                 let light_bg = vec4(self.tint_r, self.tint_g, self.tint_b, 1.0);
@@ -228,7 +228,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn get_color(self) -> vec4 {
                 return mix((WHITE), (SLATE_800), self.dark_mode);
             }

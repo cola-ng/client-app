@@ -23,7 +23,7 @@ live_design! {
         margin: 0
         show_bg: true
         draw_bg: {
-            border_radius: 0
+            instance border_radius: 0
         }
         flow: Right
         align: {x: 0.0, y: 0.5}

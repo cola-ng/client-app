@@ -26,7 +26,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance elevated: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
 
             fn get_color(self) -> vec4 {
                 let light_bg = mix((WHITE), (SLATE_50), self.elevated);
@@ -40,7 +40,7 @@ live_design! {
     pub CardBordered = <Card> {
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
@@ -65,7 +65,7 @@ live_design! {
     pub CardElevated = <Card> {
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);

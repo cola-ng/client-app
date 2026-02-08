@@ -163,7 +163,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn get_color(self) -> vec4 {
                 return mix((SLATE_200), (SLATE_700), self.dark_mode);
             }
@@ -280,7 +280,7 @@ live_design! {
             show_bg: true
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 10.0
+                instance border_radius: 10.0
                 fn get_color(self) -> vec4 {
                     return mix((ACCENT_RED), (RED_400), self.dark_mode);
                 }

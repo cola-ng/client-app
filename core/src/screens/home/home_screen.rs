@@ -31,7 +31,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 12.0
+            instance border_radius: 12.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 // Shadow
@@ -53,7 +53,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
@@ -103,7 +103,7 @@ live_design! {
 
         draw_bg: {
             instance hover: 0.0
-            border_radius: 6.0
+            instance border_radius: 6.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let base = vec4(0.976, 0.451, 0.086, 1.0);  // orange-500
@@ -142,7 +142,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
-            border_radius: 6.0
+            instance border_radius: 6.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(1.0, 1.0, 1.0, 1.0);
@@ -267,7 +267,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance hover: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(0.976, 0.980, 0.984, 1.0); // gray-50
@@ -313,7 +313,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance bg_color: 0.0  // 0=green, 1=amber, 2=blue, 3=purple
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let green = vec4(0.941, 0.992, 0.957, 1.0);   // green-50
@@ -359,7 +359,7 @@ live_design! {
         show_bg: true
         draw_bg: {
             instance dark_mode: 0.0
-            border_radius: 8.0
+            instance border_radius: 8.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 let light = vec4(1.0, 0.969, 0.929, 1.0); // orange-50
@@ -550,7 +550,7 @@ live_design! {
                         width: 28, height: 20
                         text: "日"
                         draw_bg: {
-                            border_radius: 4.0
+                            instance border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
@@ -571,7 +571,7 @@ live_design! {
                         width: 28, height: 20
                         text: "周"
                         draw_bg: {
-                            border_radius: 4.0
+                            instance border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);
@@ -592,7 +592,7 @@ live_design! {
                         width: 28, height: 20
                         text: "月"
                         draw_bg: {
-                            border_radius: 4.0
+                            instance border_radius: 4.0
                             fn pixel(self) -> vec4 {
                                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                                 sdf.box(0., 0., self.rect_size.x, self.rect_size.y, self.border_radius);

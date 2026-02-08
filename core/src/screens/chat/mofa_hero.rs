@@ -26,7 +26,7 @@ live_design! {
             fn pixel(self) -> vec4 {
                 return self.badge_color;
             }
-            border_radius: 12.0
+            instance border_radius: 12.0
         }
         status_label = <Label> {
             text: "Ready"
@@ -66,7 +66,7 @@ live_design! {
             padding: { left: 14, right: 14, top: 10, bottom: 10 }
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 12.0
+                instance border_radius: 12.0
                 fn get_color(self) -> vec4 {
                     return mix((PANEL_BG), (PANEL_BG_DARK), self.dark_mode);
                 }
@@ -186,7 +186,7 @@ live_design! {
             padding: { left: 14, right: 14, top: 10, bottom: 10 }
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 12.0
+                instance border_radius: 12.0
                 fn get_color(self) -> vec4 {
                     return mix((SLATE_50), (PANEL_BG_DARK), self.dark_mode);
                 }
@@ -209,7 +209,7 @@ live_design! {
                         fn pixel(self) -> vec4 {
                             return self.dot_color;
                         }
-                        border_radius: 6.0
+                        instance border_radius: 6.0
                     }
                 }
                 status_badge = <StatusBadge> {}
@@ -222,7 +222,7 @@ live_design! {
             padding: { left: 14, right: 14, top: 10, bottom: 10 }
             draw_bg: {
                 instance dark_mode: 0.0
-                border_radius: 12.0
+                instance border_radius: 12.0
                 fn get_color(self) -> vec4 {
                     return mix((WHITE), (PANEL_BG_DARK), self.dark_mode);
                 }

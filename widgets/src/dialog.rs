@@ -41,7 +41,7 @@ live_design! {
         draw_bg: {
             instance dark_mode: 0.0
             instance scale: 1.0
-            border_radius: 16.0
+            instance border_radius: 16.0
 
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
